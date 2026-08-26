@@ -1,0 +1,155 @@
+******************************************************************************
+ NOTE: please add the following runtime options at your srun line:
+
+ -sub_mat_superlu_dist_rowperm norowperm (when using superlu_dist for 3D run)
+ -sub_mat_mumps_icntl_14 100 (when using mumps for 3D run)
+******************************************************************************
+
+0. documentation
+   https://researchcomputing.princeton.edu/systems/stellar
+
+1. login 
+	ssh your_id@stellar.princeton.edu
+
+	Nodes have quad sockets with 24 cores/socket  per node.  There is
+	8GB/core available so a MUCH larger memory footprint.  The back end
+	network is 100Gb Infiniband, HDR100.
+
+2. code
+   git clone https://your_id:password@github.com/PrincetonUniversity/M3DC1.git
+
+3. load modules
+
+   for release version modules:
+       module use /home/nferraro/modules
+
+   for development modules:
+       setenv M3DC1_CODE_DIR $HOME/src/M3DC1  [for example]
+       module use $M3DC1_CODE_DIR/unstructured/modules/stellar
+       module load m3dc1/devel
+
+
+   if you want to forgo the above modules and load the modules necessary
+   for the latest code version individually:   
+
+   module load intel/2021.1.2 intel-mpi/intel/2021.3.1
+   module load fftw/intel-2021.1/intel-mpi/3.3.9
+   module load hdf5/intel-2021.1/intel-mpi/1.10.6 gsl/2.6
+
+4. compile code
+
+   2D real: make OPT=1 RL=1 MAX_PTS=25 ARCH=stellar
+   2D complex: make OPT=1 COM=1 MAX_PTS=25 ARCH=stellar
+           - add PAR=1 to run PIC
+   3D real: make 3D=1 OPT=1 MAX_PTS=60 ARCH=stellar
+   after compiling, run "make bin"
+
+5. mesh generator
+   # intelmpi
+   module load intel/2021.1.2 intel-mpi/intel/2021.3.1 simmodsuite/pppl/2024.0-231117dev
+   /projects/M3DC1/scorec/stellar/intel2021.1.2-intelmpi2021.3.1/2024.0-231117dev/bin
+
+   #openmpi
+   module load intel/2021.1.2 openmpi/intel-2021.1/4.1.0 simmodsuite/pppl/2024.0-231117dev
+   /projects/M3DC1/scorec/stellar/intel2021.1.2-openmpi4.1.0/2024.0-231117dev/bin
+
+   mesh utility (partioning, merging, etc.)
+   $SCOREC_UTIL_DIR/bin
+
+6. run a job 
+
+6.1 interactive mode
+  
+  $salloc -n N -t HH:MM:SS 
+  $module load module load intel/2021.1 intel-mpi/intel/2021.3.1
+  (complex) $srun -n N ./m3dc1_2d_complex -pc_factor_mat_solver_package mumps
+  (2D real) $srun -n N  ./m3dc1_2d
+  (3D real) $srun -n N ./m3dc1_3d -ipetsc -options_file options_bjacobi
+  $exit
+
+6.2 batch mode
+
+  sample job_script
+
+	#!/bin/bash
+	#SBATCH -A pppl
+	#SBATCH --nodes=16
+	#SBATCH --ntasks-per-node=16
+	#SBATCH -J JOB
+	#SBATCH --time=00:30:00
+        #2D complex
+            srun -n 8 ./m3dc1_2d_complex -pc_factor_mat_solver_package mumps
+        #2D real with petsc
+            srun -n 8 ./m3dc1_2d
+        #3D real with petsc
+            srun -n 256 ./m3dc1_3d -ipetsc -options_file options_bjacobi
+
+
+  submit job
+	sbatch job_script
+
+  list all curent jobs for a user
+	squeue -u your_id
+
+  delete a job
+   	scancel job_id
+
+6.3 regression test
+
+	setenv M3DC1_MPIRUN srun
+	setenv M3DC1_VERSION local
+	setenv M3DC1_ARCH stellar (intelmpi)
+	make bin ARCH=$M3DC1_ARCH
+	cd _stellar/bin/
+	setenv PATH `pwd`:$PATH
+	cd ../../regtest/
+	./run $M3DC1_ARCH
+	./check $M3DC1_ARCH
+
+7. solver options for mg in the toroidal direction
+
+7.1 specify which solve is the mg target solve, for example, 
+
+    use mg for solve #5
+            srun -n 256 ./m3dc1_3d -options_file options_bjacobi.type_mg -mgsolve 5
+
+    use mg for solve #5
+            srun -n 256 ./m3dc1_3d -options_file options_bjacobi.type_mg -mgsolve 17
+
+7.2 the 1st part is the block jacobi preconditioner, the same as what has been using
+
+-pc_type bjacobi
+-pc_bjacobi_blocks 16
+-sub_pc_type lu
+-sub_pc_factor_mat_solver_type mumps
+-sub_mat_mumps_icntl_14 100
+-sub_ksp_type preonly
+-ksp_type fgmres
+-ksp_gmres_restart 220
+-ksp_max_it 40000
+-ksp_rtol 1.e-9
+-ksp_atol 1.e-20
+
+7.3 the 2nd part is the block geometry multigrid  preconditioner, new
+
+-mg_nlevels 2
+-hard_ksp_type fgmres
+-hard_ksp_norm_type unpreconditioned
+-hard_pc_type mg
+
+-hard_mg_levels_1_ksp_type fgmres
+-hard_mg_levels_1_pc_type bjacobi
+-hard_mg_levels_1_pc_bjacobi_blocks 16 [this number should be the same as the number in "-pc_bjacobi_blocks 16"]
+-hard_mg_levels_1_sub_pc_type lu
+-hard_mg_levels_1_sub_pc_factor_mat_solver_type mumps
+-hard_mg_levels_1_sub_mat_mumps_icntl_14 100
+-hard_mg_levels_1_sub_ksp_type preonly
+
+-hard_mg_coarse_ksp_type fgmres
+-hard_mg_coarse_pc_type bjacobi
+-hard_mg_coarse_pc_bjacobi_blocks 8 [this number should be the half of the number in "-pc_bjacobi_blocks 16"]
+-hard_mg_coarse_sub_pc_type lu
+-hard_mg_coarse_sub_pc_factor_mat_solver_type mumps
+-hard_mg_coarse_sub_mat_mumps_icntl_14 100
+-hard_mg_coarse_sub_ksp_type preonly
+-hard_mg_coarse_ksp_max_it 3

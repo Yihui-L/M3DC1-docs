@@ -1,0 +1,80 @@
+1. login 
+	ssh your_id@edison.nersc.gov
+
+2. code
+
+3. load modules
+
+    module load cray-parallel-netcdf
+    module load cray-hdf5-parallel
+    module load cray-fftw
+    module load gsl
+    module load cray-tpsl
+    module load cray-trilinos/11.12.1.5
+    module load adios
+
+  For real type with PETSc, do
+    module load cray-petsc/3.7.6.0
+
+  For complex type with PETSc, do
+    module load cray-petsc-complex/3.7.6.0
+
+  To use adios, load the following additionally:
+    module load adios
+
+4. compile code
+	2D real: make OPT=1 
+            - add USEADIOS=1 to use adios
+            - add TRILINOS=1 to use Trilinos
+	2D complex: make OPT=1 COM=1 
+            - add USEADIOS=1 to use adios
+            - add PAR=1 to run PIC
+	3D real: make 3D=1 OPT=1 MAX_PTS=60 
+            - add USEADIOS=1 to use adios
+            - add TRILINOS=1 to use Trilinos
+        
+5. mesh utility
+        /global/project/projectdirs/mp288/edison/scorec/utilities
+
+6. run jobscript
+
+       	#!/bin/bash -l
+        #SBATCH -p regular
+        #SBATCH -N 2
+	#SBATCH -t 04:00:00
+        #SBATCH -J my_job
+        #SBATCH -o my_job.o%j
+
+        #Edison has 24 cores per compute node
+        srun -n 48 my_executable 
+
+        #2D complex
+        (for regular i/o) srun -n 8 m3dc1_2d_complex -pc_factor_mat_solver_package mumps
+        (for adios i/o)   srun -n 8 m3dc1_2d_complex_adios -pc_factor_mat_solver_package mumps 
+
+        #2D real with petsc
+        (for regular i/o) srun -n 8 m3dc1_2d
+        (for adios i/o)   srun -n 8 m3dc1_2d_adios
+ 
+        #2D real with trilinos
+        (for regular i/o) srun -n 8 m3dc1_2d_trilinos
+        (for adios i/o)   srun -n 8 m3dc1_2d_trilinos_adios
+
+        #3D real with petsc
+        (for regular i/o) srun -n 256 m3dc1_3d -ipetsc -options_file options_bjacobi
+        (for adios i/o)   srun -n 256 m3dc1_3d_adios -ipetsc -options_file options_bjacobi
+
+         #3D real with trilinos
+        (for regular i/o) srun -n 256 m3dc1_3d_trilinos
+        (for adios i/o)   srun -n 256 m3dc1_3d_trilinos_adios
+
+
+
+7. submit job
+	sbatch job_script
+
+8. list all curent jobs for a user
+	squeue -u your_id
+
+9. delete a job
+   	scancel job_id

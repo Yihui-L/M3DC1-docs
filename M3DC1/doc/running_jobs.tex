@@ -1,0 +1,184 @@
+\section{Running Jobs}
+
+\subsection{Tutorials}
+
+Tutorials for a few common use cases are provided in the M3D-C1 github
+repository under the \texttt{unstructured/tutorials} directory.
+Documentation for the tutorials can be found here:
+\url{http://sites.google.com/pppl.gov/m3d-c1/documentation}.
+
+\subsection{Regression Tests}
+
+The regression tests also provide a useful starting point for several
+typical cases, including batch scripts for a number of different
+systems.  These case be found in the github repository under
+\texttt{\$M3DC1\_DIR/unstructured/regtest/*/base/}.
+
+
+\subsection{Running 2D or Linear Jobs}
+
+In 2D, the run can be either linear or nonlinear, depending on the C1input parameter $linear$:
+
+$linear=0$ (non-linear run: must compile with the option RL=1)
+
+$linear=1$ (linear run: must compile with the option COM=1)
+
+\noindent
+In both cases, set 
+
+$nplanes=1$
+
+For the linear case, use
+
+$ntor=nn$
+
+set the toroidal mode number.
+
+\noindent
+To run your job on a scratch directory, copy the following files over:
+\begin{verbatim}
+executable (m3dc1_2d for non-linear run or m3dc1_2d_complex for linear run)
+C1input
+AnalyticModel (or MultiEdgeAnalyticModel)
+struct-dmg.sms
+(and geqdsk if needed)
+\end{verbatim}
+
+To run non-linear job
+\begin{verbatim}
+srun -np 8 m3dc1_2d
+\end{verbatim}
+
+To run linear job
+\begin{verbatim}
+srun -np 24 m3dc1_2d_complex -pc_factor_mat_solver_package mumps 
+\end{verbatim}
+
+\subsection{Running 3D Nonlinear Jobs}
+
+\noindent
+For the 3D nonlinear run, set $linear=0$ and set $nplanes$ equal to the number of toroidal planes in $C1input$ file. The
+number of bjacobi blocks in the PETSc options file must also be equal to $nplanes$. The
+total number of processors to request must be the product of nplanes and M (the number of processors per plane, which equals the number of mesh partitions per plane).
+
+\noindent
+Files required to be present to the local directory are:
+\begin{verbatim}
+executable (m3dc1 or m3dc1_st)
+C1input,
+part\#\#.smb (one for each poloidal plane partition)
+options_bjacobi
+m3dc1.xml (if using ADIOS)
+geqdsk (if needed)
+\end{verbatim}
+
+\noindent
+To run linear job
+\begin{verbatim}
+srun -np 16 m3dc1_3d -ipetsc -options_file options_bjacobi
+\end{verbatim}
+\noindent
+
+See the previous section for the format of the PETSc option file
+\texttt{options\_bjacobi}. In this example job, there are $M=8$ mesh
+partition files:
+\begin{verbatim}
+part0.smb part1.smb part2.smb part3.smb part4.smb part5.smb part6.smb part7.smb
+\end{verbatim}
+
+\subsection{Running Jobs with the Bootstrap Model}
+
+\noindent
+To run simulations with the bootstrap model enabled, the following procedure should be followed: 
+\begin{enumerate}
+    \item \textit{Initial Simulation Without Bootstrap Model}:  
+    Run a simulation for a single timestep with the bootstrap model disabled. 
+
+    \item \textit{Generate M3D-C1 output file}:  
+    Using fusion-io, generate the \texttt{neo\_input.nc} file containing the density, temperature, magnetic field, and rotational transform outputs required to calculate the bootstrap coefficients ($L_{31}$, $L_{32}$, $L_{34}$, $\alpha$). These coefficients are necessary to run the bootstrap model.
+
+    \item \textit{Generate Bootstrap Coefficients Input File}:  
+    Execute the MATLAB script located in the fusion-io's \texttt{/util/matlab\_bootstrap} directory. Use the appropriate flags as specified in the script's README file.  
+    This will generate a file named either:
+    \begin{itemize}
+        \item \texttt{ProfileJBSCoeff\_Te\_L31\_32\_34\_alpha\_B2\_dtedpsit\_G} or 
+        \item \texttt{ProfileJBSCoeff\_Psi\_L31\_32\_34\_alpha\_B2\_dtedpsit\_G},
+    \end{itemize}
+    which will serve as input for the bootstrap model in M3D-C1.
+
+    \item \textit{Rerun Simulation with Bootstrap Model Activated}:  
+    Run the simulation again, this time using the file generated in the previous step and setting the appropriate model options. The following settings are recommended for the \texttt{C1input} file to activate the bootstrap model for stellarator configurations:
+    \begin{itemize}
+        \item \texttt{ibootstrap = 3}
+        \item \texttt{ibootstrap\_model = 4}  
+        \item \texttt{bootstrap\_alpha = 1}  
+        \item \texttt{ibootstrap\_map\_te = 1}  
+        \item \texttt{ibootstrap\_regular = 1e-8}  
+        \item \texttt{iwrite\_aux\_vars = 1} \texttt{(This setting is required to generate the bootstrap model outputs in M3D-C1.)}
+    \end{itemize}
+\end{enumerate}
+
+The non-local quantities $L_{31}$, $L_{32}$, $L_{34}$, and $\alpha$ are currently computed outside M3D-C1 using the $n$, $T_e$, and $B$ field outputs from M3D-C1 (via fusion-io). These values are assumed not to change significantly throughout the simulation but can be updated when restarting the simulations.
+
+\subsection{Restarting Jobs}
+
+The HDF5 output files contain all of the needed state information to
+restart a simulation.
+
+By default, the hdf5 files are written in single precision. If
+\texttt{idouble\_out=1} in C1input file, hdf5 files are written in
+double precision.
+
+\subsubsection{Reading restart files for 2D real, 2D complex, or 3D real runs}
+
+To start a normal simulation with the hdf5 files, set the C1input
+parameter \texttt{irestart=1}.  You may restart from an intermediate
+time slice \texttt{nnn} by setting \texttt{irestart\_slice=nnn}. If
+this is not set, it will restart from the final time slice.  The files
+\texttt{C1.h5} and \texttt{time\_nnn.h5} must be present in the working
+directory. 
+
+\subsubsection{Reading real restart files to initialize 2D complex calculation}
+\begin{itemize}
+\item  Run 2D (m3dc1\_2d) \texttt{linear=0}
+\item  Copy 2D \texttt{C1.h5} and \texttt{time\_nnn.h5} to the working directory
+\item  Run 2D complex (m3dc1\_2d\_complex) \texttt{linear=1}. In the initial restart, the time and cycle number will start from t=0
+and N=0 for the complex run
+\end{itemize}
+
+\subsubsection{Running 3D real simulation from 2D real restart files}
+To start a 3D simulation with 2D restart files, do the following:
+\begin{itemize}
+\item  Run 2D
+\item  Copy 2D \texttt{C1.h5} and the \texttt{time\_nnn.h5} to the working directory
+\item  In 3D work folder, set the C1input parameter \texttt{irestart=1}
+Regardless of the time step when the restart files were written, the 3D simulation starts with time step 1. 
+\end{itemize}
+
+\subsection{Monitoring Jobs}
+You can monitor the progress of your running job in several ways:
+
+A. C1ke file. Each time step, one line will be added to the ASCII C1ke file in the run directory that you can open with a text editor. The first 4 fields are:
+
+\begin{verbatim}
+cycle time kinetic_energy growth_rate
+\end{verbatim}
+
+B. C1.h5 file: You can monitor a time dependent run by using the idl utility described below.  Especially useful is the 
+
+\begin{verbatim}
+plot_scalar, 'ke'
+\end{verbatim}
+
+\noindent
+command and also 
+
+\begin{verbatim}
+plot_scalar, 'ke', /growth
+\end{verbatim}
+
+C. You can use a text editor to monitor the log file slurm-nnnn.out file (where nnnn is the job number assigned by SLURM)
+
+\subsection{Exporting Node/Vector/Matrix for Standalone Study}
+\subsection{Archiving Data at PPPL}
+

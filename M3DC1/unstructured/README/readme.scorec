@@ -1,0 +1,80 @@
+This document describes how to install and run M3D-C1 on SCOREC linux machines:
+ 
+1. LOAD MODULES
+
+ssh romulus
+module load gcc/4.8.5-v5m6xwi mpich/3.2.1-geowaxe cmake gsl/2.5-px4dg7h
+module unload zlib/1.2.11-vhzh5cf
+
+2. INSTALL PUMI
+
+git clone https://github.com/SCOREC/core.git pumi
+git clone https://github.com/PrincetonUniversity/M3DC1
+
+cd pumi 
+cp M3DC1/m3dc1_scorec/config-files/romulus-pumi-config.sh config.sh
+EDIT config.sh as needed
+mkdir build
+cd build
+../config.sh
+make install
+
+2. INSTALL M3DC1_SCOREC
+
+cd M3DC1/m3dc1_scorec
+cp M3DC1/m3dc1_scorec/config-files/romulus-real-config.sh config.sh
+EDIT config.sh as needed
+mkdir build
+cd build
+../config.sh
+make install
+
+[Notes] 
+  - in config.sh, -DENABLE_COMPLEX are OFF by default
+  - the target library name is m3dc1_scorec by default
+  - To build complex version, set -DENABLE_COMPLEX=ON" then _complex" is appended to the target library name
+
+3. INSTALL M3DC1
+
+Modify scorec-rhel7.mk as needed (ex) PUMI_DIR
+
+Compile M3D-C1 with PETSc
+  export HOST=romulus 
+  cp 
+  - 2D real: make OPT=1
+    (the executable program is $PWD/_romulus-opt-25/m3dc1_2d)
+  - 2D complex: make OPT=1 COM=1
+  - 3D real: make OPT=1 MAX_PTS=60 3D=1
+    (the executable program is $PWD/_romulus-3d-opt-60/m3dc1_3d)
+
+4. RUN M3DC1
+
+Many test cases are available in ./regtest and /lore/seol/tests
+
+To run mesh adaptation with a pellet mesh, 
+  serial: see /lore/seol/tests/adapt/pellet-1p/run.sh
+  16 processes: see /lore/seol/tests/adapt/pellet-16p/run.sh
+
+To run regression tests
+
+cd ./regtest/adapt/base
+mpirun -n 16 /lore/seol/rhel7-gcc4.8.5-v5m6xwi-mpich3.2.1-geowaxe/bin/split_smb circle-0.02-0.0-0.0.dmg circle-0.02-0.0-0.0-2K.smb part.smb 16
+mpirun -n 16 ../../../_romulus-opt-25/m3dc1_2d 
+
+
+[to run 2d real test]
+cd 2d/2p
+Modify the file "C1input" to change the input parameters
+mpirun -np 2 YOUR_M3DC1/unstructured/_romulus-opt-25/m3dc1_2d 
+
+[to run 2d complex test]
+cd complex/48p
+Modify the file "C1input" to change the input parameters
+mpirun -np 48 YOUR_M3DC1/unstructured/_romulus-complex-opt-25/m3dc1_2d_complex -pc_factor_mat_solver_package mumps
+
+[to run 3d test]
+cd 3d/16p
+modify the file "C1input" to change the input parameters
+mpirun -np 16 YOUR_M3DC1/unstructured/_romulus-3d-opt-60/m3dc1_3d -ipetsc -options_file options_bjacobi
+
+For the details, see User's Guide available in https://m3dc1.pppl.gov/NEWDOC-latest.pdf

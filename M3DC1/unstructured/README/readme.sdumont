@@ -1,0 +1,73 @@
+1. login 
+	ssh your_id@ntm.acesso.lncc.br
+        ssh -P login.sdumont.lncc.br -l your_id
+
+2. generate User's Guide
+   cd M3DC1/doc
+   pdflatex M3DC1.tex
+
+3. load modules
+   source /scratch/app/modulos/intel-psxe-2020.sh
+   module load intel_psxe/2020 gcc/8.4 gsl/2.7_intel_2020 zlib/1.2.11 
+   export HOST=sdumont
+   export LD_LIBRARY_PATH=/scratch/app/gcc/8.4/lib64:/usr/lib64:/scratch/app/gsl/2.7_intel_2020/lib:$LD_LIBRARY_PATH
+
+4. compile code
+   for 2D real, make OPT=1
+   for 2D complex, make OPT=1 COM=1
+   for 3D real, make 3D=1 OPT=1 MAX_PTS=60
+   for 3D real with stellarator, 
+      module load netcdf/4.7_intel_2020 
+      make 3D=1 OPT=1 MAX_PTS=60 ST=1
+
+5. mesh utility
+(1) mesh generation 
+    /scratch/ntm/software/scorec/intel-psxe2020/sim12.0-181027/bin
+
+    See User's Guide Chapter 3 for details
+
+(2) other binaries 
+    /scratch/ntm/software/scorec/intel-psxe2020/petsc3.21.2/bin
+    (or $SCOREC_UTIL_DIR in sdumont.mk)
+
+6. run 
+(1) interactive mode
+   cd your test folder in /prj/ntm/your_id/scratch
+   salloc -n num_proc -t hh:mm:ss -p cpu_small
+   srun -n num_proc ./m3dc1_3d -options_file options_bjacobi > log.A_more 
+   exit
+
+(2) batch mode
+   create a script:
+	#!/bin/bash
+	#SBATCH --nodes=16                     #Numero de Nós
+	#SBATCH --ntasks-per-node=24           #Numero de tarefas por Nó
+	#SBATCH -p cpu_small                   #Fila (partition) a ser utilizada
+	#SBATCH -J jcA                         #Nome job
+	#SBATCH --time=hh:mm:ss		       #Altera o tempo limite para 5 minutos
+	#SBATCH --exclusive                    #Utilização exclusiva dos nós durante a execução do job
+
+	echo $SLURM_JOB_NODELIST
+	nodeset -e $SLURM_JOB_NODELIST
+
+	cd $SLURM_SUBMIT_DIR
+
+        #2D complex
+        srun -n xxx m3dc1_2d_complex -pc_factor_mat_solver_type mumps
+
+        #2D real
+	 srun -n xxx m3dc1_2d
+
+        #3D real
+        srun -n xxx ./m3dc1_3d -options_file options_bjacobi
+
+   then submit job
+	cd your test folder in /prj/ntm/your_id/scratch
+	sbatch job_script
+
+7. list all curent jobs for a user
+	squeue -u your_id
+
+8. delete a job
+   	scancel job_id
+

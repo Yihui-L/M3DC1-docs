@@ -1,0 +1,37 @@
+Sun Apr 12 22:41:24 EDT 2015
+
+1. login 
+	ssh your_id@saturn.gat.com
+
+2. code
+  # petsc real
+  ./configure --with-mpi=1 --with-mpi-dir=/act/mpich/gcc-4.7.2 --with-mpi-compilers=1 --with-debugging=1 --with-c++-support --with-fortran-interfaces=1 --with-shared-libraries=0 --with-x=0 --download-metis --download-parmetis --download-fblaslapack --download-blacs --download-scalapack --download-mumps --download-superlu_dist --download-superlu --download-hdf5=yes --download-netcdf=yes --download-hypre --with-scalar-type=real PETSC_ARCH=mpich-gcc4.7.2
+
+  # petsc complex:
+  ./configure --with-mpi=1 --with-mpi-dir=/act/mpich/gcc-4.7.2 --with-mpi-compilers=1 --with-debugging=1 --with-c++-support --with-fortran-interfaces=1 --with-shared-libraries=0 --with-x=0 --download-metis --download-parmetis --download-fblaslapack --download-blacs --download-scalapack --download-mumps --download-superlu_dist --download-superlu --download-hdf5=yes --download-netcdf=yes --with-scalar-type=complex PETSC_ARCH=mpich-gcc4.7.2
+
+  # zoltan: 
+  ../configure -prefix="/fusion/projects/codes/m3dc1/scorec/Dec2015-petsc" -with-parmetis -with-parmetis-incdir="/fusion/projects/codes/m3dc1/petsc-3.5.4-real/mpich-gcc4.7.2/include" -with-parmetis-libdir="/fusion/projects/codes/m3dc1/petsc-3.5.4-real/mpich-gcc4.7.2/lib" CC="/act/mpich/gcc-4.7.2/bin/mpicc" CXX="/act/mpich/gcc-4.7.2/bin/mpic++" --enable-mpi --disable-examples --with-gnumake
+
+3. load modules
+
+   module load gcc-4.7.2 mpich/gcc-4.7.2 hdf5/1.8.16-gcc4.7.2 fftw/3.3.4-mpich
+
+4. compile code
+	make OPT=1 RL=1 MAX_PTS=25
+	make OPT=1 COM=1 MAX_PTS=25
+	make 3D=1 OPT=1 MAX_PTS=60
+
+5. mesh utility
+   /fusion/projects/codes/m3dc1/scorec/mpich-gcc4.7.2/petsc3.12.1/bin
+
+6. run 
+
+  #2D complex
+     /act/mpich/gcc-4.7.2/bin/mpiexec -n N ./_saturn.cluster-complex-opt-25/m3dc1_2d_complex -pc_factor_mat_solver_package mumps
+ 
+  #2D real
+     /act/mpich/gcc-4.7.2/bin/mpiexec -n N ./_saturn.cluster-opt-25/m3dc1_2d
+
+  #3D real
+     /act/mpich/gcc-4.7.2/bin/mpiexec -n N ./_saturn.cluster-3d-opt-60/m3dc1_3d  -ipetsc -options_file options_bjacobi  

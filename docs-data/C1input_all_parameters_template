@@ -1,0 +1,687 @@
+&inputnl
+
+  ! 归一化 / Normalizations
+  ! b0_norm = 1.e4   ! real
+  ! n0_norm = 1.e14   ! real
+  ! l0_norm = 100.   ! real
+
+  ! 网格 / Mesh
+  ! nplanes = 1   ! integer
+  ! nperiods = 1   ! integer
+  ! ifull_torus = 1   ! integer
+  ! iread_vmec = 0   ! integer
+  ! vmec_filename = 'geometry.nc'   ! character(len=256)
+  ! igeometry = 0   ! integer
+  ! xcenter = 0.   ! real
+  ! zcenter = 0.   ! real
+  ! bloat_factor = 0.   ! real
+  ! bloat_distance = 0.   ! real
+  ! nzer_factor = -1   ! integer
+  ! nzer_manual = -1   ! integer
+  ! iread_planes = 0   ! integer
+  ! xzero = 0.   ! real
+  ! zzero = 0.   ! real
+  ! tiltangled = 0.   ! real
+  ! mesh_filename = 'struct-dmg.sms'   ! character(len=256)
+  ! mesh_model = 'struct.dmg'   ! character(len=256)
+  ! model_info = 'dummyInfo'   ! character(len=256)
+  ! ipartitioned = 0   ! integer
+  ! imatassemble = 0   ! integer
+  ! [conditional: ifdef REORDERED]
+  ! is1_agg_blks = 1   ! integer
+  ! [conditional: ifdef REORDERED]
+  ! is1_agg_scp = 0   ! integer
+  ! imulti_region = 0   ! integer
+  ! toroidal_pack_factor = 1.   ! real
+  ! toroidal_pack_angle = 0.   ! real
+  ! boundary_type(1) = 0   ! integer array, default all elements=0
+  ! zone_type(1) = 0   ! integer array, default all elements=0
+
+  ! 输入文件/剖面读入 / Input
+  ! iread_eqdsk = 0   ! integer
+  ! iread_dskbal = 0   ! integer
+  ! iread_jsolver = 0   ! integer
+  ! iread_omega = 0   ! integer
+  ! iread_omega_e = 0   ! integer
+  ! iread_omega_ExB = 0   ! integer
+  ! iread_ne = 0   ! integer
+  ! iread_te = 0   ! integer
+  ! iread_p = 0   ! integer
+  ! iread_f = 0   ! integer
+  ! iread_j = 0   ! integer
+  ! iread_heatsource = 0   ! integer
+  ! iread_particlesource = 0   ! integer
+  ! iread_neo = 0   ! integer
+  ! ineo_subtract_diamag = 0   ! integer
+
+  ! 平衡与初始条件 / Equilibrium
+  ! itaylor = 0   ! integer
+  ! iupstream = 0   ! integer
+  ! magus = 5.e-2   ! real
+  ! iflip = 0   ! integer
+  ! iflip_b = 0   ! integer
+  ! iflip_j = 0   ! integer
+  ! iflip_v = 0   ! integer
+  ! iflip_z = 0   ! integer
+  ! icsym = 0   ! integer
+  ! bzero = 1.   ! real
+  ! bx0 = 0.   ! real
+  ! vzero = 0.   ! real
+  ! phizero = 0.   ! real
+  ! verzero = 0.   ! real
+  ! v0_cyl = 0.   ! real
+  ! v1_cyl = 0.   ! real
+  ! idevice = 0   ! integer
+  ! iwave = 0   ! integer
+  ! eps = 0.01   ! real
+  ! maxn = 200   ! integer
+  ! irmp = 0   ! integer
+  ! rmp_atten = 0.   ! real
+  ! tf_tilt = 0.   ! real
+  ! tf_tilt_angle = 0.   ! real
+  ! tf_shift = 0.   ! real
+  ! tf_shift_angle = 0.   ! real
+  ! pf_tilt(1) = 0.   ! real array, default all elements=0.
+  ! pf_tilt_angle(1) = 0.   ! real array, default all elements=0.
+  ! pf_shift(1) = 0.   ! real array, default all elements=0.
+  ! pf_shift_angle(1) = 0.   ! real array, default all elements=0.
+  ! iread_ext_field = 0   ! integer
+  ! isample_ext_field = 1   ! integer
+  ! isample_ext_field_pol = 1   ! integer
+  ! scale_ext_field = 1.   ! real
+  ! shift_ext_field(1) = 0.   ! real array, default all elements=0.
+  ! type_ext_field = -1   ! integer
+  ! file_ext_field = 'error_field'   ! character(len=256)
+  ! file_total_field = 'total_field'   ! character(len=256)
+  ! beta = 0.   ! real
+  ! ln = 0.   ! real
+  ! elongation = 1.   ! real
+  ! basicj_nu = 1.   ! real
+  ! basicj_j0 = 1.   ! real
+  ! basicj_q0 = 0.   ! real
+  ! basicj_qa = 0.   ! real
+  ! basicj_voff = 1.   ! real
+  ! basicj_vdelt = 1.   ! real
+  ! basicj_dexp = 1.   ! real
+  ! basicj_dvac = 1.   ! real
+  ! ibasicj_solvep = 0   ! integer
+
+  ! Grad-Shafranov 求解器 / Grad-Shafranov Solver
+  ! inumgs = 0   ! integer
+  ! igs = 80   ! integer
+  ! igs_pp_ffp_rescale = 0   ! integer
+  ! igs_extend_p = 0   ! integer
+  ! igs_extend_diamag = 1   ! integer
+  ! igs_start_xpoint_search = 0   ! integer
+  ! igs_forcefree_lcfs = -1   ! integer
+  ! nv1equ = 0   ! integer
+  ! igs_feedfac = 1   ! integer
+  ! eta_gs = 1e3   ! real
+  ! tcuro = 1.   ! real
+  ! xmag = 1.   ! real
+  ! zmag = 0.   ! real
+  ! xmag0 = 0.   ! real
+  ! zmag0 = 0.   ! real
+  ! xlim = 0.   ! real
+  ! zlim = 0.   ! real
+  ! xlim2 = 0.   ! real
+  ! zlim2 = 0.   ! real
+  ! rzero = -1.   ! real
+  ! psifrac = 1.   ! real
+  ! libetap = 1.2   ! real
+  ! p0 = 0.01   ! real
+  ! pi0 = 0.005   ! real
+  ! p1 = 0.   ! real
+  ! p2 = 0.   ! real
+  ! pedge = 0.   ! real
+  ! tedge = 0.   ! real
+  ! tiedge = 0.   ! real
+  ! expn = 0.   ! real
+  ! q0 = 1.   ! real
+  ! sigma0 = 0.   ! real
+  ! djdpsi = 0.   ! real
+  ! th_gs = 0.8   ! real
+  ! tol_gs = 1.e-8   ! real
+  ! psiscale = 1.   ! real
+  ! pscale = 1.   ! real
+  ! bscale = 1.   ! real
+  ! batemanscale = 1.   ! real
+  ! bpscale = 1.   ! real
+  ! iread_bscale = 0   ! integer
+  ! iread_pscale = 0   ! integer
+  ! vscale = 1.   ! real
+  ! gs_vertical_feedback(1) = 0.   ! real array, default all elements=0.
+  ! gs_radial_feedback(1) = 0.   ! real array, default all elements=0.
+  ! gs_vertical_feedback_i(1) = 0.   ! real array, default all elements=0.
+  ! gs_radial_feedback_i(1) = 0.   ! real array, default all elements=0.
+  ! gs_vertical_feedback_x(1) = 0.   ! real array, default all elements=0.
+  ! gs_radial_feedback_x(1) = 0.   ! real array, default all elements=0.
+  ! gs_vertical_feedback_x_i(1) = 0.   ! real array, default all elements=0.
+  ! gs_radial_feedback_x_i(1) = 0.   ! real array, default all elements=0.
+  ! irot = 0   ! integer
+  ! iscale_rot_by_p = 1   ! integer
+  ! alpha0 = 0.   ! real
+  ! alpha1 = 0.   ! real
+  ! alpha2 = 0.   ! real
+  ! alpha3 = 0.   ! real
+  ! idenfunc = 0   ! integer
+  ! den_edge = 0.   ! real
+  ! den0 = 1.   ! real
+  ! dendelt = 0.1   ! real
+  ! denoff = 1.   ! real
+  ! divertors = 0   ! integer
+  ! xdiv = 0.   ! real
+  ! zdiv = 0.   ! real
+  ! divcur = 0.1   ! real
+  ! xnull = 0.   ! real
+  ! znull = 0.   ! real
+  ! mod_null_rs = 0   ! integer
+  ! xnull2 = 0.   ! real
+  ! znull2 = 0.   ! real
+  ! mod_null_rs2 = 0   ! integer
+  ! gs_pf_psi_width = 0.   ! real
+  ! xnull0 = 0.   ! real
+  ! znull0 = 0.   ! real
+  ! adapt_qs(1) = 0.   ! real array, default all elements=0.
+  ! adapt_zlow = 0.   ! real
+  ! adapt_zup = 0.   ! real
+
+  ! 模型选项 / Model Options
+  ! numvar = 3   ! integer
+  ! linear = 0   ! integer
+  ! eqsubtract = 0   ! integer
+  ! extsubtract = 0   ! integer
+  ! icsubtract = 0   ! integer
+  ! idens = 0   ! integer
+  ! ipres = 0   ! integer
+  ! ipressplit = 0   ! integer
+  ! itemp = 0   ! integer
+  ! iadiabat = 1   ! integer
+  ! gyro = 0   ! integer
+  ! igauge = 0   ! integer
+  ! inertia = 1   ! integer
+  ! itwofluid = 1   ! integer
+  ! ibootstrap = 0   ! integer
+  ! irunaway = 0   ! integer
+  ! cre = 0   ! integer
+  ! ra_cyc = 1   ! integer
+  ! radiff = 0.   ! real
+  ! rjra = 1.   ! real
+  ! ra_characteristics = 0   ! integer
+  ! bzsign = 0.   ! real
+  ! imp_bf = 0   ! integer
+  ! imp_temp = 0   ! integer
+  ! nosig = 0   ! integer
+  ! itor = 0   ! integer
+  ! iohmic_heating = 1   ! integer
+  ! irad_heating = 1   ! integer
+  ! gravr = 0.   ! real
+  ! gravz = 0.   ! real
+  ! istatic = 0   ! integer
+  ! iestatic = 0   ! integer
+  ! chiiner = 1.   ! real
+  ! ieq_bdotgradt = 1   ! integer
+  ! iwall_is_limiter = 1   ! integer
+  ! no_vdg_T = 0   ! integer
+  ! ibootstrap_model = 0   ! integer
+  ! bootstrap_alpha = 0.   ! real
+  ! ibootstrap_regular = 1e-8   ! real
+  ! kinetic = 0   ! integer
+
+  ! 输运系数 / Transport Coefficients
+  ! ivisfunc = 0   ! integer
+  ! amuoff = 0.   ! real
+  ! amudelt = 0.   ! real
+  ! amuoff2 = 0.   ! real
+  ! amudelt2 = 0.   ! real
+  ! amu = 0.   ! real
+  ! amuc = 0.   ! real
+  ! amue = 0.   ! real
+  ! amupar = 0.   ! real
+  ! amu_edge = 0.   ! real
+  ! amu_wall = 0.   ! real
+  ! amu_wall_off = 0.   ! real
+  ! amu_wall_delt = 0.1   ! real
+  ! iresfunc = 0   ! integer
+  ! etaoff = 0.   ! real
+  ! etadelt = 0.   ! real
+  ! etar = 0.   ! real
+  ! eta0 = 0.   ! real
+  ! eta_fac = 1.   ! real
+  ! eta_mod = 0   ! integer
+  ! eta_te_offset = 0.   ! real
+  ! ikprad_te_offset = 0   ! integer
+  ! eta_max = 0.   ! real
+  ! eta_min = 0.   ! real
+  ! ikappafunc = 0   ! integer
+  ! ikapparfunc = 0   ! integer
+  ! ikapscale = 0   ! integer
+  ! ikappar_ni = 1   ! integer
+  ! kappaoff = 0.   ! real
+  ! kappadelt = 0.   ! real
+  ! kappat = 0.   ! real
+  ! kappa0 = 0.   ! real
+  ! kappar = 0.   ! real
+  ! kappari_fac = 1.   ! real
+  ! tcrit = 0.   ! real
+  ! k_fac = 1.   ! real
+  ! kappax = 0.   ! real
+  ! kappah = 0.   ! real
+  ! kappag = 0.   ! real
+  ! kappaf = 1.   ! real
+  ! gradp_crit = 0.   ! real
+  ! kappa_max = 0.   ! real
+  ! kappar_max = 0.   ! real
+  ! kappar_min = 0.   ! real
+  ! temin_qd = 0.   ! real
+  ! kappai_fac = 1.   ! real
+  ! idenmfunc = 0   ! integer
+  ! denm = 0.   ! real
+  ! denmt = 0.   ! real
+  ! denmmin = 0.   ! real
+  ! denmmax = 1.e6   ! real
+
+  ! 超扩散 / Hyper Diffusivity
+  ! deex = 1.   ! real
+  ! hyper = 0.   ! real
+  ! hyperc = 0.   ! real
+  ! hyperi = 0.   ! real
+  ! hyperp = 0.   ! real
+  ! hyperv = 0.   ! real
+  ! ihypdx = 0   ! integer
+  ! ihypeta = 1   ! integer
+  ! ihypkappa = 1   ! integer
+  ! imp_hyper = 0   ! integer
+
+  ! 边界条件 / Boundary Conditions
+  ! isurface = 1   ! integer
+  ! icurv = 2   ! integer
+  ! nonrect = 1   ! integer
+  ! ifixedb = 0   ! integer
+  ! com_bc = 0   ! integer
+  ! vor_bc = 0   ! integer
+  ! iconst_p = 1   ! integer
+  ! iconst_n = 1   ! integer
+  ! iconst_t = 1   ! integer
+  ! iconst_bn = 1   ! integer
+  ! iconst_bz = 0   ! integer
+  ! inograd_p = 0   ! integer
+  ! inograd_t = 0   ! integer
+  ! inograd_n = 0   ! integer
+  ! inonormalflow = 1   ! integer
+  ! inoslip_pol = 1   ! integer
+  ! inoslip_tor = 1   ! integer
+  ! inostress_tor = 0   ! integer
+  ! inocurrent_pol = 0   ! integer
+  ! inocurrent_tor = 0   ! integer
+  ! inocurrent_norm = 0   ! integer
+  ! ifbound = -1   ! integer
+  ! iconstflux = 0   ! integer
+  ! iper = 0   ! integer
+  ! jper = 0   ! integer
+  ! tebound = -1.   ! real
+  ! tibound = -1.   ! real
+
+  ! 电阻壁/真空/导体区 / Resistive Wall
+  ! eta_wall = 1e-3   ! real
+  ! eta_wallRZ = -1.   ! real
+  ! eta_vac = 1.   ! real
+  ! iwall_breaks = 0   ! integer
+  ! eta_break(1) = 1.   ! real array, default all elements=1.
+  ! wall_break_xmin(1) = 0.   ! real array, default all elements=0.
+  ! wall_break_xmax(1) = 0.   ! real array, default all elements=0.
+  ! wall_break_zmin(1) = 0.   ! real array, default all elements=0.
+  ! wall_break_zmax(1) = 0.   ! real array, default all elements=0.
+  ! wall_break_phimin(1) = 0.   ! real array, default all elements=0.
+  ! wall_break_phimax(1) = 0.   ! real array, default all elements=0.
+  ! iwall_regions = 0   ! integer
+  ! wall_region_eta(1) = 1e-3   ! real array, default all elements=1e-3
+  ! wall_region_etaRZ(1) = -1.   ! real array, default all elements=-1.
+  ! eta_zone(1) = 0.   ! real array, default all elements=0.
+  ! etaRZ_zone(1) = 0.   ! real array, default all elements=0.
+  ! wall_region_filename(1) = ''   ! character(len=256) array, default all elements=""
+  ! eta_rekc = 0.   ! real
+  ! ntor_rekc = 0   ! integer
+  ! mpol_rekc = 0   ! integer
+  ! isym_rekc = 0   ! integer
+  ! phi_rekc = 0.   ! real
+  ! theta_rekc = 0.   ! real
+  ! sigma_rekc = 0.   ! real
+  ! rzero_rekc = 0.   ! real
+  ! zzero_rekc = 0.   ! real
+
+  ! 时间推进 / Time Step
+  ! ntimemax = 20   ! integer
+  ! integrator = 0   ! integer
+  ! isplitstep = 1   ! integer
+  ! iteratephi = 0   ! integer
+  ! imp_mod = 1   ! integer
+  ! caramana_fac = 1.   ! real
+  ! idiff = 0   ! integer
+  ! idifv = 0   ! integer
+  ! irecalc_eta = 0   ! integer
+  ! iconst_eta = 0   ! integer
+  ! itime_independent = 0   ! integer
+  ! thimp = 0.5   ! real
+  ! thimpsm = 1.   ! real
+  ! harned_mikic = 0.   ! real
+  ! isources = 0   ! integer
+  ! nskip = 1   ! integer
+  ! pskip = 0   ! integer
+  ! iskippc = 1   ! integer
+  ! dt = 0.1   ! real
+  ! ddt = 0.   ! real
+  ! frequency = 0.   ! real
+  ! gamma_gr_stop = 0   ! integer
+  ! nt_gamma_gr = 10   ! integer
+  ! gamma_gr_stop_std = 0.01   ! real
+  ! dtmin = 4.0   ! real
+  ! dtmax = 40.   ! real
+  ! dtkecrit = 0.0   ! real
+  ! dtfrac = 0.1   ! real
+  ! max_repeat = 1   ! integer
+  ! ksp_max = 10000   ! integer
+  ! ksp_min = 500   ! integer
+  ! ksp_warn = 1000   ! integer
+
+  ! 数值选项 / Numerical Options
+  ! jadv = 1   ! integer
+  ! int_pts_main = 25   ! integer
+  ! int_pts_aux = 25   ! integer
+  ! int_pts_diag = 25   ! integer
+  ! int_pts_tor = 5   ! integer
+  ! max_ke = 1.   ! real
+  ! equilibrate = 0   ! integer
+  ! regular = 0.   ! real
+  ! iset_pe_floor = 0   ! integer
+  ! pe_floor = 0.   ! real
+  ! iset_pi_floor = 0   ! integer
+  ! pi_floor = 0.   ! real
+  ! iset_ne_floor = 0   ! integer
+  ! ne_floor = 0.   ! real
+  ! iset_ni_floor = 0   ! integer
+  ! ni_floor = 0.   ! real
+  ! iset_te_floor = 0   ! integer
+  ! te_floor = 0.   ! real
+  ! iset_ti_floor = 0   ! integer
+  ! ti_floor = 0.   ! real
+  ! iprecompute_metric = 0   ! integer
+
+  ! 线性求解器 / Solver
+  ! solver_tol = 1e-9   ! real
+  ! solver_type = 0   ! integer
+  ! num_iter = 100   ! integer
+  ! isolve_with_guess = 0   ! integer
+
+  ! Trilinos 选项 / Trilinos Options
+  ! krylov_solver = 'gmres'   ! character(len=50)
+  ! preconditioner = 'dom_decomp'   ! character(len=50)
+  ! sub_dom_solver = 'ilu'   ! character(len=50)
+  ! subdomain_overlap = 1   ! integer
+  ! graph_fill = 0   ! integer
+  ! drop_tolerance = 0.0   ! real
+  ! ilu_fill_level = 1.0   ! real
+  ! ilu_omega = 1.0   ! real
+  ! poly_ord = 1   ! integer
+
+  ! 网格自适应 / Mesh Adaptation
+  ! iadapt = 0   ! integer
+  ! ispradapt = 0   ! integer
+  ! isprntime = 10   ! integer
+  ! isprweight = 0.1   ! real
+  ! isprmaxsize = 0.05   ! real
+  ! isprrefinelevel = 1   ! integer
+  ! isprcoarsenlevel = -1   ! integer
+  ! iadapt_writevtk = 0   ! integer
+  ! iadapt_writesmb = 1   ! integer
+  ! iadapt_useH1 = 0   ! integer
+  ! iadapt_removeEquiv = 0   ! integer
+  ! adapt_target_error = 0.0001   ! real
+  ! adapt_ke = 0.0   ! real
+  ! iadapt_ntime = 0   ! integer
+  ! iadapt_max_node = 10000   ! integer
+  ! adapt_control = 1   ! integer
+  ! iadapt_order_p = 3.0   ! real
+  ! iadaptFaceNumber = -1   ! integer
+  ! iadapt_snap = 1   ! integer
+  ! adapt_factor = 1.   ! real
+  ! adapt_hmin = 0.001   ! real
+  ! adapt_hmax = 0.1   ! real
+  ! adapt_hmin_rel = 0.5   ! real
+  ! adapt_hmax_rel = 2.0   ! real
+  ! adapt_smooth = 2./3. (约 0.6667)   ! real
+  ! adapt_psin_vacuum = -1.   ! real
+  ! adapt_psin_wall = -1.   ! real
+  ! iadapt_pack_rationals = 0   ! integer
+  ! adapt_pack_factor = 0.02   ! real
+  ! adapt_coil_delta = 0.   ! real
+  ! adapt_pellet_length = 0.   ! real
+  ! adapt_pellet_delta = 0.   ! real
+
+  ! 源项/汇项 / Sources/Sinks
+  ! iheat_sink = 0   ! integer
+  ! vloop = 0.   ! real
+  ! vloopRZ = 0.   ! real
+  ! tcur = 0.   ! real
+  ! vloop_freq = 0.   ! real
+  ! tcuri = 0.   ! real
+  ! tcurf = 0.   ! real
+  ! tcur_t0 = 0.   ! real
+  ! tcur_tw = 0.   ! real
+  ! control_p = 0.   ! real
+  ! control_i = 0.   ! real
+  ! control_d = 0.   ! real
+  ! control_type = -1   ! integer
+  ! ipellet = 0   ! integer
+  ! irestart_pellet = 0   ! integer
+  ! ipellet_z = 0   ! integer
+  ! iread_pellet = 0   ! integer
+  ! pellet_r = 0.   ! real
+  ! pellet_phi = 0.   ! real
+  ! pellet_z = 0.   ! real
+  ! pellet_rate = 0.   ! real
+  ! pellet_var = 1.   ! real
+  ! pellet_var_tor = 0.   ! real
+  ! pellet_velr = 0.   ! real
+  ! pellet_velphi = 0.   ! real
+  ! pellet_velz = 0.   ! real
+  ! ipellet_abl = 0   ! integer
+  ! ipellet_fixed_dep = 0   ! integer
+  ! r_p = 1.e-3   ! real
+  ! cloud_pel = 1.   ! real
+  ! pellet_mix = 0.   ! real
+  ! temin_abl = 0.   ! real
+  ! cauchy_fraction = 0.   ! real
+  ! abl_fac = 1.   ! real
+  ! ibeam = 0   ! integer
+  ! beam_x = 0.   ! real
+  ! beam_z = 0.   ! real
+  ! beam_v = 1.e4   ! real
+  ! beam_rate = 0.   ! real
+  ! beam_dr = 0.1   ! real
+  ! beam_dv = 100.   ! real
+  ! beam_fracpar = 1.0   ! real
+  ! icd_source = 0   ! integer
+  ! J_0cd = 0.   ! real
+  ! R_0cd = 0.   ! real
+  ! Z_0cd = 0.   ! real
+  ! W_cd = 0.   ! real
+  ! delta_cd = 0.   ! real
+  ! ipforce = 0   ! integer
+  ! dforce = 0.   ! real
+  ! xforce = 0.   ! real
+  ! nforce = 0   ! integer
+  ! aforce = 0.   ! real
+  ! igaussian_heat_source = 0   ! integer
+  ! ghs_x = 0.   ! real
+  ! ghs_z = 0.   ! real
+  ! ghs_phi = 0.   ! real
+  ! ghs_rate = 0.   ! real
+  ! ghs_var = 1.   ! real
+  ! ghs_var_tor = 0.   ! real
+  ! ionization = 0   ! integer
+  ! ionization_rate = 0.   ! real
+  ! coolrate = 0.   ! real
+  ! ionization_temp = 0.01   ! real
+  ! ionization_depth = 0.01   ! real
+  ! isink = 0   ! integer
+  ! sink1_x = 0.   ! real
+  ! sink1_z = 0.   ! real
+  ! sink1_rate = 0.   ! real
+  ! sink1_var = 1.   ! real
+  ! sink2_x = 0.   ! real
+  ! sink2_z = 0.   ! real
+  ! sink2_rate = 0.   ! real
+  ! sink2_var = 1.   ! real
+  ! iarc_source = 0   ! integer
+  ! arc_source_alpha = 0.   ! real
+  ! arc_source_eta = 0.01   ! real
+  ! idenfloor = 0   ! integer
+  ! alphadenfloor = 0.   ! real
+  ! n_target = 1.   ! real
+  ! n_control_p = 0.   ! real
+  ! n_control_i = 0.   ! real
+  ! n_control_d = 0.   ! real
+  ! n_control_type = -1   ! integer
+
+  ! PRAD 简单辐射模型 / PRAD Options
+  ! iprad = 0   ! integer
+  ! prad_z = 1   ! integer
+  ! prad_fz = 1.   ! real
+  ! iread_prad = 0   ! integer
+
+  ! KPRAD 辐射/杂质模型 / KPRAD Options
+  ! ikprad = 0   ! integer
+  ! kprad_z = 1   ! integer
+  ! ikprad_evolve_neutrals = 0   ! integer
+  ! kprad_fz = 0.   ! real
+  ! kprad_nz = 0.   ! real
+  ! iread_lp_source = 0   ! integer
+  ! ikprad_min_option = 1   ! integer
+  ! kprad_nemin = 1e-12   ! real
+  ! kprad_temin = 2e-7   ! real
+  ! ikprad_max_dt = 0   ! integer
+  ! kprad_max_dt = -1.   ! real
+  ! ikprad_evolve_internal = 0   ! integer
+  ! kprad_n0_denm_fac = 1.   ! real
+  ! [conditional: ifdef USEADAS]
+  ! adas_adf11 = ''   ! character(len=256)
+
+  ! 粒子模拟选项 / Particle Simulation Options
+  ! [conditional: ifdef USEPARTICLES]
+  ! kinetic_fast_ion = 1   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! kinetic_thermal_ion = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! igyroaverage = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! particle_linear = -1   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! particle_substeps = 40   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! particle_subcycles = 1   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! particle_couple = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! particle_nodelete = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! iconst_f0 = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! ifullf = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! fast_ion_mass = 0.   ! real
+  ! [conditional: ifdef USEPARTICLES]
+  ! fast_ion_z = 0.   ! real
+  ! [conditional: ifdef USEPARTICLES]
+  ! fast_ion_dist = 1   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! fast_ion_max_energy = 1000.   ! real
+  ! [conditional: ifdef USEPARTICLES]
+  ! num_par_max = 4000000   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! num_par_scale(1) = 1.   ! real array, default all elements=1.
+  ! [conditional: ifdef USEPARTICLES]
+  ! kinetic_nrmfac_scale(1) = 1.   ! real array, default all elements=1.
+  ! [conditional: ifdef USEPARTICLES]
+  ! ikinetic_vpar = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! kinetic_rhomax = 1.   ! real
+  ! [conditional: ifdef USEPARTICLES]
+  ! vpar_reduce = 0.   ! real
+  ! [conditional: ifdef USEPARTICLES]
+  ! idiamagnetic_advection = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! imode_filter = 0   ! integer
+  ! [conditional: ifdef USEPARTICLES]
+  ! mode_filter_ntor(1) = 0   ! integer array, default all elements=0
+  ! [conditional: ifdef USEPARTICLES]
+  ! smooth_par = 1.e-8   ! real
+  ! [conditional: ifdef USEPARTICLES]
+  ! smooth_dens_parallel = 0.   ! real
+
+  ! 诊断 / Diagnostics
+  ! xray_detector_enabled = 0   ! integer
+  ! xray_r0 = 0.   ! real
+  ! xray_phi0 = 0.   ! real
+  ! xray_z0 = 0.   ! real
+  ! xray_theta = 0.   ! real
+  ! xray_sigma = 1.   ! real
+  ! imag_probes = 0   ! integer
+  ! mag_probe_x(1) = 0.   ! real array, default all elements=0.
+  ! mag_probe_phi(1) = 0.   ! real array, default all elements=0.
+  ! mag_probe_z(1) = 0.   ! real array, default all elements=0.
+  ! mag_probe_nx(1) = 0.   ! real array, default all elements=0.
+  ! mag_probe_nphi(1) = 0.   ! real array, default all elements=0.
+  ! mag_probe_nz(1) = 0.   ! real array, default all elements=0.
+  ! iflux_loops = 0   ! integer
+  ! flux_loop_x(1) = 0.   ! real array, default all elements=0.
+  ! flux_loop_z(1) = 0.   ! real array, default all elements=0.
+  ! ifixed_temax = 0   ! integer
+
+  ! 输出与重启 / Output
+  ! iprint = 0   ! integer
+  ! ntimepr = 1   ! integer
+  ! ntimers = 0   ! integer
+  ! ifout = -1   ! integer
+  ! icalc_scalars = 1   ! integer
+  ! ike_only = 0   ! integer
+  ! ike_harmonics = 0   ! integer
+  ! ibh_harmonics = 0   ! integer
+  ! irestart = 0   ! integer
+  ! itimer = 0   ! integer
+  ! iwrite_transport_coeffs = 1   ! integer
+  ! iwrite_aux_vars = 1   ! integer
+  ! iwrite_adjacency = 1   ! integer
+  ! iwrite_quad_points = 0   ! integer
+  ! itemp_plot = 0   ! integer
+  ! ibdgp = 0   ! integer
+  ! idouble_out = 0   ! integer
+  ! irestart_slice = -1   ! integer
+  ! iveldif = 0   ! integer
+  ! write_ts_on_job_timeout = 0   ! integer
+
+  ! 杂项物理参数 / Miscellaneous
+  ! gam = 5./3. (约 1.6667)   ! real
+  ! db = -1.   ! real
+  ! db_fac = 0.   ! real
+  ! mass_ratio = 0.   ! real
+  ! lambdae = 0.   ! real
+  ! z_ion = 1.   ! real
+  ! ion_mass = 1.   ! real
+  ! lambda_coulomb = 17.   ! real
+  ! thermal_force_coeff = 0.   ! real
+  ! ntor = 0   ! integer
+  ! mpol = 0   ! integer
+
+  ! 已废弃兼容参数 / Deprecated
+  ! ibform = -1   ! integer
+  ! igs_method = -1   ! integer
+  ! iwrite_restart = 0   ! integer
+  ! zeff = 0.   ! real
+  ! ivform = 1   ! integer
+  ! iwrite_adios = 0   ! integer
+  ! iglobalout = 0   ! integer
+  ! iglobalin = 0   ! integer
+  ! iread_adios = 0   ! integer
+  ! iread_hdf5 = 1   ! integer
+/

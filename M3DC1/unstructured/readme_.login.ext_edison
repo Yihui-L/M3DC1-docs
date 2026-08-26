@@ -1,0 +1,10 @@
+if ($NERSC_HOST == "edison") then
+
+module load cray-netcdf-hdf5parallel/4.3.2
+module load fftw
+module load gsl/1.16
+module load idl 
+module load adios/1.4.1
+setenv CRAY_ROOFTS DSL
+module load cray-trilinos 
+endif

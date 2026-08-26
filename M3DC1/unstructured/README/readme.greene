@@ -1,0 +1,52 @@
+1. login
+   ssh portal
+
+2. code
+   git clone https://github.com/PrincetonUniversity/M3DC1.git
+
+3. load modules
+   setenv M3DC1_CODE_DIR $HOME/src/M3DC1  [for example]
+   module use $M3DC1_CODE_DIR/unstructured/modules/pppl
+   module load m3dc1/devel-greene
+
+   or
+
+   module load intel/2019.u3 openmpi/4.0.3 hdf5-parallel/1.10.5 fftw netcdf-c/4.7.3 netcdf-fortran/4.5.2  
+
+4. compile code
+   make ARCH=greene all 
+
+	2D real: make OPT=1 RL=1 MAX_PTS=25 ARCH=greene
+	2D complex: make OPT=1 COM=1 MAX_PTS=25 ARCH=greene
+	3D real: make 3D=1 OPT=1 MAX_PTS=60 ARCH=greene
+	3D ST: make 3D=1 OPT=1 MAX_PTS=60 ARCH=greene ST=1
+   
+        2D with a new mesh adaptation capability:
+           make OPT=1 MAX_PTS=25 ARCH=greene SCORECVER=adapt ADAPT=1
+           (examples available in /p/tsc/m3dc1/lib/SCORECLib/adapt-examples/pellet-*p)
+
+5. mesh utility
+   See $SCOREC_UTIL_DIR in greene.mk
+
+6. running 
+   use superlu_dist for real 2D and 3D runs
+   use mumps for complex runs
+
+   sample script:
+	#!/bin/bash
+	#SBATCH -p m3dc1
+	#SBATCH -n 16
+	#SBATCH --mem-per-cpu=2000M
+	#SBATCH -J m3dc1
+	#SBATCH -t 0:10:00
+	#SBATCH -o C1stdout
+	mpirun -n $SLURM_NTASKS m3dc1_2d_complex -pc_factor_mat_solver_type mumps
+
+   submit job
+	sbatch job_script
+
+   list all curent jobs for a user
+	squeue -u your_id
+
+   delete a job
+   	scancel job_id
