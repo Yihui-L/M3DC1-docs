@@ -253,10 +253,10 @@ pre {
 <div class="stat"><b>611</b><span>源码注册参数</span></div>
 <div class="stat"><b>23</b><span>逻辑分组</span></div>
 <div class="stat"><b>28</b><span>条件编译参数</span></div>
-<div class="stat"><b>51</b><span>含文档差异/运行时提示</span></div>
+<div class="stat"><b>57</b><span>含文档差异/运行时提示</span></div>
 <div class="stat"><b>6</b><span>未见直接源码引用</span></div>
 <div class="stat"><b>10</b><span>废弃 dummy 参数</span></div>
-<div class="stat"><b>11</b><span>语义/取值差异项</span></div>
+<div class="stat"><b>17</b><span>语义/取值差异项</span></div>
 <div class="stat"><b>23</b><span>默认值差异项</span></div>
 </div>
 </section>
@@ -1460,7 +1460,7 @@ unstructured/init_conds.f90:479: if(db.ne.0. .and. ineo_subtract_diamag.eq.1) ca
 <h2>【平衡与初始条件】</h2><span>Equilibrium · 50 个参数</span>
 </div>
 <p class="group-note">选择/缩放初始平衡、外场、RMP、stellarator 场、basicj 模型以及初始扰动。</p>
-<article class="param-card" data-param data-search="itaylor itaylor equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 选择预置初始条件/平衡：toroidal 几何中 1 常用于 gs，40/41 为 stellarator；slab/cylindrical 下有 taylor、gem、wave、rwm、basicj 等测试平衡。 源码用法：主初始化分发开关；不同几何下选择 tilting cylinder、gs、vmec/stellarator、fixed-q、basicj、rwm、wave/diffusion tests 等分支。 源码引用 20 处；主要在 `transport.f90` 4处, `init_basicj.f90` 3处, `init_basicq.f90` 3处, `init_conds.f90` 3处。 unstructured/transport.f90(4); unstructured/init_basicj.f90(3); unstructured/init_basicq.f90(3); unstructured/init_conds.f90(3); unstructured/rmp.f90(3); unstructured/ludef_t.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1) 语义/取值范围： 官方文档列出常用初始条件；源码 `init_conds.f90` 还包含 -1、24、25、26、28、30、31、32、33、34 等分支，实际可用性取决于编译宏和对应初始化例程。">
+<article class="param-card" data-param data-search="itaylor itaylor equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：当三个外部平衡入口均为 0 时选择内置初始化；`itaylor=1` 进入 gs，19 为 solovev，24 为 rwm，29/31 为 basicj，-1 为常量场。仿星器：40 直接投影固定边界 vmec 平衡；41 从三维 total/external field 初始化，程序不求解 vmec 自由边界平衡。 源码用法：主初始化分发开关；不同几何下选择 tilting cylinder、gs、vmec/stellarator、fixed-q、basicj、rwm、wave/diffusion tests 等分支。 源码引用 20 处；主要在 `transport.f90` 4处, `init_basicj.f90` 3处, `init_basicq.f90` 3处, `init_conds.f90` 3处。 unstructured/transport.f90(4); unstructured/init_basicj.f90(3); unstructured/init_basicq.f90(3); unstructured/init_conds.f90(3); unstructured/rmp.f90(3); unstructured/ludef_t.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1) 语义/取值范围： 官方文档列出常用初始条件；源码 `init_conds.f90` 还包含 -1、24、25、26、28、30、31、32、33、34 等分支，实际可用性取决于编译宏和对应初始化例程。">
 <div class="param-head">
 <div class="param-title">itaylor = 0 | integer</div>
 <div class="chips">
@@ -1474,7 +1474,7 @@ unstructured/init_conds.f90:479: if(db.ne.0. .and. ineo_subtract_diamag.eq.1) ca
 <div><dt>注册位置</dt><dd>unstructured/input.f90:560</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>选择预置初始条件/平衡：toroidal 几何中 1 常用于 GS，40/41 为 stellarator；slab/cylindrical 下有 Taylor、GEM、wave、RWM、basicJ 等测试平衡。 源码用法：主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支。</div>
+<div class="field"><b>使用：</b>托卡马克：当三个外部平衡入口均为 0 时选择内置初始化；<code>itaylor=1</code> 进入 GS，19 为 Solovev，24 为 RWM，29/31 为 basicJ，-1 为常量场。仿星器：40 直接投影固定边界 VMEC 平衡；41 从三维 total/external field 初始化，程序不求解 VMEC 自由边界平衡。 源码用法：主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支。</div>
 <div class="field"><b>源码使用：</b>源码引用 20 处；主要在 <code>transport.f90</code> 4处, <code>init_basicj.f90</code> 3处, <code>init_basicq.f90</code> 3处, <code>init_conds.f90</code> 3处。</div>
 <div class="field"><b>主要文件：</b>unstructured/transport.f90(4); unstructured/init_basicj.f90(3); unstructured/init_basicq.f90(3); unstructured/init_conds.f90(3); unstructured/rmp.f90(3); unstructured/ludef_t.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1494,7 +1494,7 @@ unstructured/ludef_t.f90:3523: if(iheat_sink.eq.1 .and. itaylor.eq.27) then</pre
 <li>语义/取值范围： 官方文档列出常用初始条件；源码 <code>init_conds.f90</code> 还包含 -1、24、25、26、28、30、31、32、33、34 等分支，实际可用性取决于编译宏和对应初始化例程。</li>
 </ul></details>
 </article>
-<article class="param-card" data-param data-search="iupstream iupstream equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。 unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4) ">
+<article class="param-card" data-param data-search="iupstream iupstream equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克与仿星器：环向数值上风/稳定化开关，不选择平衡。0 关闭；1 把 `magus` 给出的人工环向二阶项加到已有系数；2 用该人工项替代相应系数。它在时间演化算子中生效。 源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。 unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4) ">
 <div class="param-head">
 <div class="param-title">iupstream = 0 | integer</div>
 <div class="chips">
@@ -1507,7 +1507,7 @@ unstructured/ludef_t.f90:3523: if(iheat_sink.eq.1 .and. itaylor.eq.27) then</pre
 <div><dt>注册位置</dt><dd>unstructured/input.f90:561</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：环向数值上风/稳定化开关，不选择平衡。0 关闭；1 把 <code>magus</code> 给出的人工环向二阶项加到已有系数；2 用该人工项替代相应系数。它在时间演化算子中生效。</div>
 <div class="field"><b>源码使用：</b>源码引用 25 处；主要在 <code>metricterms_new.f90</code> 12处, <code>metricterms_new_gpu.f90</code> 9处, <code>parallel_heat_flux.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -1523,7 +1523,7 @@ unstructured/metricterms_new.f90:8770: if(iupstream.eq.1) then
 unstructured/metricterms_new.f90:8775: if(iupstream.eq.2) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="magus magus equilibrium 平衡与初始条件 real 5.e-2 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。 unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4) ">
+<article class="param-card" data-param data-search="magus magus equilibrium 平衡与初始条件 real 5.e-2 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克与仿星器：`iupstream=1/2` 时人工环向二阶稳定项的无量纲强度；常与局部场或速度绝对值相乘。0 不一定关闭，关闭应设 `iupstream=0`。 源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。 unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4) ">
 <div class="param-head">
 <div class="param-title">magus = 5.e-2 | real</div>
 <div class="chips">
@@ -1536,7 +1536,7 @@ unstructured/metricterms_new.f90:8775: if(iupstream.eq.2) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:562</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：<code>iupstream=1/2</code> 时人工环向二阶稳定项的无量纲强度；常与局部场或速度绝对值相乘。0 不一定关闭，关闭应设 <code>iupstream=0</code>。</div>
 <div class="field"><b>源码使用：</b>源码引用 25 处；主要在 <code>metricterms_new.f90</code> 12处, <code>metricterms_new_gpu.f90</code> 9处, <code>parallel_heat_flux.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -1552,7 +1552,7 @@ unstructured/metricterms_new.f90:8771: temp79a = temp79a + abs(h(:,OP_1))*magus
 unstructured/metricterms_new.f90:8776: temp79a = abs(h(:,OP_1))*magus</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="iflip iflip equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 2 处；主要在 `input.f90` 1处, `newpar.f90` 1处。 unstructured/input.f90(1); unstructured/newpar.f90(1) ">
+<article class="param-card" data-param data-search="iflip iflip equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克与仿星器：新启动时把坐标系手性翻转，统一反号 psi、环向场、速度势和环向速度，并反号 `vloop/tcur`；这是整体坐标约定变换，不等同于单独反转 b、j 或 v。restart 路径不再次调用该初始翻转。 源码引用 2 处；主要在 `input.f90` 1处, `newpar.f90` 1处。 unstructured/input.f90(1); unstructured/newpar.f90(1) ">
 <div class="param-head">
 <div class="param-title">iflip = 0 | integer</div>
 <div class="chips">
@@ -1565,7 +1565,7 @@ unstructured/metricterms_new.f90:8776: temp79a = abs(h(:,OP_1))*magus</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:563</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：新启动时把坐标系手性翻转，统一反号 psi、环向场、速度势和环向速度，并反号 <code>vloop/tcur</code>；这是整体坐标约定变换，不等同于单独反转 B、J 或 V。restart 路径不再次调用该初始翻转。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>input.f90</code> 1处, <code>newpar.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/input.f90(1); unstructured/newpar.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1573,7 +1573,7 @@ unstructured/metricterms_new.f90:8776: temp79a = abs(h(:,OP_1))*magus</pre>
 unstructured/newpar.f90:237: if(iflip.eq.1) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="iflip_b iflip_b equilibrium 平衡与初始条件 integer 0 reverse equilibrium toroidal field  源码引用 2 处；主要在 `init_conds.f90` 1处, `rmp.f90` 1处。 unstructured/init_conds.f90(1); unstructured/rmp.f90(1) ">
+<article class="param-card" data-param data-search="iflip_b iflip_b equilibrium 平衡与初始条件 integer 0 reverse equilibrium toroidal field 托卡马克：平衡和已构造外场的环向磁场反号。仿星器：固定 vmec 或外场初始化后同样反转环向场分量；必须确保输入场、诊断和模数符号约定一致。 源码引用 2 处；主要在 `init_conds.f90` 1处, `rmp.f90` 1处。 unstructured/init_conds.f90(1); unstructured/rmp.f90(1) ">
 <div class="param-head">
 <div class="param-title">iflip_b = 0 | integer</div>
 <div class="chips">
@@ -1586,7 +1586,7 @@ unstructured/newpar.f90:237: if(iflip.eq.1) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:564</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Reverse equilibrium toroidal field</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：平衡和已构造外场的环向磁场反号。仿星器：固定 VMEC 或外场初始化后同样反转环向场分量；必须确保输入场、诊断和模数符号约定一致。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>init_conds.f90</code> 1处, <code>rmp.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_conds.f90(1); unstructured/rmp.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1594,7 +1594,7 @@ unstructured/newpar.f90:237: if(iflip.eq.1) then</pre>
 unstructured/rmp.f90:669: if(iflip_b.eq.1) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="iflip_j iflip_j equilibrium 平衡与初始条件 integer 0 reverse equilibrium toroidal current  源码引用 6 处；主要在 `init_eqdsk.f90` 3处, `gradshafranov.f90` 1处, `init_conds.f90` 1处, `rmp.f90` 1处。 unstructured/init_eqdsk.f90(3); unstructured/gradshafranov.f90(1); unstructured/init_conds.f90(1); unstructured/rmp.f90(1) ">
+<article class="param-card" data-param data-search="iflip_j iflip_j equilibrium 平衡与初始条件 integer 0 reverse equilibrium toroidal current 托卡马克：反转平衡极向磁通，从而反转环向电流；`icsubtract=1` 时线圈磁通也反号。gfile 负电流已自动处理，`iflip_j=1` 会中止并提示用 2 强制覆盖。仿星器：同样反转 psi 表示，通常不应把它当作重新求解电流剖面。 源码引用 6 处；主要在 `init_eqdsk.f90` 3处, `gradshafranov.f90` 1处, `init_conds.f90` 1处, `rmp.f90` 1处。 unstructured/init_eqdsk.f90(3); unstructured/gradshafranov.f90(1); unstructured/init_conds.f90(1); unstructured/rmp.f90(1) ">
 <div class="param-head">
 <div class="param-title">iflip_j = 0 | integer</div>
 <div class="chips">
@@ -1607,7 +1607,7 @@ unstructured/rmp.f90:669: if(iflip_b.eq.1) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:566</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Reverse equilibrium toroidal current</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：反转平衡极向磁通，从而反转环向电流；<code>icsubtract=1</code> 时线圈磁通也反号。gfile 负电流已自动处理，<code>iflip_j=1</code> 会中止并提示用 2 强制覆盖。仿星器：同样反转 psi 表示，通常不应把它当作重新求解电流剖面。</div>
 <div class="field"><b>源码使用：</b>源码引用 6 处；主要在 <code>init_eqdsk.f90</code> 3处, <code>gradshafranov.f90</code> 1处, <code>init_conds.f90</code> 1处, <code>rmp.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_eqdsk.f90(3); unstructured/gradshafranov.f90(1); unstructured/init_conds.f90(1); unstructured/rmp.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1619,7 +1619,7 @@ unstructured/init_eqdsk.f90:60: print *, &#x27;iflip_j = 2.&#x27;
 unstructured/rmp.f90:672: if(iflip_j.eq.1) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="iflip_v iflip_v equilibrium 平衡与初始条件 integer 0 reverse equilibrium toroidal velocity  源码引用 3 处；主要在 `init_conds.f90` 2处, `gradshafranov.f90` 1处。 unstructured/init_conds.f90(2); unstructured/gradshafranov.f90(1) ">
+<article class="param-card" data-param data-search="iflip_v iflip_v equilibrium 平衡与初始条件 integer 0 reverse equilibrium toroidal velocity 托卡马克与仿星器：1 反转平衡环向速度；-1 把平衡环向速度清零；0 保持初始化结果。它在平衡与 neo 速度处理完成后执行。 源码引用 3 处；主要在 `init_conds.f90` 2处, `gradshafranov.f90` 1处。 unstructured/init_conds.f90(2); unstructured/gradshafranov.f90(1) ">
 <div class="param-head">
 <div class="param-title">iflip_v = 0 | integer</div>
 <div class="chips">
@@ -1632,7 +1632,7 @@ unstructured/rmp.f90:672: if(iflip_j.eq.1) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:568</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Reverse equilibrium toroidal velocity</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：1 反转平衡环向速度；-1 把平衡环向速度清零；0 保持初始化结果。它在平衡与 NEO 速度处理完成后执行。</div>
 <div class="field"><b>源码使用：</b>源码引用 3 处；主要在 <code>init_conds.f90</code> 2处, <code>gradshafranov.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_conds.f90(2); unstructured/gradshafranov.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1641,11 +1641,12 @@ unstructured/init_conds.f90:720: if(iflip_v.eq.1) call mult(vz_field(0), -1.)
 unstructured/init_conds.f90:721: if(iflip_v.eq.-1) call mult(vz_field(0), 0.)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="iflip_z iflip_z equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 1 处；主要在 `init_eqdsk.f90` 1处。 unstructured/init_eqdsk.f90(1) ">
+<article class="param-card" data-param data-search="iflip_z iflip_z equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：当前源码只在 gfile 初始化中令 `zmaxis=-zmaxis`，并未同时镜像 `psirz`、mesh 或其它场，不能视为完整的上下翻转。仿星器：vmec/外场路径没有活动使用。 源码引用 1 处；主要在 `init_eqdsk.f90` 1处。 unstructured/init_eqdsk.f90(1) 语义/取值范围： 官方文档称其翻转整个平衡；当前活动使用点只在 gfile 初始化中反号 `zmaxis`，没有同时镜像 `psirz`、mesh 节点或其它平衡场。">
 <div class="param-head">
 <div class="param-title">iflip_z = 0 | integer</div>
 <div class="chips">
 <span class="chip source">源码 1 处</span>
+<span class="chip audit">文档差异</span>
 </div></div>
 <dl class="meta">
 <div><dt>namelist</dt><dd>&amp;inputnl</dd></div>
@@ -1654,18 +1655,23 @@ unstructured/init_conds.f90:721: if(iflip_v.eq.-1) call mult(vz_field(0), 0.)</p
 <div><dt>注册位置</dt><dd>unstructured/input.f90:570</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：当前源码只在 gfile 初始化中令 <code>zmaxis=-zmaxis</code>，并未同时镜像 <code>psirz</code>、mesh 或其它场，不能视为完整的上下翻转。仿星器：VMEC/外场路径没有活动使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>init_eqdsk.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_eqdsk.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_eqdsk.f90:65: if(iflip_z.eq.1) zmaxis = -zmaxis</pre>
 </details>
+<details open><summary>官方文档差异 / 运行时提示</summary>
+<ul class="audit-list">
+<li>语义/取值范围： 官方文档称其翻转整个平衡；当前活动使用点只在 gfile 初始化中反号 <code>zmaxis</code>，没有同时镜像 <code>psirz</code>、mesh 节点或其它平衡场。</li>
+</ul></details>
 </article>
-<article class="param-card" data-param data-search="icsym icsym equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 2 处；主要在 `init_common.f90` 1处, `init_conds.f90` 1处。 unstructured/init_common.f90(1); unstructured/init_conds.f90(1) ">
+<article class="param-card" data-param data-search="icsym icsym equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：控制 `eps` 初始扰动的上下对称性，0 无约束，1 仅给 u 加奇对称扰动，2 仅给 u 加偶对称扰动，3 使用确定性的 (1,1) 型扰动。仿星器：取值相同，但随机形状在逻辑网格坐标中构造后映射到物理空间。 源码引用 2 处；主要在 `init_common.f90` 1处, `init_conds.f90` 1处。 unstructured/init_common.f90(1); unstructured/init_conds.f90(1) 语义/取值范围： 官方文档只列 0-2；当前源码还实现 3，使用确定性的 (1,1) 型初始扰动而不是随机噪声。">
 <div class="param-head">
 <div class="param-title">icsym = 0 | integer</div>
 <div class="chips">
 <span class="chip source">源码 2 处</span>
+<span class="chip audit">文档差异</span>
 </div></div>
 <dl class="meta">
 <div><dt>namelist</dt><dd>&amp;inputnl</dd></div>
@@ -1674,15 +1680,19 @@ unstructured/init_conds.f90:721: if(iflip_v.eq.-1) call mult(vz_field(0), 0.)</p
 <div><dt>注册位置</dt><dd>unstructured/input.f90:571</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：控制 <code>eps</code> 初始扰动的上下对称性，0 无约束，1 仅给 U 加奇对称扰动，2 仅给 U 加偶对称扰动，3 使用确定性的 (1,1) 型扰动。仿星器：取值相同，但随机形状在逻辑网格坐标中构造后映射到物理空间。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>init_common.f90</code> 1处, <code>init_conds.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_common.f90(1); unstructured/init_conds.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_common.f90:77: select case (icsym)
 unstructured/init_conds.f90:150: select case (icsym)</pre>
 </details>
+<details open><summary>官方文档差异 / 运行时提示</summary>
+<ul class="audit-list">
+<li>语义/取值范围： 官方文档只列 0-2；当前源码还实现 3，使用确定性的 (1,1) 型初始扰动而不是随机噪声。</li>
+</ul></details>
 </article>
-<article class="param-card" data-param data-search="bzero bzero equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 99 处；主要在 `gradshafranov.f90` 23处, `init_3dwave.f90` 17处, `init_basicj.f90` 7处, `init_mri.f90` 4处。 unstructured/gradshafranov.f90(23); unstructured/init_3dwave.f90(17); unstructured/init_basicj.f90(7); unstructured/init_mri.f90(4); unstructured/init_rotating_cylinder.f90(4); unstructured/init_rwm.f90(4); unstructured/init_wave.f90(4); unstructured/init_conds.f90(3) ">
+<article class="param-card" data-param data-search="bzero bzero equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：解析/gs 初始化的参考环向场，通常表示 `rzero` 处 bphi；gfile 会以最外层 `fpol/rmaxis` 覆盖它，`profile_f` 与 gs 磁场缩放还可再次改写。仿星器：固定 vmec 的 b 直接来自 wout，三维外场来自场文件，本参数不替代这些数据；tf 倾斜/平移解析误差场仍会用到它。 源码引用 99 处；主要在 `gradshafranov.f90` 23处, `init_3dwave.f90` 17处, `init_basicj.f90` 7处, `init_mri.f90` 4处。 unstructured/gradshafranov.f90(23); unstructured/init_3dwave.f90(17); unstructured/init_basicj.f90(7); unstructured/init_mri.f90(4); unstructured/init_rotating_cylinder.f90(4); unstructured/init_rwm.f90(4); unstructured/init_wave.f90(4); unstructured/init_conds.f90(3) ">
 <div class="param-head">
 <div class="param-title">bzero = 1. | real</div>
 <div class="chips">
@@ -1695,7 +1705,7 @@ unstructured/init_conds.f90:150: select case (icsym)</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:572</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：解析/GS 初始化的参考环向场，通常表示 <code>rzero</code> 处 Bphi；gfile 会以最外层 <code>fpol/rmaxis</code> 覆盖它，<code>profile_f</code> 与 GS 磁场缩放还可再次改写。仿星器：固定 VMEC 的 B 直接来自 wout，三维外场来自场文件，本参数不替代这些数据；TF 倾斜/平移解析误差场仍会用到它。</div>
 <div class="field"><b>源码使用：</b>源码引用 99 处；主要在 <code>gradshafranov.f90</code> 23处, <code>init_3dwave.f90</code> 17处, <code>init_basicj.f90</code> 7处, <code>init_mri.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/gradshafranov.f90(23); unstructured/init_3dwave.f90(17); unstructured/init_basicj.f90(7); unstructured/init_mri.f90(4); unstructured/init_rotating_cylinder.f90(4); unstructured/init_rwm.f90(4); unstructured/init_wave.f90(4); unstructured/init_conds.f90(3)</div>
 <details><summary>源码引用示例</summary>
@@ -1711,7 +1721,7 @@ unstructured/gradshafranov.f90:519: (1.-bpscale)*bpscale*bzero*rzero / &amp;
 unstructured/gradshafranov.f90:520: sqrt(2.*g0_spline%y(:)+(bzero*rzero)**2))</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="bx0 bx0 equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 27 处；主要在 `init_3dwave.f90` 16处, `init_3ddiffusion.f90` 6处, `init_wave.f90` 5处。 unstructured/init_3dwave.f90(16); unstructured/init_3ddiffusion.f90(6); unstructured/init_wave.f90(5) ">
+<article class="param-card" data-param data-search="bx0 bx0 equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：仅 wave、3d diffusion 等内置测试平衡的初始 x 向磁场幅值，gfile/gs 生产路径不使用。仿星器：`itaylor=40/41` 不使用。 源码引用 27 处；主要在 `init_3dwave.f90` 16处, `init_3ddiffusion.f90` 6处, `init_wave.f90` 5处。 unstructured/init_3dwave.f90(16); unstructured/init_3ddiffusion.f90(6); unstructured/init_wave.f90(5) ">
 <div class="param-head">
 <div class="param-title">bx0 = 0. | real</div>
 <div class="chips">
@@ -1724,7 +1734,7 @@ unstructured/gradshafranov.f90:520: sqrt(2.*g0_spline%y(:)+(bzero*rzero)**2))</p
 <div><dt>注册位置</dt><dd>unstructured/input.f90:573</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：仅 wave、3D diffusion 等内置测试平衡的初始 x 向磁场幅值，gfile/GS 生产路径不使用。仿星器：<code>itaylor=40/41</code> 不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 27 处；主要在 <code>init_3dwave.f90</code> 16处, <code>init_3ddiffusion.f90</code> 6处, <code>init_wave.f90</code> 5处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_3dwave.f90(16); unstructured/init_3ddiffusion.f90(6); unstructured/init_wave.f90(5)</div>
 <details><summary>源码引用示例</summary>
@@ -1740,7 +1750,7 @@ unstructured/init_3dwave.f90:52: omega = bx0*kx*kB + 0.5*b2*kphi**2 &amp;
 unstructured/init_3dwave.f90:53: + 0.5*sqrt((2.*bx0*kx*kB + B2*kphi**2)**2 &amp;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="vzero vzero equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 8 处；主要在 `init_rotating_cylinder.f90` 4处, `init_basicj.f90` 2处, `init_conds.f90` 1处, `init_cyl.f90` 1处。 unstructured/init_rotating_cylinder.f90(4); unstructured/init_basicj.f90(2); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1) ">
+<article class="param-card" data-param data-search="vzero vzero equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：若干解析初始化的环向/轴向速度标度；basicj 用作核心平坦转动值，`itaylor=-1` 直接作为均匀环向速度。gfile/gs 的文件旋转由 input 组控制。仿星器：vmec/外场路径不从本参数建立旋转。 源码引用 8 处；主要在 `init_rotating_cylinder.f90` 4处, `init_basicj.f90` 2处, `init_conds.f90` 1处, `init_cyl.f90` 1处。 unstructured/init_rotating_cylinder.f90(4); unstructured/init_basicj.f90(2); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1) ">
 <div class="param-head">
 <div class="param-title">vzero = 0. | real</div>
 <div class="chips">
@@ -1753,7 +1763,7 @@ unstructured/init_3dwave.f90:53: + 0.5*sqrt((2.*bx0*kx*kB + B2*kphi**2)**2 &amp;
 <div><dt>注册位置</dt><dd>unstructured/input.f90:574</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：若干解析初始化的环向/轴向速度标度；basicJ 用作核心平坦转动值，<code>itaylor=-1</code> 直接作为均匀环向速度。gfile/GS 的文件旋转由 Input 组控制。仿星器：VMEC/外场路径不从本参数建立旋转。</div>
 <div class="field"><b>源码使用：</b>源码引用 8 处；主要在 <code>init_rotating_cylinder.f90</code> 4处, <code>init_basicj.f90</code> 2处, <code>init_conds.f90</code> 1处, <code>init_cyl.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_rotating_cylinder.f90(4); unstructured/init_basicj.f90(2); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1767,7 +1777,7 @@ unstructured/init_rotating_cylinder.f90:58: vz0_l(4) = 2.*vzero
 unstructured/init_rotating_cylinder.f90:74: den0_l(1) = 2.*(bzero/vzero)**2</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="phizero phizero equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 3 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处。 unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1) ">
+<article class="param-card" data-param data-search="phizero phizero equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：frs、ftz、eigen 等测试初始化中速度流函数 u 的扰动幅值；常规 gfile/gs 不使用。仿星器：`itaylor=40/41` 不使用。 源码引用 3 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处。 unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1) ">
 <div class="param-head">
 <div class="param-title">phizero = 0. | real</div>
 <div class="chips">
@@ -1780,7 +1790,7 @@ unstructured/init_rotating_cylinder.f90:74: den0_l(1) = 2.*(bzero/vzero)**2</pre
 <div><dt>注册位置</dt><dd>unstructured/input.f90:575</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：FRS、FTZ、eigen 等测试初始化中速度流函数 U 的扰动幅值；常规 gfile/GS 不使用。仿星器：<code>itaylor=40/41</code> 不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 3 处；主要在 <code>init_eigen.f90</code> 1处, <code>init_frs.f90</code> 1处, <code>init_ftz.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1789,7 +1799,7 @@ unstructured/init_frs.f90:216: u1_l = phizero*vmask
 unstructured/init_ftz.f90:120: u1_l = phizero*vmask</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="verzero verzero equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 1 处；主要在 `init_common.f90` 1处。 unstructured/init_common.f90(1) ">
+<article class="param-card" data-param data-search="verzero verzero equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克与仿星器：在 `init_perturbations` 中向 plasma zone 的扰动速度势加入 `r*verzero`，用于给定初始竖直速度；它是扰动层，不会改变读入平衡或 lcfs。 源码引用 1 处；主要在 `init_common.f90` 1处。 unstructured/init_common.f90(1) ">
 <div class="param-head">
 <div class="param-title">verzero = 0. | real</div>
 <div class="chips">
@@ -1802,14 +1812,14 @@ unstructured/init_ftz.f90:120: u1_l = phizero*vmask</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:576</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：在 <code>init_perturbations</code> 中向 plasma zone 的扰动速度势加入 <code>R*verzero</code>，用于给定初始竖直速度；它是扰动层，不会改变读入平衡或 LCFS。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>init_common.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_common.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_common.f90:183: ph179(:,OP_1) = ph179(:,OP_1) + r_79*verzero</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="v0_cyl v0_cyl equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 1 处；主要在 `init_basicq.f90` 1处。 unstructured/init_basicq.f90(1) ">
+<article class="param-card" data-param data-search="v0_cyl v0_cyl equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：只在 fixed-q/cylindrical 测试剖面中作为中心轴向速度常数项；gfile/gs 不使用。仿星器：`itaylor=40/41` 不使用。 源码引用 1 处；主要在 `init_basicq.f90` 1处。 unstructured/init_basicq.f90(1) ">
 <div class="param-head">
 <div class="param-title">v0_cyl = 0. | real</div>
 <div class="chips">
@@ -1822,14 +1832,14 @@ unstructured/init_ftz.f90:120: u1_l = phizero*vmask</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:577</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：只在 fixed-q/cylindrical 测试剖面中作为中心轴向速度常数项；gfile/GS 不使用。仿星器：<code>itaylor=40/41</code> 不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>init_basicq.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicq.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_basicq.f90:42: v0_qp = v0_cyl</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="v1_cyl v1_cyl equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 1 处；主要在 `init_basicq.f90` 1处。 unstructured/init_basicq.f90(1) ">
+<article class="param-card" data-param data-search="v1_cyl v1_cyl equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：只在 fixed-q/cylindrical 测试剖面中作为随归一化磁通变化的速度幅值，形式为 `v0_cyl+v1_cyl*psi^beta`。仿星器：`itaylor=40/41` 不使用。 源码引用 1 处；主要在 `init_basicq.f90` 1处。 unstructured/init_basicq.f90(1) ">
 <div class="param-head">
 <div class="param-title">v1_cyl = 0. | real</div>
 <div class="chips">
@@ -1842,18 +1852,19 @@ unstructured/init_ftz.f90:120: u1_l = phizero*vmask</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:578</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：只在 fixed-q/cylindrical 测试剖面中作为随归一化磁通变化的速度幅值，形式为 <code>v0_cyl+v1_cyl*psi^beta</code>。仿星器：<code>itaylor=40/41</code> 不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>init_basicq.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicq.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_basicq.f90:43: v1_qp = v1_cyl</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="idevice idevice equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 -1 读 coil.dat/current.dat；0 generic；1 cdx-u；2 nstx；3 iter；4 diii-d（按文档）。 源码引用 5 处；主要在 `gradshafranov.f90` 4处, `init_eqdsk.f90` 1处。 unstructured/gradshafranov.f90(4); unstructured/init_eqdsk.f90(1) ">
+<article class="param-card" data-param data-search="idevice idevice equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：只服务 gs/pf 线圈场。当前源码实际实现 -1 读取 `coil.dat/current.dat`，0 使用 generic dipole；其它值进入无 pf 线圈的默认分支。仿星器：vmec/三维场初始化不使用该设备选择。 源码引用 5 处；主要在 `gradshafranov.f90` 4处, `init_eqdsk.f90` 1处。 unstructured/gradshafranov.f90(4); unstructured/init_eqdsk.f90(1) 语义/取值范围： 官方文档列出 1=cdx-u、2=nstx、3=iter、4=diii-d；当前 `gradshafranov.f90` 的活动 `select case` 只实现 -1（读 `coil.dat/current.dat`）和 0（generic dipole），其它值进入无 pf 线圈的默认分支。">
 <div class="param-head">
 <div class="param-title">idevice = 0 | integer</div>
 <div class="chips">
 <span class="chip source">源码 5 处</span>
+<span class="chip audit">文档差异</span>
 </div></div>
 <dl class="meta">
 <div><dt>namelist</dt><dd>&amp;inputnl</dd></div>
@@ -1862,7 +1873,7 @@ unstructured/init_ftz.f90:120: u1_l = phizero*vmask</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:579</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>-1 读 coil.dat/current.dat；0 generic；1 CDX-U；2 NSTX；3 ITER；4 DIII-D（按文档）。</div>
+<div class="field"><b>使用：</b>托卡马克：只服务 GS/PF 线圈场。当前源码实际实现 -1 读取 <code>coil.dat/current.dat</code>，0 使用 generic dipole；其它值进入无 PF 线圈的默认分支。仿星器：VMEC/三维场初始化不使用该设备选择。</div>
 <div class="field"><b>源码使用：</b>源码引用 5 处；主要在 <code>gradshafranov.f90</code> 4处, <code>init_eqdsk.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/gradshafranov.f90(4); unstructured/init_eqdsk.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1872,8 +1883,12 @@ unstructured/gradshafranov.f90:1232: if(idevice .eq. -1) then
 unstructured/gradshafranov.f90:3413: if(idevice .eq. 0 .and. ifixedb .eq. 0 .and. feedfac.ne.0.) then
 unstructured/init_eqdsk.f90:80: if(iread_eqdsk.eq.3 .or. idevice.eq.-1 .or. imulti_region.eq.1) then</pre>
 </details>
+<details open><summary>官方文档差异 / 运行时提示</summary>
+<ul class="audit-list">
+<li>语义/取值范围： 官方文档列出 1=CDX-U、2=NSTX、3=ITER、4=DIII-D；当前 <code>gradshafranov.f90</code> 的活动 <code>select case</code> 只实现 -1（读 <code>coil.dat/current.dat</code>）和 0（generic dipole），其它值进入无 PF 线圈的默认分支。</li>
+</ul></details>
 </article>
-<article class="param-card" data-param data-search="iwave iwave equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 16 处；主要在 `init_3dwave.f90` 13处, `init_wave.f90` 3处。 unstructured/init_3dwave.f90(13); unstructured/init_wave.f90(3) ">
+<article class="param-card" data-param data-search="iwave iwave equilibrium 平衡与初始条件 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克与仿星器生产平衡均不使用；只为 wave 测试初始化选择波支，具体可用取值随二维/三维测试例程而异。 源码引用 16 处；主要在 `init_3dwave.f90` 13处, `init_wave.f90` 3处。 unstructured/init_3dwave.f90(13); unstructured/init_wave.f90(3) ">
 <div class="param-head">
 <div class="param-title">iwave = 0 | integer</div>
 <div class="chips">
@@ -1886,7 +1901,7 @@ unstructured/init_eqdsk.f90:80: if(iread_eqdsk.eq.3 .or. idevice.eq.-1 .or. imul
 <div><dt>注册位置</dt><dd>unstructured/input.f90:580</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器生产平衡均不使用；只为 wave 测试初始化选择波支，具体可用取值随二维/三维测试例程而异。</div>
 <div class="field"><b>源码使用：</b>源码引用 16 处；主要在 <code>init_3dwave.f90</code> 13处, <code>init_wave.f90</code> 3处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_3dwave.f90(13); unstructured/init_wave.f90(3)</div>
 <details><summary>源码引用示例</summary>
@@ -1902,7 +1917,7 @@ unstructured/init_3dwave.f90:101: print *, &#x27;Error: iwave must be one of the
 unstructured/init_3dwave.f90:102: print *, &#x27; iwave = 0: Shear Alfven wave&#x27;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="eps eps equilibrium 平衡与初始条件 real 0.01 magnitude of initial perturbations*  源码引用 84 处；主要在 `init_conds.f90` 36处, `init_3dwave.f90` 12处, `init_gem.f90` 6处, `init_gmode.f90` 6处。 unstructured/init_conds.f90(36); unstructured/init_3dwave.f90(12); unstructured/init_gem.f90(6); unstructured/init_gmode.f90(6); unstructured/init_strauss.f90(6); unstructured/init_wave.f90(6); unstructured/init_common.f90(5); unstructured/rmp.f90(3) ">
+<article class="param-card" data-param data-search="eps eps equilibrium 平衡与初始条件 real 0.01 magnitude of initial perturbations* 托卡马克：初始随机/确定性扰动幅度；`itor=0,irmp=2` 时还作为解析 m/n 真空场幅度。仿星器：固定 vmec 和 total-field 路径也可用它给 plasma zone 添加初始流扰动，但不改变 wout/外场基态。 源码引用 84 处；主要在 `init_conds.f90` 36处, `init_3dwave.f90` 12处, `init_gem.f90` 6处, `init_gmode.f90` 6处。 unstructured/init_conds.f90(36); unstructured/init_3dwave.f90(12); unstructured/init_gem.f90(6); unstructured/init_gmode.f90(6); unstructured/init_strauss.f90(6); unstructured/init_wave.f90(6); unstructured/init_common.f90(5); unstructured/rmp.f90(3) ">
 <div class="param-head">
 <div class="param-title">eps = 0.01 | real</div>
 <div class="chips">
@@ -1915,7 +1930,7 @@ unstructured/init_3dwave.f90:102: print *, &#x27; iwave = 0: Shear Alfven wave&#
 <div><dt>注册位置</dt><dd>unstructured/input.f90:581</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Magnitude of initial perturbations*</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：初始随机/确定性扰动幅度；<code>itor=0,irmp=2</code> 时还作为解析 m/n 真空场幅度。仿星器：固定 VMEC 和 total-field 路径也可用它给 plasma zone 添加初始流扰动，但不改变 wout/外场基态。</div>
 <div class="field"><b>源码使用：</b>源码引用 84 处；主要在 <code>init_conds.f90</code> 36处, <code>init_3dwave.f90</code> 12处, <code>init_gem.f90</code> 6处, <code>init_gmode.f90</code> 6处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_conds.f90(36); unstructured/init_3dwave.f90(12); unstructured/init_gem.f90(6); unstructured/init_gmode.f90(6); unstructured/init_strauss.f90(6); unstructured/init_wave.f90(6); unstructured/init_common.f90(5); unstructured/rmp.f90(3)</div>
 <details><summary>源码引用示例</summary>
@@ -1931,7 +1946,7 @@ unstructured/init_3dwave.f90:175: val(7) =-eps*sin(kx*x)*sin(kz*z)*sin(kphi*phi)
 unstructured/init_3dwave.f90:176: val(8) =-eps*cos(kx*x)*sin(kz*z)*sin(kphi*phi)*kphi*kx</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="maxn maxn equilibrium 平衡与初始条件 integer 200 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 10 处；主要在 `init_common.f90` 6处, `init_conds.f90` 4处。 unstructured/init_common.f90(6); unstructured/init_conds.f90(4) ">
+<article class="param-card" data-param data-search="maxn maxn equilibrium 平衡与初始条件 integer 200 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克与仿星器：`icsym=0/1/2` 随机初始扰动的模循环上限，值越大包含的平面波越多、初始化代价越高；不控制 m3d-c1 实际环向网格分辨率。 源码引用 10 处；主要在 `init_common.f90` 6处, `init_conds.f90` 4处。 unstructured/init_common.f90(6); unstructured/init_conds.f90(4) ">
 <div class="param-head">
 <div class="param-title">maxn = 200 | integer</div>
 <div class="chips">
@@ -1944,7 +1959,7 @@ unstructured/init_3dwave.f90:176: val(8) =-eps*cos(kx*x)*sin(kz*z)*sin(kphi*phi)
 <div><dt>注册位置</dt><dd>unstructured/input.f90:583</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：<code>icsym=0/1/2</code> 随机初始扰动的模循环上限，值越大包含的平面波越多、初始化代价越高；不控制 M3D-C1 实际环向网格分辨率。</div>
 <div class="field"><b>源码使用：</b>源码引用 10 处；主要在 <code>init_common.f90</code> 6处, <code>init_conds.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_common.f90(6); unstructured/init_conds.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -1960,11 +1975,12 @@ unstructured/init_conds.f90:167: do j=1, maxn/2
 unstructured/init_conds.f90:177: do j=1, maxn/2</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="irmp irmp equilibrium 平衡与初始条件 integer 0 1: apply nonaxisym. fields throughout plasma； 2: apply mpol/ntor vacuum fields (itor=0 only) 1 在等离子体内应用非轴对称 rmp/error field；2 仅边界应用真空 mpol/ntor 场。常配合 `type_ext_field`、rmp 文件和 `ntor`。 源码引用 10 处；主要在 `rmp.f90` 4处, `input.f90` 2处, `init_basicj.f90` 1处, `init_conds.f90` 1处。 unstructured/rmp.f90(4); unstructured/input.f90(2); unstructured/init_basicj.f90(1); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="irmp irmp equilibrium 平衡与初始条件 integer 0 1: apply nonaxisym. fields throughout plasma； 2: apply mpol/ntor vacuum fields (itor=0 only) 托卡马克：1 读取/计算 rmp 与 error field 并投影到整个计算域；2 仅 `itor=0` 可用，在整个域评价解析 mpol/ntor 真空场。仿星器：`itaylor=41,type_ext_field=1,extsubtract=0` 已装入 total field 后会跳过第二次 rmp；固定 vmec 或 subtraction 路径可另行调用外场处理。 源码引用 10 处；主要在 `rmp.f90` 4处, `input.f90` 2处, `init_basicj.f90` 1处, `init_conds.f90` 1处。 unstructured/rmp.f90(4); unstructured/input.f90(2); unstructured/init_basicj.f90(1); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1); unstructured/restart_hdf5.f90(1) 语义/取值范围： 官方文档写 1 只在 plasma、2 只在 boundary 施加；当前 `rmp.f90` 对所有计算单元评价并投影该场，且 2 仅允许 `itor=0`，不是环形托卡马克的边界条件。">
 <div class="param-head">
 <div class="param-title">irmp = 0 | integer</div>
 <div class="chips">
 <span class="chip source">源码 10 处</span>
+<span class="chip audit">文档差异</span>
 </div></div>
 <dl class="meta">
 <div><dt>namelist</dt><dd>&amp;inputnl</dd></div>
@@ -1973,7 +1989,7 @@ unstructured/init_conds.f90:177: do j=1, maxn/2</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:584</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: Apply nonaxisym. fields throughout plasma； 2: Apply mpol/ntor vacuum fields (itor=0 only)</div>
-<div class="field"><b>使用：</b>1 在等离子体内应用非轴对称 RMP/error field；2 仅边界应用真空 mpol/ntor 场。常配合 <code>type_ext_field</code>、RMP 文件和 <code>ntor</code>。</div>
+<div class="field"><b>使用：</b>托卡马克：1 读取/计算 RMP 与 error field 并投影到整个计算域；2 仅 <code>itor=0</code> 可用，在整个域评价解析 mpol/ntor 真空场。仿星器：<code>itaylor=41,type_ext_field=1,extsubtract=0</code> 已装入 total field 后会跳过第二次 RMP；固定 VMEC 或 subtraction 路径可另行调用外场处理。</div>
 <div class="field"><b>源码使用：</b>源码引用 10 处；主要在 <code>rmp.f90</code> 4处, <code>input.f90</code> 2处, <code>init_basicj.f90</code> 1处, <code>init_conds.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(4); unstructured/input.f90(2); unstructured/init_basicj.f90(1); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -1988,8 +2004,12 @@ unstructured/rmp.f90:275: if(myrank.eq.0) print *, &#x27;ERROR: irmp==2 only imp
 unstructured/rmp.f90:316: if(myrank.eq.0) print *, &#x27;Error: Option not recognized: irmp = &#x27;, irmp
 unstructured/rmp.f90:447: if(irmp.eq.1) then</pre>
 </details>
+<details open><summary>官方文档差异 / 运行时提示</summary>
+<ul class="audit-list">
+<li>语义/取值范围： 官方文档写 1 只在 plasma、2 只在 boundary 施加；当前 <code>rmp.f90</code> 对所有计算单元评价并投影该场，且 2 仅允许 <code>itor=0</code>，不是环形托卡马克的边界条件。</li>
+</ul></details>
 </article>
-<article class="param-card" data-param data-search="rmp_atten rmp_atten equilibrium 平衡与初始条件 real 0. additional exponential decay of rmp field from r=1 for irmp=2  源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="rmp_atten rmp_atten equilibrium 平衡与初始条件 real 0. additional exponential decay of rmp field from r=1 for irmp=2 托卡马克与仿星器环形生产路径不使用；只在 `itor=0,irmp=2` 中控制解析真空扰动从 r=1 起的指数因子。0 表示不加该衰减/增长因子。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">rmp_atten = 0. | real</div>
 <div class="chips">
@@ -2002,7 +2022,7 @@ unstructured/rmp.f90:447: if(irmp.eq.1) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:587</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Additional exponential decay of RMP field from r=1 for irmp=2</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器环形生产路径不使用；只在 <code>itor=0,irmp=2</code> 中控制解析真空扰动从 r=1 起的指数因子。0 表示不加该衰减/增长因子。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2010,7 +2030,7 @@ unstructured/rmp.f90:447: if(irmp.eq.1) then</pre>
 unstructured/rmp.f90:295: atten = exp((r-1.)/rmp_atten)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="tf_tilt tf_tilt equilibrium 平衡与初始条件 real 0. angle of tf from vertical (in degrees)  源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="tf_tilt tf_tilt equilibrium 平衡与初始条件 real 0. angle of tf from vertical (in degrees) 托卡马克：tf 线圈相对竖直方向的小倾斜角，单位度；源码据此构造非轴对称误差场并在基态后加入，不移动 mesh。仿星器：不是 vmec 场线圈几何参数，通常保持 0。 源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
 <div class="param-head">
 <div class="param-title">tf_tilt = 0. | real</div>
 <div class="chips">
@@ -2023,7 +2043,7 @@ unstructured/rmp.f90:295: atten = exp((r-1.)/rmp_atten)</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:589</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Angle of TF from vertical (in degrees)</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：TF 线圈相对竖直方向的小倾斜角，单位度；源码据此构造非轴对称误差场并在基态后加入，不移动 mesh。仿星器：不是 VMEC 场线圈几何参数，通常保持 0。</div>
 <div class="field"><b>源码使用：</b>源码引用 6 处；主要在 <code>rmp.f90</code> 3处, <code>init_conds.f90</code> 1处, <code>input.f90</code> 1处, <code>restart_hdf5.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2035,7 +2055,7 @@ unstructured/rmp.f90:732: tilt_sn = tf_tilt*deg2rad*exp(-(0,1)*tf_tilt_angle*deg
 unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*deg2rad)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="tf_tilt_angle tf_tilt_angle equilibrium 平衡与初始条件 real 0. axis of rotation for tf tilt (in degrees)  源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="tf_tilt_angle tf_tilt_angle equilibrium 平衡与初始条件 real 0. axis of rotation for tf tilt (in degrees) 托卡马克：`tf_tilt` 的旋转轴环向方位，单位度，只在 `tf_tilt!=0` 时生效。仿星器：通常不使用。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">tf_tilt_angle = 0. | real</div>
 <div class="chips">
@@ -2048,7 +2068,7 @@ unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*d
 <div><dt>注册位置</dt><dd>unstructured/input.f90:591</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Axis of rotation for TF tilt (in degrees)</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：<code>tf_tilt</code> 的旋转轴环向方位，单位度，只在 <code>tf_tilt!=0</code> 时生效。仿星器：通常不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2056,7 +2076,7 @@ unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*d
 unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*deg2rad)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="tf_shift tf_shift equilibrium 平衡与初始条件 real 0. horizontal shift of tf coil  源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="tf_shift tf_shift equilibrium 平衡与初始条件 real 0. horizontal shift of tf coil 托卡马克：tf 线圈水平平移幅度，用解析式生成误差场，不改变 mesh 或 gs 线圈坐标。仿星器：通常不使用。 源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
 <div class="param-head">
 <div class="param-title">tf_shift = 0. | real</div>
 <div class="chips">
@@ -2069,7 +2089,7 @@ unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*d
 <div><dt>注册位置</dt><dd>unstructured/input.f90:593</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Horizontal shift of TF coil</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：TF 线圈水平平移幅度，用解析式生成误差场，不改变 mesh 或 GS 线圈坐标。仿星器：通常不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 6 处；主要在 <code>rmp.f90</code> 3处, <code>init_conds.f90</code> 1处, <code>input.f90</code> 1处, <code>restart_hdf5.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2081,7 +2101,7 @@ unstructured/rmp.f90:733: shift_co = tf_shift*exp(-(0,1)*tf_shift_angle*deg2rad)
 unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2rad)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="tf_shift_angle tf_shift_angle equilibrium 平衡与初始条件 real 0. direction of tf shift (in degrees)  源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="tf_shift_angle tf_shift_angle equilibrium 平衡与初始条件 real 0. direction of tf shift (in degrees) 托卡马克：`tf_shift` 的平移方向方位角，单位度，只在 `tf_shift!=0` 时生效。仿星器：通常不使用。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">tf_shift_angle = 0. | real</div>
 <div class="chips">
@@ -2094,7 +2114,7 @@ unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2ra
 <div><dt>注册位置</dt><dd>unstructured/input.f90:595</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Direction of TF shift (in degrees)</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：<code>tf_shift</code> 的平移方向方位角，单位度，只在 <code>tf_shift!=0</code> 时生效。仿星器：通常不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2102,7 +2122,7 @@ unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2ra
 unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2rad)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="pf_tilt pf_tilt equilibrium 平衡与初始条件 real array 0. angle of pf from vertical (in degrees) 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="pf_tilt pf_tilt equilibrium 平衡与初始条件 real array 0. angle of pf from vertical (in degrees) 托卡马克：pf 线圈逐线圈倾斜角数组，单位度；只有已经由 gs/`idevice=-1` 装载到 pf 线圈表的线圈才会产生误差场。仿星器：vmec/外场路径没有 pf 线圈表，通常不使用。 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
 <div class="param-head">
 <div class="param-title">pf_tilt = 0. | real array</div>
 <div class="chips">
@@ -2116,7 +2136,7 @@ unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2ra
 <div><dt>注册位置</dt><dd>unstructured/input.f90:597</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Angle of PF from vertical (in degrees)</div>
-<div class="field"><b>使用：</b>数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
+<div class="field"><b>使用：</b>托卡马克：PF 线圈逐线圈倾斜角数组，单位度；只有已经由 GS/<code>idevice=-1</code> 装载到 PF 线圈表的线圈才会产生误差场。仿星器：VMEC/外场路径没有 PF 线圈表，通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
 <div class="field"><b>源码使用：</b>源码引用 9 处；主要在 <code>rmp.f90</code> 6处, <code>init_conds.f90</code> 1处, <code>input.f90</code> 1处, <code>restart_hdf5.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2131,7 +2151,7 @@ unstructured/rmp.f90:359: tilt_sn = pf_tilt(j)*deg2rad* &amp;
 unstructured/rmp.f90:451: if((any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) &amp;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="pf_tilt_angle pf_tilt_angle equilibrium 平衡与初始条件 real array 0. axis of rotation for pf tilt (in degrees) 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 4 处；主要在 `rmp.f90` 4处。 unstructured/rmp.f90(4) ">
+<article class="param-card" data-param data-search="pf_tilt_angle pf_tilt_angle equilibrium 平衡与初始条件 real array 0. axis of rotation for pf tilt (in degrees) 托卡马克：每个 `pf_tilt(i)` 的旋转轴方位角数组，单位度，索引对应线圈组标签。仿星器：通常不使用。 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 4 处；主要在 `rmp.f90` 4处。 unstructured/rmp.f90(4) ">
 <div class="param-head">
 <div class="param-title">pf_tilt_angle = 0. | real array</div>
 <div class="chips">
@@ -2145,7 +2165,7 @@ unstructured/rmp.f90:451: if((any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) &amp;
 <div><dt>注册位置</dt><dd>unstructured/input.f90:599</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Axis of rotation for PF tilt (in degrees)</div>
-<div class="field"><b>使用：</b>数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
+<div class="field"><b>使用：</b>托卡马克：每个 <code>pf_tilt(i)</code> 的旋转轴方位角数组，单位度，索引对应线圈组标签。仿星器：通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
 <div class="field"><b>源码使用：</b>源码引用 4 处；主要在 <code>rmp.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -2155,7 +2175,7 @@ unstructured/rmp.f90:358: cos(phi - pf_tilt_angle(j)*deg2rad)
 unstructured/rmp.f90:360: sin(phi - pf_tilt_angle(j)*deg2rad)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="pf_shift pf_shift equilibrium 平衡与初始条件 real array 0. horizontal shift of pf coil 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="pf_shift pf_shift equilibrium 平衡与初始条件 real array 0. horizontal shift of pf coil 托卡马克：pf 线圈逐线圈水平平移数组；基于已加载线圈场导数构造非轴对称误差场，不修改轴对称 gs 线圈位置。仿星器：通常不使用。 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
 <div class="param-head">
 <div class="param-title">pf_shift = 0. | real array</div>
 <div class="chips">
@@ -2169,7 +2189,7 @@ unstructured/rmp.f90:360: sin(phi - pf_tilt_angle(j)*deg2rad)</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:601</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Horizontal shift of PF coil</div>
-<div class="field"><b>使用：</b>数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
+<div class="field"><b>使用：</b>托卡马克：PF 线圈逐线圈水平平移数组；基于已加载线圈场导数构造非轴对称误差场，不修改轴对称 GS 线圈位置。仿星器：通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
 <div class="field"><b>源码使用：</b>源码引用 9 处；主要在 <code>rmp.f90</code> 6处, <code>init_conds.f90</code> 1处, <code>input.f90</code> 1处, <code>restart_hdf5.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2184,7 +2204,7 @@ unstructured/rmp.f90:363: shift_sn = pf_shift(j)* &amp;
 unstructured/rmp.f90:451: if((any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) &amp;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="pf_shift_angle pf_shift_angle equilibrium 平衡与初始条件 real array 0. direction of pf shift (in degrees) 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 4 处；主要在 `rmp.f90` 4处。 unstructured/rmp.f90(4) ">
+<article class="param-card" data-param data-search="pf_shift_angle pf_shift_angle equilibrium 平衡与初始条件 real array 0. direction of pf shift (in degrees) 托卡马克：每个 `pf_shift(i)` 的平移方向方位角数组，单位度。仿星器：通常不使用。 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 4 处；主要在 `rmp.f90` 4处。 unstructured/rmp.f90(4) ">
 <div class="param-head">
 <div class="param-title">pf_shift_angle = 0. | real array</div>
 <div class="chips">
@@ -2198,7 +2218,7 @@ unstructured/rmp.f90:451: if((any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) &amp;
 <div><dt>注册位置</dt><dd>unstructured/input.f90:603</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Direction of PF shift (in degrees)</div>
-<div class="field"><b>使用：</b>数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
+<div class="field"><b>使用：</b>托卡马克：每个 <code>pf_shift(i)</code> 的平移方向方位角数组，单位度。仿星器：通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：2000。</div>
 <div class="field"><b>源码使用：</b>源码引用 4 处；主要在 <code>rmp.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -2208,11 +2228,12 @@ unstructured/rmp.f90:362: cos(phi - pf_shift_angle(j)*deg2rad)
 unstructured/rmp.f90:364: sin(phi - pf_shift_angle(j)*deg2rad)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="iread_ext_field iread_ext_field equilibrium 平衡与初始条件 integer 0 1: read external field  源码引用 20 处；主要在 `rmp.f90` 16处, `init_conds.f90` 2处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(16); unstructured/init_conds.f90(2); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="iread_ext_field iread_ext_field equilibrium 平衡与初始条件 integer 0 1: read external field 托卡马克：对 `type_ext_field&lt;=0` 表示要读的 error-field 数据组数；1 读 `error_field`，大于 1 读 `error_field01...`。仿星器：`itaylor=41` 必须非零，当前读取器实际只装载索引 `iread_ext_field`，常规用法应取 1。 源码引用 20 处；主要在 `rmp.f90` 16处, `init_conds.f90` 2处, `input.f90` 1处, `restart_hdf5.f90` 1处。 unstructured/rmp.f90(16); unstructured/init_conds.f90(2); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1) 语义/取值范围： 官方文档只说明 1=读取外场；tokamak 源码把它作为数据组数量，1 读 `error_field`，大于 1 读 `error_fieldnn`。stellarator 读取器则只装载数组索引 `iread_ext_field`，常规可靠用法是 1。">
 <div class="param-head">
 <div class="param-title">iread_ext_field = 0 | integer</div>
 <div class="chips">
 <span class="chip source">源码 20 处</span>
+<span class="chip audit">文档差异</span>
 </div></div>
 <dl class="meta">
 <div><dt>namelist</dt><dd>&amp;inputnl</dd></div>
@@ -2221,7 +2242,7 @@ unstructured/rmp.f90:364: sin(phi - pf_shift_angle(j)*deg2rad)</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:606</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: Read external field</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：对 <code>type_ext_field&lt;=0</code> 表示要读的 error-field 数据组数；1 读 <code>error_field</code>，大于 1 读 <code>error_field01...</code>。仿星器：<code>itaylor=41</code> 必须非零，当前读取器实际只装载索引 <code>iread_ext_field</code>，常规用法应取 1。</div>
 <div class="field"><b>源码使用：</b>源码引用 20 处；主要在 <code>rmp.f90</code> 16处, <code>init_conds.f90</code> 2处, <code>input.f90</code> 1处, <code>restart_hdf5.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(16); unstructured/init_conds.f90(2); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2236,8 +2257,12 @@ unstructured/rmp.f90:63: allocate(sf(iread_ext_field))
 unstructured/rmp.f90:97: allocate(sf(iread_ext_field))
 unstructured/rmp.f90:143: call load_fieldlines_field(sf(iread_ext_field), field_name,ierr)</pre>
 </details>
+<details open><summary>官方文档差异 / 运行时提示</summary>
+<ul class="audit-list">
+<li>语义/取值范围： 官方文档只说明 1=读取外场；tokamak 源码把它作为数据组数量，1 读 <code>error_field</code>，大于 1 读 <code>error_fieldNN</code>。stellarator 读取器则只装载数组索引 <code>iread_ext_field</code>，常规可靠用法是 1。</li>
+</ul></details>
 </article>
-<article class="param-card" data-param data-search="isample_ext_field isample_ext_field equilibrium 平衡与初始条件 integer 1 factor to down-sample external field data toroidally  源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="isample_ext_field isample_ext_field equilibrium 平衡与初始条件 integer 1 factor to down-sample external field data toroidally 托卡马克：schaffer error-field 数据的环向降采样因子。仿星器：仅场文件回退到 schaffer 格式时使用；fieldlines/mgrid/hint/mips 专用读取器不使用该因子。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">isample_ext_field = 1 | integer</div>
 <div class="chips">
@@ -2250,7 +2275,7 @@ unstructured/rmp.f90:143: call load_fieldlines_field(sf(iread_ext_field), field_
 <div><dt>注册位置</dt><dd>unstructured/input.f90:608</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Factor to down-sample external field data toroidally</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：Schaffer error-field 数据的环向降采样因子。仿星器：仅场文件回退到 Schaffer 格式时使用；FIELDLINES/MGRID/HINT/MIPS 专用读取器不使用该因子。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2258,7 +2283,7 @@ unstructured/rmp.f90:143: call load_fieldlines_field(sf(iread_ext_field), field_
 unstructured/rmp.f90:154: call load_schaffer_field(sf(iread_ext_field),field_name,isample_ext_field, &amp;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="isample_ext_field_pol isample_ext_field_pol equilibrium 平衡与初始条件 integer 1 factor to down-sample external field data poloidally  源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="isample_ext_field_pol isample_ext_field_pol equilibrium 平衡与初始条件 integer 1 factor to down-sample external field data poloidally 托卡马克：schaffer error-field 数据的极向降采样因子。仿星器：仅 schaffer 回退格式使用，专用三维场读取器不使用。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">isample_ext_field_pol = 1 | integer</div>
 <div class="chips">
@@ -2271,7 +2296,7 @@ unstructured/rmp.f90:154: call load_schaffer_field(sf(iread_ext_field),field_nam
 <div><dt>注册位置</dt><dd>unstructured/input.f90:610</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Factor to down-sample external field data poloidally</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：Schaffer error-field 数据的极向降采样因子。仿星器：仅 Schaffer 回退格式使用，专用三维场读取器不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2279,7 +2304,7 @@ unstructured/rmp.f90:154: call load_schaffer_field(sf(iread_ext_field),field_nam
 unstructured/rmp.f90:155: isample_ext_field_pol,ierr)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="scale_ext_field scale_ext_field equilibrium 平衡与初始条件 real 1. factor to scale external field  源码引用 6 处；主要在 `rmp.f90` 6处。 unstructured/rmp.f90(6) ">
+<article class="param-card" data-param data-search="scale_ext_field scale_ext_field equilibrium 平衡与初始条件 real 1. factor to scale external field 托卡马克与仿星器：投影已读场数据时统一乘的幅值因子；会作用于该读取器装入的 `file_total_field/file_ext_field/error_field`，但不缩放 gfile 或 `itaylor=40` 直接读取的 wout 基态，也不重新求解平衡。 源码引用 6 处；主要在 `rmp.f90` 6处。 unstructured/rmp.f90(6) ">
 <div class="param-head">
 <div class="param-title">scale_ext_field = 1. | real</div>
 <div class="chips">
@@ -2292,7 +2317,7 @@ unstructured/rmp.f90:155: isample_ext_field_pol,ierr)</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:612</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Factor to scale external field</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：投影已读场数据时统一乘的幅值因子；会作用于该读取器装入的 <code>file_total_field/file_ext_field/error_field</code>，但不缩放 gfile 或 <code>itaylor=40</code> 直接读取的 wout 基态，也不重新求解平衡。</div>
 <div class="field"><b>源码使用：</b>源码引用 6 处；主要在 <code>rmp.f90</code> 6处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(6)</div>
 <details><summary>源码引用示例</summary>
@@ -2304,7 +2329,7 @@ unstructured/rmp.f90:399: bphi = bphi + (1e4/b0_norm)*gphi*scale_ext_field
 unstructured/rmp.f90:400: bz = bz + (1e4/b0_norm)*gz *scale_ext_field</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="shift_ext_field shift_ext_field equilibrium 平衡与初始条件 real array 0. toroidal shift (in deg) of external fields 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="shift_ext_field shift_ext_field equilibrium 平衡与初始条件 real array 0. toroidal shift (in deg) of external fields 托卡马克与仿星器：各外场数据组的环向相位平移数组，单位度；3d 中通过改变取样角实现，complex 中转化为所选 `ntor` 的相位因子。 数组参数在 c1input 中使用 fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">shift_ext_field = 0. | real array</div>
 <div class="chips">
@@ -2318,7 +2343,7 @@ unstructured/rmp.f90:400: bz = bz + (1e4/b0_norm)*gz *scale_ext_field</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:614</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Toroidal shift (in deg) of external fields</div>
-<div class="field"><b>使用：</b>数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：8。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：各外场数据组的环向相位平移数组，单位度；3D 中通过改变取样角实现，complex 中转化为所选 <code>ntor</code> 的相位因子。 数组参数在 C1input 中使用 Fortran 一基索引，例如 <code>name(1)=...</code>；未赋值元素保持默认值。 数组长度/上限：8。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2326,7 +2351,7 @@ unstructured/rmp.f90:400: bz = bz + (1e4/b0_norm)*gz *scale_ext_field</pre>
 unstructured/rmp.f90:396: x,phi-shift_ext_field(i)*pi/180.,z,&amp;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="type_ext_field type_ext_field equilibrium 平衡与初始条件 integer -1 type of external field file -1 默认；0 tokamak rmp/error field；1 free-boundary stellarator fieldlines/mgrid total field；2 stellarator total+external subtraction。 源码用法：`&lt;=0` 用 tokamak rmp/error-field 分支，`=1/2` 用 stellarator/free-boundary 场文件，`=3` 从电流计算外场。 源码引用 11 处；主要在 `rmp.f90` 10处, `init_conds.f90` 1处。 unstructured/rmp.f90(10); unstructured/init_conds.f90(1) 语义/取值范围： 官方文档列出 tokamak/stellarator 主要取值；源码 `rmp.f90` 中 `type_ext_field&lt;=0` 走 rmp/error-field 分支，`=1/2` 走 stellarator/free-boundary 分支，另有 `=3` 从电流计算外场的分支。">
+<article class="param-card" data-param data-search="type_ext_field type_ext_field equilibrium 平衡与初始条件 integer -1 type of external field file 托卡马克：&lt;=0 走 rmp/error-field；3 可从 `external_j` 电流数据求外场。仿星器：1 在 `itaylor=41` 中直接把 `file_total_field` 作为 total field；2 要求 `extsubtract=1`，先装 total field、再读 `file_ext_field` 并保存/扣除外场。 源码用法：`&lt;=0` 用 tokamak rmp/error-field 分支，`=1/2` 用 stellarator/free-boundary 场文件，`=3` 从电流计算外场。 源码引用 11 处；主要在 `rmp.f90` 10处, `init_conds.f90` 1处。 unstructured/rmp.f90(10); unstructured/init_conds.f90(1) 语义/取值范围： 官方文档列出 tokamak/stellarator 主要取值；源码 `rmp.f90` 中 `type_ext_field&lt;=0` 走 rmp/error-field 分支，`=1/2` 走 stellarator/free-boundary 分支，另有 `=3` 从电流计算外场的分支。">
 <div class="param-head">
 <div class="param-title">type_ext_field = -1 | integer</div>
 <div class="chips">
@@ -2340,7 +2365,7 @@ unstructured/rmp.f90:396: x,phi-shift_ext_field(i)*pi/180.,z,&amp;</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:616</dd></div>
 </dl>
 <div class="field"><b>含义：</b>type of external field file</div>
-<div class="field"><b>使用：</b>-1 默认；0 tokamak RMP/error field；1 free-boundary stellarator FIELDLINES/MGRID total field；2 stellarator total+external subtraction。 源码用法：<code>&lt;=0</code> 用 tokamak RMP/error-field 分支，<code>=1/2</code> 用 stellarator/free-boundary 场文件，<code>=3</code> 从电流计算外场。</div>
+<div class="field"><b>使用：</b>托卡马克：&lt;=0 走 RMP/error-field；3 可从 <code>external_j</code> 电流数据求外场。仿星器：1 在 <code>itaylor=41</code> 中直接把 <code>file_total_field</code> 作为 total field；2 要求 <code>extsubtract=1</code>，先装 total field、再读 <code>file_ext_field</code> 并保存/扣除外场。 源码用法：<code>&lt;=0</code> 用 tokamak RMP/error-field 分支，<code>=1/2</code> 用 stellarator/free-boundary 场文件，<code>=3</code> 从电流计算外场。</div>
 <div class="field"><b>源码使用：</b>源码引用 11 处；主要在 <code>rmp.f90</code> 10处, <code>init_conds.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(10); unstructured/init_conds.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2360,7 +2385,7 @@ unstructured/rmp.f90:635: if (type_ext_field.ge.1 .and. (itaylor.eq.40 .or. itay
 <li>语义/取值范围： 官方文档列出 tokamak/stellarator 主要取值；源码 <code>rmp.f90</code> 中 <code>type_ext_field&lt;=0</code> 走 RMP/error-field 分支，<code>=1/2</code> 走 stellarator/free-boundary 分支，另有 <code>=3</code> 从电流计算外场的分支。</li>
 </ul></details>
 </article>
-<article class="param-card" data-param data-search="file_ext_field file_ext_field equilibrium 平衡与初始条件 character(len=256) error_field name of external field file stellarator/free-boundary 场文件名，默认 `error_field`；支持 fieldlines/mgrid 前缀。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。 源码引用 1 处；主要在 `rmp.f90` 1处。 unstructured/rmp.f90(1) ">
+<article class="param-card" data-param data-search="file_ext_field file_ext_field equilibrium 平衡与初始条件 character(len=256) error_field name of external field file 托卡马克：`type_ext_field&lt;=0` 时此名称被忽略，文件名固定为 `error_field` 或 `error_fieldnn`。仿星器：`type_ext_field=2` 的真空/外部场文件；文件名前缀选择 fieldlines、mips、hint、mgrid 读取器，其它名称按 schaffer 格式。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。 源码引用 1 处；主要在 `rmp.f90` 1处。 unstructured/rmp.f90(1) ">
 <div class="param-head">
 <div class="param-title">file_ext_field = error_field | character(len=256)</div>
 <div class="chips">
@@ -2373,14 +2398,14 @@ unstructured/rmp.f90:635: if (type_ext_field.ge.1 .and. (itaylor.eq.40 .or. itay
 <div><dt>注册位置</dt><dd>unstructured/input.f90:618</dd></div>
 </dl>
 <div class="field"><b>含义：</b>name of external field file</div>
-<div class="field"><b>使用：</b>stellarator/free-boundary 场文件名，默认 <code>error_field</code>；支持 fieldlines/mgrid 前缀。 字符串值可写成 <code>name = value</code> 或带引号形式；解析器会去掉首尾引号。</div>
+<div class="field"><b>使用：</b>托卡马克：<code>type_ext_field&lt;=0</code> 时此名称被忽略，文件名固定为 <code>error_field</code> 或 <code>error_fieldNN</code>。仿星器：<code>type_ext_field=2</code> 的真空/外部场文件；文件名前缀选择 FIELDLINES、MIPS、HINT、MGRID 读取器，其它名称按 Schaffer 格式。 字符串值可写成 <code>name = value</code> 或带引号形式；解析器会去掉首尾引号。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>rmp.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/rmp.f90:64: call read_stellarator_field(file_ext_field)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="file_total_field file_total_field equilibrium 平衡与初始条件 character(len=256) total_field name of total field file for st stellarator total field 文件名，默认 `total_field`；支持 fieldlines/mgrid 前缀。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
+<article class="param-card" data-param data-search="file_total_field file_total_field equilibrium 平衡与初始条件 character(len=256) total_field name of total field file for st 托卡马克：常规 rmp/gs 不使用。仿星器：`itaylor=41,type_ext_field=1/2` 的总磁场文件；1 直接作为基态，2 与 `file_ext_field` 组成 total-minus-external 的演化场分解。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。 源码引用 2 处；主要在 `rmp.f90` 2处。 unstructured/rmp.f90(2) ">
 <div class="param-head">
 <div class="param-title">file_total_field = total_field | character(len=256)</div>
 <div class="chips">
@@ -2393,7 +2418,7 @@ unstructured/rmp.f90:635: if (type_ext_field.ge.1 .and. (itaylor.eq.40 .or. itay
 <div><dt>注册位置</dt><dd>unstructured/input.f90:620</dd></div>
 </dl>
 <div class="field"><b>含义：</b>name of total field file for ST</div>
-<div class="field"><b>使用：</b>stellarator total field 文件名，默认 <code>total_field</code>；支持 fieldlines/mgrid 前缀。 字符串值可写成 <code>name = value</code> 或带引号形式；解析器会去掉首尾引号。</div>
+<div class="field"><b>使用：</b>托卡马克：常规 RMP/GS 不使用。仿星器：<code>itaylor=41,type_ext_field=1/2</code> 的总磁场文件；1 直接作为基态，2 与 <code>file_ext_field</code> 组成 total-minus-external 的演化场分解。 字符串值可写成 <code>name = value</code> 或带引号形式；解析器会去掉首尾引号。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>rmp.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2401,7 +2426,7 @@ unstructured/rmp.f90:635: if (type_ext_field.ge.1 .and. (itaylor.eq.40 .or. itay
 unstructured/rmp.f90:109: call read_stellarator_field(file_total_field)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="beta beta equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 58 处；主要在 `mackenbach_profiles.f90` 23处, `reducedquinticimplicit.cc` 10处, `metricterms_new.f90` 8处, `metricterms_new_gpu.f90` 8处。 unstructured/mackenbach_profiles.f90(23); m3dc1_scorec/src/reducedquinticimplicit.cc(10); unstructured/metricterms_new.f90(8); unstructured/metricterms_new_gpu.f90(8); unstructured/init_tilt.f90(3); unstructured/scorec_mesh.f90(3); unstructured/nintegrate_mod.f90(2); unstructured/init_basicq.f90(1) ">
+<article class="param-card" data-param data-search="beta beta equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：仅 tilting/fixed-q 等模型平衡或测试问题中的无量纲形状/速度幂参数，不是由 gfile 得到的等离子体 beta，也不会覆盖压力。仿星器：`itaylor=40/41` 不使用。 源码引用 58 处；主要在 `mackenbach_profiles.f90` 23处, `reducedquinticimplicit.cc` 10处, `metricterms_new.f90` 8处, `metricterms_new_gpu.f90` 8处。 unstructured/mackenbach_profiles.f90(23); m3dc1_scorec/src/reducedquinticimplicit.cc(10); unstructured/metricterms_new.f90(8); unstructured/metricterms_new_gpu.f90(8); unstructured/init_tilt.f90(3); unstructured/scorec_mesh.f90(3); unstructured/nintegrate_mod.f90(2); unstructured/init_basicq.f90(1) ">
 <div class="param-head">
 <div class="param-title">beta = 0. | real</div>
 <div class="chips">
@@ -2414,7 +2439,7 @@ unstructured/rmp.f90:109: call read_stellarator_field(file_total_field)</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:622</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：仅 tilting/fixed-q 等模型平衡或测试问题中的无量纲形状/速度幂参数，不是由 gfile 得到的等离子体 beta，也不会覆盖压力。仿星器：<code>itaylor=40/41</code> 不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 58 处；主要在 <code>mackenbach_profiles.f90</code> 23处, <code>ReducedQuinticImplicit.cc</code> 10处, <code>metricterms_new.f90</code> 8处, <code>metricterms_new_gpu.f90</code> 8处。</div>
 <div class="field"><b>主要文件：</b>unstructured/mackenbach_profiles.f90(23); m3dc1_scorec/src/ReducedQuinticImplicit.cc(10); unstructured/metricterms_new.f90(8); unstructured/metricterms_new_gpu.f90(8); unstructured/init_tilt.f90(3); unstructured/scorec_mesh.f90(3); unstructured/nintegrate_mod.f90(2); unstructured/init_basicq.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2430,7 +2455,7 @@ unstructured/mackenbach_profiles.f90:102: rhoarr(1) = rho0(gamma0(1),beta,drho,t
 unstructured/mackenbach_profiles.f90:103: rhoarr(2) = rho0(gamma0(2),beta,drho,t_end)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="ln ln equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 64 处；主要在 `init_conds.f90` 17处, `init_solovev.f90` 12处, `init_basicj.f90` 10处, `init_3ddiffusion.f90` 7处。 unstructured/init_conds.f90(17); unstructured/init_solovev.f90(12); unstructured/init_basicj.f90(10); unstructured/init_3ddiffusion.f90(7); unstructured/init_circle.f90(5); unstructured/init_gmode.f90(4); unstructured/input.f90(3); unstructured/init_common.f90(1) ">
+<article class="param-card" data-param data-search="ln ln equilibrium 平衡与初始条件 real 0. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：多个解析/测试平衡的特征径向尺度；basicj 中是电流剖面半径，solovev 中控制横向尺寸。它不是自然对数。仿星器：vmec/外场平衡不使用，但 `icsym=3` 扰动包络仍可能引用。 源码引用 64 处；主要在 `init_conds.f90` 17处, `init_solovev.f90` 12处, `init_basicj.f90` 10处, `init_3ddiffusion.f90` 7处。 unstructured/init_conds.f90(17); unstructured/init_solovev.f90(12); unstructured/init_basicj.f90(10); unstructured/init_3ddiffusion.f90(7); unstructured/init_circle.f90(5); unstructured/init_gmode.f90(4); unstructured/input.f90(3); unstructured/init_common.f90(1) ">
 <div class="param-head">
 <div class="param-title">ln = 0. | real</div>
 <div class="chips">
@@ -2443,7 +2468,7 @@ unstructured/mackenbach_profiles.f90:103: rhoarr(2) = rho0(gamma0(2),beta,drho,t
 <div><dt>注册位置</dt><dd>unstructured/input.f90:623</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：多个解析/测试平衡的特征径向尺度；basicJ 中是电流剖面半径，Solovev 中控制横向尺寸。它不是自然对数。仿星器：VMEC/外场平衡不使用，但 <code>icsym=3</code> 扰动包络仍可能引用。</div>
 <div class="field"><b>源码使用：</b>源码引用 64 处；主要在 <code>init_conds.f90</code> 17处, <code>init_solovev.f90</code> 12处, <code>init_basicj.f90</code> 10处, <code>init_3ddiffusion.f90</code> 7处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_conds.f90(17); unstructured/init_solovev.f90(12); unstructured/init_basicj.f90(10); unstructured/init_3ddiffusion.f90(7); unstructured/init_circle.f90(5); unstructured/init_gmode.f90(4); unstructured/input.f90(3); unstructured/init_common.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2459,7 +2484,7 @@ unstructured/init_basicj.f90:37: jphi = basicj_j0*(1.-(r2/ln**2))**basicj_nu
 unstructured/init_basicj.f90:43: jphi = basicj_j0*(1. + (r2/ln**2)**basicj_nu)**(-(1.+1./basicj_nu))</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="elongation elongation equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 8 处；主要在 `init_solovev.f90` 8处。 unstructured/init_solovev.f90(8) ">
+<article class="param-card" data-param data-search="elongation elongation equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：仅 `itaylor=19` solovev 解析平衡的伸长率。仿星器：vmec 几何由傅里叶系数给出，本参数不使用。 源码引用 8 处；主要在 `init_solovev.f90` 8处。 unstructured/init_solovev.f90(8) ">
 <div class="param-head">
 <div class="param-title">elongation = 1. | real</div>
 <div class="chips">
@@ -2472,7 +2497,7 @@ unstructured/init_basicj.f90:43: jphi = basicj_j0*(1. + (r2/ln**2)**basicj_nu)**
 <div><dt>注册位置</dt><dd>unstructured/input.f90:624</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：仅 <code>itaylor=19</code> Solovev 解析平衡的伸长率。仿星器：VMEC 几何由傅里叶系数给出，本参数不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 8 处；主要在 <code>init_solovev.f90</code> 8处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_solovev.f90(8)</div>
 <details><summary>源码引用示例</summary>
@@ -2486,7 +2511,7 @@ unstructured/init_solovev.f90:238: j0 = -(1.+elongation**2)/(q0*rzero**3*elongat
 unstructured/init_solovev.f90:251: zmax = elongation*sqrt((2.*ln*rzero)**2-(r0**2-rzero**2)**2)/(2.*r0)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_nu basicj_nu equilibrium 平衡与初始条件 real 1. exponent in basicj equilibrium  源码引用 6 处；主要在 `init_basicj.f90` 5处, `input.f90` 1处。 unstructured/init_basicj.f90(5); unstructured/input.f90(1) ">
+<article class="param-card" data-param data-search="basicj_nu basicj_nu equilibrium 平衡与初始条件 real 1. exponent in basicj equilibrium 托卡马克：`itaylor=29/31` 电流剖面指数；若 `basicj_qa!=0` 会由 q0/qa 关系覆盖。仿星器：`itaylor=40/41` 不使用。 源码引用 6 处；主要在 `init_basicj.f90` 5处, `input.f90` 1处。 unstructured/init_basicj.f90(5); unstructured/input.f90(1) ">
 <div class="param-head">
 <div class="param-title">basicj_nu = 1. | real</div>
 <div class="chips">
@@ -2499,7 +2524,7 @@ unstructured/init_solovev.f90:251: zmax = elongation*sqrt((2.*ln*rzero)**2-(r0**
 <div><dt>注册位置</dt><dd>unstructured/input.f90:625</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Exponent in basicj equilibrium</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：<code>itaylor=29/31</code> 电流剖面指数；若 <code>basicj_qa!=0</code> 会由 q0/qa 关系覆盖。仿星器：<code>itaylor=40/41</code> 不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 6 处；主要在 <code>init_basicj.f90</code> 5处, <code>input.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(5); unstructured/input.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2511,7 +2536,7 @@ unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)
 unstructured/input.f90:632: &quot;Edge safety factor in basicj equilibrium (supersedes basicj_nu)&quot;, eq_grp)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_j0 basicj_j0 equilibrium 平衡与初始条件 real 1. on-axis current density in basicj equilibrium  源码引用 9 处；主要在 `init_basicj.f90` 8处, `input.f90` 1处。 unstructured/init_basicj.f90(8); unstructured/input.f90(1) ">
+<article class="param-card" data-param data-search="basicj_j0 basicj_j0 equilibrium 平衡与初始条件 real 1. on-axis current density in basicj equilibrium 托卡马克：basicj 轴上电流密度幅值；若 `basicj_q0!=0`，源码用 `2*bzero/(rzero*q0)` 覆盖本值。仿星器：不使用。 源码引用 9 处；主要在 `init_basicj.f90` 8处, `input.f90` 1处。 unstructured/init_basicj.f90(8); unstructured/input.f90(1) ">
 <div class="param-head">
 <div class="param-title">basicj_j0 = 1. | real</div>
 <div class="chips">
@@ -2524,7 +2549,7 @@ unstructured/input.f90:632: &quot;Edge safety factor in basicj equilibrium (supe
 <div><dt>注册位置</dt><dd>unstructured/input.f90:627</dd></div>
 </dl>
 <div class="field"><b>含义：</b>On-axis current density in basicj equilibrium</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 轴上电流密度幅值；若 <code>basicj_q0!=0</code>，源码用 <code>2*bzero/(rzero*q0)</code> 覆盖本值。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 9 处；主要在 <code>init_basicj.f90</code> 8处, <code>input.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(8); unstructured/input.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -2539,7 +2564,7 @@ unstructured/init_basicj.f90:264: if(basicj_j0.ne.0.) call boundary_dc(jphi_vec%
 unstructured/input.f90:630: &quot;On-axis safety factor in basicj equilibrium (supersedes basicj_j0)&quot;, eq_grp)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_q0 basicj_q0 equilibrium 平衡与初始条件 real 0. on-axis safety factor in basicj equilibrium (supersedes basicj_j0)  源码引用 5 处；主要在 `init_basicj.f90` 5处。 unstructured/init_basicj.f90(5) ">
+<article class="param-card" data-param data-search="basicj_q0 basicj_q0 equilibrium 平衡与初始条件 real 0. on-axis safety factor in basicj equilibrium (supersedes basicj_j0) 托卡马克：basicj 轴上安全因子；非零时优先于 `basicj_j0` 并反算轴上电流。0 表示由 `basicj_j0` 反算 q0。仿星器：不使用。 源码引用 5 处；主要在 `init_basicj.f90` 5处。 unstructured/init_basicj.f90(5) ">
 <div class="param-head">
 <div class="param-title">basicj_q0 = 0. | real</div>
 <div class="chips">
@@ -2552,7 +2577,7 @@ unstructured/input.f90:630: &quot;On-axis safety factor in basicj equilibrium (s
 <div><dt>注册位置</dt><dd>unstructured/input.f90:629</dd></div>
 </dl>
 <div class="field"><b>含义：</b>On-axis safety factor in basicj equilibrium (supersedes basicj_j0)</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 轴上安全因子；非零时优先于 <code>basicj_j0</code> 并反算轴上电流。0 表示由 <code>basicj_j0</code> 反算 q0。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 5 处；主要在 <code>init_basicj.f90</code> 5处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(5)</div>
 <details><summary>源码引用示例</summary>
@@ -2563,7 +2588,7 @@ unstructured/init_basicj.f90:124: basicj_nu = basicj_qa/basicj_q0 - 1.
 unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_qa basicj_qa equilibrium 平衡与初始条件 real 0. edge safety factor in basicj equilibrium (supersedes basicj_nu)  源码引用 4 处；主要在 `init_basicj.f90` 4处。 unstructured/init_basicj.f90(4) ">
+<article class="param-card" data-param data-search="basicj_qa basicj_qa equilibrium 平衡与初始条件 real 0. edge safety factor in basicj equilibrium (supersedes basicj_nu) 托卡马克：basicj 目标边缘安全因子；非零时覆盖 `basicj_nu`。`itaylor=31` 且显式给 `xlim!=0` 时源码会报错。仿星器：不使用。 源码引用 4 处；主要在 `init_basicj.f90` 4处。 unstructured/init_basicj.f90(4) ">
 <div class="param-head">
 <div class="param-title">basicj_qa = 0. | real</div>
 <div class="chips">
@@ -2576,7 +2601,7 @@ unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)</
 <div><dt>注册位置</dt><dd>unstructured/input.f90:631</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Edge safety factor in basicj equilibrium (supersedes basicj_nu)</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 目标边缘安全因子；非零时覆盖 <code>basicj_nu</code>。<code>itaylor=31</code> 且显式给 <code>xlim!=0</code> 时源码会报错。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 4 处；主要在 <code>init_basicj.f90</code> 4处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -2586,7 +2611,7 @@ unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)
 unstructured/init_basicj.f90:129: if(myrank.eq.0) print *, &#x27;Error: basicj_qa not available when xlim != 0&#x27;</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_voff basicj_voff equilibrium 平衡与初始条件 real 1. radial extent of flat toroidal rotation in basicj equilibrium  源码引用 3 处；主要在 `init_basicj.f90` 3处。 unstructured/init_basicj.f90(3) ">
+<article class="param-card" data-param data-search="basicj_voff basicj_voff equilibrium 平衡与初始条件 real 1. radial extent of flat toroidal rotation in basicj equilibrium 托卡马克：basicj 核心平坦环向速度区的径向范围；范围内速度基值为 `vzero`。仿星器：不使用。 源码引用 3 处；主要在 `init_basicj.f90` 3处。 unstructured/init_basicj.f90(3) ">
 <div class="param-head">
 <div class="param-title">basicj_voff = 1. | real</div>
 <div class="chips">
@@ -2599,7 +2624,7 @@ unstructured/init_basicj.f90:129: if(myrank.eq.0) print *, &#x27;Error: basicj_q
 <div><dt>注册位置</dt><dd>unstructured/input.f90:633</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Radial extent of flat toroidal rotation in basicj equilibrium</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 核心平坦环向速度区的径向范围；范围内速度基值为 <code>vzero</code>。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 3 处；主要在 <code>init_basicj.f90</code> 3处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(3)</div>
 <details><summary>源码引用示例</summary>
@@ -2608,7 +2633,7 @@ unstructured/init_basicj.f90:61: vz = vzero*exp(-(r - basicj_voff)**2/(basicj_vd
 unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basicj_vdelt*ln)**4)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_vdelt basicj_vdelt equilibrium 平衡与初始条件 real 1. width of velocity drop-off, as fraction of ln, in basicj equilibrium  源码引用 2 处；主要在 `init_basicj.f90` 2处。 unstructured/init_basicj.f90(2) ">
+<article class="param-card" data-param data-search="basicj_vdelt basicj_vdelt equilibrium 平衡与初始条件 real 1. width of velocity drop-off, as fraction of ln, in basicj equilibrium 托卡马克：basicj 平坦转动区外速度衰减宽度相对 `ln` 的系数，进入高斯型衰减分母。仿星器：不使用。 源码引用 2 处；主要在 `init_basicj.f90` 2处。 unstructured/init_basicj.f90(2) ">
 <div class="param-head">
 <div class="param-title">basicj_vdelt = 1. | real</div>
 <div class="chips">
@@ -2621,7 +2646,7 @@ unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basic
 <div><dt>注册位置</dt><dd>unstructured/input.f90:635</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Width of velocity drop-off, as fraction of ln, in basicj equilibrium</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 平坦转动区外速度衰减宽度相对 <code>ln</code> 的系数，进入高斯型衰减分母。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 2 处；主要在 <code>init_basicj.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(2)</div>
 <details><summary>源码引用示例</summary>
@@ -2629,7 +2654,7 @@ unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basic
 unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basicj_vdelt*ln)**4)</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_dexp basicj_dexp equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 1 处；主要在 `init_basicj.f90` 1处。 unstructured/init_basicj.f90(1) ">
+<article class="param-card" data-param data-search="basicj_dexp basicj_dexp equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：basicj 专用输运系数径向缩放函数的幂指数，配合 `basicj_dvac` 使黏性/热传导向外变化；不改变初始密度场本身。仿星器：不使用。 源码引用 1 处；主要在 `init_basicj.f90` 1处。 unstructured/init_basicj.f90(1) ">
 <div class="param-head">
 <div class="param-title">basicj_dexp = 1. | real</div>
 <div class="chips">
@@ -2642,14 +2667,14 @@ unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basic
 <div><dt>注册位置</dt><dd>unstructured/input.f90:637</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 专用输运系数径向缩放函数的幂指数，配合 <code>basicj_dvac</code> 使黏性/热传导向外变化；不改变初始密度场本身。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>init_basicj.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_basicj.f90:365: basicj_dscale = (1. + (sqrt(basicj_dvac) - 1.)*(sqrt(rsq)/ln)**basicj_dexp)**2</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="basicj_dvac basicj_dvac equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 1 处；主要在 `init_basicj.f90` 1处。 unstructured/init_basicj.f90(1) ">
+<article class="param-card" data-param data-search="basicj_dvac basicj_dvac equilibrium 平衡与初始条件 real 1. 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：basicj 专用输运系数缩放函数在 `r=ln` 处的目标倍率，影响相关黏性与热传导系数，不是外部真空区密度。仿星器：不使用。 源码引用 1 处；主要在 `init_basicj.f90` 1处。 unstructured/init_basicj.f90(1) ">
 <div class="param-head">
 <div class="param-title">basicj_dvac = 1. | real</div>
 <div class="chips">
@@ -2662,18 +2687,19 @@ unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basic
 <div><dt>注册位置</dt><dd>unstructured/input.f90:638</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：basicJ 专用输运系数缩放函数在 <code>r=ln</code> 处的目标倍率，影响相关黏性与热传导系数，不是外部真空区密度。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 1 处；主要在 <code>init_basicj.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(1)</div>
 <details><summary>源码引用示例</summary>
 <pre>unstructured/init_basicj.f90:365: basicj_dscale = (1. + (sqrt(basicj_dvac) - 1.)*(sqrt(rsq)/ln)**basicj_dexp)**2</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="ibasicj_solvep ibasicj_solvep equilibrium 平衡与初始条件 integer 0 0: uniform pressure, solve for f.  1: uniform f, solve for pressure  源码引用 10 处；主要在 `init_basicj.f90` 10处。 unstructured/init_basicj.f90(10) ">
+<article class="param-card" data-param data-search="ibasicj_solvep ibasicj_solvep equilibrium 平衡与初始条件 integer 0 0: uniform pressure, solve for f.  1: uniform f, solve for pressure 托卡马克：仅 `itaylor=29/31`。0 使用解析压力并由给定 j 求 f；1 令 f 均匀并由 j 求压力。`itaylor=29` 的解析压力为常数，`itaylor=31` 的解析压力随半径衰减。仿星器：不使用。 源码引用 10 处；主要在 `init_basicj.f90` 10处。 unstructured/init_basicj.f90(10) 语义/取值范围： 官方文档把 0 概括为 uniform p；源码中 `itaylor=29` 的解析压力确为常数，但 `itaylor=31` 使用随半径衰减的解析压力，因此 0 的准确含义是使用所选 basicj 解析压力并求 f。">
 <div class="param-head">
 <div class="param-title">ibasicj_solvep = 0 | integer</div>
 <div class="chips">
 <span class="chip source">源码 10 处</span>
+<span class="chip audit">文档差异</span>
 </div></div>
 <dl class="meta">
 <div><dt>namelist</dt><dd>&amp;inputnl</dd></div>
@@ -2682,7 +2708,7 @@ unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basic
 <div><dt>注册位置</dt><dd>unstructured/input.f90:639</dd></div>
 </dl>
 <div class="field"><b>含义：</b>0: Uniform pressure, solve for F.  1: Uniform F, solve for pressure</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：仅 <code>itaylor=29/31</code>。0 使用解析压力并由给定 J 求 F；1 令 F 均匀并由 J 求压力。<code>itaylor=29</code> 的解析压力为常数，<code>itaylor=31</code> 的解析压力随半径衰减。仿星器：不使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 10 处；主要在 <code>init_basicj.f90</code> 10处。</div>
 <div class="field"><b>主要文件：</b>unstructured/init_basicj.f90(10)</div>
 <details><summary>源码引用示例</summary>
@@ -2697,6 +2723,10 @@ unstructured/init_basicj.f90:299: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:310: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:319: if(ibasicj_solvep.eq.0) then</pre>
 </details>
+<details open><summary>官方文档差异 / 运行时提示</summary>
+<ul class="audit-list">
+<li>语义/取值范围： 官方文档把 0 概括为 uniform p；源码中 <code>itaylor=29</code> 的解析压力确为常数，但 <code>itaylor=31</code> 使用随半径衰减的解析压力，因此 0 的准确含义是使用所选 basicJ 解析压力并求 F。</li>
+</ul></details>
 </article>
 </section>
 <section class="section" id="grad-shafranov-solver" data-section>
@@ -2724,7 +2754,7 @@ unstructured/init_basicj.f90:319: if(ibasicj_solvep.eq.0) then</pre>
 <pre>unstructured/gradshafranov.f90:461: if(inumgs .eq. 1) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="igs igs grad-shafranov solver grad-shafranov 求解器 integer 80 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 9 处；主要在 `gradshafranov.f90` 4处, `init_conds.f90` 1处, `init_eqdsk.f90` 1处, `init_jsolver.f90` 1处。 unstructured/gradshafranov.f90(4); unstructured/init_conds.f90(1); unstructured/init_eqdsk.f90(1); unstructured/init_jsolver.f90(1); unstructured/init_kstar.f90(1); unstructured/newvar.f90(1) ">
+<article class="param-card" data-param data-search="igs igs grad-shafranov solver grad-shafranov 求解器 integer 80 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：大于 0 时给出 gs 最大迭代次数，收敛误差达到 `tol_gs` 可提前退出；0 不求解 gs。它与 input 的平衡入口、boundary 的 `ifixedb`、mesh 的 zone 共同决定初始平衡。仿星器：`itaylor=40/41` 不调用 gs。 源码引用 9 处；主要在 `gradshafranov.f90` 4处, `init_conds.f90` 1处, `init_eqdsk.f90` 1处, `init_jsolver.f90` 1处。 unstructured/gradshafranov.f90(4); unstructured/init_conds.f90(1); unstructured/init_eqdsk.f90(1); unstructured/init_jsolver.f90(1); unstructured/init_kstar.f90(1); unstructured/newvar.f90(1) ">
 <div class="param-head">
 <div class="param-title">igs = 80 | integer</div>
 <div class="chips">
@@ -2737,7 +2767,7 @@ unstructured/init_basicj.f90:319: if(ibasicj_solvep.eq.0) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:644</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：大于 0 时给出 GS 最大迭代次数，收敛误差达到 <code>tol_gs</code> 可提前退出；0 不求解 GS。它与 Input 的平衡入口、Boundary 的 <code>ifixedb</code>、Mesh 的 zone 共同决定初始平衡。仿星器：<code>itaylor=40/41</code> 不调用 GS。</div>
 <div class="field"><b>源码使用：</b>源码引用 9 处；主要在 <code>gradshafranov.f90</code> 4处, <code>init_conds.f90</code> 1处, <code>init_eqdsk.f90</code> 1处, <code>init_jsolver.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/gradshafranov.f90(4); unstructured/init_conds.f90(1); unstructured/init_eqdsk.f90(1); unstructured/init_jsolver.f90(1); unstructured/init_kstar.f90(1); unstructured/newvar.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -4687,7 +4717,7 @@ unstructured/auxiliary_fields.f90:292: if(ieqsub.eq.1 .and. ilin.eq.1 .and. line
 unstructured/auxiliary_fields.f90:383: if(linear.eq.1 .and. ilin.eq.1) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="eqsubtract eqsubtract model options 模型选项 integer 0 1: subtract equilibrium fields 线性模拟会在校验阶段强制置 1；非线性时设 1 表示从方程中扣除平衡场。 源码引用 195 处；主要在 `ludef_t.f90` 68处, `ludef_t_gpu.f90` 35处, `output.f90` 14处, `diagnostics.f90` 13处。 unstructured/ludef_t.f90(68); unstructured/ludef_t_gpu.f90(35); unstructured/output.f90(14); unstructured/diagnostics.f90(13); unstructured/newpar.f90(13); unstructured/adapt.f90(6); unstructured/electrostatic_potential.f90(5); unstructured/gradshafranov.f90(5) ">
+<article class="param-card" data-param data-search="eqsubtract eqsubtract model options 模型选项 integer 0 1: subtract equilibrium fields 托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果。 源码引用 195 处；主要在 `ludef_t.f90` 68处, `ludef_t_gpu.f90` 35处, `output.f90` 14处, `diagnostics.f90` 13处。 unstructured/ludef_t.f90(68); unstructured/ludef_t_gpu.f90(35); unstructured/output.f90(14); unstructured/diagnostics.f90(13); unstructured/newpar.f90(13); unstructured/adapt.f90(6); unstructured/electrostatic_potential.f90(5); unstructured/gradshafranov.f90(5) ">
 <div class="param-head">
 <div class="param-title">eqsubtract = 0 | integer</div>
 <div class="chips">
@@ -4700,7 +4730,7 @@ unstructured/auxiliary_fields.f90:383: if(linear.eq.1 .and. ilin.eq.1) then</pre
 <div><dt>注册位置</dt><dd>unstructured/input.f90:403</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: Subtract equilibrium fields</div>
-<div class="field"><b>使用：</b>线性模拟会在校验阶段强制置 1；非线性时设 1 表示从方程中扣除平衡场。</div>
+<div class="field"><b>使用：</b>托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果。</div>
 <div class="field"><b>源码使用：</b>源码引用 195 处；主要在 <code>ludef_t.f90</code> 68处, <code>ludef_t_gpu.f90</code> 35处, <code>output.f90</code> 14处, <code>diagnostics.f90</code> 13处。</div>
 <div class="field"><b>主要文件：</b>unstructured/ludef_t.f90(68); unstructured/ludef_t_gpu.f90(35); unstructured/output.f90(14); unstructured/diagnostics.f90(13); unstructured/newpar.f90(13); unstructured/adapt.f90(6); unstructured/electrostatic_potential.f90(5); unstructured/gradshafranov.f90(5)</div>
 <details><summary>源码引用示例</summary>
@@ -4716,7 +4746,7 @@ unstructured/bootstrap.f90:1391: if(eqsubtract.eq.1) then
 unstructured/bootstrap.f90:1449: if(eqsubtract.eq.1) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="extsubtract extsubtract model options 模型选项 integer 0 1: subtract fields from non-axisymmetric coils  源码引用 32 处；主要在 `rmp.f90` 14处, `output.f90` 11处, `newpar.f90` 3处, `input.f90` 2处。 unstructured/rmp.f90(14); unstructured/output.f90(11); unstructured/newpar.f90(3); unstructured/input.f90(2); unstructured/init_conds.f90(1); unstructured/restart_hdf5.f90(1) ">
+<article class="param-card" data-param data-search="extsubtract extsubtract model options 模型选项 integer 0 1: subtract fields from non-axisymmetric coils 托卡马克：1 把 rmp/error field 保存为独立外场，而不是直接写入扰动场。仿星器：`itaylor=41,type_ext_field=2` 必须为 1，程序先读 total field，再读 external field，并把 total-external 作为动态场。 源码引用 32 处；主要在 `rmp.f90` 14处, `output.f90` 11处, `newpar.f90` 3处, `input.f90` 2处。 unstructured/rmp.f90(14); unstructured/output.f90(11); unstructured/newpar.f90(3); unstructured/input.f90(2); unstructured/init_conds.f90(1); unstructured/restart_hdf5.f90(1) ">
 <div class="param-head">
 <div class="param-title">extsubtract = 0 | integer</div>
 <div class="chips">
@@ -4729,7 +4759,7 @@ unstructured/bootstrap.f90:1449: if(eqsubtract.eq.1) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:405</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: Subtract fields from non-axisymmetric coils</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：1 把 RMP/error field 保存为独立外场，而不是直接写入扰动场。仿星器：<code>itaylor=41,type_ext_field=2</code> 必须为 1，程序先读 total field，再读 external field，并把 total-external 作为动态场。</div>
 <div class="field"><b>源码使用：</b>源码引用 32 处；主要在 <code>rmp.f90</code> 14处, <code>output.f90</code> 11处, <code>newpar.f90</code> 3处, <code>input.f90</code> 2处。</div>
 <div class="field"><b>主要文件：</b>unstructured/rmp.f90(14); unstructured/output.f90(11); unstructured/newpar.f90(3); unstructured/input.f90(2); unstructured/init_conds.f90(1); unstructured/restart_hdf5.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -4745,7 +4775,7 @@ unstructured/output.f90:1068: if(extsubtract.eq.1 .and. (ilin.eq.1 .or. eqsubtra
 unstructured/output.f90:1097: if(extsubtract.eq.1 .and. (ilin.eq.1 .or. eqsubtract.eq.0)) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="icsubtract icsubtract model options 模型选项 integer 0 1: subtract fields from poloidal field coils  源码引用 82 处；主要在 `ludef_t.f90` 34处, `ludef_t_gpu.f90` 18处, `gradshafranov.f90` 13处, `output.f90` 7处。 unstructured/ludef_t.f90(34); unstructured/ludef_t_gpu.f90(18); unstructured/gradshafranov.f90(13); unstructured/output.f90(7); unstructured/diagnostics.f90(3); unstructured/restart_hdf5.f90(2); unstructured/adapt.f90(1); unstructured/init_conds.f90(1) ">
+<article class="param-card" data-param data-search="icsubtract icsubtract model options 模型选项 integer 0 1: subtract fields from poloidal field coils 托卡马克：1 把 pf 线圈磁通与等离子体磁通分开保存；求总磁场/磁区时仍会重新相加。0 直接把线圈磁通加入 `psi_field(0)`。仿星器：没有对应的 vmec 线圈分解路径，通常保持 0。 源码引用 82 处；主要在 `ludef_t.f90` 34处, `ludef_t_gpu.f90` 18处, `gradshafranov.f90` 13处, `output.f90` 7处。 unstructured/ludef_t.f90(34); unstructured/ludef_t_gpu.f90(18); unstructured/gradshafranov.f90(13); unstructured/output.f90(7); unstructured/diagnostics.f90(3); unstructured/restart_hdf5.f90(2); unstructured/adapt.f90(1); unstructured/init_conds.f90(1) ">
 <div class="param-head">
 <div class="param-title">icsubtract = 0 | integer</div>
 <div class="chips">
@@ -4758,7 +4788,7 @@ unstructured/output.f90:1097: if(extsubtract.eq.1 .and. (ilin.eq.1 .or. eqsubtra
 <div><dt>注册位置</dt><dd>unstructured/input.f90:407</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: Subtract fields from poloidal field coils</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：1 把 PF 线圈磁通与等离子体磁通分开保存；求总磁场/磁区时仍会重新相加。0 直接把线圈磁通加入 <code>psi_field(0)</code>。仿星器：没有对应的 VMEC 线圈分解路径，通常保持 0。</div>
 <div class="field"><b>源码使用：</b>源码引用 82 处；主要在 <code>ludef_t.f90</code> 34处, <code>ludef_t_gpu.f90</code> 18处, <code>gradshafranov.f90</code> 13处, <code>output.f90</code> 7处。</div>
 <div class="field"><b>主要文件：</b>unstructured/ludef_t.f90(34); unstructured/ludef_t_gpu.f90(18); unstructured/gradshafranov.f90(13); unstructured/output.f90(7); unstructured/diagnostics.f90(3); unstructured/restart_hdf5.f90(2); unstructured/adapt.f90(1); unstructured/init_conds.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -5030,7 +5060,7 @@ unstructured/ludef_t.f90:458: if(db .gt. 0 .and. itwofluid.eq.2) then
 unstructured/ludef_t.f90:479: if(db .gt. 0 .and. itwofluid.eq.2) then</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="ibootstrap ibootstrap model options 模型选项 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。  源码引用 115 处；主要在 `newpar.f90` 25处, `adapt.f90` 20处, `bootstrap.f90` 19处, `transport.f90` 19处。 unstructured/newpar.f90(25); unstructured/adapt.f90(20); unstructured/bootstrap.f90(19); unstructured/transport.f90(19); unstructured/auxiliary_fields.f90(11); unstructured/output.f90(11); unstructured/m3dc1_nint.f90(5); unstructured/diagnostics.f90(4) ">
+<article class="param-card" data-param data-search="ibootstrap ibootstrap model options 模型选项 integer 0 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 te，3 按 `1-te/temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 vmec/st bootstrap 初始化，除非已验证模型与系数，否则保持 0。 源码引用 115 处；主要在 `newpar.f90` 25处, `adapt.f90` 20处, `bootstrap.f90` 19处, `transport.f90` 19处。 unstructured/newpar.f90(25); unstructured/adapt.f90(20); unstructured/bootstrap.f90(19); unstructured/transport.f90(19); unstructured/auxiliary_fields.f90(11); unstructured/output.f90(11); unstructured/m3dc1_nint.f90(5); unstructured/diagnostics.f90(4) ">
 <div class="param-head">
 <div class="param-title">ibootstrap = 0 | integer</div>
 <div class="chips">
@@ -5043,7 +5073,7 @@ unstructured/ludef_t.f90:479: if(db .gt. 0 .and. itwofluid.eq.2) then</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:426</dd></div>
 </dl>
 <div class="field"><b>含义：</b>源码 <code>add_var_*</code> 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 <code>1-Te/Temax</code> 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0。</div>
 <div class="field"><b>源码使用：</b>源码引用 115 处；主要在 <code>newpar.f90</code> 25处, <code>adapt.f90</code> 20处, <code>bootstrap.f90</code> 19处, <code>transport.f90</code> 19处。</div>
 <div class="field"><b>主要文件：</b>unstructured/newpar.f90(25); unstructured/adapt.f90(20); unstructured/bootstrap.f90(19); unstructured/transport.f90(19); unstructured/auxiliary_fields.f90(11); unstructured/output.f90(11); unstructured/m3dc1_nint.f90(5); unstructured/diagnostics.f90(4)</div>
 <details><summary>源码引用示例</summary>
@@ -5617,7 +5647,7 @@ unstructured/runaway_advection.f90:210: print *, &#x27;iwall_is_limiter = &#x27;
 unstructured/ludef_t_gpu.f90:4838: if(no_vdg_T .eq. 0) then ! debug</pre>
 </details>
 </article>
-<article class="param-card" data-param data-search="ibootstrap_model ibootstrap_model model options 模型选项 integer 0 1: j_bs = alpha f &lt;p,psi&gt; b 源码用法：在 `bootstrap.f90` 中选择 bootstrap closure：1/3 为 sauter &amp; angioni，2/4 为 redl，5 为 constant-lambda 分支。 源码引用 29 处；主要在 `bootstrap.f90` 24处, `ludef_t.f90` 4处, `output.f90` 1处。 unstructured/bootstrap.f90(24); unstructured/ludef_t.f90(4); unstructured/output.f90(1) 语义/取值范围： 官方文档列出 1-4；源码 `bootstrap.f90` 还显式实现 `ibootstrap_model=5` 的 constant-lambda 分支。源码 `input.f90` 内联说明仍是旧的一行模型说明，使用时以 `bootstrap.f90` 为准。">
+<article class="param-card" data-param data-search="ibootstrap_model ibootstrap_model model options 模型选项 integer 0 1: j_bs = alpha f &lt;p,psi&gt; b 托卡马克：1/3 选 sauter-angioni，2/4 选 redl，3/4 为简化方程实现，5 为 constant-lambda；应与非零 `ibootstrap` 配套。`ibootstrap=3` 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合。 源码用法：在 `bootstrap.f90` 中选择 bootstrap closure：1/3 为 sauter &amp; angioni，2/4 为 redl，5 为 constant-lambda 分支。 源码引用 29 处；主要在 `bootstrap.f90` 24处, `ludef_t.f90` 4处, `output.f90` 1处。 unstructured/bootstrap.f90(24); unstructured/ludef_t.f90(4); unstructured/output.f90(1) 语义/取值范围： 官方文档列出 1-4；源码 `bootstrap.f90` 还显式实现 `ibootstrap_model=5` 的 constant-lambda 分支。源码 `input.f90` 内联说明仍是旧的一行模型说明，使用时以 `bootstrap.f90` 为准。">
 <div class="param-head">
 <div class="param-title">ibootstrap_model = 0 | integer</div>
 <div class="chips">
@@ -5631,7 +5661,7 @@ unstructured/ludef_t_gpu.f90:4838: if(no_vdg_T .eq. 0) then ! debug</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:460</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: J_BS = alpha F &lt;p,psi&gt; B</div>
-<div class="field"><b>使用：</b>源码用法：在 <code>bootstrap.f90</code> 中选择 bootstrap closure：1/3 为 Sauter &amp; Angioni，2/4 为 Redl，5 为 constant-Lambda 分支。</div>
+<div class="field"><b>使用：</b>托卡马克：1/3 选 Sauter-Angioni，2/4 选 Redl，3/4 为简化方程实现，5 为 constant-Lambda；应与非零 <code>ibootstrap</code> 配套。<code>ibootstrap=3</code> 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合。 源码用法：在 <code>bootstrap.f90</code> 中选择 bootstrap closure：1/3 为 Sauter &amp; Angioni，2/4 为 Redl，5 为 constant-Lambda 分支。</div>
 <div class="field"><b>源码使用：</b>源码引用 29 处；主要在 <code>bootstrap.f90</code> 24处, <code>ludef_t.f90</code> 4处, <code>output.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/bootstrap.f90(24); unstructured/ludef_t.f90(4); unstructured/output.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -5651,7 +5681,7 @@ unstructured/bootstrap.f90:413: else if (ibootstrap_model.eq.2)then !Redl et al 
 <li>语义/取值范围： 官方文档列出 1-4；源码 <code>bootstrap.f90</code> 还显式实现 <code>ibootstrap_model=5</code> 的 constant-Lambda 分支。源码 <code>input.f90</code> 内联说明仍是旧的一行模型说明，使用时以 <code>bootstrap.f90</code> 为准。</li>
 </ul></details>
 </article>
-<article class="param-card" data-param data-search="bootstrap_alpha bootstrap_alpha model options 模型选项 real 0. alpha parameter in bootstrap current model  源码引用 13 处；主要在 `bootstrap.f90` 12处, `output.f90` 1处。 unstructured/bootstrap.f90(12); unstructured/output.f90(1) 默认值不一致：官方 `1`；源码 `0.`。源码默认 0；官方文档旧表写 1。">
+<article class="param-card" data-param data-search="bootstrap_alpha bootstrap_alpha model options 模型选项 real 0. alpha parameter in bootstrap current model 托卡马克：bootstrap 项的统一幅值乘子，默认 0；打开 `ibootstrap/model` 后仍需给非零值才有驱动。仿星器：仅在自行验证并启用同一演化闭合时有意义。 源码引用 13 处；主要在 `bootstrap.f90` 12处, `output.f90` 1处。 unstructured/bootstrap.f90(12); unstructured/output.f90(1) 默认值不一致：官方 `1`；源码 `0.`。源码默认 0；官方文档旧表写 1。">
 <div class="param-head">
 <div class="param-title">bootstrap_alpha = 0. | real</div>
 <div class="chips">
@@ -5665,7 +5695,7 @@ unstructured/bootstrap.f90:413: else if (ibootstrap_model.eq.2)then !Redl et al 
 <div><dt>注册位置</dt><dd>unstructured/input.f90:462</dd></div>
 </dl>
 <div class="field"><b>含义：</b>alpha parameter in bootstrap current model</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：bootstrap 项的统一幅值乘子，默认 0；打开 <code>ibootstrap/model</code> 后仍需给非零值才有驱动。仿星器：仅在自行验证并启用同一演化闭合时有意义。</div>
 <div class="field"><b>源码使用：</b>源码引用 13 处；主要在 <code>bootstrap.f90</code> 12处, <code>output.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/bootstrap.f90(12); unstructured/output.f90(1)</div>
 <details><summary>源码引用示例</summary>
@@ -5685,7 +5715,7 @@ unstructured/bootstrap.f90:1112: temp2=-tempDD*bootstrap_alpha</pre>
 <li>默认值不一致：官方 <code>1</code>；源码 <code>0.</code>。源码默认 0；官方文档旧表写 1。</li>
 </ul></details>
 </article>
-<article class="param-card" data-param data-search="ibootstrap_regular ibootstrap_regular model options 模型选项 real 1e-8 regularization parameter default=1e-8  源码引用 8 处；主要在 `bootstrap.f90` 8处。 unstructured/bootstrap.f90(8) ">
+<article class="param-card" data-param data-search="ibootstrap_regular ibootstrap_regular model options 模型选项 real 1e-8 regularization parameter default=1e-8 托卡马克：bootstrap 计算中小 bp、温度梯度和归一化温度的正则化尺度，默认 `1e-8`，不表示电流比例。仿星器：只有启用并验证 bootstrap 路径时使用。 源码引用 8 处；主要在 `bootstrap.f90` 8处。 unstructured/bootstrap.f90(8) ">
 <div class="param-head">
 <div class="param-title">ibootstrap_regular = 1e-8 | real</div>
 <div class="chips">
@@ -5698,7 +5728,7 @@ unstructured/bootstrap.f90:1112: temp2=-tempDD*bootstrap_alpha</pre>
 <div><dt>注册位置</dt><dd>unstructured/input.f90:464</dd></div>
 </dl>
 <div class="field"><b>含义：</b>Regularization parameter Default=1e-8</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：bootstrap 计算中小 Bp、温度梯度和归一化温度的正则化尺度，默认 <code>1e-8</code>，不表示电流比例。仿星器：只有启用并验证 bootstrap 路径时使用。</div>
 <div class="field"><b>源码使用：</b>源码引用 8 处；主要在 <code>bootstrap.f90</code> 8处。</div>
 <div class="field"><b>主要文件：</b>unstructured/bootstrap.f90(8)</div>
 <details><summary>源码引用示例</summary>
@@ -7396,7 +7426,7 @@ unstructured/runaway_advection.f90:209: print *, &#x27;nonrect = &#x27;, nonrect
 <li>默认值不一致：官方 <code>0</code>；源码 <code>1</code>。源码默认 1；官方文档表写 0。</li>
 </ul></details>
 </article>
-<article class="param-card" data-param data-search="ifixedb ifixedb boundary conditions 边界条件 integer 0 1: force psi=0 on boundary  源码引用 11 处；主要在 `gradshafranov.f90` 3处, `init_eqdsk.f90` 2处, `diagnostics.f90` 1处, `init_dskbal.f90` 1处。 unstructured/gradshafranov.f90(3); unstructured/init_eqdsk.f90(2); unstructured/diagnostics.f90(1); unstructured/init_dskbal.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1) ">
+<article class="param-card" data-param data-search="ifixedb ifixedb boundary conditions 边界条件 integer 0 1: force psi=0 on boundary 托卡马克：gs 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/pf 线圈真空场边界值并允许 lcfs 在域内更新。仿星器：vmec/外场初始化不通过它选择固定或自由边界。 源码引用 11 处；主要在 `gradshafranov.f90` 3处, `init_eqdsk.f90` 2处, `diagnostics.f90` 1处, `init_dskbal.f90` 1处。 unstructured/gradshafranov.f90(3); unstructured/init_eqdsk.f90(2); unstructured/diagnostics.f90(1); unstructured/init_dskbal.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1) ">
 <div class="param-head">
 <div class="param-title">ifixedb = 0 | integer</div>
 <div class="chips">
@@ -7409,7 +7439,7 @@ unstructured/runaway_advection.f90:209: print *, &#x27;nonrect = &#x27;, nonrect
 <div><dt>注册位置</dt><dd>unstructured/input.f90:802</dd></div>
 </dl>
 <div class="field"><b>含义：</b>1: Force psi=0 on boundary</div>
-<div class="field"><b>使用：</b>按需在 C1input 中写 <code>name = value</code>；未设置则使用默认值。</div>
+<div class="field"><b>使用：</b>托卡马克：GS 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/PF 线圈真空场边界值并允许 LCFS 在域内更新。仿星器：VMEC/外场初始化不通过它选择固定或自由边界。</div>
 <div class="field"><b>源码使用：</b>源码引用 11 处；主要在 <code>gradshafranov.f90</code> 3处, <code>init_eqdsk.f90</code> 2处, <code>diagnostics.f90</code> 1处, <code>init_dskbal.f90</code> 1处。</div>
 <div class="field"><b>主要文件：</b>unstructured/gradshafranov.f90(3); unstructured/init_eqdsk.f90(2); unstructured/diagnostics.f90(1); unstructured/init_dskbal.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1)</div>
 <details><summary>源码引用示例</summary>

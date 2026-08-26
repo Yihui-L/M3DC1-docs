@@ -264,7 +264,7 @@ unstructured/init_conds.f90:445: if(db.ne.0. .and. ineo_subtract_diamag.eq.1) th
 unstructured/init_conds.f90:451: if(db.ne.0. .and. ineo_subtract_diamag.eq.1) call sum_shared(diamag%vec)
 unstructured/init_conds.f90:461: if(db.ne.0. .and. ineo_subtract_diamag.eq.1) then
 unstructured/init_conds.f90:479: if(db.ne.0. .and. ineo_subtract_diamag.eq.1) call destroy_field(diamag)"
-191,itaylor,itaylor,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择预置初始条件/平衡：toroidal 几何中 1 常用于 GS，40/41 为 stellarator；slab/cylindrical 下有 Taylor、GEM、wave、RWM、basicJ 等测试平衡。 源码用法：主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支。,,unstructured/input.f90,560,20,unstructured/transport.f90(4); unstructured/init_basicj.f90(3); unstructured/init_basicq.f90(3); unstructured/init_conds.f90(3); unstructured/rmp.f90(3); unstructured/ludef_t.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 20 处；主要在 `transport.f90` 4处, `init_basicj.f90` 3处, `init_basicq.f90` 3处, `init_conds.f90` 3处。","unstructured/init_basicj.f90:34: select case(itaylor)
+191,itaylor,itaylor,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：当三个外部平衡入口均为 0 时选择内置初始化；`itaylor=1` 进入 GS，19 为 Solovev，24 为 RWM，29/31 为 basicJ，-1 为常量场。仿星器：40 直接投影固定边界 VMEC 平衡；41 从三维 total/external field 初始化，程序不求解 VMEC 自由边界平衡。 源码用法：主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支。,,unstructured/input.f90,560,20,unstructured/transport.f90(4); unstructured/init_basicj.f90(3); unstructured/init_basicq.f90(3); unstructured/init_conds.f90(3); unstructured/rmp.f90(3); unstructured/ludef_t.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 20 处；主要在 `transport.f90` 4处, `init_basicj.f90` 3处, `init_basicq.f90` 3处, `init_conds.f90` 3处。","unstructured/init_basicj.f90:34: select case(itaylor)
 unstructured/init_basicj.f90:81: select case(itaylor)
 unstructured/init_basicj.f90:122: select case(itaylor)
 unstructured/init_basicq.f90:35: itaylor_qp = itaylor
@@ -274,7 +274,7 @@ unstructured/init_conds.f90:544: select case(itaylor)
 unstructured/init_conds.f90:598: select case(itaylor)
 unstructured/init_conds.f90:689: if(itaylor.eq.41 .and. extsubtract.eq.0) then
 unstructured/ludef_t.f90:3523: if(iheat_sink.eq.1 .and. itaylor.eq.27) then"
-192,iupstream,iupstream,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,561,25,unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4),"源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。","unstructured/metricterms_new.f90:6106: if(iupstream.eq.1) then
+192,iupstream,iupstream,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克与仿星器：环向数值上风/稳定化开关，不选择平衡。0 关闭；1 把 `magus` 给出的人工环向二阶项加到已有系数；2 用该人工项替代相应系数。它在时间演化算子中生效。,,unstructured/input.f90,561,25,unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4),"源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。","unstructured/metricterms_new.f90:6106: if(iupstream.eq.1) then
 unstructured/metricterms_new.f90:6109: elseif(iupstream.eq.2) then
 unstructured/metricterms_new.f90:6139: if(iupstream.eq.1) then
 unstructured/metricterms_new.f90:6147: elseif(iupstream.eq.2) then
@@ -284,7 +284,7 @@ unstructured/metricterms_new.f90:8702: if(iupstream.eq.1) then
 unstructured/metricterms_new.f90:8707: if(iupstream.eq.2) then
 unstructured/metricterms_new.f90:8770: if(iupstream.eq.1) then
 unstructured/metricterms_new.f90:8775: if(iupstream.eq.2) then"
-193,magus,magus,&inputnl,Equilibrium,平衡与初始条件,real,5.e-2,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,562,25,unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4),"源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。","unstructured/metricterms_new.f90:6107: temp79a = abs(h(:,OP_1))*magus
+193,magus,magus,&inputnl,Equilibrium,平衡与初始条件,real,5.e-2,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克与仿星器：`iupstream=1/2` 时人工环向二阶稳定项的无量纲强度；常与局部场或速度绝对值相乘。0 不一定关闭，关闭应设 `iupstream=0`。,,unstructured/input.f90,562,25,unstructured/metricterms_new.f90(12); unstructured/metricterms_new_gpu.f90(9); unstructured/parallel_heat_flux.f90(4),"源码引用 25 处；主要在 `metricterms_new.f90` 12处, `metricterms_new_gpu.f90` 9处, `parallel_heat_flux.f90` 4处。","unstructured/metricterms_new.f90:6107: temp79a = abs(h(:,OP_1))*magus
 unstructured/metricterms_new.f90:6110: temp79a = abs(h(:,OP_1))*magus
 unstructured/metricterms_new.f90:6140: temp79a = abs(h(:,OP_1))*magus
 unstructured/metricterms_new.f90:6148: temp79a = abs(h(:,OP_1))*magus
@@ -294,23 +294,23 @@ unstructured/metricterms_new.f90:8703: temp79a = temp79a + abs(i(:,OP_1))*magus
 unstructured/metricterms_new.f90:8708: temp79a = abs(i(:,OP_1))*magus
 unstructured/metricterms_new.f90:8771: temp79a = temp79a + abs(h(:,OP_1))*magus
 unstructured/metricterms_new.f90:8776: temp79a = abs(h(:,OP_1))*magus"
-194,iflip,iflip,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,563,2,unstructured/input.f90(1); unstructured/newpar.f90(1),"源码引用 2 处；主要在 `input.f90` 1处, `newpar.f90` 1处。","unstructured/input.f90:1571: if(iflip.eq.1) then
+194,iflip,iflip,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克与仿星器：新启动时把坐标系手性翻转，统一反号 psi、环向场、速度势和环向速度，并反号 `vloop/tcur`；这是整体坐标约定变换，不等同于单独反转 B、J 或 V。restart 路径不再次调用该初始翻转。,,unstructured/input.f90,563,2,unstructured/input.f90(1); unstructured/newpar.f90(1),"源码引用 2 处；主要在 `input.f90` 1处, `newpar.f90` 1处。","unstructured/input.f90:1571: if(iflip.eq.1) then
 unstructured/newpar.f90:237: if(iflip.eq.1) then"
-195,iflip_b,iflip_b,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,Reverse equilibrium toroidal field,,,unstructured/input.f90,564,2,unstructured/init_conds.f90(1); unstructured/rmp.f90(1),"源码引用 2 处；主要在 `init_conds.f90` 1处, `rmp.f90` 1处。","unstructured/init_conds.f90:713: if(iflip_b.eq.1) call mult(bz_field(0), -1.)
+195,iflip_b,iflip_b,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,Reverse equilibrium toroidal field,托卡马克：平衡和已构造外场的环向磁场反号。仿星器：固定 VMEC 或外场初始化后同样反转环向场分量；必须确保输入场、诊断和模数符号约定一致。,,unstructured/input.f90,564,2,unstructured/init_conds.f90(1); unstructured/rmp.f90(1),"源码引用 2 处；主要在 `init_conds.f90` 1处, `rmp.f90` 1处。","unstructured/init_conds.f90:713: if(iflip_b.eq.1) call mult(bz_field(0), -1.)
 unstructured/rmp.f90:669: if(iflip_b.eq.1) then"
-196,iflip_j,iflip_j,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,Reverse equilibrium toroidal current,,,unstructured/input.f90,566,6,unstructured/init_eqdsk.f90(3); unstructured/gradshafranov.f90(1); unstructured/init_conds.f90(1); unstructured/rmp.f90(1),"源码引用 6 处；主要在 `init_eqdsk.f90` 3处, `gradshafranov.f90` 1处, `init_conds.f90` 1处, `rmp.f90` 1处。","unstructured/gradshafranov.f90:997: if(iflip_j.eq.1) dia = -dia
+196,iflip_j,iflip_j,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,Reverse equilibrium toroidal current,托卡马克：反转平衡极向磁通，从而反转环向电流；`icsubtract=1` 时线圈磁通也反号。gfile 负电流已自动处理，`iflip_j=1` 会中止并提示用 2 强制覆盖。仿星器：同样反转 psi 表示，通常不应把它当作重新求解电流剖面。,,unstructured/input.f90,566,6,unstructured/init_eqdsk.f90(3); unstructured/gradshafranov.f90(1); unstructured/init_conds.f90(1); unstructured/rmp.f90(1),"源码引用 6 处；主要在 `init_eqdsk.f90` 3处, `gradshafranov.f90` 1处, `init_conds.f90` 1处, `rmp.f90` 1处。","unstructured/gradshafranov.f90:997: if(iflip_j.eq.1) dia = -dia
 unstructured/init_conds.f90:714: if(iflip_j.gt.0) then
 unstructured/init_eqdsk.f90:55: if(current.lt.0 .and. iflip_j.eq.1) then
 unstructured/init_eqdsk.f90:57: print *, 'WARNING: iflip_j = 1 for case with negative current.'
 unstructured/init_eqdsk.f90:60: print *, 'iflip_j = 2.'
 unstructured/rmp.f90:672: if(iflip_j.eq.1) then"
-197,iflip_v,iflip_v,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,Reverse equilibrium toroidal velocity,,,unstructured/input.f90,568,3,unstructured/init_conds.f90(2); unstructured/gradshafranov.f90(1),"源码引用 3 处；主要在 `init_conds.f90` 2处, `gradshafranov.f90` 1处。","unstructured/gradshafranov.f90:998: if(iflip_v.eq.1) dia = -dia
+197,iflip_v,iflip_v,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,Reverse equilibrium toroidal velocity,托卡马克与仿星器：1 反转平衡环向速度；-1 把平衡环向速度清零；0 保持初始化结果。它在平衡与 NEO 速度处理完成后执行。,,unstructured/input.f90,568,3,unstructured/init_conds.f90(2); unstructured/gradshafranov.f90(1),"源码引用 3 处；主要在 `init_conds.f90` 2处, `gradshafranov.f90` 1处。","unstructured/gradshafranov.f90:998: if(iflip_v.eq.1) dia = -dia
 unstructured/init_conds.f90:720: if(iflip_v.eq.1) call mult(vz_field(0), -1.)
 unstructured/init_conds.f90:721: if(iflip_v.eq.-1) call mult(vz_field(0), 0.)"
-198,iflip_z,iflip_z,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,570,1,unstructured/init_eqdsk.f90(1),源码引用 1 处；主要在 `init_eqdsk.f90` 1处。,unstructured/init_eqdsk.f90:65: if(iflip_z.eq.1) zmaxis = -zmaxis
-199,icsym,icsym,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,571,2,unstructured/init_common.f90(1); unstructured/init_conds.f90(1),"源码引用 2 处；主要在 `init_common.f90` 1处, `init_conds.f90` 1处。","unstructured/init_common.f90:77: select case (icsym)
+198,iflip_z,iflip_z,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：当前源码只在 gfile 初始化中令 `zmaxis=-zmaxis`，并未同时镜像 `psirz`、mesh 或其它场，不能视为完整的上下翻转。仿星器：VMEC/外场路径没有活动使用。,,unstructured/input.f90,570,1,unstructured/init_eqdsk.f90(1),源码引用 1 处；主要在 `init_eqdsk.f90` 1处。,unstructured/init_eqdsk.f90:65: if(iflip_z.eq.1) zmaxis = -zmaxis
+199,icsym,icsym,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,"托卡马克：控制 `eps` 初始扰动的上下对称性，0 无约束，1 仅给 U 加奇对称扰动，2 仅给 U 加偶对称扰动，3 使用确定性的 (1,1) 型扰动。仿星器：取值相同，但随机形状在逻辑网格坐标中构造后映射到物理空间。",,unstructured/input.f90,571,2,unstructured/init_common.f90(1); unstructured/init_conds.f90(1),"源码引用 2 处；主要在 `init_common.f90` 1处, `init_conds.f90` 1处。","unstructured/init_common.f90:77: select case (icsym)
 unstructured/init_conds.f90:150: select case (icsym)"
-200,bzero,bzero,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,572,99,unstructured/gradshafranov.f90(23); unstructured/init_3dwave.f90(17); unstructured/init_basicj.f90(7); unstructured/init_mri.f90(4); unstructured/init_rotating_cylinder.f90(4); unstructured/init_rwm.f90(4); unstructured/init_wave.f90(4); unstructured/init_conds.f90(3),"源码引用 99 处；主要在 `gradshafranov.f90` 23处, `init_3dwave.f90` 17处, `init_basicj.f90` 7处, `init_mri.f90` 4处。","unstructured/gradshafranov.f90:444: bzero = yvals(nvals)/rzero
+200,bzero,bzero,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：解析/GS 初始化的参考环向场，通常表示 `rzero` 处 Bphi；gfile 会以最外层 `fpol/rmaxis` 覆盖它，`profile_f` 与 GS 磁场缩放还可再次改写。仿星器：固定 VMEC 的 B 直接来自 wout，三维外场来自场文件，本参数不替代这些数据；TF 倾斜/平移解析误差场仍会用到它。,,unstructured/input.f90,572,99,unstructured/gradshafranov.f90(23); unstructured/init_3dwave.f90(17); unstructured/init_basicj.f90(7); unstructured/init_mri.f90(4); unstructured/init_rotating_cylinder.f90(4); unstructured/init_rwm.f90(4); unstructured/init_wave.f90(4); unstructured/init_conds.f90(3),"源码引用 99 处；主要在 `gradshafranov.f90` 23处, `init_3dwave.f90` 17处, `init_basicj.f90` 7处, `init_mri.f90` 4处。","unstructured/gradshafranov.f90:444: bzero = yvals(nvals)/rzero
 unstructured/gradshafranov.f90:483: bzero = bzero*bscale
 unstructured/gradshafranov.f90:507: if(bzero.gt.0) then
 unstructured/gradshafranov.f90:510: (1.-bpscale)*bpscale*bzero*rzero / &
@@ -320,7 +320,7 @@ unstructured/gradshafranov.f90:514: *(2.*bzero*rzero &
 unstructured/gradshafranov.f90:515: + (sqrt(2.*g0_spline%y(:)+(bzero*rzero)**2)-(bzero*rzero))*bpscale)
 unstructured/gradshafranov.f90:519: (1.-bpscale)*bpscale*bzero*rzero / &
 unstructured/gradshafranov.f90:520: sqrt(2.*g0_spline%y(:)+(bzero*rzero)**2))"
-201,bx0,bx0,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,573,27,unstructured/init_3dwave.f90(16); unstructured/init_3ddiffusion.f90(6); unstructured/init_wave.f90(5),"源码引用 27 处；主要在 `init_3dwave.f90` 16处, `init_3ddiffusion.f90` 6处, `init_wave.f90` 5处。","unstructured/init_3ddiffusion.f90:59: psi0_l(1) = bx0*sin(kx*x)*sin(kz*z)
+201,bx0,bx0,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：仅 wave、3D diffusion 等内置测试平衡的初始 x 向磁场幅值，gfile/GS 生产路径不使用。仿星器：`itaylor=40/41` 不使用。,,unstructured/input.f90,573,27,unstructured/init_3dwave.f90(16); unstructured/init_3ddiffusion.f90(6); unstructured/init_wave.f90(5),"源码引用 27 处；主要在 `init_3dwave.f90` 16处, `init_3ddiffusion.f90` 6处, `init_wave.f90` 5处。","unstructured/init_3ddiffusion.f90:59: psi0_l(1) = bx0*sin(kx*x)*sin(kz*z)
 unstructured/init_3ddiffusion.f90:60: psi0_l(2) = bx0*cos(kx*x)*sin(kz*z)*kx
 unstructured/init_3ddiffusion.f90:61: psi0_l(3) = bx0*sin(kx*x)*cos(kz*z)*kz
 unstructured/init_3ddiffusion.f90:62: psi0_l(4) =-bx0*sin(kx*x)*sin(kz*z)*kx**2
@@ -330,7 +330,7 @@ unstructured/init_3dwave.f90:30: kB = kx*Bx0 + kphi*bzero
 unstructured/init_3dwave.f90:31: b2 = bzero**2 + Bx0**2
 unstructured/init_3dwave.f90:52: omega = bx0*kx*kB + 0.5*b2*kphi**2 &
 unstructured/init_3dwave.f90:53: + 0.5*sqrt((2.*bx0*kx*kB + B2*kphi**2)**2 &"
-202,vzero,vzero,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,574,8,unstructured/init_rotating_cylinder.f90(4); unstructured/init_basicj.f90(2); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1),"源码引用 8 处；主要在 `init_rotating_cylinder.f90` 4处, `init_basicj.f90` 2处, `init_conds.f90` 1处, `init_cyl.f90` 1处。","unstructured/init_basicj.f90:59: vz = vzero
+202,vzero,vzero,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：若干解析初始化的环向/轴向速度标度；basicJ 用作核心平坦转动值，`itaylor=-1` 直接作为均匀环向速度。gfile/GS 的文件旋转由 Input 组控制。仿星器：VMEC/外场路径不从本参数建立旋转。,,unstructured/input.f90,574,8,unstructured/init_rotating_cylinder.f90(4); unstructured/init_basicj.f90(2); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1),"源码引用 8 处；主要在 `init_rotating_cylinder.f90` 4处, `init_basicj.f90` 2处, `init_conds.f90` 1处, `init_cyl.f90` 1处。","unstructured/init_basicj.f90:59: vz = vzero
 unstructured/init_basicj.f90:61: vz = vzero*exp(-(r - basicj_voff)**2/(basicj_vdelt*ln)**2) &
 unstructured/init_conds.f90:601: vz_field(0) = vzero
 unstructured/init_cyl.f90:230: temp79a = vzero
@@ -338,18 +338,18 @@ unstructured/init_rotating_cylinder.f90:55: vz0_l(1) = vzero*x**2
 unstructured/init_rotating_cylinder.f90:56: vz0_l(2) = 2.*vzero*x
 unstructured/init_rotating_cylinder.f90:58: vz0_l(4) = 2.*vzero
 unstructured/init_rotating_cylinder.f90:74: den0_l(1) = 2.*(bzero/vzero)**2"
-203,phizero,phizero,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,575,3,unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1),"源码引用 3 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处。","unstructured/init_eigen.f90:88: u1_l = phizero*vmask
+203,phizero,phizero,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：FRS、FTZ、eigen 等测试初始化中速度流函数 U 的扰动幅值；常规 gfile/GS 不使用。仿星器：`itaylor=40/41` 不使用。,,unstructured/input.f90,575,3,unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1),"源码引用 3 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处。","unstructured/init_eigen.f90:88: u1_l = phizero*vmask
 unstructured/init_frs.f90:216: u1_l = phizero*vmask
 unstructured/init_ftz.f90:120: u1_l = phizero*vmask"
-204,verzero,verzero,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,576,1,unstructured/init_common.f90(1),源码引用 1 处；主要在 `init_common.f90` 1处。,"unstructured/init_common.f90:183: ph179(:,OP_1) = ph179(:,OP_1) + r_79*verzero"
-205,v0_cyl,v0_cyl,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,577,1,unstructured/init_basicq.f90(1),源码引用 1 处；主要在 `init_basicq.f90` 1处。,unstructured/init_basicq.f90:42: v0_qp = v0_cyl
-206,v1_cyl,v1_cyl,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,578,1,unstructured/init_basicq.f90(1),源码引用 1 处；主要在 `init_basicq.f90` 1处。,unstructured/init_basicq.f90:43: v1_qp = v1_cyl
-207,idevice,idevice,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,-1 读 coil.dat/current.dat；0 generic；1 CDX-U；2 NSTX；3 ITER；4 DIII-D（按文档）。,,unstructured/input.f90,579,5,unstructured/gradshafranov.f90(4); unstructured/init_eqdsk.f90(1),"源码引用 5 处；主要在 `gradshafranov.f90` 4处, `init_eqdsk.f90` 1处。","unstructured/gradshafranov.f90:267: select case(idevice)
+204,verzero,verzero,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克与仿星器：在 `init_perturbations` 中向 plasma zone 的扰动速度势加入 `R*verzero`，用于给定初始竖直速度；它是扰动层，不会改变读入平衡或 LCFS。,,unstructured/input.f90,576,1,unstructured/init_common.f90(1),源码引用 1 处；主要在 `init_common.f90` 1处。,"unstructured/init_common.f90:183: ph179(:,OP_1) = ph179(:,OP_1) + r_79*verzero"
+205,v0_cyl,v0_cyl,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：只在 fixed-q/cylindrical 测试剖面中作为中心轴向速度常数项；gfile/GS 不使用。仿星器：`itaylor=40/41` 不使用。,,unstructured/input.f90,577,1,unstructured/init_basicq.f90(1),源码引用 1 处；主要在 `init_basicq.f90` 1处。,unstructured/init_basicq.f90:42: v0_qp = v0_cyl
+206,v1_cyl,v1_cyl,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：只在 fixed-q/cylindrical 测试剖面中作为随归一化磁通变化的速度幅值，形式为 `v0_cyl+v1_cyl*psi^beta`。仿星器：`itaylor=40/41` 不使用。,,unstructured/input.f90,578,1,unstructured/init_basicq.f90(1),源码引用 1 处；主要在 `init_basicq.f90` 1处。,unstructured/init_basicq.f90:43: v1_qp = v1_cyl
+207,idevice,idevice,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：只服务 GS/PF 线圈场。当前源码实际实现 -1 读取 `coil.dat/current.dat`，0 使用 generic dipole；其它值进入无 PF 线圈的默认分支。仿星器：VMEC/三维场初始化不使用该设备选择。,,unstructured/input.f90,579,5,unstructured/gradshafranov.f90(4); unstructured/init_eqdsk.f90(1),"源码引用 5 处；主要在 `gradshafranov.f90` 4处, `init_eqdsk.f90` 1处。","unstructured/gradshafranov.f90:267: select case(idevice)
 unstructured/gradshafranov.f90:338: if(idevice .eq. 0) then
 unstructured/gradshafranov.f90:1232: if(idevice .eq. -1) then
 unstructured/gradshafranov.f90:3413: if(idevice .eq. 0 .and. ifixedb .eq. 0 .and. feedfac.ne.0.) then
 unstructured/init_eqdsk.f90:80: if(iread_eqdsk.eq.3 .or. idevice.eq.-1 .or. imulti_region.eq.1) then"
-208,iwave,iwave,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,580,16,unstructured/init_3dwave.f90(13); unstructured/init_wave.f90(3),"源码引用 16 处；主要在 `init_3dwave.f90` 13处, `init_wave.f90` 3处。","unstructured/init_3dwave.f90:35: select case(iwave)
+208,iwave,iwave,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克与仿星器生产平衡均不使用；只为 wave 测试初始化选择波支，具体可用取值随二维/三维测试例程而异。,,unstructured/input.f90,580,16,unstructured/init_3dwave.f90(13); unstructured/init_wave.f90(3),"源码引用 16 处；主要在 `init_3dwave.f90` 13处, `init_wave.f90` 3处。","unstructured/init_3dwave.f90:35: select case(iwave)
 unstructured/init_3dwave.f90:41: print *, 'Error: iwave must be one of the following:'
 unstructured/init_3dwave.f90:42: print *, ' iwave = 0: Shear Alfven wave'
 unstructured/init_3dwave.f90:48: select case(iwave)
@@ -359,7 +359,7 @@ unstructured/init_3dwave.f90:69: print *, ' iwave = 1: Fast wave'
 unstructured/init_3dwave.f90:80: select case(iwave)
 unstructured/init_3dwave.f90:101: print *, 'Error: iwave must be one of the following:'
 unstructured/init_3dwave.f90:102: print *, ' iwave = 0: Shear Alfven wave'"
-209,eps,eps,&inputnl,Equilibrium,平衡与初始条件,real,0.01,1,Magnitude of initial perturbations*,,,unstructured/input.f90,581,84,unstructured/init_conds.f90(36); unstructured/init_3dwave.f90(12); unstructured/init_gem.f90(6); unstructured/init_gmode.f90(6); unstructured/init_strauss.f90(6); unstructured/init_wave.f90(6); unstructured/init_common.f90(5); unstructured/rmp.f90(3),"源码引用 84 处；主要在 `init_conds.f90` 36处, `init_3dwave.f90` 12处, `init_gem.f90` 6处, `init_gmode.f90` 6处。","unstructured/coils.f90:262: x=1.-rksq + eps
+209,eps,eps,&inputnl,Equilibrium,平衡与初始条件,real,0.01,1,Magnitude of initial perturbations*,"托卡马克：初始随机/确定性扰动幅度；`itor=0,irmp=2` 时还作为解析 m/n 真空场幅度。仿星器：固定 VMEC 和 total-field 路径也可用它给 plasma zone 添加初始流扰动，但不改变 wout/外场基态。",,unstructured/input.f90,581,84,unstructured/init_conds.f90(36); unstructured/init_3dwave.f90(12); unstructured/init_gem.f90(6); unstructured/init_gmode.f90(6); unstructured/init_strauss.f90(6); unstructured/init_wave.f90(6); unstructured/init_common.f90(5); unstructured/rmp.f90(3),"源码引用 84 处；主要在 `init_conds.f90` 36处, `init_3dwave.f90` 12处, `init_gem.f90` 6处, `init_gmode.f90` 6处。","unstructured/coils.f90:262: x=1.-rksq + eps
 unstructured/init_3ddiffusion.f90:83: ex = eps*exp(-(rzero*phi/ln)**2-(x/ln)**2-(z/ln)**2)
 unstructured/init_3dwave.f90:168: val(1) = eps*sin(kx*x)*sin(kz*z)*cos(kphi*phi)
 unstructured/init_3dwave.f90:169: val(2) = eps*cos(kx*x)*sin(kz*z)*cos(kphi*phi)*kx
@@ -369,7 +369,7 @@ unstructured/init_3dwave.f90:172: val(5) = eps*cos(kx*x)*cos(kz*z)*cos(kphi*phi)
 unstructured/init_3dwave.f90:173: val(6) =-eps*sin(kx*x)*sin(kz*z)*cos(kphi*phi)*kz**2
 unstructured/init_3dwave.f90:175: val(7) =-eps*sin(kx*x)*sin(kz*z)*sin(kphi*phi)*kphi
 unstructured/init_3dwave.f90:176: val(8) =-eps*cos(kx*x)*sin(kz*z)*sin(kphi*phi)*kphi*kx"
-210,maxn,maxn,&inputnl,Equilibrium,平衡与初始条件,integer,200,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,583,10,unstructured/init_common.f90(6); unstructured/init_conds.f90(4),"源码引用 10 处；主要在 `init_common.f90` 6处, `init_conds.f90` 4处。","unstructured/init_common.f90:80: do i=1,maxn
+210,maxn,maxn,&inputnl,Equilibrium,平衡与初始条件,integer,200,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克与仿星器：`icsym=0/1/2` 随机初始扰动的模循环上限，值越大包含的平面波越多、初始化代价越高；不控制 M3D-C1 实际环向网格分辨率。,,unstructured/input.f90,583,10,unstructured/init_common.f90(6); unstructured/init_conds.f90(4),"源码引用 10 处；主要在 `init_common.f90` 6处, `init_conds.f90` 4处。","unstructured/init_common.f90:80: do i=1,maxn
 unstructured/init_common.f90:82: do j=1, maxn
 unstructured/init_common.f90:99: do i=1,maxn
 unstructured/init_common.f90:101: do j=1, maxn/2
@@ -379,7 +379,7 @@ unstructured/init_conds.f90:148: do i=1,maxn
 unstructured/init_conds.f90:153: do j=1, maxn
 unstructured/init_conds.f90:167: do j=1, maxn/2
 unstructured/init_conds.f90:177: do j=1, maxn/2"
-211,irmp,irmp,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,1: Apply nonaxisym. fields throughout plasma； 2: Apply mpol/ntor vacuum fields (itor=0 only),1 在等离子体内应用非轴对称 RMP/error field；2 仅边界应用真空 mpol/ntor 场。常配合 `type_ext_field`、RMP 文件和 `ntor`。,,unstructured/input.f90,584,10,unstructured/rmp.f90(4); unstructured/input.f90(2); unstructured/init_basicj.f90(1); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 10 处；主要在 `rmp.f90` 4处, `input.f90` 2处, `init_basicj.f90` 1处, `init_conds.f90` 1处。","unstructured/init_basicj.f90:355: if(irmp.ne.2) call init_perturbations
+211,irmp,irmp,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,1: Apply nonaxisym. fields throughout plasma； 2: Apply mpol/ntor vacuum fields (itor=0 only),"托卡马克：1 读取/计算 RMP 与 error field 并投影到整个计算域；2 仅 `itor=0` 可用，在整个域评价解析 mpol/ntor 真空场。仿星器：`itaylor=41,type_ext_field=1,extsubtract=0` 已装入 total field 后会跳过第二次 RMP；固定 VMEC 或 subtraction 路径可另行调用外场处理。",,unstructured/input.f90,584,10,unstructured/rmp.f90(4); unstructured/input.f90(2); unstructured/init_basicj.f90(1); unstructured/init_conds.f90(1); unstructured/init_cyl.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 10 处；主要在 `rmp.f90` 4处, `input.f90` 2处, `init_basicj.f90` 1处, `init_conds.f90` 1处。","unstructured/init_basicj.f90:355: if(irmp.ne.2) call init_perturbations
 unstructured/init_conds.f90:685: if(irmp.ge.1 .or. iread_ext_field.ge.1 .or. &
 unstructured/init_cyl.f90:321: if(irmp.ne.2) call init_perturbations
 unstructured/input.f90:588: ""Additional exponential decay of RMP field from r=1 for irmp=2"", eq_grp)
@@ -389,25 +389,25 @@ unstructured/rmp.f90:231: select case(irmp)
 unstructured/rmp.f90:275: if(myrank.eq.0) print *, 'ERROR: irmp==2 only implemented for itor=0'
 unstructured/rmp.f90:316: if(myrank.eq.0) print *, 'Error: Option not recognized: irmp = ', irmp
 unstructured/rmp.f90:447: if(irmp.eq.1) then"
-212,rmp_atten,rmp_atten,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Additional exponential decay of RMP field from r=1 for irmp=2,,,unstructured/input.f90,587,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:294: if(rmp_atten.ne.0) then
+212,rmp_atten,rmp_atten,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Additional exponential decay of RMP field from r=1 for irmp=2,"托卡马克与仿星器环形生产路径不使用；只在 `itor=0,irmp=2` 中控制解析真空扰动从 r=1 起的指数因子。0 表示不加该衰减/增长因子。",,unstructured/input.f90,587,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:294: if(rmp_atten.ne.0) then
 unstructured/rmp.f90:295: atten = exp((r-1.)/rmp_atten)"
-213,tf_tilt,tf_tilt,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Angle of TF from vertical (in degrees),,,unstructured/input.f90,589,6,unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:686: tf_tilt.ne.0. .or. tf_shift.ne.0. .or. &
+213,tf_tilt,tf_tilt,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Angle of TF from vertical (in degrees),托卡马克：TF 线圈相对竖直方向的小倾斜角，单位度；源码据此构造非轴对称误差场并在基态后加入，不移动 mesh。仿星器：不是 VMEC 场线圈几何参数，通常保持 0。,,unstructured/input.f90,589,6,unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:686: tf_tilt.ne.0. .or. tf_shift.ne.0. .or. &
 unstructured/input.f90:1715: .and. tf_tilt.eq.0. .and. tf_shift.eq.0. &
 unstructured/restart_hdf5.f90:351: tf_tilt.ne.0. .or. tf_shift.ne.0. .or. &
 unstructured/rmp.f90:686: if(tf_tilt.ne.0. .or. tf_shift.ne.0.) call tf_shift_tilt
 unstructured/rmp.f90:732: tilt_sn = tf_tilt*deg2rad*exp(-(0,1)*tf_tilt_angle*deg2rad )*(0,-1)
 unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*deg2rad)"
-214,tf_tilt_angle,tf_tilt_angle,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Axis of rotation for TF tilt (in degrees),,,unstructured/input.f90,591,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:732: tilt_sn = tf_tilt*deg2rad*exp(-(0,1)*tf_tilt_angle*deg2rad )*(0,-1)
+214,tf_tilt_angle,tf_tilt_angle,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Axis of rotation for TF tilt (in degrees),托卡马克：`tf_tilt` 的旋转轴环向方位，单位度，只在 `tf_tilt!=0` 时生效。仿星器：通常不使用。,,unstructured/input.f90,591,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:732: tilt_sn = tf_tilt*deg2rad*exp(-(0,1)*tf_tilt_angle*deg2rad )*(0,-1)
 unstructured/rmp.f90:735: tilt_sn = tf_tilt*deg2rad*sin(phi_79 - tf_tilt_angle*deg2rad)"
-215,tf_shift,tf_shift,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Horizontal shift of TF coil,,,unstructured/input.f90,593,6,unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:686: tf_tilt.ne.0. .or. tf_shift.ne.0. .or. &
+215,tf_shift,tf_shift,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Horizontal shift of TF coil,托卡马克：TF 线圈水平平移幅度，用解析式生成误差场，不改变 mesh 或 GS 线圈坐标。仿星器：通常不使用。,,unstructured/input.f90,593,6,unstructured/rmp.f90(3); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 6 处；主要在 `rmp.f90` 3处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:686: tf_tilt.ne.0. .or. tf_shift.ne.0. .or. &
 unstructured/input.f90:1715: .and. tf_tilt.eq.0. .and. tf_shift.eq.0. &
 unstructured/restart_hdf5.f90:351: tf_tilt.ne.0. .or. tf_shift.ne.0. .or. &
 unstructured/rmp.f90:686: if(tf_tilt.ne.0. .or. tf_shift.ne.0.) call tf_shift_tilt
 unstructured/rmp.f90:733: shift_co = tf_shift*exp(-(0,1)*tf_shift_angle*deg2rad)
 unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2rad)"
-216,tf_shift_angle,tf_shift_angle,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Direction of TF shift (in degrees),,,unstructured/input.f90,595,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:733: shift_co = tf_shift*exp(-(0,1)*tf_shift_angle*deg2rad)
+216,tf_shift_angle,tf_shift_angle,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Direction of TF shift (in degrees),托卡马克：`tf_shift` 的平移方向方位角，单位度，只在 `tf_shift!=0` 时生效。仿星器：通常不使用。,,unstructured/input.f90,595,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:733: shift_co = tf_shift*exp(-(0,1)*tf_shift_angle*deg2rad)
 unstructured/rmp.f90:736: shift_co = tf_shift*cos(phi_79 - tf_shift_angle*deg2rad)"
-217,pf_tilt,pf_tilt,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Angle of PF from vertical (in degrees),数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,597,9,unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:687: any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) then
+217,pf_tilt,pf_tilt,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Angle of PF from vertical (in degrees),托卡马克：PF 线圈逐线圈倾斜角数组，单位度；只有已经由 GS/`idevice=-1` 装载到 PF 线圈表的线圈才会产生误差场。仿星器：VMEC/外场路径没有 PF 线圈表，通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,597,9,unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:687: any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) then
 unstructured/input.f90:1716: .and. all(pf_tilt.eq.0.) .and. all(pf_shift.eq.0.)) then
 unstructured/restart_hdf5.f90:352: any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) then
 unstructured/rmp.f90:345: if(pf_tilt(j).ne.0. .or. pf_shift(j).ne.0.) then
@@ -416,11 +416,11 @@ unstructured/rmp.f90:350: tilt_sn = pf_tilt(j)*deg2rad* &
 unstructured/rmp.f90:357: tilt_co = pf_tilt(j)*deg2rad* &
 unstructured/rmp.f90:359: tilt_sn = pf_tilt(j)*deg2rad* &
 unstructured/rmp.f90:451: if((any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) &"
-218,pf_tilt_angle,pf_tilt_angle,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Axis of rotation for PF tilt (in degrees),数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,599,4,unstructured/rmp.f90(4),源码引用 4 处；主要在 `rmp.f90` 4处。,"unstructured/rmp.f90:349: exp(-(0,1)*pf_tilt_angle(j)*deg2rad )
+218,pf_tilt_angle,pf_tilt_angle,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Axis of rotation for PF tilt (in degrees),托卡马克：每个 `pf_tilt(i)` 的旋转轴方位角数组，单位度，索引对应线圈组标签。仿星器：通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,599,4,unstructured/rmp.f90(4),源码引用 4 处；主要在 `rmp.f90` 4处。,"unstructured/rmp.f90:349: exp(-(0,1)*pf_tilt_angle(j)*deg2rad )
 unstructured/rmp.f90:351: exp(-(0,1)*pf_tilt_angle(j)*deg2rad )*(0,-1)
 unstructured/rmp.f90:358: cos(phi - pf_tilt_angle(j)*deg2rad)
 unstructured/rmp.f90:360: sin(phi - pf_tilt_angle(j)*deg2rad)"
-219,pf_shift,pf_shift,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Horizontal shift of PF coil,数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,601,9,unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:687: any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) then
+219,pf_shift,pf_shift,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Horizontal shift of PF coil,托卡马克：PF 线圈逐线圈水平平移数组；基于已加载线圈场导数构造非轴对称误差场，不修改轴对称 GS 线圈位置。仿星器：通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,601,9,unstructured/rmp.f90(6); unstructured/init_conds.f90(1); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 9 处；主要在 `rmp.f90` 6处, `init_conds.f90` 1处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:687: any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) then
 unstructured/input.f90:1716: .and. all(pf_tilt.eq.0.) .and. all(pf_shift.eq.0.)) then
 unstructured/restart_hdf5.f90:352: any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) then
 unstructured/rmp.f90:345: if(pf_tilt(j).ne.0. .or. pf_shift(j).ne.0.) then
@@ -429,11 +429,11 @@ unstructured/rmp.f90:354: shift_sn = pf_shift(j)* &
 unstructured/rmp.f90:361: shift_co = pf_shift(j)* &
 unstructured/rmp.f90:363: shift_sn = pf_shift(j)* &
 unstructured/rmp.f90:451: if((any(pf_tilt.ne.0.) .or. any(pf_shift.ne.0.)) &"
-220,pf_shift_angle,pf_shift_angle,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Direction of PF shift (in degrees),数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,603,4,unstructured/rmp.f90(4),源码引用 4 处；主要在 `rmp.f90` 4处。,"unstructured/rmp.f90:353: exp(-(0,1)*pf_shift_angle(j)*deg2rad)
+220,pf_shift_angle,pf_shift_angle,&inputnl,Equilibrium,平衡与初始条件,real array,0.,2000,Direction of PF shift (in degrees),托卡马克：每个 `pf_shift(i)` 的平移方向方位角数组，单位度。仿星器：通常不使用。 数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,603,4,unstructured/rmp.f90(4),源码引用 4 处；主要在 `rmp.f90` 4处。,"unstructured/rmp.f90:353: exp(-(0,1)*pf_shift_angle(j)*deg2rad)
 unstructured/rmp.f90:355: exp(-(0,1)*pf_shift_angle(j)*deg2rad)*(0,-1)
 unstructured/rmp.f90:362: cos(phi - pf_shift_angle(j)*deg2rad)
 unstructured/rmp.f90:364: sin(phi - pf_shift_angle(j)*deg2rad)"
-221,iread_ext_field,iread_ext_field,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,1: Read external field,,,unstructured/input.f90,606,20,unstructured/rmp.f90(16); unstructured/init_conds.f90(2); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 20 处；主要在 `rmp.f90` 16处, `init_conds.f90` 2处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:650: if(iread_ext_field.eq.0) then
+221,iread_ext_field,iread_ext_field,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,1: Read external field,托卡马克：对 `type_ext_field<=0` 表示要读的 error-field 数据组数；1 读 `error_field`，大于 1 读 `error_field01...`。仿星器：`itaylor=41` 必须非零，当前读取器实际只装载索引 `iread_ext_field`，常规用法应取 1。,,unstructured/input.f90,606,20,unstructured/rmp.f90(16); unstructured/init_conds.f90(2); unstructured/input.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 20 处；主要在 `rmp.f90` 16处, `init_conds.f90` 2处, `input.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/init_conds.f90:650: if(iread_ext_field.eq.0) then
 unstructured/init_conds.f90:685: if(irmp.ge.1 .or. iread_ext_field.ge.1 .or. &
 unstructured/input.f90:1714: if(irmp.eq.0 .and. iread_ext_field.eq.0 &
 unstructured/restart_hdf5.f90:350: if(irmp.ge.1 .or. iread_ext_field.ge.1 .or. &
@@ -443,19 +443,19 @@ unstructured/rmp.f90:40: if(iread_ext_field.eq.1) then
 unstructured/rmp.f90:63: allocate(sf(iread_ext_field))
 unstructured/rmp.f90:97: allocate(sf(iread_ext_field))
 unstructured/rmp.f90:143: call load_fieldlines_field(sf(iread_ext_field), field_name,ierr)"
-222,isample_ext_field,isample_ext_field,&inputnl,Equilibrium,平衡与初始条件,integer,1,1,Factor to down-sample external field data toroidally,,,unstructured/input.f90,608,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:45: call load_schaffer_field(sf(l),ext_field_name,isample_ext_field, &
+222,isample_ext_field,isample_ext_field,&inputnl,Equilibrium,平衡与初始条件,integer,1,1,Factor to down-sample external field data toroidally,托卡马克：Schaffer error-field 数据的环向降采样因子。仿星器：仅场文件回退到 Schaffer 格式时使用；FIELDLINES/MGRID/HINT/MIPS 专用读取器不使用该因子。,,unstructured/input.f90,608,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:45: call load_schaffer_field(sf(l),ext_field_name,isample_ext_field, &
 unstructured/rmp.f90:154: call load_schaffer_field(sf(iread_ext_field),field_name,isample_ext_field, &"
-223,isample_ext_field_pol,isample_ext_field_pol,&inputnl,Equilibrium,平衡与初始条件,integer,1,1,Factor to down-sample external field data poloidally,,,unstructured/input.f90,610,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:46: isample_ext_field_pol,ierr)
+223,isample_ext_field_pol,isample_ext_field_pol,&inputnl,Equilibrium,平衡与初始条件,integer,1,1,Factor to down-sample external field data poloidally,托卡马克：Schaffer error-field 数据的极向降采样因子。仿星器：仅 Schaffer 回退格式使用，专用三维场读取器不使用。,,unstructured/input.f90,610,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:46: isample_ext_field_pol,ierr)
 unstructured/rmp.f90:155: isample_ext_field_pol,ierr)"
-224,scale_ext_field,scale_ext_field,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,Factor to scale external field,,,unstructured/input.f90,612,6,unstructured/rmp.f90(6),源码引用 6 处；主要在 `rmp.f90` 6处。,"unstructured/rmp.f90:391: br = br + (1e4/b0_norm)*fr *scale_ext_field*sfac
+224,scale_ext_field,scale_ext_field,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,Factor to scale external field,托卡马克与仿星器：投影已读场数据时统一乘的幅值因子；会作用于该读取器装入的 `file_total_field/file_ext_field/error_field`，但不缩放 gfile 或 `itaylor=40` 直接读取的 wout 基态，也不重新求解平衡。,,unstructured/input.f90,612,6,unstructured/rmp.f90(6),源码引用 6 处；主要在 `rmp.f90` 6处。,"unstructured/rmp.f90:391: br = br + (1e4/b0_norm)*fr *scale_ext_field*sfac
 unstructured/rmp.f90:392: bphi = bphi + (1e4/b0_norm)*fphi*scale_ext_field*sfac
 unstructured/rmp.f90:393: bz = bz + (1e4/b0_norm)*fz *scale_ext_field*sfac
 unstructured/rmp.f90:398: br = br + (1e4/b0_norm)*gr *scale_ext_field
 unstructured/rmp.f90:399: bphi = bphi + (1e4/b0_norm)*gphi*scale_ext_field
 unstructured/rmp.f90:400: bz = bz + (1e4/b0_norm)*gz *scale_ext_field"
-225,shift_ext_field,shift_ext_field,&inputnl,Equilibrium,平衡与初始条件,real array,0.,8,Toroidal shift (in deg) of external fields,数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,614,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:389: sfac = exp(-cmplx(0.,1.)*ntor*shift_ext_field(i)*pi/180.)
+225,shift_ext_field,shift_ext_field,&inputnl,Equilibrium,平衡与初始条件,real array,0.,8,Toroidal shift (in deg) of external fields,托卡马克与仿星器：各外场数据组的环向相位平移数组，单位度；3D 中通过改变取样角实现，complex 中转化为所选 `ntor` 的相位因子。 数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。,,unstructured/input.f90,614,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:389: sfac = exp(-cmplx(0.,1.)*ntor*shift_ext_field(i)*pi/180.)
 unstructured/rmp.f90:396: x,phi-shift_ext_field(i)*pi/180.,z,&"
-226,type_ext_field,type_ext_field,&inputnl,Equilibrium,平衡与初始条件,integer,-1,1,type of external field file,-1 默认；0 tokamak RMP/error field；1 free-boundary stellarator FIELDLINES/MGRID total field；2 stellarator total+external subtraction。 源码用法：`<=0` 用 tokamak RMP/error-field 分支，`=1/2` 用 stellarator/free-boundary 场文件，`=3` 从电流计算外场。,,unstructured/input.f90,616,11,unstructured/rmp.f90(10); unstructured/init_conds.f90(1),"源码引用 11 处；主要在 `rmp.f90` 10处, `init_conds.f90` 1处。","unstructured/init_conds.f90:655: if(type_ext_field.ge.1) &
+226,type_ext_field,type_ext_field,&inputnl,Equilibrium,平衡与初始条件,integer,-1,1,type of external field file,托卡马克：<=0 走 RMP/error-field；3 可从 `external_j` 电流数据求外场。仿星器：1 在 `itaylor=41` 中直接把 `file_total_field` 作为 total field；2 要求 `extsubtract=1`，先装 total field、再读 `file_ext_field` 并保存/扣除外场。 源码用法：`<=0` 用 tokamak RMP/error-field 分支，`=1/2` 用 stellarator/free-boundary 场文件，`=3` 从电流计算外场。,,unstructured/input.f90,616,11,unstructured/rmp.f90(10); unstructured/init_conds.f90(1),"源码引用 11 处；主要在 `rmp.f90` 10处, `init_conds.f90` 1处。","unstructured/init_conds.f90:655: if(type_ext_field.ge.1) &
 unstructured/rmp.f90:37: if(type_ext_field.le.0) then ! RMP field
 unstructured/rmp.f90:62: else if(type_ext_field.eq.2) then ! Stellarator/3D vacuum field
 unstructured/rmp.f90:71: else if(type_ext_field.eq.3) then
@@ -465,10 +465,10 @@ unstructured/rmp.f90:105: else if(type_ext_field.eq.2 .and. extsubtract.eq.1) th
 unstructured/rmp.f90:115: else if(type_ext_field.eq.2 .and. extsubtract.eq.0) then
 unstructured/rmp.f90:117: 'ERROR: type_ext_field=2 requires extsubtract=1 when itaylor=41'
 unstructured/rmp.f90:635: if (type_ext_field.ge.1 .and. (itaylor.eq.40 .or. itaylor.eq.41)) then"
-227,file_ext_field,file_ext_field,&inputnl,Equilibrium,平衡与初始条件,character(len=256),error_field,1,name of external field file,stellarator/free-boundary 场文件名，默认 `error_field`；支持 fieldlines/mgrid 前缀。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。,,unstructured/input.f90,618,1,unstructured/rmp.f90(1),源码引用 1 处；主要在 `rmp.f90` 1处。,unstructured/rmp.f90:64: call read_stellarator_field(file_ext_field)
-228,file_total_field,file_total_field,&inputnl,Equilibrium,平衡与初始条件,character(len=256),total_field,1,name of total field file for ST,stellarator total field 文件名，默认 `total_field`；支持 fieldlines/mgrid 前缀。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。,,unstructured/input.f90,620,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:101: call read_stellarator_field(file_total_field)
+227,file_ext_field,file_ext_field,&inputnl,Equilibrium,平衡与初始条件,character(len=256),error_field,1,name of external field file,托卡马克：`type_ext_field<=0` 时此名称被忽略，文件名固定为 `error_field` 或 `error_fieldNN`。仿星器：`type_ext_field=2` 的真空/外部场文件；文件名前缀选择 FIELDLINES、MIPS、HINT、MGRID 读取器，其它名称按 Schaffer 格式。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。,,unstructured/input.f90,618,1,unstructured/rmp.f90(1),源码引用 1 处；主要在 `rmp.f90` 1处。,unstructured/rmp.f90:64: call read_stellarator_field(file_ext_field)
+228,file_total_field,file_total_field,&inputnl,Equilibrium,平衡与初始条件,character(len=256),total_field,1,name of total field file for ST,"托卡马克：常规 RMP/GS 不使用。仿星器：`itaylor=41,type_ext_field=1/2` 的总磁场文件；1 直接作为基态，2 与 `file_ext_field` 组成 total-minus-external 的演化场分解。 字符串值可写成 `name = value` 或带引号形式；解析器会去掉首尾引号。",,unstructured/input.f90,620,2,unstructured/rmp.f90(2),源码引用 2 处；主要在 `rmp.f90` 2处。,"unstructured/rmp.f90:101: call read_stellarator_field(file_total_field)
 unstructured/rmp.f90:109: call read_stellarator_field(file_total_field)"
-229,beta,beta,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,622,58,unstructured/mackenbach_profiles.f90(23); m3dc1_scorec/src/ReducedQuinticImplicit.cc(10); unstructured/metricterms_new.f90(8); unstructured/metricterms_new_gpu.f90(8); unstructured/init_tilt.f90(3); unstructured/scorec_mesh.f90(3); unstructured/nintegrate_mod.f90(2); unstructured/init_basicq.f90(1),"源码引用 58 处；主要在 `mackenbach_profiles.f90` 23处, `ReducedQuinticImplicit.cc` 10处, `metricterms_new.f90` 8处, `metricterms_new_gpu.f90` 8处。","unstructured/init_basicq.f90:44: beta_qp = beta
+229,beta,beta,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：仅 tilting/fixed-q 等模型平衡或测试问题中的无量纲形状/速度幂参数，不是由 gfile 得到的等离子体 beta，也不会覆盖压力。仿星器：`itaylor=40/41` 不使用。,,unstructured/input.f90,622,58,unstructured/mackenbach_profiles.f90(23); m3dc1_scorec/src/ReducedQuinticImplicit.cc(10); unstructured/metricterms_new.f90(8); unstructured/metricterms_new_gpu.f90(8); unstructured/init_tilt.f90(3); unstructured/scorec_mesh.f90(3); unstructured/nintegrate_mod.f90(2); unstructured/init_basicq.f90(1),"源码引用 58 处；主要在 `mackenbach_profiles.f90` 23处, `ReducedQuinticImplicit.cc` 10处, `metricterms_new.f90` 8处, `metricterms_new_gpu.f90` 8处。","unstructured/init_basicq.f90:44: beta_qp = beta
 unstructured/init_tilt.f90:107: kb = k**2*(1.-beta)
 unstructured/init_tilt.f90:125: kb = k**2*beta*pefac
 unstructured/init_tilt.f90:133: kb = k**2*beta
@@ -478,7 +478,7 @@ unstructured/mackenbach_profiles.f90:86: gamma*beta*exheat(rho-drho) + dk(rho-dr
 unstructured/mackenbach_profiles.f90:96: real function gamma_final(beta,drho,t_end) result(y)
 unstructured/mackenbach_profiles.f90:102: rhoarr(1) = rho0(gamma0(1),beta,drho,t_end)
 unstructured/mackenbach_profiles.f90:103: rhoarr(2) = rho0(gamma0(2),beta,drho,t_end)"
-230,ln,ln,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,623,64,unstructured/init_conds.f90(17); unstructured/init_solovev.f90(12); unstructured/init_basicj.f90(10); unstructured/init_3ddiffusion.f90(7); unstructured/init_circle.f90(5); unstructured/init_gmode.f90(4); unstructured/input.f90(3); unstructured/init_common.f90(1),"源码引用 64 处；主要在 `init_conds.f90` 17处, `init_solovev.f90` 12处, `init_basicj.f90` 10处, `init_3ddiffusion.f90` 7处。","unstructured/init_3ddiffusion.f90:83: ex = eps*exp(-(rzero*phi/ln)**2-(x/ln)**2-(z/ln)**2)
+230,ln,ln,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：多个解析/测试平衡的特征径向尺度；basicJ 中是电流剖面半径，Solovev 中控制横向尺寸。它不是自然对数。仿星器：VMEC/外场平衡不使用，但 `icsym=3` 扰动包络仍可能引用。,,unstructured/input.f90,623,64,unstructured/init_conds.f90(17); unstructured/init_solovev.f90(12); unstructured/init_basicj.f90(10); unstructured/init_3ddiffusion.f90(7); unstructured/init_circle.f90(5); unstructured/init_gmode.f90(4); unstructured/input.f90(3); unstructured/init_common.f90(1),"源码引用 64 处；主要在 `init_conds.f90` 17处, `init_solovev.f90` 12处, `init_basicj.f90` 10处, `init_3ddiffusion.f90` 7处。","unstructured/init_3ddiffusion.f90:83: ex = eps*exp(-(rzero*phi/ln)**2-(x/ln)**2-(z/ln)**2)
 unstructured/init_3ddiffusion.f90:86: p1_l(2) = -2.*ex*x/ln**2
 unstructured/init_3ddiffusion.f90:87: p1_l(3) = -2.*ex*z/ln**2
 unstructured/init_3ddiffusion.f90:88: p1_l(4) = 4.*ex*x**2/ln**4 - 2.*ex*ln**2
@@ -488,7 +488,7 @@ unstructured/init_3ddiffusion.f90:92: p1_l(7:12) = -2.*phi*p1_l(1:6)*(rzero/ln)*
 unstructured/init_basicj.f90:36: where(r2.lt.ln**2)
 unstructured/init_basicj.f90:37: jphi = basicj_j0*(1.-(r2/ln**2))**basicj_nu
 unstructured/init_basicj.f90:43: jphi = basicj_j0*(1. + (r2/ln**2)**basicj_nu)**(-(1.+1./basicj_nu))"
-231,elongation,elongation,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,624,8,unstructured/init_solovev.f90(8),源码引用 8 处；主要在 `init_solovev.f90` 8处。,"unstructured/init_solovev.f90:127: g = (x_79*z_79/elongation)**2 + &
+231,elongation,elongation,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：仅 `itaylor=19` Solovev 解析平衡的伸长率。仿星器：VMEC 几何由傅里叶系数给出，本参数不使用。,,unstructured/input.f90,624,8,unstructured/init_solovev.f90(8),源码引用 8 处；主要在 `init_solovev.f90` 8处。,"unstructured/init_solovev.f90:127: g = (x_79*z_79/elongation)**2 + &
 unstructured/init_solovev.f90:143: p079(:,OP_1) = pedge - g * (1. + elongation**2) &
 unstructured/init_solovev.f90:145: p079(:,OP_1) = pedge - ps079(:,OP_1) * (1. + elongation**2) &
 unstructured/init_solovev.f90:146: / (elongation*rzero**3*q0)
@@ -496,13 +496,13 @@ unstructured/init_solovev.f90:192: z(i) = rzero*ln*elongation*sin(theta) / r(i)
 unstructured/init_solovev.f90:200: b(i+npts) = ln*elongation* &
 unstructured/init_solovev.f90:238: j0 = -(1.+elongation**2)/(q0*rzero**3*elongation)
 unstructured/init_solovev.f90:251: zmax = elongation*sqrt((2.*ln*rzero)**2-(r0**2-rzero**2)**2)/(2.*r0)"
-232,basicj_nu,basicj_nu,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,Exponent in basicj equilibrium,,,unstructured/input.f90,625,6,unstructured/init_basicj.f90(5); unstructured/input.f90(1),"源码引用 6 处；主要在 `init_basicj.f90` 5处, `input.f90` 1处。","unstructured/init_basicj.f90:37: jphi = basicj_j0*(1.-(r2/ln**2))**basicj_nu
+232,basicj_nu,basicj_nu,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,Exponent in basicj equilibrium,托卡马克：`itaylor=29/31` 电流剖面指数；若 `basicj_qa!=0` 会由 q0/qa 关系覆盖。仿星器：`itaylor=40/41` 不使用。,,unstructured/input.f90,625,6,unstructured/init_basicj.f90(5); unstructured/input.f90(1),"源码引用 6 处；主要在 `init_basicj.f90` 5处, `input.f90` 1处。","unstructured/init_basicj.f90:37: jphi = basicj_j0*(1.-(r2/ln**2))**basicj_nu
 unstructured/init_basicj.f90:43: jphi = basicj_j0*(1. + (r2/ln**2)**basicj_nu)**(-(1.+1./basicj_nu))
 unstructured/init_basicj.f90:86: p = p0*(1.+(r2/ln**2)**basicj_nu)**(-(2./3.)*(1.+1./basicj_nu))
 unstructured/init_basicj.f90:124: basicj_nu = basicj_qa/basicj_q0 - 1.
 unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)
 unstructured/input.f90:632: ""Edge safety factor in basicj equilibrium (supersedes basicj_nu)"", eq_grp)"
-233,basicj_j0,basicj_j0,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,On-axis current density in basicj equilibrium,,,unstructured/input.f90,627,9,unstructured/init_basicj.f90(8); unstructured/input.f90(1),"源码引用 9 处；主要在 `init_basicj.f90` 8处, `input.f90` 1处。","unstructured/init_basicj.f90:37: jphi = basicj_j0*(1.-(r2/ln**2))**basicj_nu
+233,basicj_j0,basicj_j0,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,On-axis current density in basicj equilibrium,托卡马克：basicJ 轴上电流密度幅值；若 `basicj_q0!=0`，源码用 `2*bzero/(rzero*q0)` 覆盖本值。仿星器：不使用。,,unstructured/input.f90,627,9,unstructured/init_basicj.f90(8); unstructured/input.f90(1),"源码引用 9 处；主要在 `init_basicj.f90` 8处, `input.f90` 1处。","unstructured/init_basicj.f90:37: jphi = basicj_j0*(1.-(r2/ln**2))**basicj_nu
 unstructured/init_basicj.f90:43: jphi = basicj_j0*(1. + (r2/ln**2)**basicj_nu)**(-(1.+1./basicj_nu))
 unstructured/init_basicj.f90:117: if(basicj_j0 .ne. 0.) basicj_q0 = 2.*bzero/(rzero*basicj_j0)
 unstructured/init_basicj.f90:119: basicj_j0 = 2.*bzero/(rzero*basicj_q0)
@@ -511,23 +511,23 @@ unstructured/init_basicj.f90:225: if(basicj_j0.eq.0.) then
 unstructured/init_basicj.f90:235: if(basicj_j0.eq.0.) then
 unstructured/init_basicj.f90:264: if(basicj_j0.ne.0.) call boundary_dc(jphi_vec%vec, jphi_vec%vec, dr_matrix)
 unstructured/input.f90:630: ""On-axis safety factor in basicj equilibrium (supersedes basicj_j0)"", eq_grp)"
-234,basicj_q0,basicj_q0,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,On-axis safety factor in basicj equilibrium (supersedes basicj_j0),,,unstructured/input.f90,629,5,unstructured/init_basicj.f90(5),源码引用 5 处；主要在 `init_basicj.f90` 5处。,"unstructured/init_basicj.f90:116: if(basicj_q0 .eq. 0.) then
+234,basicj_q0,basicj_q0,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,On-axis safety factor in basicj equilibrium (supersedes basicj_j0),托卡马克：basicJ 轴上安全因子；非零时优先于 `basicj_j0` 并反算轴上电流。0 表示由 `basicj_j0` 反算 q0。仿星器：不使用。,,unstructured/input.f90,629,5,unstructured/init_basicj.f90(5),源码引用 5 处；主要在 `init_basicj.f90` 5处。,"unstructured/init_basicj.f90:116: if(basicj_q0 .eq. 0.) then
 unstructured/init_basicj.f90:117: if(basicj_j0 .ne. 0.) basicj_q0 = 2.*bzero/(rzero*basicj_j0)
 unstructured/init_basicj.f90:119: basicj_j0 = 2.*bzero/(rzero*basicj_q0)
 unstructured/init_basicj.f90:124: basicj_nu = basicj_qa/basicj_q0 - 1.
 unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)"
-235,basicj_qa,basicj_qa,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Edge safety factor in basicj equilibrium (supersedes basicj_nu),,,unstructured/input.f90,631,4,unstructured/init_basicj.f90(4),源码引用 4 处；主要在 `init_basicj.f90` 4处。,"unstructured/init_basicj.f90:121: if(basicj_qa .ne. 0.) then
+235,basicj_qa,basicj_qa,&inputnl,Equilibrium,平衡与初始条件,real,0.,1,Edge safety factor in basicj equilibrium (supersedes basicj_nu),托卡马克：basicJ 目标边缘安全因子；非零时覆盖 `basicj_nu`。`itaylor=31` 且显式给 `xlim!=0` 时源码会报错。仿星器：不使用。,,unstructured/input.f90,631,4,unstructured/init_basicj.f90(4),源码引用 4 处；主要在 `init_basicj.f90` 4处。,"unstructured/init_basicj.f90:121: if(basicj_qa .ne. 0.) then
 unstructured/init_basicj.f90:124: basicj_nu = basicj_qa/basicj_q0 - 1.
 unstructured/init_basicj.f90:127: basicj_nu = log(2.)/log(basicj_qa/basicj_q0)
 unstructured/init_basicj.f90:129: if(myrank.eq.0) print *, 'Error: basicj_qa not available when xlim != 0'"
-236,basicj_voff,basicj_voff,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,Radial extent of flat toroidal rotation in basicj equilibrium,,,unstructured/input.f90,633,3,unstructured/init_basicj.f90(3),源码引用 3 处；主要在 `init_basicj.f90` 3处。,"unstructured/init_basicj.f90:58: where(r.lt.basicj_voff)
+236,basicj_voff,basicj_voff,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,Radial extent of flat toroidal rotation in basicj equilibrium,托卡马克：basicJ 核心平坦环向速度区的径向范围；范围内速度基值为 `vzero`。仿星器：不使用。,,unstructured/input.f90,633,3,unstructured/init_basicj.f90(3),源码引用 3 处；主要在 `init_basicj.f90` 3处。,"unstructured/init_basicj.f90:58: where(r.lt.basicj_voff)
 unstructured/init_basicj.f90:61: vz = vzero*exp(-(r - basicj_voff)**2/(basicj_vdelt*ln)**2) &
 unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basicj_vdelt*ln)**4)"
-237,basicj_vdelt,basicj_vdelt,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,"Width of velocity drop-off, as fraction of ln, in basicj equilibrium",,,unstructured/input.f90,635,2,unstructured/init_basicj.f90(2),源码引用 2 处；主要在 `init_basicj.f90` 2处。,"unstructured/init_basicj.f90:61: vz = vzero*exp(-(r - basicj_voff)**2/(basicj_vdelt*ln)**2) &
+237,basicj_vdelt,basicj_vdelt,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,"Width of velocity drop-off, as fraction of ln, in basicj equilibrium",托卡马克：basicJ 平坦转动区外速度衰减宽度相对 `ln` 的系数，进入高斯型衰减分母。仿星器：不使用。,,unstructured/input.f90,635,2,unstructured/init_basicj.f90(2),源码引用 2 处；主要在 `init_basicj.f90` 2处。,"unstructured/init_basicj.f90:61: vz = vzero*exp(-(r - basicj_voff)**2/(basicj_vdelt*ln)**2) &
 unstructured/init_basicj.f90:62: + alpha1*exp(-(r**2 - basicj_voff**2)**2/(basicj_vdelt*ln)**4)"
-238,basicj_dexp,basicj_dexp,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,637,1,unstructured/init_basicj.f90(1),源码引用 1 处；主要在 `init_basicj.f90` 1处。,unstructured/init_basicj.f90:365: basicj_dscale = (1. + (sqrt(basicj_dvac) - 1.)*(sqrt(rsq)/ln)**basicj_dexp)**2
-239,basicj_dvac,basicj_dvac,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,638,1,unstructured/init_basicj.f90(1),源码引用 1 处；主要在 `init_basicj.f90` 1处。,unstructured/init_basicj.f90:365: basicj_dscale = (1. + (sqrt(basicj_dvac) - 1.)*(sqrt(rsq)/ln)**basicj_dexp)**2
-240,ibasicj_solvep,ibasicj_solvep,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,"0: Uniform pressure, solve for F.  1: Uniform F, solve for pressure",,,unstructured/input.f90,639,10,unstructured/init_basicj.f90(10),源码引用 10 处；主要在 `init_basicj.f90` 10处。,"unstructured/init_basicj.f90:138: if(ibasicj_solvep.eq.0) then
+238,basicj_dexp,basicj_dexp,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：basicJ 专用输运系数径向缩放函数的幂指数，配合 `basicj_dvac` 使黏性/热传导向外变化；不改变初始密度场本身。仿星器：不使用。,,unstructured/input.f90,637,1,unstructured/init_basicj.f90(1),源码引用 1 处；主要在 `init_basicj.f90` 1处。,unstructured/init_basicj.f90:365: basicj_dscale = (1. + (sqrt(basicj_dvac) - 1.)*(sqrt(rsq)/ln)**basicj_dexp)**2
+239,basicj_dvac,basicj_dvac,&inputnl,Equilibrium,平衡与初始条件,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：basicJ 专用输运系数缩放函数在 `r=ln` 处的目标倍率，影响相关黏性与热传导系数，不是外部真空区密度。仿星器：不使用。,,unstructured/input.f90,638,1,unstructured/init_basicj.f90(1),源码引用 1 处；主要在 `init_basicj.f90` 1处。,unstructured/init_basicj.f90:365: basicj_dscale = (1. + (sqrt(basicj_dvac) - 1.)*(sqrt(rsq)/ln)**basicj_dexp)**2
+240,ibasicj_solvep,ibasicj_solvep,&inputnl,Equilibrium,平衡与初始条件,integer,0,1,"0: Uniform pressure, solve for F.  1: Uniform F, solve for pressure",托卡马克：仅 `itaylor=29/31`。0 使用解析压力并由给定 J 求 F；1 令 F 均匀并由 J 求压力。`itaylor=29` 的解析压力为常数，`itaylor=31` 的解析压力随半径衰减。仿星器：不使用。,,unstructured/input.f90,639,10,unstructured/init_basicj.f90(10),源码引用 10 处；主要在 `init_basicj.f90` 10处。,"unstructured/init_basicj.f90:138: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:166: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:179: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:196: if(ibasicj_solvep.eq.0) then
@@ -538,7 +538,7 @@ unstructured/init_basicj.f90:299: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:310: if(ibasicj_solvep.eq.0) then
 unstructured/init_basicj.f90:319: if(ibasicj_solvep.eq.0) then"
 241,inumgs,inumgs,&inputnl,Grad-Shafranov Solver,Grad-Shafranov 求解器,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,643,1,unstructured/gradshafranov.f90(1),源码引用 1 处；主要在 `gradshafranov.f90` 1处。,unstructured/gradshafranov.f90:461: if(inumgs .eq. 1) then
-242,igs,igs,&inputnl,Grad-Shafranov Solver,Grad-Shafranov 求解器,integer,80,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,644,9,unstructured/gradshafranov.f90(4); unstructured/init_conds.f90(1); unstructured/init_eqdsk.f90(1); unstructured/init_jsolver.f90(1); unstructured/init_kstar.f90(1); unstructured/newvar.f90(1),"源码引用 9 处；主要在 `gradshafranov.f90` 4处, `init_conds.f90` 1处, `init_eqdsk.f90` 1处, `init_jsolver.f90` 1处。","unstructured/gradshafranov.f90:105: if(igs.ne.0) call gradshafranov_solve()
+242,igs,igs,&inputnl,Grad-Shafranov Solver,Grad-Shafranov 求解器,integer,80,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：大于 0 时给出 GS 最大迭代次数，收敛误差达到 `tol_gs` 可提前退出；0 不求解 GS。它与 Input 的平衡入口、Boundary 的 `ifixedb`、Mesh 的 zone 共同决定初始平衡。仿星器：`itaylor=40/41` 不调用 GS。,,unstructured/input.f90,644,9,unstructured/gradshafranov.f90(4); unstructured/init_conds.f90(1); unstructured/init_eqdsk.f90(1); unstructured/init_jsolver.f90(1); unstructured/init_kstar.f90(1); unstructured/newvar.f90(1),"源码引用 9 处；主要在 `gradshafranov.f90` 4处, `init_conds.f90` 1处, `init_eqdsk.f90` 1处, `init_jsolver.f90` 1处。","unstructured/gradshafranov.f90:105: if(igs.ne.0) call gradshafranov_solve()
 unstructured/gradshafranov.f90:1261: if(igs.ne.0) call lcfs(psi_vec, iwall_is_limiter.eq.1, &
 unstructured/gradshafranov.f90:1269: mainloop: do itnum=1, igs
 unstructured/gradshafranov.f90:1402: if(igs.ne.0) call lcfs(psi_vec, iwall_is_limiter.eq.1)
@@ -973,7 +973,7 @@ unstructured/auxiliary_fields.f90:261: if(linear.eq.1 .and. ilin.eq.1) then
 unstructured/auxiliary_fields.f90:278: if(linear.eq.1 .and. ilin.eq.1) then
 unstructured/auxiliary_fields.f90:292: if(ieqsub.eq.1 .and. ilin.eq.1 .and. linear.eq.0) then
 unstructured/auxiliary_fields.f90:383: if(linear.eq.1 .and. ilin.eq.1) then"
-100,eqsubtract,eqsubtract,&inputnl,Model Options,模型选项,integer,0,1,1: Subtract equilibrium fields,线性模拟会在校验阶段强制置 1；非线性时设 1 表示从方程中扣除平衡场。,,unstructured/input.f90,403,195,unstructured/ludef_t.f90(68); unstructured/ludef_t_gpu.f90(35); unstructured/output.f90(14); unstructured/diagnostics.f90(13); unstructured/newpar.f90(13); unstructured/adapt.f90(6); unstructured/electrostatic_potential.f90(5); unstructured/gradshafranov.f90(5),"源码引用 195 处；主要在 `ludef_t.f90` 68处, `ludef_t_gpu.f90` 35处, `output.f90` 14处, `diagnostics.f90` 13处。","unstructured/adapt.f90:115: if(eqsubtract.eq.1) then
+100,eqsubtract,eqsubtract,&inputnl,Model Options,模型选项,integer,0,1,1: Subtract equilibrium fields,托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果。,,unstructured/input.f90,403,195,unstructured/ludef_t.f90(68); unstructured/ludef_t_gpu.f90(35); unstructured/output.f90(14); unstructured/diagnostics.f90(13); unstructured/newpar.f90(13); unstructured/adapt.f90(6); unstructured/electrostatic_potential.f90(5); unstructured/gradshafranov.f90(5),"源码引用 195 处；主要在 `ludef_t.f90` 68处, `ludef_t_gpu.f90` 35处, `output.f90` 14处, `diagnostics.f90` 13处。","unstructured/adapt.f90:115: if(eqsubtract.eq.1) then
 unstructured/adapt.f90:284: if(eqsubtract.eq.0) then
 unstructured/adapt.f90:385: if(eqsubtract.eq.0) then
 unstructured/adapt.f90:396: if(eqsubtract.eq.1) then
@@ -983,7 +983,7 @@ unstructured/bootstrap.f90:650: if(eqsubtract.eq.1) then
 unstructured/bootstrap.f90:804: if(eqsubtract.eq.1) then
 unstructured/bootstrap.f90:1391: if(eqsubtract.eq.1) then
 unstructured/bootstrap.f90:1449: if(eqsubtract.eq.1) then"
-101,extsubtract,extsubtract,&inputnl,Model Options,模型选项,integer,0,1,1: Subtract fields from non-axisymmetric coils,,,unstructured/input.f90,405,32,unstructured/rmp.f90(14); unstructured/output.f90(11); unstructured/newpar.f90(3); unstructured/input.f90(2); unstructured/init_conds.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 32 处；主要在 `rmp.f90` 14处, `output.f90` 11处, `newpar.f90` 3处, `input.f90` 2处。","unstructured/init_conds.f90:689: if(itaylor.eq.41 .and. extsubtract.eq.0) then
+101,extsubtract,extsubtract,&inputnl,Model Options,模型选项,integer,0,1,1: Subtract fields from non-axisymmetric coils,"托卡马克：1 把 RMP/error field 保存为独立外场，而不是直接写入扰动场。仿星器：`itaylor=41,type_ext_field=2` 必须为 1，程序先读 total field，再读 external field，并把 total-external 作为动态场。",,unstructured/input.f90,405,32,unstructured/rmp.f90(14); unstructured/output.f90(11); unstructured/newpar.f90(3); unstructured/input.f90(2); unstructured/init_conds.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 32 处；主要在 `rmp.f90` 14处, `output.f90` 11处, `newpar.f90` 3处, `input.f90` 2处。","unstructured/init_conds.f90:689: if(itaylor.eq.41 .and. extsubtract.eq.0) then
 unstructured/input.f90:1717: if(extsubtract.ne.0) then
 unstructured/input.f90:1718: if(myrank.eq.0) print *, 'Error: with no external fields, set extsubtract=0'
 unstructured/newpar.f90:877: if(extsubtract.eq.1) then ! also, external bfp
@@ -993,7 +993,7 @@ unstructured/output.f90:265: call write_int_attr (root_id, ""extsubtract"", exts
 unstructured/output.f90:1052: (extsubtract.eq.1 .and. (ilin.eq.1 .or. eqsubtract.eq.0))) then
 unstructured/output.f90:1068: if(extsubtract.eq.1 .and. (ilin.eq.1 .or. eqsubtract.eq.0)) then
 unstructured/output.f90:1097: if(extsubtract.eq.1 .and. (ilin.eq.1 .or. eqsubtract.eq.0)) then"
-102,icsubtract,icsubtract,&inputnl,Model Options,模型选项,integer,0,1,1: Subtract fields from poloidal field coils,,,unstructured/input.f90,407,82,unstructured/ludef_t.f90(34); unstructured/ludef_t_gpu.f90(18); unstructured/gradshafranov.f90(13); unstructured/output.f90(7); unstructured/diagnostics.f90(3); unstructured/restart_hdf5.f90(2); unstructured/adapt.f90(1); unstructured/init_conds.f90(1),"源码引用 82 处；主要在 `ludef_t.f90` 34处, `ludef_t_gpu.f90` 18处, `gradshafranov.f90` 13处, `output.f90` 7处。","unstructured/adapt.f90:120: if(icsubtract.eq.1) then
+102,icsubtract,icsubtract,&inputnl,Model Options,模型选项,integer,0,1,1: Subtract fields from poloidal field coils,托卡马克：1 把 PF 线圈磁通与等离子体磁通分开保存；求总磁场/磁区时仍会重新相加。0 直接把线圈磁通加入 `psi_field(0)`。仿星器：没有对应的 VMEC 线圈分解路径，通常保持 0。,,unstructured/input.f90,407,82,unstructured/ludef_t.f90(34); unstructured/ludef_t_gpu.f90(18); unstructured/gradshafranov.f90(13); unstructured/output.f90(7); unstructured/diagnostics.f90(3); unstructured/restart_hdf5.f90(2); unstructured/adapt.f90(1); unstructured/init_conds.f90(1),"源码引用 82 处；主要在 `ludef_t.f90` 34处, `ludef_t_gpu.f90` 18处, `gradshafranov.f90` 13处, `output.f90` 7处。","unstructured/adapt.f90:120: if(icsubtract.eq.1) then
 unstructured/diagnostics.f90:2071: if(icsubtract.eq.1) call add(temp_field, psi_coil_field)
 unstructured/diagnostics.f90:2837: if(icsubtract.eq.1) then
 unstructured/diagnostics.f90:2867: if(icsubtract.eq.1) then
@@ -1083,7 +1083,7 @@ unstructured/harned_mikic.f90:17: if(itwofluid.ne.1 .or. surface_int .or. &
 unstructured/harned_mikic.f90:107: if(itwofluid.ne.1 .or. surface_int .or. &
 unstructured/ludef_t.f90:458: if(db .gt. 0 .and. itwofluid.eq.2) then
 unstructured/ludef_t.f90:479: if(db .gt. 0 .and. itwofluid.eq.2) then"
-112,ibootstrap,ibootstrap,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,426,115,unstructured/newpar.f90(25); unstructured/adapt.f90(20); unstructured/bootstrap.f90(19); unstructured/transport.f90(19); unstructured/auxiliary_fields.f90(11); unstructured/output.f90(11); unstructured/m3dc1_nint.f90(5); unstructured/diagnostics.f90(4),"源码引用 115 处；主要在 `newpar.f90` 25处, `adapt.f90` 20处, `bootstrap.f90` 19处, `transport.f90` 19处。","unstructured/adapt.f90:368: if(ibootstrap.gt.0) visc_e_field = 0.
+112,ibootstrap,ibootstrap,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 `1-Te/Temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0。,,unstructured/input.f90,426,115,unstructured/newpar.f90(25); unstructured/adapt.f90(20); unstructured/bootstrap.f90(19); unstructured/transport.f90(19); unstructured/auxiliary_fields.f90(11); unstructured/output.f90(11); unstructured/m3dc1_nint.f90(5); unstructured/diagnostics.f90(4),"源码引用 115 处；主要在 `newpar.f90` 25处, `adapt.f90` 20处, `bootstrap.f90` 19处, `transport.f90` 19处。","unstructured/adapt.f90:368: if(ibootstrap.gt.0) visc_e_field = 0.
 unstructured/adapt.f90:369: if(ibootstrap.gt.0) Jbs_L31_field = 0.
 unstructured/adapt.f90:370: if(ibootstrap.gt.0) Jbs_L32_field = 0.
 unstructured/adapt.f90:371: if(ibootstrap.gt.0) Jbs_L34_field = 0.
@@ -1252,7 +1252,7 @@ unstructured/particle_com.f90:289: print *, 'iwall_is_limiter = ', iwall_is_limi
 unstructured/runaway_advection.f90:210: print *, 'iwall_is_limiter = ', iwall_is_limiter"
 133,no_vdg_T,no_vdg_T,&inputnl,Model Options,模型选项,integer,0,1,1: do not include V dot grad T in Temp equation (debug),,,unstructured/input.f90,457,2,unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1),"源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。","unstructured/ludef_t.f90:4237: if(no_vdg_T .eq. 0) then ! debug
 unstructured/ludef_t_gpu.f90:4838: if(no_vdg_T .eq. 0) then ! debug"
-134,ibootstrap_model,ibootstrap_model,&inputnl,Model Options,模型选项,integer,0,1,"1: J_BS = alpha F <p,psi> B",源码用法：在 `bootstrap.f90` 中选择 bootstrap closure：1/3 为 Sauter & Angioni，2/4 为 Redl，5 为 constant-Lambda 分支。,,unstructured/input.f90,460,29,unstructured/bootstrap.f90(24); unstructured/ludef_t.f90(4); unstructured/output.f90(1),"源码引用 29 处；主要在 `bootstrap.f90` 24处, `ludef_t.f90` 4处, `output.f90` 1处。","unstructured/bootstrap.f90:117: if(ibootstrap_model.eq.1 .or. ibootstrap_model.eq.3)then !Sauter & Angioni (1999)
+134,ibootstrap_model,ibootstrap_model,&inputnl,Model Options,模型选项,integer,0,1,"1: J_BS = alpha F <p,psi> B",托卡马克：1/3 选 Sauter-Angioni，2/4 选 Redl，3/4 为简化方程实现，5 为 constant-Lambda；应与非零 `ibootstrap` 配套。`ibootstrap=3` 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合。 源码用法：在 `bootstrap.f90` 中选择 bootstrap closure：1/3 为 Sauter & Angioni，2/4 为 Redl，5 为 constant-Lambda 分支。,,unstructured/input.f90,460,29,unstructured/bootstrap.f90(24); unstructured/ludef_t.f90(4); unstructured/output.f90(1),"源码引用 29 处；主要在 `bootstrap.f90` 24处, `ludef_t.f90` 4处, `output.f90` 1处。","unstructured/bootstrap.f90:117: if(ibootstrap_model.eq.1 .or. ibootstrap_model.eq.3)then !Sauter & Angioni (1999)
 unstructured/bootstrap.f90:124: else if (ibootstrap_model.eq.2 .or. ibootstrap_model.eq.4)then !Redl et al (2021)
 unstructured/bootstrap.f90:207: if(ibootstrap_model.eq.1)then !Sauter & Angioni (1999)
 unstructured/bootstrap.f90:214: else if (ibootstrap_model.eq.2)then !Redl et al (2021)
@@ -1262,7 +1262,7 @@ unstructured/bootstrap.f90:326: if(ibootstrap_model.eq.1)then !Sauter & Angioni 
 unstructured/bootstrap.f90:333: else if (ibootstrap_model.eq.2)then !Redl et al (2021)
 unstructured/bootstrap.f90:406: if(ibootstrap_model.eq.1)then !Sauter & Angioni (1999)
 unstructured/bootstrap.f90:413: else if (ibootstrap_model.eq.2)then !Redl et al (2021)"
-135,bootstrap_alpha,bootstrap_alpha,&inputnl,Model Options,模型选项,real,0.,1,alpha parameter in bootstrap current model,,,unstructured/input.f90,462,13,unstructured/bootstrap.f90(12); unstructured/output.f90(1),"源码引用 13 处；主要在 `bootstrap.f90` 12处, `output.f90` 1处。","unstructured/bootstrap.f90:136: temp79a=tempDD*jbsfluxavg_iBsq_B79(:,OP_1)*iBpsq(:)*ri_79*bzt79(:,OP_1)*bootstrap_alpha
+135,bootstrap_alpha,bootstrap_alpha,&inputnl,Model Options,模型选项,real,0.,1,alpha parameter in bootstrap current model,托卡马克：bootstrap 项的统一幅值乘子，默认 0；打开 `ibootstrap/model` 后仍需给非零值才有驱动。仿星器：仅在自行验证并启用同一演化闭合时有意义。,,unstructured/input.f90,462,13,unstructured/bootstrap.f90(12); unstructured/output.f90(1),"源码引用 13 处；主要在 `bootstrap.f90` 12处, `output.f90` 1处。","unstructured/bootstrap.f90:136: temp79a=tempDD*jbsfluxavg_iBsq_B79(:,OP_1)*iBpsq(:)*ri_79*bzt79(:,OP_1)*bootstrap_alpha
 unstructured/bootstrap.f90:241: bs_b1psifpsib = bootstrap_alpha*temp
 unstructured/bootstrap.f90:354: bs_b1psifbb = bootstrap_alpha*temp
 unstructured/bootstrap.f90:440: bs_b1psiffb = bootstrap_alpha*temp
@@ -1272,7 +1272,7 @@ unstructured/bootstrap.f90:978: temp1=tempDD*jbsfluxavg_iBsq_B79(:,OP_1)*bootstr
 unstructured/bootstrap.f90:979: temp2=tempDD*bootstrap_alpha
 unstructured/bootstrap.f90:1111: temp1=-tempDD*jbsfluxavg_iBsq_B79(:,OP_1)*bootstrap_alpha
 unstructured/bootstrap.f90:1112: temp2=-tempDD*bootstrap_alpha"
-136,ibootstrap_regular,ibootstrap_regular,&inputnl,Model Options,模型选项,real,1e-8,1,Regularization parameter Default=1e-8,,,unstructured/input.f90,464,8,unstructured/bootstrap.f90(8),源码引用 8 处；主要在 `bootstrap.f90` 8处。,"unstructured/bootstrap.f90:1043: chisq(i) = ibootstrap_regular / (1.0 + 1e-2 * tempbeta)
+136,ibootstrap_regular,ibootstrap_regular,&inputnl,Model Options,模型选项,real,1e-8,1,Regularization parameter Default=1e-8,托卡马克：bootstrap 计算中小 Bp、温度梯度和归一化温度的正则化尺度，默认 `1e-8`，不表示电流比例。仿星器：只有启用并验证 bootstrap 路径时使用。,,unstructured/input.f90,464,8,unstructured/bootstrap.f90(8),源码引用 8 处；主要在 `bootstrap.f90` 8处。,"unstructured/bootstrap.f90:1043: chisq(i) = ibootstrap_regular / (1.0 + 1e-2 * tempbeta)
 unstructured/bootstrap.f90:1493: eps_val=ibootstrap_regular**2
 unstructured/bootstrap.f90:1684: atten_width_core=ibootstrap_regular*10.0
 unstructured/bootstrap.f90:1694: if(temax .le. ibootstrap_regular) then
@@ -1656,7 +1656,7 @@ unstructured/output.f90:275: call write_int_attr (root_id, ""nonrect"" , nonrect
 unstructured/particle.f90:290: print *, 'nonrect = ', nonrect
 unstructured/particle_com.f90:288: print *, 'nonrect = ', nonrect
 unstructured/runaway_advection.f90:209: print *, 'nonrect = ', nonrect"
-329,ifixedb,ifixedb,&inputnl,Boundary Conditions,边界条件,integer,0,1,1: Force psi=0 on boundary,,,unstructured/input.f90,802,11,unstructured/gradshafranov.f90(3); unstructured/init_eqdsk.f90(2); unstructured/diagnostics.f90(1); unstructured/init_dskbal.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1),"源码引用 11 处；主要在 `gradshafranov.f90` 3处, `init_eqdsk.f90` 2处, `diagnostics.f90` 1处, `init_dskbal.f90` 1处。","unstructured/diagnostics.f90:2090: if(ifixedb.eq.1 .and. ntime.le.0) then
+329,ifixedb,ifixedb,&inputnl,Boundary Conditions,边界条件,integer,0,1,1: Force psi=0 on boundary,托卡马克：GS 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/PF 线圈真空场边界值并允许 LCFS 在域内更新。仿星器：VMEC/外场初始化不通过它选择固定或自由边界。,,unstructured/input.f90,802,11,unstructured/gradshafranov.f90(3); unstructured/init_eqdsk.f90(2); unstructured/diagnostics.f90(1); unstructured/init_dskbal.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1),"源码引用 11 处；主要在 `gradshafranov.f90` 3处, `init_eqdsk.f90` 2处, `diagnostics.f90` 1处, `init_dskbal.f90` 1处。","unstructured/diagnostics.f90:2090: if(ifixedb.eq.1 .and. ntime.le.0) then
 unstructured/gradshafranov.f90:87: if(ifixedb.eq.0) then
 unstructured/gradshafranov.f90:3413: if(idevice .eq. 0 .and. ifixedb .eq. 0 .and. feedfac.ne.0.) then
 unstructured/gradshafranov.f90:3423: if(ifixedb.ge.1) then

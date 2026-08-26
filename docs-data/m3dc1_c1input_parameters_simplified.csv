@@ -45,58 +45,58 @@ iread_heatsource,integer,0,托卡马克：1 读取 `profile_heatsource(psi_N)`�
 iread_particlesource,integer,0,"托卡马克：1 读取 `profile_particlesource(psi_N)`。仿星器：1 读取同名文件，但横坐标解释为逻辑 `s=xl^2+zl^2`。两者均把第二列乘输入参数 `pellet_rate` 并与其他密度源相加，且要求 `idens=1,linear=0`"
 iread_neo,integer,0,Read velocity data from NEO output；托卡马克：1 读取三类 NEO 输出和 GYRO `input.profiles`；环向速度叠加到已有 `vz`，极向速度重写 `u/chi`，非 plasma 磁区置零。仿星器：没有与 VMEC 逻辑坐标配套的专用实现，建议保持 0
 ineo_subtract_diamag,integer,0,"Subtract diamag. term from input vel. when reading NEO vel.；托卡马克：仅 `iread_neo=1,db!=0` 时从 NEO 环向速度扣除离子抗磁贡献。仿星器：随 `iread_neo` 保持 0"
-itaylor,integer,0,选择预置初始条件/平衡：toroidal 几何中 1 常用于 GS，40/41 为 stellarator；slab/cylindrical 下有 Taylor、GEM、wave、RWM、basicJ 等测试平衡；主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支
-iupstream,integer,0,平衡与初始条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-magus,real,5.e-2,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-iflip,integer,0,平衡与初始条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-iflip_b,integer,0,Reverse equilibrium toroidal field
-iflip_j,integer,0,Reverse equilibrium toroidal current
-iflip_v,integer,0,Reverse equilibrium toroidal velocity
-iflip_z,integer,0,平衡与初始条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-icsym,integer,0,平衡与初始条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-bzero,real,1.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-bx0,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-vzero,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-phizero,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-verzero,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-v0_cyl,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-v1_cyl,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-idevice,integer,0,-1 读 coil.dat/current.dat；0 generic；1 CDX-U；2 NSTX；3 ITER；4 DIII-D（按文档）
-iwave,integer,0,平衡与初始条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-eps,real,0.01,Magnitude of initial perturbations*
-maxn,integer,200,平衡与初始条件相关上限参数，用于限制迭代、场量、系数或网格/时间步控制范围
-irmp,integer,0,1: Apply nonaxisym. fields throughout plasma； 2: Apply mpol/ntor vacuum fields (itor=0 only)；1 在等离子体内应用非轴对称 RMP/error field；2 仅边界应用真空 mpol/ntor 场。常配合 `type_ext_field`、RMP 文件和 `ntor`
-rmp_atten,real,0.,Additional exponential decay of RMP field from r=1 for irmp=2
-tf_tilt,real,0.,Angle of TF from vertical (in degrees)
-tf_tilt_angle,real,0.,Axis of rotation for TF tilt (in degrees)
-tf_shift,real,0.,Horizontal shift of TF coil
-tf_shift_angle,real,0.,Direction of TF shift (in degrees)
-pf_tilt,real array,0.,Angle of PF from vertical (in degrees)；数组长度/上限：2000
-pf_tilt_angle,real array,0.,Axis of rotation for PF tilt (in degrees)；数组长度/上限：2000
-pf_shift,real array,0.,Horizontal shift of PF coil；数组长度/上限：2000
-pf_shift_angle,real array,0.,Direction of PF shift (in degrees)；数组长度/上限：2000
-iread_ext_field,integer,0,1: Read external field
-isample_ext_field,integer,1,Factor to down-sample external field data toroidally
-isample_ext_field_pol,integer,1,Factor to down-sample external field data poloidally
-scale_ext_field,real,1.,Factor to scale external field
-shift_ext_field,real array,0.,Toroidal shift (in deg) of external fields；数组长度/上限：8
-type_ext_field,integer,-1,type of external field file；-1 默认；0 tokamak RMP/error field；1 free-boundary stellarator FIELDLINES/MGRID total field；2 stellarator total+external subtraction；`<=0` 用 tokamak RMP/error-field 分支，`=1/2` 用 stellarator/free-boundary 场文件，`=3` 从电流计算外场
-file_ext_field,character(len=256),error_field,name of external field file；stellarator/free-boundary 场文件名，默认 `error_field`；支持 fieldlines/mgrid 前缀
-file_total_field,character(len=256),total_field,name of total field file for ST；stellarator total field 文件名，默认 `total_field`；支持 fieldlines/mgrid 前缀
-beta,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-ln,real,0.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-elongation,real,1.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-basicj_nu,real,1.,Exponent in basicj equilibrium
-basicj_j0,real,1.,On-axis current density in basicj equilibrium
-basicj_q0,real,0.,On-axis safety factor in basicj equilibrium (supersedes basicj_j0)
-basicj_qa,real,0.,Edge safety factor in basicj equilibrium (supersedes basicj_nu)
-basicj_voff,real,1.,Radial extent of flat toroidal rotation in basicj equilibrium
-basicj_vdelt,real,1.,"Width of velocity drop-off, as fraction of ln, in basicj equilibrium"
-basicj_dexp,real,1.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-basicj_dvac,real,1.,平衡与初始条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-ibasicj_solvep,integer,0,"0: Uniform pressure, solve for F. 1: Uniform F, solve for pressure"
+itaylor,integer,0,托卡马克：当三个外部平衡入口均为 0 时选择内置初始化；`itaylor=1` 进入 GS，19 为 Solovev，24 为 RWM，29/31 为 basicJ，-1 为常量场。仿星器：40 直接投影固定边界 VMEC 平衡；41 从三维 total/external field 初始化，程序不求解 VMEC 自由边界平衡；主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支
+iupstream,integer,0,托卡马克与仿星器：环向数值上风/稳定化开关，不选择平衡。0 关闭；1 把 `magus` 给出的人工环向二阶项加到已有系数；2 用该人工项替代相应系数。它在时间演化算子中生效
+magus,real,5.e-2,托卡马克与仿星器：`iupstream=1/2` 时人工环向二阶稳定项的无量纲强度；常与局部场或速度绝对值相乘。0 不一定关闭，关闭应设 `iupstream=0`
+iflip,integer,0,托卡马克与仿星器：新启动时把坐标系手性翻转，统一反号 psi、环向场、速度势和环向速度，并反号 `vloop/tcur`；这是整体坐标约定变换，不等同于单独反转 B、J 或 V。restart 路径不再次调用该初始翻转
+iflip_b,integer,0,Reverse equilibrium toroidal field；托卡马克：平衡和已构造外场的环向磁场反号。仿星器：固定 VMEC 或外场初始化后同样反转环向场分量；必须确保输入场、诊断和模数符号约定一致
+iflip_j,integer,0,Reverse equilibrium toroidal current；托卡马克：反转平衡极向磁通，从而反转环向电流；`icsubtract=1` 时线圈磁通也反号。gfile 负电流已自动处理，`iflip_j=1` 会中止并提示用 2 强制覆盖。仿星器：同样反转 psi 表示，通常不应把它当作重新求解电流剖面
+iflip_v,integer,0,Reverse equilibrium toroidal velocity；托卡马克与仿星器：1 反转平衡环向速度；-1 把平衡环向速度清零；0 保持初始化结果。它在平衡与 NEO 速度处理完成后执行
+iflip_z,integer,0,托卡马克：当前程序只在 gfile 初始化中令 `zmaxis=-zmaxis`，并未同时镜像 `psirz`、mesh 或其它场，不能视为完整的上下翻转。仿星器：VMEC/外场路径没有活动使用
+icsym,integer,0,"托卡马克：控制 `eps` 初始扰动的上下对称性，0 无约束，1 仅给 U 加奇对称扰动，2 仅给 U 加偶对称扰动，3 使用确定性的 (1,1) 型扰动。仿星器：取值相同，但随机形状在逻辑网格坐标中构造后映射到物理空间"
+bzero,real,1.,托卡马克：解析/GS 初始化的参考环向场，通常表示 `rzero` 处 Bphi；gfile 会以最外层 `fpol/rmaxis` 覆盖它，`profile_f` 与 GS 磁场缩放还可再次改写。仿星器：固定 VMEC 的 B 直接来自 wout，三维外场来自场文件，本参数不替代这些数据；TF 倾斜/平移解析误差场仍会用到它
+bx0,real,0.,托卡马克：仅 wave、3D diffusion 等内置测试平衡的初始 x 向磁场幅值，gfile/GS 生产路径不使用。仿星器：`itaylor=40/41` 不使用
+vzero,real,0.,托卡马克：若干解析初始化的环向/轴向速度标度；basicJ 用作核心平坦转动值，`itaylor=-1` 直接作为均匀环向速度。gfile/GS 的文件旋转由 Input 组控制。仿星器：VMEC/外场路径不从本参数建立旋转
+phizero,real,0.,托卡马克：FRS、FTZ、eigen 等测试初始化中速度流函数 U 的扰动幅值；常规 gfile/GS 不使用。仿星器：`itaylor=40/41` 不使用
+verzero,real,0.,托卡马克与仿星器：在 `init_perturbations` 中向 plasma zone 的扰动速度势加入 `R*verzero`，用于给定初始竖直速度；它是扰动层，不会改变读入平衡或 LCFS
+v0_cyl,real,0.,托卡马克：只在 fixed-q/cylindrical 测试剖面中作为中心轴向速度常数项；gfile/GS 不使用。仿星器：`itaylor=40/41` 不使用
+v1_cyl,real,0.,托卡马克：只在 fixed-q/cylindrical 测试剖面中作为随归一化磁通变化的速度幅值，形式为 `v0_cyl+v1_cyl*psi^beta`。仿星器：`itaylor=40/41` 不使用
+idevice,integer,0,托卡马克：只服务 GS/PF 线圈场。当前程序实际实现 -1 读取 `coil.dat/current.dat`，0 使用 generic dipole；其它值进入无 PF 线圈的默认分支。仿星器：VMEC/三维场初始化不使用该设备选择
+iwave,integer,0,托卡马克与仿星器生产平衡均不使用；只为 wave 测试初始化选择波支，具体可用取值随二维/三维测试例程而异
+eps,real,0.01,"Magnitude of initial perturbations*；托卡马克：初始随机/确定性扰动幅度；`itor=0,irmp=2` 时还作为解析 m/n 真空场幅度。仿星器：固定 VMEC 和 total-field 路径也可用它给 plasma zone 添加初始流扰动，但不改变 wout/外场基态"
+maxn,integer,200,托卡马克与仿星器：`icsym=0/1/2` 随机初始扰动的模循环上限，值越大包含的平面波越多、初始化代价越高；不控制 M3D-C1 实际环向网格分辨率
+irmp,integer,0,"1: Apply nonaxisym. fields throughout plasma； 2: Apply mpol/ntor vacuum fields (itor=0 only)；托卡马克：1 读取/计算 RMP 与 error field 并投影到整个计算域；2 仅 `itor=0` 可用，在整个域评价解析 mpol/ntor 真空场。仿星器：`itaylor=41,type_ext_field=1,extsubtract=0` 已装入 total field 后会跳过第二次 RMP；固定 VMEC 或 subtraction 路径可另行调用外场处理"
+rmp_atten,real,0.,"Additional exponential decay of RMP field from r=1 for irmp=2；托卡马克与仿星器环形生产路径不使用；只在 `itor=0,irmp=2` 中控制解析真空扰动从 r=1 起的指数因子。0 表示不加该衰减/增长因子"
+tf_tilt,real,0.,Angle of TF from vertical (in degrees)；托卡马克：TF 线圈相对竖直方向的小倾斜角，单位度；程序据此构造非轴对称误差场并在基态后加入，不移动 mesh。仿星器：不是 VMEC 场线圈几何参数，通常保持 0
+tf_tilt_angle,real,0.,Axis of rotation for TF tilt (in degrees)；托卡马克：`tf_tilt` 的旋转轴环向方位，单位度，只在 `tf_tilt!=0` 时生效。仿星器：通常不使用
+tf_shift,real,0.,Horizontal shift of TF coil；托卡马克：TF 线圈水平平移幅度，用解析式生成误差场，不改变 mesh 或 GS 线圈坐标。仿星器：通常不使用
+tf_shift_angle,real,0.,Direction of TF shift (in degrees)；托卡马克：`tf_shift` 的平移方向方位角，单位度，只在 `tf_shift!=0` 时生效。仿星器：通常不使用
+pf_tilt,real array,0.,Angle of PF from vertical (in degrees)；托卡马克：PF 线圈逐线圈倾斜角数组，单位度；只有已经由 GS/`idevice=-1` 装载到 PF 线圈表的线圈才会产生误差场。仿星器：VMEC/外场路径没有 PF 线圈表，通常不使用；数组长度/上限：2000
+pf_tilt_angle,real array,0.,Axis of rotation for PF tilt (in degrees)；托卡马克：每个 `pf_tilt(i)` 的旋转轴方位角数组，单位度，索引对应线圈组标签。仿星器：通常不使用；数组长度/上限：2000
+pf_shift,real array,0.,Horizontal shift of PF coil；托卡马克：PF 线圈逐线圈水平平移数组；基于已加载线圈场导数构造非轴对称误差场，不修改轴对称 GS 线圈位置。仿星器：通常不使用；数组长度/上限：2000
+pf_shift_angle,real array,0.,Direction of PF shift (in degrees)；托卡马克：每个 `pf_shift(i)` 的平移方向方位角数组，单位度。仿星器：通常不使用；数组长度/上限：2000
+iread_ext_field,integer,0,1: Read external field；托卡马克：对 `type_ext_field<=0` 表示要读的 error-field 数据组数；1 读 `error_field`，大于 1 读 `error_field01...`。仿星器：`itaylor=41` 必须非零，当前读取器实际只装载索引 `iread_ext_field`，常规用法应取 1
+isample_ext_field,integer,1,Factor to down-sample external field data toroidally；托卡马克：Schaffer error-field 数据的环向降采样因子。仿星器：仅场文件回退到 Schaffer 格式时使用；FIELDLINES/MGRID/HINT/MIPS 专用读取器不使用该因子
+isample_ext_field_pol,integer,1,Factor to down-sample external field data poloidally；托卡马克：Schaffer error-field 数据的极向降采样因子。仿星器：仅 Schaffer 回退格式使用，专用三维场读取器不使用
+scale_ext_field,real,1.,Factor to scale external field；托卡马克与仿星器：投影已读场数据时统一乘的幅值因子；会作用于该读取器装入的 `file_total_field/file_ext_field/error_field`，但不缩放 gfile 或 `itaylor=40` 直接读取的 wout 基态，也不重新求解平衡
+shift_ext_field,real array,0.,Toroidal shift (in deg) of external fields；托卡马克与仿星器：各外场数据组的环向相位平移数组，单位度；3D 中通过改变取样角实现，complex 中转化为所选 `ntor` 的相位因子；数组长度/上限：8
+type_ext_field,integer,-1,type of external field file；托卡马克：<=0 走 RMP/error-field；3 可从 `external_j` 电流数据求外场。仿星器：1 在 `itaylor=41` 中直接把 `file_total_field` 作为 total field；2 要求 `extsubtract=1`，先装 total field、再读 `file_ext_field` 并保存/扣除外场；`<=0` 用 tokamak RMP/error-field 分支，`=1/2` 用 stellarator/free-boundary 场文件，`=3` 从电流计算外场
+file_ext_field,character(len=256),error_field,name of external field file；托卡马克：`type_ext_field<=0` 时此名称被忽略，文件名固定为 `error_field` 或 `error_fieldNN`。仿星器：`type_ext_field=2` 的真空/外部场文件；文件名前缀选择 FIELDLINES、MIPS、HINT、MGRID 读取器，其它名称按 Schaffer 格式
+file_total_field,character(len=256),total_field,"name of total field file for ST；托卡马克：常规 RMP/GS 不使用。仿星器：`itaylor=41,type_ext_field=1/2` 的总磁场文件；1 直接作为基态，2 与 `file_ext_field` 组成 total-minus-external 的演化场分解"
+beta,real,0.,托卡马克：仅 tilting/fixed-q 等模型平衡或测试问题中的无量纲形状/速度幂参数，不是由 gfile 得到的等离子体 beta，也不会覆盖压力。仿星器：`itaylor=40/41` 不使用
+ln,real,0.,托卡马克：多个解析/测试平衡的特征径向尺度；basicJ 中是电流剖面半径，Solovev 中控制横向尺寸。它不是自然对数。仿星器：VMEC/外场平衡不使用，但 `icsym=3` 扰动包络仍可能引用
+elongation,real,1.,托卡马克：仅 `itaylor=19` Solovev 解析平衡的伸长率。仿星器：VMEC 几何由傅里叶系数给出，本参数不使用
+basicj_nu,real,1.,Exponent in basicj equilibrium；托卡马克：`itaylor=29/31` 电流剖面指数；若 `basicj_qa!=0` 会由 q0/qa 关系覆盖。仿星器：`itaylor=40/41` 不使用
+basicj_j0,real,1.,On-axis current density in basicj equilibrium；托卡马克：basicJ 轴上电流密度幅值；若 `basicj_q0!=0`，程序用 `2*bzero/(rzero*q0)` 覆盖本值。仿星器：不使用
+basicj_q0,real,0.,On-axis safety factor in basicj equilibrium (supersedes basicj_j0)；托卡马克：basicJ 轴上安全因子；非零时优先于 `basicj_j0` 并反算轴上电流。0 表示由 `basicj_j0` 反算 q0。仿星器：不使用
+basicj_qa,real,0.,Edge safety factor in basicj equilibrium (supersedes basicj_nu)；托卡马克：basicJ 目标边缘安全因子；非零时覆盖 `basicj_nu`。`itaylor=31` 且显式给 `xlim!=0` 时程序会报错。仿星器：不使用
+basicj_voff,real,1.,Radial extent of flat toroidal rotation in basicj equilibrium；托卡马克：basicJ 核心平坦环向速度区的径向范围；范围内速度基值为 `vzero`。仿星器：不使用
+basicj_vdelt,real,1.,"Width of velocity drop-off, as fraction of ln, in basicj equilibrium；托卡马克：basicJ 平坦转动区外速度衰减宽度相对 `ln` 的系数，进入高斯型衰减分母。仿星器：不使用"
+basicj_dexp,real,1.,托卡马克：basicJ 专用输运系数径向缩放函数的幂指数，配合 `basicj_dvac` 使黏性/热传导向外变化；不改变初始密度场本身。仿星器：不使用
+basicj_dvac,real,1.,托卡马克：basicJ 专用输运系数缩放函数在 `r=ln` 处的目标倍率，影响相关黏性与热传导系数，不是外部真空区密度。仿星器：不使用
+ibasicj_solvep,integer,0,"0: Uniform pressure, solve for F. 1: Uniform F, solve for pressure；托卡马克：仅 `itaylor=29/31`。0 使用解析压力并由给定 J 求 F；1 令 F 均匀并由 J 求压力。`itaylor=29` 的解析压力为常数，`itaylor=31` 的解析压力随半径衰减。仿星器：不使用"
 inumgs,integer,0,Grad-Shafranov 求解器相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-igs,integer,80,Grad-Shafranov 求解器相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
+igs,integer,80,托卡马克：大于 0 时给出 GS 最大迭代次数，收敛误差达到 `tol_gs` 可提前退出；0 不求解 GS。它与 Input 的平衡入口、Boundary 的 `ifixedb`、Mesh 的 zone 共同决定初始平衡。仿星器：`itaylor=40/41` 不调用 GS
 igs_pp_ffp_rescale,integer,0,Rescale p' and FF' to match p and F
 igs_extend_p,integer,0,Extend p past Psi=1 using ne and Te profiles
 igs_extend_diamag,integer,1,Extend diamagnetic rotation Psi=1
@@ -175,9 +175,9 @@ adapt_zlow,real,0.,Z-coordinate below which SOL adaptation is coarse
 adapt_zup,real,0.,Z-coordinate above which SOL adaptation is coarse
 numvar,integer,3,1: 2-Field; 2: 4-Field; 3: 6-Field；1: 2-field；2: 4-field/reduced MHD；3: 6-field/compressible MHD
 linear,integer,0,1: Use linearized equations；0 非线性；1 线性化方程。2D 非线性通常需 RL=1；线性/complex 需 COM=1 且 `nplanes=1`
-eqsubtract,integer,0,1: Subtract equilibrium fields；线性模拟会在校验阶段强制置 1；非线性时设 1 表示从方程中扣除平衡场
-extsubtract,integer,0,1: Subtract fields from non-axisymmetric coils
-icsubtract,integer,0,1: Subtract fields from poloidal field coils
+eqsubtract,integer,0,1: Subtract equilibrium fields；托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果
+extsubtract,integer,0,"1: Subtract fields from non-axisymmetric coils；托卡马克：1 把 RMP/error field 保存为独立外场，而不是直接写入扰动场。仿星器：`itaylor=41,type_ext_field=2` 必须为 1，程序先读 total field，再读 external field，并把 total-external 作为动态场"
+icsubtract,integer,0,1: Subtract fields from poloidal field coils；托卡马克：1 把 PF 线圈磁通与等离子体磁通分开保存；求总磁场/磁区时仍会重新相加。0 直接把线圈磁通加入 `psi_field(0)`。仿星器：没有对应的 VMEC 线圈分解路径，通常保持 0
 idens,integer,0,1: Include density equation
 ipres,integer,0,1: Include total pressure equation
 ipressplit,integer,0,1: Separate pressure solves from field solves；仅 `isplitstep=1` 且 `numvar=3` 时允许；把压力/温度求解从场求解分离
@@ -187,7 +187,7 @@ gyro,integer,0,1: Include Braginskii gyroviscosity
 igauge,integer,0,模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
 inertia,integer,1,1: Include V.Grad(V) terms
 itwofluid,integer,1,"1: -electron 2F, 2: ion 2F"
-ibootstrap,integer,0,模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
+ibootstrap,integer,0,托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 `1-Te/Temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0
 irunaway,integer,0,模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
 cre,integer,0,模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
 ra_cyc,integer,1,模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
@@ -209,9 +209,9 @@ chiiner,real,1.,模型选项相关参数，用于控制该组对应的物理模�
 ieq_bdotgradt,integer,1,模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
 iwall_is_limiter,integer,1,1 = Wall acts as limiter
 no_vdg_T,integer,0,1: do not include V dot grad T in Temp equation (debug)
-ibootstrap_model,integer,0,"1: J_BS = alpha F <p,psi> B；选择 bootstrap closure：1/3 为 Sauter & Angioni，2/4 为 Redl，5 为 constant-Lambda 分支"
-bootstrap_alpha,real,0.,alpha parameter in bootstrap current model
-ibootstrap_regular,real,1e-8,Regularization parameter Default=1e-8
+ibootstrap_model,integer,0,"1: J_BS = alpha F <p,psi> B；托卡马克：1/3 选 Sauter-Angioni，2/4 选 Redl，3/4 为简化方程实现，5 为 constant-Lambda；应与非零 `ibootstrap` 配套。`ibootstrap=3` 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合；选择 bootstrap closure：1/3 为 Sauter & Angioni，2/4 为 Redl，5 为 constant-Lambda 分支"
+bootstrap_alpha,real,0.,alpha parameter in bootstrap current model；托卡马克：bootstrap 项的统一幅值乘子，默认 0；打开 `ibootstrap/model` 后仍需给非零值才有驱动。仿星器：仅在自行验证并启用同一演化闭合时有意义
+ibootstrap_regular,real,1e-8,Regularization parameter Default=1e-8；托卡马克：bootstrap 计算中小 Bp、温度梯度和归一化温度的正则化尺度，默认 `1e-8`，不表示电流比例。仿星器：只有启用并验证 bootstrap 路径时使用
 kinetic,integer,0,"1: Use kinetic PIC; 2: CGL incompressible; 3: CGL；1: kinetic PIC hot ion pressure；2: incompressible CGL；3: full CGL。2/3 要求 linear=1,isplitstep=0,ipres=1,itemp=0,ipressplit=0"
 ivisfunc,integer,0,输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
 amuoff,real,0.,输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
@@ -277,7 +277,7 @@ imp_hyper,integer,0,1: implicit hyper-resistivity in psi equation
 isurface,integer,1,边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
 icurv,integer,2,边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
 nonrect,integer,1,边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-ifixedb,integer,0,1: Force psi=0 on boundary
+ifixedb,integer,0,1: Force psi=0 on boundary；托卡马克：GS 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/PF 线圈真空场边界值并允许 LCFS 在域内更新。仿星器：VMEC/外场初始化不通过它选择固定或自由边界
 com_bc,integer,0,边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
 vor_bc,integer,0,边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
 iconst_p,integer,1,1: Hold pressure constant on boundary

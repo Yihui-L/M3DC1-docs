@@ -32,6 +32,12 @@ default_mismatch,db,db,-1.,0,源码默认 -1，表示按物理归一化自动计
 default_mismatch,ghs_var,ghs_var,1.,0,源码默认 1；官方文档 Gaussian heat source 表写 0。
 default_mismatch,eta_wallRZ,eta_wallRZ,-1.,.001,源码读入默认 -1，`validate_input` 中若 <0 则取 `eta_wall`；官方文档直接写 .001。
 default_mismatch,wall_region_etaRZ,wall_region_etaRZ,-1.,1.e-3,源码读入默认 -1，`validate_input` 中若 <0 则逐区取 `wall_region_eta(i)`；官方文档直接写 1.e-3。
+usage_or_value_range_mismatch,idevice,idevice,0,,官方文档列出 1=CDX-U、2=NSTX、3=ITER、4=DIII-D；当前 `gradshafranov.f90` 的活动 `select case` 只实现 -1（读 `coil.dat/current.dat`）和 0（generic dipole），其它值进入无 PF 线圈的默认分支。
+usage_or_value_range_mismatch,irmp,irmp,0,,官方文档写 1 只在 plasma、2 只在 boundary 施加；当前 `rmp.f90` 对所有计算单元评价并投影该场，且 2 仅允许 `itor=0`，不是环形托卡马克的边界条件。
+usage_or_value_range_mismatch,icsym,icsym,0,,"官方文档只列 0-2；当前源码还实现 3，使用确定性的 (1,1) 型初始扰动而不是随机噪声。"
+usage_or_value_range_mismatch,iflip_z,iflip_z,0,,官方文档称其翻转整个平衡；当前活动使用点只在 gfile 初始化中反号 `zmaxis`，没有同时镜像 `psirz`、mesh 节点或其它平衡场。
+usage_or_value_range_mismatch,iread_ext_field,iread_ext_field,0,,官方文档只说明 1=读取外场；tokamak 源码把它作为数据组数量，1 读 `error_field`，大于 1 读 `error_fieldNN`。stellarator 读取器则只装载数组索引 `iread_ext_field`，常规可靠用法是 1。
+usage_or_value_range_mismatch,ibasicj_solvep,ibasicj_solvep,0,,官方文档把 0 概括为 uniform p；源码中 `itaylor=29` 的解析压力确为常数，但 `itaylor=31` 使用随半径衰减的解析压力，因此 0 的准确含义是使用所选 basicJ 解析压力并求 F。
 usage_or_value_range_mismatch,ibootstrap_model,ibootstrap_model,0,,官方文档列出 1-4；源码 `bootstrap.f90` 还显式实现 `ibootstrap_model=5` 的 constant-Lambda 分支。源码 `input.f90` 内联说明仍是旧的一行模型说明，使用时以 `bootstrap.f90` 为准。
 usage_or_value_range_mismatch,iread_te,iread_te,0,,官方文档主要写 `1: profile_te`；源码 GS 路径还支持 2(eV vs Psi)、4(keV vs rho)、10(Corsica)、20(iterdb)，VMEC 路径支持 21(`te_profile`)。
 usage_or_value_range_mismatch,iread_ne,iread_ne,0,,官方文档主要写 `1: profile_ne`；源码 GS 路径还支持 2、4、10、20，VMEC/ST 相关路径支持 21、22、23 等专用剖面读入方式。

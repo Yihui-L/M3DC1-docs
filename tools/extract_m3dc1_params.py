@@ -216,6 +216,70 @@ MANUAL_USAGE = {
     "iflux_loops": "磁通环数量；对应数组用 `flux_loop_x(i)`、`flux_loop_z(i)` 一基索引给出。",
 }
 
+# Equilibrium is the bridge between the already-loaded input/mesh and the
+# evolved MHD state. Keep device-specific behavior explicit in every card.
+MANUAL_USAGE.update({
+    "itaylor": "托卡马克：当三个外部平衡入口均为 0 时选择内置初始化；`itaylor=1` 进入 GS，19 为 Solovev，24 为 RWM，29/31 为 basicJ，-1 为常量场。仿星器：40 直接投影固定边界 VMEC 平衡；41 从三维 total/external field 初始化，程序不求解 VMEC 自由边界平衡。",
+    "iupstream": "托卡马克与仿星器：环向数值上风/稳定化开关，不选择平衡。0 关闭；1 把 `magus` 给出的人工环向二阶项加到已有系数；2 用该人工项替代相应系数。它在时间演化算子中生效。",
+    "magus": "托卡马克与仿星器：`iupstream=1/2` 时人工环向二阶稳定项的无量纲强度；常与局部场或速度绝对值相乘。0 不一定关闭，关闭应设 `iupstream=0`。",
+    "iflip": "托卡马克与仿星器：新启动时把坐标系手性翻转，统一反号 psi、环向场、速度势和环向速度，并反号 `vloop/tcur`；这是整体坐标约定变换，不等同于单独反转 B、J 或 V。restart 路径不再次调用该初始翻转。",
+    "iflip_b": "托卡马克：平衡和已构造外场的环向磁场反号。仿星器：固定 VMEC 或外场初始化后同样反转环向场分量；必须确保输入场、诊断和模数符号约定一致。",
+    "iflip_j": "托卡马克：反转平衡极向磁通，从而反转环向电流；`icsubtract=1` 时线圈磁通也反号。gfile 负电流已自动处理，`iflip_j=1` 会中止并提示用 2 强制覆盖。仿星器：同样反转 psi 表示，通常不应把它当作重新求解电流剖面。",
+    "iflip_v": "托卡马克与仿星器：1 反转平衡环向速度；-1 把平衡环向速度清零；0 保持初始化结果。它在平衡与 NEO 速度处理完成后执行。",
+    "iflip_z": "托卡马克：当前源码只在 gfile 初始化中令 `zmaxis=-zmaxis`，并未同时镜像 `psirz`、mesh 或其它场，不能视为完整的上下翻转。仿星器：VMEC/外场路径没有活动使用。",
+    "icsym": "托卡马克：控制 `eps` 初始扰动的上下对称性，0 无约束，1 仅给 U 加奇对称扰动，2 仅给 U 加偶对称扰动，3 使用确定性的 (1,1) 型扰动。仿星器：取值相同，但随机形状在逻辑网格坐标中构造后映射到物理空间。",
+    "bzero": "托卡马克：解析/GS 初始化的参考环向场，通常表示 `rzero` 处 Bphi；gfile 会以最外层 `fpol/rmaxis` 覆盖它，`profile_f` 与 GS 磁场缩放还可再次改写。仿星器：固定 VMEC 的 B 直接来自 wout，三维外场来自场文件，本参数不替代这些数据；TF 倾斜/平移解析误差场仍会用到它。",
+    "bx0": "托卡马克：仅 wave、3D diffusion 等内置测试平衡的初始 x 向磁场幅值，gfile/GS 生产路径不使用。仿星器：`itaylor=40/41` 不使用。",
+    "vzero": "托卡马克：若干解析初始化的环向/轴向速度标度；basicJ 用作核心平坦转动值，`itaylor=-1` 直接作为均匀环向速度。gfile/GS 的文件旋转由 Input 组控制。仿星器：VMEC/外场路径不从本参数建立旋转。",
+    "phizero": "托卡马克：FRS、FTZ、eigen 等测试初始化中速度流函数 U 的扰动幅值；常规 gfile/GS 不使用。仿星器：`itaylor=40/41` 不使用。",
+    "verzero": "托卡马克与仿星器：在 `init_perturbations` 中向 plasma zone 的扰动速度势加入 `R*verzero`，用于给定初始竖直速度；它是扰动层，不会改变读入平衡或 LCFS。",
+    "v0_cyl": "托卡马克：只在 fixed-q/cylindrical 测试剖面中作为中心轴向速度常数项；gfile/GS 不使用。仿星器：`itaylor=40/41` 不使用。",
+    "v1_cyl": "托卡马克：只在 fixed-q/cylindrical 测试剖面中作为随归一化磁通变化的速度幅值，形式为 `v0_cyl+v1_cyl*psi^beta`。仿星器：`itaylor=40/41` 不使用。",
+    "idevice": "托卡马克：只服务 GS/PF 线圈场。当前源码实际实现 -1 读取 `coil.dat/current.dat`，0 使用 generic dipole；其它值进入无 PF 线圈的默认分支。仿星器：VMEC/三维场初始化不使用该设备选择。",
+    "iwave": "托卡马克与仿星器生产平衡均不使用；只为 wave 测试初始化选择波支，具体可用取值随二维/三维测试例程而异。",
+    "eps": "托卡马克：初始随机/确定性扰动幅度；`itor=0,irmp=2` 时还作为解析 m/n 真空场幅度。仿星器：固定 VMEC 和 total-field 路径也可用它给 plasma zone 添加初始流扰动，但不改变 wout/外场基态。",
+    "maxn": "托卡马克与仿星器：`icsym=0/1/2` 随机初始扰动的模循环上限，值越大包含的平面波越多、初始化代价越高；不控制 M3D-C1 实际环向网格分辨率。",
+    "irmp": "托卡马克：1 读取/计算 RMP 与 error field 并投影到整个计算域；2 仅 `itor=0` 可用，在整个域评价解析 mpol/ntor 真空场。仿星器：`itaylor=41,type_ext_field=1,extsubtract=0` 已装入 total field 后会跳过第二次 RMP；固定 VMEC 或 subtraction 路径可另行调用外场处理。",
+    "rmp_atten": "托卡马克与仿星器环形生产路径不使用；只在 `itor=0,irmp=2` 中控制解析真空扰动从 r=1 起的指数因子。0 表示不加该衰减/增长因子。",
+    "tf_tilt": "托卡马克：TF 线圈相对竖直方向的小倾斜角，单位度；源码据此构造非轴对称误差场并在基态后加入，不移动 mesh。仿星器：不是 VMEC 场线圈几何参数，通常保持 0。",
+    "tf_tilt_angle": "托卡马克：`tf_tilt` 的旋转轴环向方位，单位度，只在 `tf_tilt!=0` 时生效。仿星器：通常不使用。",
+    "tf_shift": "托卡马克：TF 线圈水平平移幅度，用解析式生成误差场，不改变 mesh 或 GS 线圈坐标。仿星器：通常不使用。",
+    "tf_shift_angle": "托卡马克：`tf_shift` 的平移方向方位角，单位度，只在 `tf_shift!=0` 时生效。仿星器：通常不使用。",
+    "pf_tilt": "托卡马克：PF 线圈逐线圈倾斜角数组，单位度；只有已经由 GS/`idevice=-1` 装载到 PF 线圈表的线圈才会产生误差场。仿星器：VMEC/外场路径没有 PF 线圈表，通常不使用。",
+    "pf_tilt_angle": "托卡马克：每个 `pf_tilt(i)` 的旋转轴方位角数组，单位度，索引对应线圈组标签。仿星器：通常不使用。",
+    "pf_shift": "托卡马克：PF 线圈逐线圈水平平移数组；基于已加载线圈场导数构造非轴对称误差场，不修改轴对称 GS 线圈位置。仿星器：通常不使用。",
+    "pf_shift_angle": "托卡马克：每个 `pf_shift(i)` 的平移方向方位角数组，单位度。仿星器：通常不使用。",
+    "iread_ext_field": "托卡马克：对 `type_ext_field<=0` 表示要读的 error-field 数据组数；1 读 `error_field`，大于 1 读 `error_field01...`。仿星器：`itaylor=41` 必须非零，当前读取器实际只装载索引 `iread_ext_field`，常规用法应取 1。",
+    "isample_ext_field": "托卡马克：Schaffer error-field 数据的环向降采样因子。仿星器：仅场文件回退到 Schaffer 格式时使用；FIELDLINES/MGRID/HINT/MIPS 专用读取器不使用该因子。",
+    "isample_ext_field_pol": "托卡马克：Schaffer error-field 数据的极向降采样因子。仿星器：仅 Schaffer 回退格式使用，专用三维场读取器不使用。",
+    "scale_ext_field": "托卡马克与仿星器：投影已读场数据时统一乘的幅值因子；会作用于该读取器装入的 `file_total_field/file_ext_field/error_field`，但不缩放 gfile 或 `itaylor=40` 直接读取的 wout 基态，也不重新求解平衡。",
+    "shift_ext_field": "托卡马克与仿星器：各外场数据组的环向相位平移数组，单位度；3D 中通过改变取样角实现，complex 中转化为所选 `ntor` 的相位因子。",
+    "type_ext_field": "托卡马克：<=0 走 RMP/error-field；3 可从 `external_j` 电流数据求外场。仿星器：1 在 `itaylor=41` 中直接把 `file_total_field` 作为 total field；2 要求 `extsubtract=1`，先装 total field、再读 `file_ext_field` 并保存/扣除外场。",
+    "file_ext_field": "托卡马克：`type_ext_field<=0` 时此名称被忽略，文件名固定为 `error_field` 或 `error_fieldNN`。仿星器：`type_ext_field=2` 的真空/外部场文件；文件名前缀选择 FIELDLINES、MIPS、HINT、MGRID 读取器，其它名称按 Schaffer 格式。",
+    "file_total_field": "托卡马克：常规 RMP/GS 不使用。仿星器：`itaylor=41,type_ext_field=1/2` 的总磁场文件；1 直接作为基态，2 与 `file_ext_field` 组成 total-minus-external 的演化场分解。",
+    "beta": "托卡马克：仅 tilting/fixed-q 等模型平衡或测试问题中的无量纲形状/速度幂参数，不是由 gfile 得到的等离子体 beta，也不会覆盖压力。仿星器：`itaylor=40/41` 不使用。",
+    "ln": "托卡马克：多个解析/测试平衡的特征径向尺度；basicJ 中是电流剖面半径，Solovev 中控制横向尺寸。它不是自然对数。仿星器：VMEC/外场平衡不使用，但 `icsym=3` 扰动包络仍可能引用。",
+    "elongation": "托卡马克：仅 `itaylor=19` Solovev 解析平衡的伸长率。仿星器：VMEC 几何由傅里叶系数给出，本参数不使用。",
+    "basicj_nu": "托卡马克：`itaylor=29/31` 电流剖面指数；若 `basicj_qa!=0` 会由 q0/qa 关系覆盖。仿星器：`itaylor=40/41` 不使用。",
+    "basicj_j0": "托卡马克：basicJ 轴上电流密度幅值；若 `basicj_q0!=0`，源码用 `2*bzero/(rzero*q0)` 覆盖本值。仿星器：不使用。",
+    "basicj_q0": "托卡马克：basicJ 轴上安全因子；非零时优先于 `basicj_j0` 并反算轴上电流。0 表示由 `basicj_j0` 反算 q0。仿星器：不使用。",
+    "basicj_qa": "托卡马克：basicJ 目标边缘安全因子；非零时覆盖 `basicj_nu`。`itaylor=31` 且显式给 `xlim!=0` 时源码会报错。仿星器：不使用。",
+    "basicj_voff": "托卡马克：basicJ 核心平坦环向速度区的径向范围；范围内速度基值为 `vzero`。仿星器：不使用。",
+    "basicj_vdelt": "托卡马克：basicJ 平坦转动区外速度衰减宽度相对 `ln` 的系数，进入高斯型衰减分母。仿星器：不使用。",
+    "basicj_dexp": "托卡马克：basicJ 专用输运系数径向缩放函数的幂指数，配合 `basicj_dvac` 使黏性/热传导向外变化；不改变初始密度场本身。仿星器：不使用。",
+    "basicj_dvac": "托卡马克：basicJ 专用输运系数缩放函数在 `r=ln` 处的目标倍率，影响相关黏性与热传导系数，不是外部真空区密度。仿星器：不使用。",
+    "ibasicj_solvep": "托卡马克：仅 `itaylor=29/31`。0 使用解析压力并由给定 J 求 F；1 令 F 均匀并由 J 求压力。`itaylor=29` 的解析压力为常数，`itaylor=31` 的解析压力随半径衰减。仿星器：不使用。",
+    "igs": "托卡马克：大于 0 时给出 GS 最大迭代次数，收敛误差达到 `tol_gs` 可提前退出；0 不求解 GS。它与 Input 的平衡入口、Boundary 的 `ifixedb`、Mesh 的 zone 共同决定初始平衡。仿星器：`itaylor=40/41` 不调用 GS。",
+    "ifixedb": "托卡马克：GS 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/PF 线圈真空场边界值并允许 LCFS 在域内更新。仿星器：VMEC/外场初始化不通过它选择固定或自由边界。",
+    "eqsubtract": "托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果。",
+    "extsubtract": "托卡马克：1 把 RMP/error field 保存为独立外场，而不是直接写入扰动场。仿星器：`itaylor=41,type_ext_field=2` 必须为 1，程序先读 total field，再读 external field，并把 total-external 作为动态场。",
+    "icsubtract": "托卡马克：1 把 PF 线圈磁通与等离子体磁通分开保存；求总磁场/磁区时仍会重新相加。0 直接把线圈磁通加入 `psi_field(0)`。仿星器：没有对应的 VMEC 线圈分解路径，通常保持 0。",
+    "ibootstrap": "托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 `1-Te/Temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0。",
+    "ibootstrap_model": "托卡马克：1/3 选 Sauter-Angioni，2/4 选 Redl，3/4 为简化方程实现，5 为 constant-Lambda；应与非零 `ibootstrap` 配套。`ibootstrap=3` 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合。",
+    "bootstrap_alpha": "托卡马克：bootstrap 项的统一幅值乘子，默认 0；打开 `ibootstrap/model` 后仍需给非零值才有驱动。仿星器：仅在自行验证并启用同一演化闭合时有意义。",
+    "ibootstrap_regular": "托卡马克：bootstrap 计算中小 Bp、温度梯度和归一化温度的正则化尺度，默认 `1e-8`，不表示电流比例。仿星器：只有启用并验证 bootstrap 路径时使用。",
+})
+
 DOC_ALIASES = {
     "bound_type": "boundary_type",
     "ikprad_z": "kprad_z",
@@ -254,6 +318,12 @@ DOC_DEFAULT_MISMATCHES = {
 }
 
 DOC_USAGE_MISMATCHES = {
+    "idevice": "官方文档列出 1=CDX-U、2=NSTX、3=ITER、4=DIII-D；当前 `gradshafranov.f90` 的活动 `select case` 只实现 -1（读 `coil.dat/current.dat`）和 0（generic dipole），其它值进入无 PF 线圈的默认分支。",
+    "irmp": "官方文档写 1 只在 plasma、2 只在 boundary 施加；当前 `rmp.f90` 对所有计算单元评价并投影该场，且 2 仅允许 `itor=0`，不是环形托卡马克的边界条件。",
+    "icsym": "官方文档只列 0-2；当前源码还实现 3，使用确定性的 (1,1) 型初始扰动而不是随机噪声。",
+    "iflip_z": "官方文档称其翻转整个平衡；当前活动使用点只在 gfile 初始化中反号 `zmaxis`，没有同时镜像 `psirz`、mesh 节点或其它平衡场。",
+    "iread_ext_field": "官方文档只说明 1=读取外场；tokamak 源码把它作为数据组数量，1 读 `error_field`，大于 1 读 `error_fieldNN`。stellarator 读取器则只装载数组索引 `iread_ext_field`，常规可靠用法是 1。",
+    "ibasicj_solvep": "官方文档把 0 概括为 uniform p；源码中 `itaylor=29` 的解析压力确为常数，但 `itaylor=31` 使用随半径衰减的解析压力，因此 0 的准确含义是使用所选 basicJ 解析压力并求 F。",
     "ibootstrap_model": "官方文档列出 1-4；源码 `bootstrap.f90` 还显式实现 `ibootstrap_model=5` 的 constant-Lambda 分支。源码 `input.f90` 内联说明仍是旧的一行模型说明，使用时以 `bootstrap.f90` 为准。",
     "iread_te": "官方文档主要写 `1: profile_te`；源码 GS 路径还支持 2(eV vs Psi)、4(keV vs rho)、10(Corsica)、20(iterdb)，VMEC 路径支持 21(`te_profile`)。",
     "iread_ne": "官方文档主要写 `1: profile_ne`；源码 GS 路径还支持 2、4、10、20，VMEC/ST 相关路径支持 21、22、23 等专用剖面读入方式。",
@@ -1561,6 +1631,173 @@ def simplified_html_supplement(group: str) -> str:
 <div class="callout"><strong>共同的文件覆盖原则：</strong>平衡入口决定初始几何和主场；剖面读取只在所属初始化分支中生效；NEO 与 22/23 密度属于平衡后的重写；热源和粒子源属于时间推进中的附加项。参数非零并不保证文件一定会被读到，必须同时满足装置路径和方程开关。</div>
 </div>
 """
+    if group == "Equilibrium":
+        return """
+<div class="guide" data-guide>
+<div class="guide-title">
+<div>
+<h3>Equilibrium：把输入数据和网格变成可演化的 MHD 基态</h3>
+<p>本模块承接 Input 与 Mesh：Input 已决定平衡数据从哪里来，Mesh 已决定计算域、边界和 zone；Equilibrium 再选择直接投影、重新求解或解析初始化，建立基态磁场与热力学场，并叠加外场和初始扰动。之后 Model Options、Transport 与 Boundary Conditions 才决定这些场怎样演化。</p>
+</div>
+<span class="guide-kicker">模块递进</span>
+</div>
+
+<div class="sequence-pair">
+<div><strong>前置模块提供</strong><span>Input：gfile / wout / profile / restart 的读取入口与覆盖顺序<br>Mesh：物理或逻辑坐标、计算域、zone 与 boundary 标签</span></div>
+<div><strong>本模块输出</strong><span>平衡场 0 层：\(\psi_0,F_0,p_0,n_0,\mathbf V_0\)<br>扰动场 1 层与可选外场：\(\delta\psi,\delta F,\mathbf B_{ext}\)</span></div>
+</div>
+
+<div class="flow" aria-label="从输入到时间演化的完整顺序">
+<span>Input 选择数据源</span><b>→</b><span>Mesh 建立计算域与 zone</span><b>→</b><span>读入或求解基态</span><b>→</b><span>外场分解</span><b>→</b><span>初始扰动与符号约定</span><b>→</b><span>Model/Transport 时间演化</span>
+</div>
+
+<div class="callout"><strong>固定边界/自由边界不是一个孤立开关：</strong>必须同时看平衡来源、<code>ifixedb</code>、mesh 外边界、PF 线圈、<code>imulti_region/zone_type</code> 和 GS 是否启用。无论哪种 GS 设置，有限元计算域的最外边界始终存在；“自由”指等离子体 LCFS 可在更大的固定计算域内由电流与线圈场共同决定。</div>
+
+<section class="device-band tokamak-band">
+<div class="device-heading"><span>托卡马克</span><h4>从 gfile / GS 选择开始，再决定 LCFS 外是否进入计算域</h4></div>
+<ol class="case-steps">
+<li><strong>先由 Input 选择基态来源。</strong><code>iread_eqdsk=1,igs=0</code> 直接投影 gfile；<code>igs&gt;0</code> 才重新求解 GS；三个读取入口均为 0 时可用 <code>itaylor=1</code> 从解析初值和剖面求 GS，或选择其它测试平衡。</li>
+<li><strong>再由 Mesh 决定物理计算域。</strong>托卡马克 mesh 节点就是 R-Z 坐标。若只覆盖 gfile LCFS 内部，模型天然接近固定等离子体边界；若覆盖 LCFS 外真空和导体，则必须用 <code>imulti_region=1</code> 及 <code>zone_type</code> 给这些单元明确物理意义。</li>
+<li><strong>选择 GS 的外边界方式。</strong><code>ifixedb&gt;=1</code> 在计算域外边界强制 \(\psi=0\)；<code>ifixedb=0</code> 先建立等离子体电流和 PF 线圈真空场，再把该场值作为 GS 外边界，LCFS 在域内重新寻找。</li>
+<li><strong>建立等离子体源与真空场。</strong>GS 的 \(p'(\psi)\) 与 \(FF'(\psi)\) 源只放在 plasma zone 且被判为 plasma magnetic region 的位置；外部 vacuum/conductor zone 仍参与磁场椭圆方程，但不承载等离子体 GS 源。</li>
+<li><strong>最后叠加独立磁场。</strong>RMP、error field、TF/PF 线圈误差在基态之后投影，不会再次求解 GS，也不会重写 gfile/GS 压力或电流剖面。<code>extsubtract/icsubtract</code> 决定这些场并入基态还是单独保存。</li>
+<li><strong>进入时间演化。</strong>Model Options 决定是否扣除平衡场、是否加入 bootstrap closure；Transport 根据 zone 选择 plasma、vacuum 或 conductor 的电阻率和输运系数。</li>
+</ol>
+
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>初始平衡目标</th><th>关键设置</th><th>LCFS 与最外边界</th><th>是否重新求解</th></tr></thead>
+<tbody>
+<tr><td>直接使用 gfile 基态</td><td><code>iread_eqdsk=1, igs=0</code></td><td>gfile 给出磁通与 <code>sibry</code>；mesh 外边界独立存在，程序不按 LCFS 裁网格。</td><td>不求 GS；后续线圈、RMP 或 error field 仍可叠加。</td></tr>
+<tr><td>固定计算边界 GS</td><td><code>igs&gt;0, ifixedb&gt;=1</code></td><td>最外边界强制 \(\psi=0\)。若它就是目标 plasma boundary，才构成通常所说的固定 LCFS 求解。</td><td>是。</td></tr>
+<tr><td>较大域内的自由 LCFS GS</td><td><code>igs&gt;0, ifixedb=0</code>，常配 <code>idevice=-1</code></td><td>最外边界取已建立的参考磁通；默认 <code>icsubtract=0</code> 时其中包含 PF 线圈真空场。LCFS 每轮在域内更新，外边界本身仍固定。</td><td>是，可带 PF 反馈。</td></tr>
+<tr><td>解析/测试平衡</td><td>读取入口全 0，选择 <code>itaylor</code></td><td>由所选解析模型及 mesh 外边界决定。</td><td><code>itaylor=1</code> 求 GS；19、24、29/31 等走各自初始化。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="guide-grid compact">
+<div class="guide-block">
+<h4>直接投影与 zone</h4>
+<p>gfile 的 \(\psi,p,F\) 会在读取路径中插值到 mesh 单元，不只写 plasma zone。zone 标签不会裁剪输入数据；它主要决定随后哪些方程、材料系数和源项生效。</p>
+</div>
+<div class="guide-block">
+<h4>GS 求解与 zone</h4>
+<p>GS 矩阵覆盖整个计算域，但 plasma 电流源只在 <code>ZONE_PLASMA</code> 内。非 plasma zone 的压力取边缘值、环向真空场取 <code>bzero*rzero</code>；vacuum 与 conductor 的差异主要在后续电阻率和壁电流演化。</p>
+</div>
+</div>
+
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>跨模块参数</th><th>所属模块</th><th>与 Equilibrium 的接口</th></tr></thead>
+<tbody>
+<tr><td><code>iread_eqdsk</code>, <code>iread_p/f/ne/te</code></td><td>Input</td><td>决定基态数据源以及 GS 前的剖面覆盖；直接投影路径不会读取普通 GS profile 覆盖文件。</td></tr>
+<tr><td><code>mesh_filename</code>, <code>imulti_region</code>, <code>zone_type</code></td><td>Mesh</td><td>给出真实 R-Z 域及 plasma/conductor/vacuum 分类；程序不检查这些标签与 gfile LCFS 是否几何一致。</td></tr>
+<tr><td><code>igs</code>, GS profile/feedback 参数</td><td>Grad-Shafranov</td><td>决定是否迭代、剖面约束、LCFS/X 点搜索和 PF 电流反馈。</td></tr>
+<tr><td><code>ifixedb</code></td><td>Boundary Conditions</td><td>控制 GS 计算域外边界是强制零磁通，还是沿用已建立的线圈/真空磁通。</td></tr>
+<tr><td><code>eqsubtract</code>, <code>extsubtract</code>, <code>icsubtract</code></td><td>Model Options</td><td>分别控制演化方程中的平衡扣除、非轴对称外场分离、PF 线圈场分离；不改变 mesh。</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>RMP、线圈误差与外场：作用在基态之后</h4>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>功能</th><th>设置</th><th>实际作用</th><th>不会做的事</th></tr></thead>
+<tbody>
+<tr><td>窗口线圈 RMP</td><td><code>irmp=1, type_ext_field&lt;=0</code></td><td>读取 <code>rmp_coil.dat/rmp_current.dat</code>，并可叠加 <code>error_field</code> 数据；场投影到整个计算域。</td><td>不重算 GS，不只限于 plasma zone。</td></tr>
+<tr><td>解析 m/n 真空场</td><td><code>irmp=2</code></td><td>用 <code>mpol/ntor/eps/rmp_atten</code> 构造场；仅 <code>itor=0</code> 可用。</td><td>不是环形托卡马克的边界 RMP 设置。</td></tr>
+<tr><td>误差场文件</td><td><code>iread_ext_field&gt;0, type_ext_field&lt;=0</code></td><td>1 组读 <code>error_field</code>，多组读 <code>error_fieldNN</code>，再应用采样、缩放和相位平移。</td><td><code>file_ext_field</code> 在此分支不会改文件名。</td></tr>
+<tr><td>TF/PF 倾斜和平移</td><td><code>tf_*</code>, <code>pf_*</code></td><td>由理想线圈场的一阶变化构造非轴对称误差场；PF 项要求先有线圈表。</td><td>不移动有限元节点，也不修改轴对称 GS 线圈几何。</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>自举电流：属于 Equilibrium 之后的演化闭合</h4>
+<div class="flow" aria-label="自举电流与初始电流关系">
+<span>gfile / GS / basicJ 给出初始 J</span><b>→</b><span>计算 ne、Te、Ti 与 bootstrap 系数</span><b>→</b><span>bootstrap 项进入磁通和环向场方程</span><b>→</b><span>J 随时间演化</span>
+</div>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>参数</th><th>源码行为</th><th>用户需要把握的覆盖关系</th></tr></thead>
+<tbody>
+<tr><td><code>ibootstrap=0/1/2/3</code></td><td>0 关闭；1 用 \(\psi\) 作系数坐标；2 用 \(T_e\)；3 用 \(1-T_e/T_{e,max}\)，并从专用文件读取/计算更多几何系数。</td><td>不会覆盖初始 J；它选择演化阶段 bootstrap 系数的坐标和计算路径。</td></tr>
+<tr><td><code>ibootstrap_model</code></td><td>1/3 为 Sauter-Angioni，2/4 为 Redl，3/4 是简化方程实现，5 为 constant-Lambda 分支。</td><td>必须与 <code>ibootstrap</code> 及系数文件配套；<code>ibootstrap=3</code> 的模型 1/3 当前会停止运行。</td></tr>
+<tr><td><code>bootstrap_alpha</code></td><td>统一乘在计算得到的 bootstrap 项上，默认 0。</td><td>即使打开模型，保持 0 也会把 bootstrap 驱动缩放为零。</td></tr>
+<tr><td><code>ibootstrap_regular</code></td><td>正则化小磁场、温度梯度和归一化温度计算，默认 \(10^{-8}\)。</td><td>它是数值保护尺度，不是 bootstrap 电流比例。</td></tr>
+</tbody>
+</table>
+</div>
+<div class="guide-grid compact">
+<div class="guide-block">
+<h4>ibootstrap=1/2 的系数文件</h4>
+<p>分别读取 <code>ProfileJBSCoeff_Psi_L31_32_34_alpha_B2_dtedpsit_G</code> 或 <code>ProfileJBSCoeff_Te_L31_32_34_alpha_B2_dtedpsit_G</code>。横坐标分别为归一化磁通或电子温度；后续列提供 L31、L32、L34、alpha、\\(1/\\langle B^2\\rangle\\)、\\(dT_e/d\\psi_t\\) 与 G。</p>
+</div>
+<div class="guide-block">
+<h4>ibootstrap=3 的系数文件</h4>
+<p>读取 <code>ProfileJBSCoeff_Tenorm_L31_32_34_alpha_B2_dtedpsit_G_ft_qR_e_temax</code>，以 \\(1-T_e/T_{e,max}\\) 为坐标，并额外提供 trapped fraction、qR、逆长宽比和初始最大电子温度。</p>
+</div>
+</div>
+<div class="callout"><strong>初始电流不会被自动替换：</strong>若希望初始平衡已经包含自举电流，必须让输入 gfile/VMEC/GS 剖面本身包含相应总电流并保持力平衡。只设置 <code>ibootstrap</code> 会在时间推进时驱动电流变化，可能产生初始调整过程，但不会返回 GS 或 VMEC 重求一个自洽平衡。</div>
+</section>
+
+<section class="device-band stellarator-band">
+<div class="device-heading"><span>仿星器</span><h4>区分固定边界 VMEC 投影与三维 total/external-field 初始化</h4></div>
+<ol class="case-steps">
+<li><strong>先由 Input 排除托卡马克入口。</strong><code>iread_eqdsk=iread_dskbal=iread_jsolver=0</code>，否则初始化会在到达 <code>itaylor=40/41</code> 之前被抢占。</li>
+<li><strong>由 Mesh 建立逻辑域并映射。</strong>通常 <code>igeometry=1,iread_vmec=1</code>；逻辑 \\((\\rho,\\theta,\\phi)\\) mesh 先映射到物理 R-Z-phi，zone 与 boundary 标签随映射带入，但不会由 wout 或场文件自动重分类。</li>
+<li><strong>选择固定边界。</strong><code>itaylor=40</code> 读取 wout 的几何、磁场和压力并投影；M3D-C1 不求解 VMEC。源码要求 <code>bloat_factor=0</code>，物理上还应保持 <code>bloat_distance=0</code>，使外边界对应 VMEC 最外磁面。</li>
+<li><strong>或选择三维外场/所谓自由边界入口。</strong><code>itaylor=41</code> 要求 <code>iread_ext_field!=0</code>，从 total field 或 total/external 组合建立磁场。该路径没有求解 VMEC 自由边界方程，也不会根据第一壁位置重新求 LCFS。</li>
+<li><strong>检查计算域物理意义。</strong>bloat 只扩展几何映射；扩展区是 plasma、vacuum 还是 conductor 仍完全由 <code>zone_type</code> 决定。程序允许但不会识别“导体 zone 实际落在 wout plasma 内”等物理冲突。</li>
+<li><strong>再进入演化模型。</strong>RMP/外场分解、bootstrap、transport 和壁电阻依次作用；这些模型不会回头改变 VMEC 映射或重求平衡边界。</li>
+</ol>
+
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>仿星器模式</th><th>核心设置</th><th>读取/构造内容</th><th>边界含义</th></tr></thead>
+<tbody>
+<tr><td>固定边界 VMEC</td><td><code>itaylor=40, igeometry=1, iread_vmec=1</code></td><td>wout 几何、B 和 <code>presf</code>；Input 的 21 模式可替换 p/ne/Te，但不改 B 和几何。</td><td>逻辑 mesh 最外边界映射到 VMEC 最外磁面；不包含显式外真空/壁域。</td></tr>
+<tr><td>total field 直接初始化</td><td><code>itaylor=41, type_ext_field=1, iread_ext_field=1, extsubtract=0</code></td><td><code>file_total_field</code> 作为初始总 B；若格式携带压力，也可一并投影。</td><td>计算域由 mesh/VMEC 几何决定；场文件不会自动给 zone 贴标签。</td></tr>
+<tr><td>total/external 分解</td><td><code>itaylor=41, type_ext_field=2, iread_ext_field=1, extsubtract=1</code></td><td>先装 <code>file_total_field</code>，再装 <code>file_ext_field</code>；演化场保存 total-external，外场单独保存。</td><td>适合把固定真空线圈场从动态等离子体场中分离，但不是自由边界平衡求解器。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="guide-grid compact">
+<div class="guide-block">
+<h4>plasma 与外部区</h4>
+<p><code>itaylor=40</code> 的 wout 平衡定义到最外磁面。若通过 bloat 或更复杂逻辑 mesh 建立外区，源码不会从 wout 判断该区是真空、壁还是等离子体；必须在 Mesh 阶段设计 zone，并在 Transport/Boundary 模块赋材料参数。</p>
+</div>
+<div class="guide-block">
+<h4>所谓 free-boundary 的准确含义</h4>
+<p>源码把 <code>itaylor=41</code> 注释为 free-boundary stellarator，但实现是读取三维 total/external field 并初始化 MHD 场。它允许 LCFS 在后续 MHD 演化中变化，却不执行 VMEC 那种在 mgrid 背景场中求 LCFS 的平衡迭代。</p>
+</div>
+</div>
+
+<div class="callout"><strong>固定 VMEC 的源码边界检查：</strong>初始化只显式检查 <code>bloat_factor==0</code>。<code>bloat_distance</code> 可在 VMEC 几何读取时把前者重置为 0，因此数值上可能通过检查；但这已不再是“mesh 外边界等于 wout 最外磁面”的严格固定边界几何，用户应主动设为 0。</div>
+</section>
+
+<h4>共同的后处理顺序：后面的步骤可以改符号或叠加场，但不回写平衡来源</h4>
+<div class="flow" aria-label="平衡完成后的共同后处理">
+<span>基态初始化</span><b>→</b><span>NEO 与密度初始化</span><b>→</b><span>RMP/外场/线圈误差</span><b>→</b><span>ne/Te/Ti 派生</span><b>→</b><span><code>iflip_b/j/v</code></span><b>→</b><span><code>iflip</code> 手性变换</span><b>→</b><span>时间推进</span>
+</div>
+
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>参数族</th><th>生产 case 中的角色</th><th>主要限制</th></tr></thead>
+<tbody>
+<tr><td><code>eps/maxn/icsym/verzero</code></td><td>构造初始扰动层；扰动只在 plasma zone 生成，并可按压力/磁区掩膜衰减。</td><td>不改变基态边界；仿星器在逻辑坐标中构造随机形状。</td></tr>
+<tr><td><code>iflip_b/j/v</code></td><td>分别改变已初始化 B、J 表示和环向速度的符号。</td><td>必须同步核对输入文件、<code>ntor</code>、线圈电流和诊断符号。</td></tr>
+<tr><td><code>iflip</code></td><td>整体坐标手性变换，同时反号多种场及 <code>vloop/tcur</code>。</td><td>只在非 restart 的初始化后执行；不要与单项翻转混为一谈。</td></tr>
+<tr><td><code>iupstream/magus</code></td><td>时间演化的环向人工二阶稳定化。</td><td>虽归在 Equilibrium 组，但不参与平衡读取或求解。</td></tr>
+<tr><td><code>bx0/v0_cyl/v1_cyl/iwave/beta/ln/elongation/basicj_*</code></td><td>解析和回归测试平衡参数；其中 Solovev/basicJ 可用于受控验证。</td><td>不会覆盖 gfile、wout 或三维场文件；只在对应 <code>itaylor</code> 分支有意义。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout"><strong>最终一致性由用户负责：</strong>源码会检查部分缺失文件和开关组合，但不会验证 mesh zone、gfile/VMEC LCFS、第一壁、线圈域和外场数据范围是否物理吻合。一个输入组合可以通过语法和分支检查，仍可能代表错误的物理区域。</div>
+</div>
+"""
     if group == "__legacy_mesh":
         return """
 <div class="guide" data-guide>
@@ -1774,7 +2011,7 @@ def write_simplified_html(params: list[Param], path: Path) -> None:
 :root { --bg:#f7f7f4; --panel:#fff; --ink:#202629; --muted:#627073; --line:#d9ddd8; --accent:#1f6f8b; }
 * { box-sizing: border-box; }
 body { margin:0; overflow-x:hidden; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","Microsoft YaHei",Arial,sans-serif; line-height:1.55; }
-code { background:#f0f2f1; border-radius:4px; padding:0.08rem 0.28rem; }
+code { background:#f0f2f1; border-radius:4px; padding:0.08rem 0.28rem; overflow-wrap:anywhere; word-break:break-word; }
 .layout { display:grid; grid-template-columns:280px minmax(0,1fr); min-height:100vh; width:100%; max-width:100%; }
 .sidebar { position:sticky; top:0; height:100vh; overflow:auto; padding:20px 16px; background:#fbfbf8; border-right:1px solid var(--line); }
 .sidebar h1 { font-size:1.08rem; margin:0 0 12px; }
