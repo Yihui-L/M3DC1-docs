@@ -71,6 +71,19 @@
 | `pellet_var_tor` | `0.` | 官方文档写 0 时取 `pellet_var`；源码中若 `ipellet=15` 且 `pellet_var_tor<=0`，实际设为 `pellet_var/pellet_r`，其它 pellet 分支才取 `pellet_var`。 |
 | `ipellet_abl` | `0` | 官方文档列出 1、2、3；源码另有 `ipellet_abl=43` 的 Sergeev06 carbon ablation 分支，并且 `ipellet_z=0` 时会按 ablation 模型推断默认 Z。 |
 | `itaylor` | `0` | 官方文档列出常用初始条件；源码 `init_conds.f90` 还包含 -1、24、25、26、28、30、31、32、33、34 等分支，实际可用性取决于编译宏和对应初始化例程。 |
+| `inumgs` | `0` | 官方文档写读取 `profile-p` 与 `profile-g`；当前源码固定打开的文件名实际是复数 `profiles-p` 与 `profiles-g`，并按固定宽度格式读取 p/p' 和 g/FF'。 |
+| `igs` | `80` | 官方文档只称其为最大 Picard 迭代次数；当前活动循环是 `do itnum=1,igs`。源码旁仍保留关于 `abs(igs)`/负值继续运行的旧注释，但负 `igs` 在当前实现中不会执行 GS 迭代。 |
+| `igs_feedfac` | `1` | 官方文档称其为 external-field feedback 的 proportionality factor；当前源码只检查 `igs_feedfac.eq.1`，实际是 0/1 型开关，反馈幅值由固定公式计算。 |
+| `igs_forcefree_lcfs` | `-1` | 官方文档主要说明取 1 时使 LCFS force-free；当前源码还区分 0、1、2，并把读入默认 -1 自动改为 0 或 2。1 令 LCFS 外转动为 0，2 则保持 LCFS 转动值。 |
+| `psiscale` | `1.` | 源码声明注释称小于 1 可丢弃边缘剖面点，但当前活动代码只把大于 1 的值重置为 1，之后没有任何计算读取 `psiscale`；实际剖面磁通范围缩放使用的是 `psifrac`。 |
+| `p1` | `0.` | 官方文档把它写成轴上 p'(Psi)；内置解析式使用归一化磁通，实际轴上导数系数为 `p0*p1`，不是参数值本身。 |
+| `p2` | `0.` | 官方文档把它写成轴上 p''(Psi)；内置解析式的实际轴上二阶导数系数为 `2*p0*p2`，且自变量是归一化磁通。 |
+| `xnull2` | `0.` | 官方文档称第二 X 点为 inactive；当前 `lcfs` 对两个 X 点使用同样的搜索和 LCFS 候选比较，第二点若更靠近磁轴磁通会成为活动 LCFS 限制点。 |
+| `idenfunc` | `0` | 官方文档把 0-3 都列为平衡密度函数；当前初始化流程中 0/4 直接保留 GS/profile 密度，1/2 在 `den_eq` 中重写，3 主要在场评价算子中按磁通梯度重写，源码还实现文档未列出的 20 与专用 21。 |
+| `tedge` | `0.` | 官方文档把它概括为真空区电子温度并给出边界关系；当前 GS 源码先平移 Te 样条，随后在 `pedge<=0` 时用 `n0_spline%n`（样条点数）而非边缘密度修正压力，行为与文档公式不一致，使用该组合前应验证或修正源码。 |
+| `adapt_qs` | `0.` | 官方输入表把它放在 GS 小节，且源码也误用 `gs_grp` 注册；实际唯一活动使用位于 `adapt.f90`，用于按 q 面打包自适应网格，不参与 GS 求解。 |
+| `adapt_zlow` | `0.` | 官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。 |
+| `adapt_zup` | `0.` | 官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。 |
 
 ## 5. 运行时默认值/校验阶段会改写
 

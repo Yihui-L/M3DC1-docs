@@ -280,6 +280,89 @@ MANUAL_USAGE.update({
     "ibootstrap_regular": "托卡马克：bootstrap 计算中小 Bp、温度梯度和归一化温度的正则化尺度，默认 `1e-8`，不表示电流比例。仿星器：只有启用并验证 bootstrap 路径时使用。",
 })
 
+# The Grad-Shafranov implementation is an axisymmetric tokamak initializer.
+# Stellarator initialization (itaylor=40/41) bypasses this module entirely.
+MANUAL_USAGE.update({
+    "inumgs": "托卡马克：0 使用源码内置解析 p、p'、F、FF' 形状；1 从固定文件 `profiles-p` 与 `profiles-g` 读取完整剖面并约束 GS。若 gfile 或 `iread_p/f` 已建立剖面，本开关不会再生效。仿星器：`itaylor=40/41` 不调用 GS，不使用。",
+    "igs": "托卡马克：GS 最大 Picard 迭代次数；必须取正整数才会执行当前源码的 `1...igs` 循环，0 表示不求解。达到 `tol_gs` 可提前结束；负值在当前实现中不会产生迭代。仿星器：`itaylor=40/41` 不调用 GS，不使用。",
+    "igs_pp_ffp_rescale": "托卡马克：1 仅在由 gfile 的 p、p'、F、FF' 建立约束剖面时，把 p' 与 FF' 的积分分别重标度到给定 p 与 F；同时改变 `batemanscale` 的应用顺序。0 保留文件导数。仿星器：不使用。",
+    "igs_extend_p": "托卡马克：非零时，若 ne 或 Te 剖面延伸到压力剖面末端之外，就用电子压力加保持末端 Ti 不变的离子压力延伸总压力，并重新计算 p'。0 不延伸。仿星器：不使用。",
+    "igs_extend_diamag": "托卡马克：读取电子或 E×B 转动并换算离子转动时，0 在归一化磁通大于等于 1 处停止加入抗磁修正；非零则继续到转动样条末端。仿星器：不使用。",
+    "igs_start_xpoint_search": "托卡马克：前 N 次 GS 迭代只在给定 `xnull/znull` 位置评价磁通，从第 N 次起才在其附近搜索真正鞍点；0 表示初始化 LCFS 时即搜索。仿星器：不使用。",
+    "igs_forcefree_lcfs": "托卡马克：控制 LCFS 外剖面处理。0 允许剖面按样条继续；1 在非 plasma magnetic region 令 p'、FF'、转动均为 0；2 令 p'、FF' 为 0，并把外侧转动保持为 LCFS 值。-1 会在校验时自动选 0 或 2。仿星器：不使用。",
+    "nv1equ": "托卡马克：1 使非约束解析 GS 路径把 `gamma2/gamma3/gamma4` 全部置 0，跳过 q0、dJ/dpsi 和总电流约束；0 正常计算这些约束。名称中的 numvar 说明已不能完整代表当前行为。仿星器：不使用。",
+    "igs_feedfac": "托卡马克：只按是否等于 1 作为 generic `idevice=0` 双 limiter 外场反馈开关；1 在第二轮以后根据两 limiter 的磁通差修正外边界场，其他值关闭。它不是连续比例系数。仿星器：不使用。",
+    "eta_gs": "托卡马克：仅 USE3D 编译中给 GS 矩阵加入环向导数惩罚，平滑 psi 的非轴对称分量；常规轴对称二维求解中无作用。仿星器：不使用。",
+    "tcuro": "托卡马克：无 gfile 时是初始电流丝/高斯电流的总电流，也是非约束解析 GS 用 `gamma4` 保持的目标总等离子体电流；gfile 路径会用文件总电流覆盖。完整 p/F 约束路径不再用它重调总电流。仿星器：不使用。",
+    "xmag": "托卡马克：初始电流丝的 R 位置及磁轴搜索初猜；每次 LCFS 搜索后会更新为求得的磁轴 R。gfile 会先用 `rmaxis` 覆盖。仿星器：不使用。",
+    "zmag": "托卡马克：初始电流丝的 Z 位置及磁轴搜索初猜；迭代中更新为求得的磁轴 Z，gfile 会先用 `zmaxis` 覆盖。仿星器：不使用。",
+    "xmag0": "托卡马克：`idevice=-1` 线圈反馈的目标磁轴 R；磁轴反馈数组非零而本值为 0 时，自动取初始 `xmag`。还可被部分诊断参数引用。仿星器：不使用 GS 线圈反馈。",
+    "zmag0": "托卡马克：`idevice=-1` 线圈反馈的目标磁轴 Z；与 `xmag0` 配套，反馈是否启用由反馈数组决定。仿星器：不使用 GS 线圈反馈。",
+    "xlim": "托卡马克：内部 limiter #1 的物理 R 坐标；LCFS 候选取该点磁通。0 表示不设内部 limiter，并沿用第一壁/X 点给出的当前边界磁通。generic PF 场还用它估计小半径。仿星器：不使用。",
+    "zlim": "托卡马克：内部 limiter #1 的物理 Z 坐标，仅在 `xlim!=0` 时与之配套评价磁通。仿星器：不使用。",
+    "xlim2": "托卡马克：内部 limiter #2 的物理 R 坐标；大于 0 时作为第二个 LCFS 候选。`idevice=0,igs_feedfac=1` 时还与 limiter #1 的磁通差构成外场反馈。仿星器：不使用。",
+    "zlim2": "托卡马克：内部 limiter #2 的物理 Z 坐标，仅在 `xlim2>0` 时使用。仿星器：不使用。",
+    "rzero": "托卡马克：参考大半径，进入 F=R Bphi、旋转平衡指数和归一化；读入默认 -1，校验时环形几何改取 `xzero`，gfile 又会用 `rmaxis` 覆盖。仿星器：VMEC/外场基态不由它定义。",
+    "psifrac": "托卡马克：把实际归一化磁通乘以该因子后再查询所有剖面，即 `psi_profile=(psi-psiaxis)/(psiLCFS-psiaxis)*psifrac`。小于 1 会让 LCFS 只用到剖面表的内侧部分，并非裁剪 mesh。仿星器：不使用 GS 剖面坐标。",
+    "libetap": "托卡马克：只在 `idevice=0` generic 自由边界初值中，作为 Shafranov 竖直场估算的 `li/2+beta_p`；不会由一般 `idevice=-1` 线圈求解自动满足。仿星器：不使用。",
+    "p0": "托卡马克：内置解析压力剖面的轴上总压力幅值，也是密度幂律归一化和电子/离子压力分配的参考；gfile 或 `profile_p` 建立完整剖面后，其形状不再由本值控制，但直接 gfile 投影仍以它归一化解析密度。仿星器：GS 不使用；其它解析测试平衡可能复用该全局量。",
+    "pi0": "托卡马克：轴上离子压力参考值；校验阶段以 `(p0-pi0)/p0` 计算电子压力份额 `pefac`，压力外延没有 Te 文件时也用它。它不直接进入 GS 磁通源。仿星器：VMEC 初始化会从总压和 `pefac` 重设该量，GS 不使用。",
+    "p1": "托卡马克：内置解析压力关于归一化磁通的轴上一次形状系数；实际 `p'(0)=p0*p1`，并参与 q0 约束系数。完整 p/F 剖面约束时不控制压力。仿星器：不使用 GS。",
+    "p2": "托卡马克：内置解析压力的轴上二次形状系数；实际 `p''(0)=2*p0*p2`，并参与轴上电流梯度约束。完整 p/F 剖面约束时不生效。仿星器：不使用 GS。",
+    "pedge": "托卡马克：GS 路径中大于 0 时平移整个压力样条，使最外剖面点等于该总压力；直接 gfile 且不求 GS 时，非负值则作为常数直接加到投影压力。它不是给真空 zone 单独增加一条压力方程；`tiedge` 可随后覆盖，`tedge` 也可据密度推算。仿星器：不通过 GS 使用。",
+    "tedge": "托卡马克：大于 0 时设置最外电子温度；不能同时读取 Te。源码会平移 Te，并在 `pedge<=0` 时试图相应平移总压力以保持离子温度，当前实现该压力修正含明显索引/数值问题，使用前应验证。仿星器：不通过 GS 使用。",
+    "tiedge": "托卡马克：大于 0 时按最外密度和 Te 重新计算 `pedge`，因此覆盖用户给定的 `pedge`，再平移总压力使最外离子温度达到目标。仿星器：不使用 GS。",
+    "expn": "托卡马克：未读入 ne 时密度随压力的幂指数；0 给常密度，非零构造近似 `n∝p^expn`，可叠加 `den_edge`。直接 gfile 投影也用它从投影压力构造初始密度；它不进入静态无旋转 GS 方程。仿星器：GS 不使用。",
+    "q0": "托卡马克：非约束解析 GS 中目标轴上安全因子，用于计算 `gamma2`；完整 gfile/profile p-F 约束或 `nv1equ=1` 时不再用它调解。仿星器：不使用。",
+    "sigma0": "托卡马克：初始等离子体电流猜测的物理 R-Z 高斯宽度；0 使用位于 `xmag,zmag` 的 delta 电流，非零使用高斯。它只影响 GS 初猜，不是最终电流剖面宽度。仿星器：不使用。",
+    "djdpsi": "托卡马克：非约束解析 GS 的目标轴上环向电流对实际磁通的导数，通过 `gamma3` 调节额外 FF' 基函数；完整剖面约束或 `nv1equ=1` 时不生效。仿星器：不使用。",
+    "th_gs": "托卡马克：从第二个已求解迭代起的 Picard 松弛权重，`psi_new=th_gs*psi_solved+(1-th_gs)*psi_old`；通常应在 0 到 1 之间。仿星器：不使用。",
+    "tol_gs": "托卡马克：第二轮以后 GS 解变化误差 `error2` 的提前停止阈值；约束剖面的残差另用于输出/诊断，但退出判断仍看 `error2`。仿星器：不使用。",
+    "psiscale": "托卡马克：当前源码只检查大于 1 时把它重置为 1，之后没有活动计算使用；不能依靠它缩放或截取磁通剖面，相关用户作用实际由 `psifrac` 完成。仿星器：不使用。",
+    "pscale": "托卡马克：在剖面来源确定后统一乘 p 与 p'；随后 `profile_pscale`、边缘压力/温度设置仍可进一步修改。仿星器：不经过 GS；固定 VMEC 压力覆盖不使用本开关。",
+    "bscale": "托卡马克：统一缩放 F=R Bphi 的幅值；内部对 g=(F^2-Fedge^2)/2 与 FF' 乘 `bscale^2`，对 `bzero` 乘 `bscale`，随后仍可应用 `bpscale/profile_bscale`。仿星器：不使用。",
+    "batemanscale": "托卡马克：gfile 路径的 Bateman 环向场缩放，目标是在改变 F/Bphi 时保持给定 FF' 或电流源关系；与 `igs_pp_ffp_rescale` 的组合决定是在读入时重构 F，还是在 GS 后缩放 `bzero`。仿星器：不使用。",
+    "bpscale": "托卡马克：在保持边缘 `F0=bzero*rzero` 不变的条件下缩放 F 的偏离量，从而一致更新 g 与 FF'；不是简单给整个 Bphi 乘常数。仿星器：不使用。",
+    "iread_bscale": "托卡马克：1 读取两列 `profile_bscale(psi_N,scale)`，逐点乘 F 后重新计算 g 与 FF'；它在常数 `bscale/bpscale` 之后执行。仿星器：不使用。",
+    "iread_pscale": "托卡马克：1 读取两列 `profile_pscale(psi_N,scale)`，令 p→pS，并按乘积法则令 p'→p'S+pS'；在常数 `pscale` 之后执行。仿星器：不使用。",
+    "vscale": "托卡马克：`irot!=0` 时统一乘读入或解析的基础环向角频率，之后才加入可选电子/E×B 抗磁换算。仿星器：VMEC/外场初始化不读取 GS 转动剖面。",
+    "gs_vertical_feedback": "托卡马克：`idevice=-1` 时按线圈组给出的磁轴 Z 误差比例反馈系数数组；索引对应 `coil.dat` 的 coil group，电流在每轮 GS 后更新。仿星器：不使用。",
+    "gs_radial_feedback": "托卡马克：`idevice=-1` 时按线圈组给出的磁轴 R 误差比例反馈系数数组，与 `xmag-xmag0` 相乘。仿星器：不使用。",
+    "gs_vertical_feedback_i": "托卡马克：磁轴 Z 误差的积分反馈系数数组；误差逐 GS 迭代累加，不含时间步长。仿星器：不使用。",
+    "gs_radial_feedback_i": "托卡马克：磁轴 R 误差的积分反馈系数数组；误差逐 GS 迭代累加，不含时间步长。仿星器：不使用。",
+    "gs_vertical_feedback_x": "托卡马克：X 点 Z 误差的比例线圈反馈系数数组；仅 `idevice=-1`、X 点反馈数组非零且迭代次数大于 10 时生效。仿星器：不使用。",
+    "gs_radial_feedback_x": "托卡马克：X 点 R 误差的比例线圈反馈系数数组；与 `xnull-xnull0` 相乘，迭代次数必须大于 10。仿星器：不使用。",
+    "gs_vertical_feedback_x_i": "托卡马克：X 点 Z 误差的积分反馈系数数组；从第 11 次迭代起累计。仿星器：不使用。",
+    "gs_radial_feedback_x_i": "托卡马克：X 点 R 误差的积分反馈系数数组；从第 11 次迭代起累计。仿星器：不使用。",
+    "irot": "托卡马克：0 不把环向旋转纳入平衡；1 采用 `p(R,psi)=p0(psi) exp[alpha(psi)(R^2-rzero^2)/rzero^2]` 修改 GS 压力源并输出转动场。其它非零值会建立转动场，但只有等于 1 才进入该旋转 GS 公式。仿星器：不使用 GS 转动平衡。",
+    "iscale_rot_by_p": "托卡马克：只在未读入转动文件时选择解析转动参数化。0 先令 alpha 多项式乘 n/p；1 直接用多项式并把边缘 omega 减到 0；2 使用高斯 alpha 后乘 n/p。仿星器：不使用。",
+    "alpha0": "托卡马克：解析 alpha 剖面的常数项；`iscale_rot_by_p=2` 时为高斯背景项。只有 `irot!=0` 且未读转动文件时使用。仿星器：GS 不使用；其它测试平衡可能复用该全局量。",
+    "alpha1": "托卡马克：解析 alpha 剖面的一次项；模式 2 时为高斯幅值。仿星器：GS 不使用。",
+    "alpha2": "托卡马克：解析 alpha 剖面的二次项；模式 2 时为高斯中心 `psi_N`。仿星器：GS 不使用。",
+    "alpha3": "托卡马克：解析 alpha 剖面的三次项；模式 2 时为高斯宽度且不可为 0。仿星器：GS 不使用。",
+    "idenfunc": "托卡马克：选择 GS 后的平衡密度重写方式。0/4 保留 GS/profile 建立的密度；1 用磁通外侧 tanh 台阶，2 在 `den0` 与 `den_edge` 间作 tanh 过渡，3 在场评价中按磁通与梯度方向区分核心/外侧；源码还实现 20 及专用 21。它不改变无旋转 GS 磁通。仿星器：VMEC/外场可经过通用密度重写，但 1-3 的磁通判据面向托卡马克，不建议直接套用。",
+    "den_edge": "托卡马克：未读取 ne 时的外侧密度；大于 0 可加到压力幂律剖面或作为 `idenfunc=2/3` 的外侧值。与非零 `iread_ne` 冲突；与 `pedge`、`tedge` 三者不能同时显式设置。仿星器：通用密度/输运代码可能复用，但不属于 VMEC 平衡求解。",
+    "den0": "托卡马克：解析密度的核心幅值；`expn=0` 时 GS 剖面为常数 den0，`idenfunc` 1/2/3 又把它作为核心/台阶幅值。仿星器：可能用于固定 VMEC 无外部密度文件时的默认密度，但不进入 GS。",
+    "dendelt": "托卡马克：`idenfunc=1/2` 的归一化磁通 tanh 过渡宽度；越小过渡越尖，需要相应网格分辨率。仿星器：不建议用于 VMEC 逻辑域的物理壁定义。",
+    "denoff": "托卡马克：`idenfunc=1/2/3` 的归一化磁通偏移位置；1/2 决定 tanh 中心，3 决定核心判据阈值。仿星器：不建议作为 VMEC 边界定义。",
+    "divertors": "托卡马克：generic/线圈真空场中额外电流丝数；0 无，1 在 `xdiv,zdiv`，2 再在 `xdiv,-zdiv` 放置对称电流丝。它不是 X 点数量开关。仿星器：不使用。",
+    "xdiv": "托卡马克：附加 divertor 电流丝的物理 R 坐标，仅 `divertors>=1` 使用。仿星器：不使用。",
+    "zdiv": "托卡马克：第一附加 divertor 电流丝的物理 Z 坐标；`divertors=2` 时第二根位于其相反 Z。仿星器：不使用。",
+    "divcur": "托卡马克：每根附加 divertor 电流丝相对 `tcuro` 的电流比例，实际线圈源用 `tcuro/(2pi)*divcur`。仿星器：不使用。",
+    "xnull": "托卡马克：X 点 #1 的物理 R 初猜；大于 0 才启用。搜索前可只在该点取磁通，搜索启动后在附近找鞍点，并把所得磁通作为 LCFS 候选。仿星器：不使用。",
+    "znull": "托卡马克：X 点 #1 的物理 Z 初猜，与 `xnull>0` 配套。仿星器：不使用。",
+    "mod_null_rs": "托卡马克 restart：0 用 restart 文件保存的 X 点 #1 坐标覆盖 C1input；1 保留本次 C1input 中的 `xnull/znull`。新启动 GS 不受此开关影响。仿星器：通常不使用。",
+    "xnull2": "托卡马克：X 点 #2 的物理 R 初猜；大于 0 时与第一个 X 点同样搜索并参与 LCFS 候选比较，源码不会强制它保持 inactive。仿星器：不使用。",
+    "znull2": "托卡马克：X 点 #2 的物理 Z 初猜，与 `xnull2>0` 配套。仿星器：不使用。",
+    "mod_null_rs2": "托卡马克 restart：0 用 restart 文件坐标覆盖 X 点 #2 输入；1 保留本次 C1input 的 `xnull2/znull2`。仿星器：通常不使用。",
+    "gs_pf_psi_width": "托卡马克：私有磁通区把归一化磁通镜像到 LCFS 外侧时的 tanh 平滑宽度；0 使用尖锐镜像，正值使转接平滑。只影响 private-flux 剖面取样。仿星器：不使用。",
+    "xnull0": "托卡马克：`idevice=-1` X 点线圈反馈的目标 R；X 点反馈数组非零而本值为 0 时自动取初始 `xnull`，实际反馈从第 11 轮开始。仿星器：不使用。",
+    "znull0": "托卡马克：X 点线圈反馈的目标 Z，与 `xnull0` 配套。仿星器：不使用。",
+    "adapt_qs": "托卡马克：尽管源码把它注册在 GS 参数组，实际属于 Mesh Adaptation；给出要加密的安全因子 q 值数组，需启用自适应及 q 打包逻辑。仿星器：没有由 GS 生成的轴对称 q 面，通常不使用。",
+    "adapt_zlow": "托卡马克：实际属于 Mesh Adaptation；非零时把 Z 小于该值的 SOL 区域标为粗化候选，不参与 GS 方程。仿星器：逻辑/物理坐标适用性需单独验证。",
+    "adapt_zup": "托卡马克：实际属于 Mesh Adaptation；非零时把 Z 大于该值的 SOL 区域标为粗化候选，不参与 GS 方程。仿星器：逻辑/物理坐标适用性需单独验证。",
+})
+
 DOC_ALIASES = {
     "bound_type": "boundary_type",
     "ikprad_z": "kprad_z",
@@ -335,6 +418,19 @@ DOC_USAGE_MISMATCHES = {
     "pellet_var_tor": "官方文档写 0 时取 `pellet_var`；源码中若 `ipellet=15` 且 `pellet_var_tor<=0`，实际设为 `pellet_var/pellet_r`，其它 pellet 分支才取 `pellet_var`。",
     "ipellet_abl": "官方文档列出 1、2、3；源码另有 `ipellet_abl=43` 的 Sergeev06 carbon ablation 分支，并且 `ipellet_z=0` 时会按 ablation 模型推断默认 Z。",
     "itaylor": "官方文档列出常用初始条件；源码 `init_conds.f90` 还包含 -1、24、25、26、28、30、31、32、33、34 等分支，实际可用性取决于编译宏和对应初始化例程。",
+    "inumgs": "官方文档写读取 `profile-p` 与 `profile-g`；当前源码固定打开的文件名实际是复数 `profiles-p` 与 `profiles-g`，并按固定宽度格式读取 p/p' 和 g/FF'。",
+    "igs": "官方文档只称其为最大 Picard 迭代次数；当前活动循环是 `do itnum=1,igs`。源码旁仍保留关于 `abs(igs)`/负值继续运行的旧注释，但负 `igs` 在当前实现中不会执行 GS 迭代。",
+    "igs_feedfac": "官方文档称其为 external-field feedback 的 proportionality factor；当前源码只检查 `igs_feedfac.eq.1`，实际是 0/1 型开关，反馈幅值由固定公式计算。",
+    "igs_forcefree_lcfs": "官方文档主要说明取 1 时使 LCFS force-free；当前源码还区分 0、1、2，并把读入默认 -1 自动改为 0 或 2。1 令 LCFS 外转动为 0，2 则保持 LCFS 转动值。",
+    "psiscale": "源码声明注释称小于 1 可丢弃边缘剖面点，但当前活动代码只把大于 1 的值重置为 1，之后没有任何计算读取 `psiscale`；实际剖面磁通范围缩放使用的是 `psifrac`。",
+    "p1": "官方文档把它写成轴上 p'(Psi)；内置解析式使用归一化磁通，实际轴上导数系数为 `p0*p1`，不是参数值本身。",
+    "p2": "官方文档把它写成轴上 p''(Psi)；内置解析式的实际轴上二阶导数系数为 `2*p0*p2`，且自变量是归一化磁通。",
+    "xnull2": "官方文档称第二 X 点为 inactive；当前 `lcfs` 对两个 X 点使用同样的搜索和 LCFS 候选比较，第二点若更靠近磁轴磁通会成为活动 LCFS 限制点。",
+    "idenfunc": "官方文档把 0-3 都列为平衡密度函数；当前初始化流程中 0/4 直接保留 GS/profile 密度，1/2 在 `den_eq` 中重写，3 主要在场评价算子中按磁通梯度重写，源码还实现文档未列出的 20 与专用 21。",
+    "tedge": "官方文档把它概括为真空区电子温度并给出边界关系；当前 GS 源码先平移 Te 样条，随后在 `pedge<=0` 时用 `n0_spline%n`（样条点数）而非边缘密度修正压力，行为与文档公式不一致，使用该组合前应验证或修正源码。",
+    "adapt_qs": "官方输入表把它放在 GS 小节，且源码也误用 `gs_grp` 注册；实际唯一活动使用位于 `adapt.f90`，用于按 q 面打包自适应网格，不参与 GS 求解。",
+    "adapt_zlow": "官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。",
+    "adapt_zup": "官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。",
 }
 
 RUNTIME_DEFAULT_NOTES = {
@@ -1796,6 +1892,191 @@ def simplified_html_supplement(group: str) -> str:
 </div>
 
 <div class="callout"><strong>最终一致性由用户负责：</strong>源码会检查部分缺失文件和开关组合，但不会验证 mesh zone、gfile/VMEC LCFS、第一壁、线圈域和外场数据范围是否物理吻合。一个输入组合可以通过语法和分支检查，仍可能代表错误的物理区域。</div>
+</div>
+"""
+    if group == "Grad-Shafranov Solver":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title">
+<div>
+<h3>Grad-Shafranov Solver：托卡马克轴对称基态求解</h3>
+<p>本模块只处理托卡马克的轴对称 Grad-Shafranov 平衡。它承接 Input 选定的 gfile/剖面与 Mesh/Equilibrium 建立的物理 R-Z 计算域，在固定的有限元外边界内迭代求解磁通、寻找磁轴与 LCFS，再把压力、环向场、密度和转动投影为可演化的 MHD 基态。</p>
+</div>
+<span class="guide-kicker">TOKAMAK ONLY</span>
+</div>
+
+<div class="sequence-pair">
+<div><strong>进入 GS 之前</strong><span>Input：选择 gfile、解析初值与 profile 覆盖<br>Mesh：给出真实 R-Z 域、plasma/vacuum/conductor zone<br>Equilibrium/Boundary：建立初始 psi、PF 场及计算域外边界</span></div>
+<div><strong>GS 完成之后</strong><span>得到磁轴、LCFS/X 点与自洽 psi<br>投影 p、F=RBphi、n、omega、Te/Ti 到有限元场<br>再进入扰动、RMP、Model、Transport 和时间推进</span></div>
+</div>
+
+<div class="callout"><strong>仿星器不经过本模块：</strong><code>itaylor=40</code> 直接读取固定边界 VMEC 平衡，<code>itaylor=41</code> 读取三维 total/external field；两者都不求解轴对称 GS。因而本组参数不用于决定仿星器的 LCFS、自由边界、壁或线圈响应。源码误归在本组的 <code>adapt_qs/adapt_zlow/adapt_zup</code> 实际属于 Mesh Adaptation。</div>
+
+<div class="flow" aria-label="托卡马克 Grad-Shafranov 求解链条">
+<span>选择 psi 初值</span><b>→</b><span>建立 p 与 F 剖面</span><b>→</b><span>形成全域 GS 矩阵</span><b>→</b><span>Picard 求解 psi</span><b>→</b><span>搜索磁轴/LCFS</span><b>→</b><span>更新源项与约束</span><b>→</b><span>线圈反馈</span><b>→</b><span>投影平衡场</span>
+</div>
+
+<section class="device-band tokamak-band">
+<div class="device-heading"><span>托卡马克</span><h4>第一步：先确定 GS 接收到什么初值</h4></div>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>用户设置</th><th>psi 初值</th><th>p/F 初值</th><th>第一轮行为</th></tr></thead>
+<tbody>
+<tr><td><code>iread_eqdsk=1, igs=0</code></td><td>直接投影 gfile <code>psirz</code></td><td>直接投影 gfile</td><td>不进入 GS；本组大多数参数不生效。</td></tr>
+<tr><td><code>iread_eqdsk=1, igs&gt;0</code></td><td>gfile <code>psirz</code></td><td>gfile p/F，可被 <code>iread_p/f</code> 替换</td><td>第一轮保留文件 psi，只更新 LCFS 与源；第二轮起才解线性 GS。</td></tr>
+<tr><td><code>iread_eqdsk=2, igs&gt;0</code></td><td>先投影 gfile，但立即从第一轮重解</td><td>丢弃 gfile p/F，改用内置解析剖面，再允许文件覆盖</td><td>用 gfile 几何/磁轴/电流信息重新构造自洽平衡。</td></tr>
+<tr><td><code>iread_eqdsk=3, igs&gt;0</code></td><td>不使用 <code>psirz</code>；在文件磁轴处放置电流丝或高斯电流</td><td>gfile p/F/q 仍可用于约束，随后允许文件覆盖</td><td>从构造的电流初猜求解。</td></tr>
+<tr><td>无平衡文件，<code>itaylor=1, igs&gt;0</code></td><td>由 <code>tcuro,xmag,zmag,sigma0</code> 建立电流初猜</td><td><code>inumgs=0</code> 用解析剖面，1 读固定剖面文件</td><td>从第一轮解 GS。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout"><strong><code>igs</code> 的当前有效范围：</strong>活动循环按 <code>1...igs</code> 执行。生产 case 应使用 <code>igs&gt;0</code>；<code>igs=0</code> 表示跳过，负值不会按旁边旧注释所暗示的 <code>abs(igs)</code> 次数运行。</div>
+
+<h4>第二步：明确固定的是计算域外边界，不一定是 LCFS</h4>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>边界模式</th><th>GS 外边界条件</th><th>LCFS 如何得到</th><th>物理解释</th></tr></thead>
+<tbody>
+<tr><td><code>ifixedb&gt;=1</code></td><td>计算域最外边界强制 <code>psi=0</code>。</td><td><code>ifixedb=1</code> 新启动时直接把边界磁通设为 0；其它取值仍可运行 LCFS 判定。</td><td>只有 mesh 外边界本身就是目标等离子体边界时，才等价于通常的固定 LCFS GS。</td></tr>
+<tr><td><code>ifixedb=0</code></td><td>使用初始化阶段建立的等离子体电流丝与 PF 线圈真空场在外边界上的 psi。</td><td>每轮在更大 R-Z 域内由第一壁、X 点和 limiter 候选重新确定。</td><td>LCFS 可移动的自由边界平衡；有限元计算域外边界仍然固定并施加 Dirichlet 值。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="guide-grid compact">
+<div class="guide-block">
+<h4>PF 场来源</h4>
+<p><code>idevice=-1</code> 读取 <code>coil.dat/current.dat</code>；<code>idevice=0</code> 使用 generic dipole 近似，并用 <code>libetap</code> 估计竖直场。当前源码对其它 <code>idevice</code> 值不建立 PF 线圈。</p>
+</div>
+<div class="guide-block">
+<h4>线圈场是否分离</h4>
+<p><code>icsubtract=0</code> 把 PF psi 加入平衡 psi；<code>icsubtract=1</code> 单独保存线圈场，但 LCFS、剖面坐标和总磁场评价时仍重新相加。它改变场的存储分解，不改变物理总场。</p>
+</div>
+</div>
+
+<h4>第三步：建立真正进入 GS 方程的剖面</h4>
+<p>源码求解的数学作用可写为</p>
+<div class="formula">\[\Delta^{*}\psi + R^{2}\frac{dp}{d\psi} + F\frac{dF}{d\psi}=0,\qquad F(\psi)=R B_{\phi}.\]</div>
+<p>剖面查询坐标不是 mesh 的径向坐标，而是每轮由磁轴与 LCFS 更新的磁通坐标：</p>
+<div class="formula">\[s_{\psi}=\frac{\psi-\psi_{\mathrm{axis}}}{\psi_{\mathrm{LCFS}}-\psi_{\mathrm{axis}}}\,\mathtt{psifrac}.\]</div>
+
+<div class="flow" aria-label="GS 剖面覆盖顺序">
+<span>gfile / <code>profiles-p,g</code> / 内置解析剖面</span><b>→</b><span><code>iread_p/f</code> 完整替换</span><b>→</b><span><code>pscale/bscale</code></span><b>→</b><span><code>profile_pscale</code></span><b>→</b><span><code>bpscale</code></span><b>→</b><span><code>profile_bscale</code></span><b>→</b><span>edge 与延伸处理</span>
+</div>
+
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>剖面来源/修改</th><th>读入或计算内容</th><th>覆盖关系</th></tr></thead>
+<tbody>
+<tr><td>gfile 约束剖面</td><td>p、p'、F、FF'；可选 q 用于 rho 到 psi 换算。</td><td><code>iread_eqdsk=1/3,igs&gt;0</code> 时建立完整约束；此后 <code>q0/djdpsi/tcuro</code> 不再重调其形状或总电流。</td></tr>
+<tr><td><code>inumgs=1</code></td><td><code>profiles-p</code> 给 p/p'，<code>profiles-g</code> 给 g/FF'。</td><td>只有此前未建立 p 剖面时读取，并将求解设为完整剖面约束。</td></tr>
+<tr><td><code>inumgs=0</code></td><td>由 <code>p0,p1,p2</code> 建 p/p'，由内置 g 基函数建 F/FF'。</td><td>允许 <code>q0,djdpsi,tcuro</code> 通过 gamma2/3/4 约束轴上 q、电流梯度和总电流。</td></tr>
+<tr><td><code>iread_p=1</code></td><td><code>profile_p(psi_N,p)</code>，并数值求 p'。</td><td>替换前面建立的完整压力剖面；随后仍受 p 缩放、edge 与延伸处理。</td></tr>
+<tr><td><code>iread_f=1</code></td><td><code>profile_f(psi_N,F)</code>，并数值求 FF'。</td><td>替换 F，同时按文件外点重设 <code>bzero</code>；随后仍受磁场缩放。</td></tr>
+<tr><td><code>igs_pp_ffp_rescale=1</code></td><td>让文件 p'、FF' 的积分与 p、F 端点差匹配。</td><td>只在 gfile <code>create_profile</code> 路径执行，不修复普通 <code>profile_p/f</code>。</td></tr>
+<tr><td><code>pedge/tedge/tiedge</code></td><td>平移剖面末端值；<code>tiedge</code> 会重算并覆盖 <code>pedge</code>。</td><td>在常数/径向缩放之后执行。<code>tedge</code> 的一条压力修正路径存在源码问题，应谨慎使用。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout"><strong>源项的空间范围：</strong>GS 矩阵在整个 mesh 上组装，plasma、vacuum 与 conductor 都参与同一个椭圆磁场解；但 \(p'\) 与 \(FF'\) 源只在 <code>ZONE_PLASMA</code> 且被磁区判定为 <code>REGION_PLASMA</code> 的位置非零。LCFS 外或非 plasma zone 不能仅靠给定剖面产生等离子体电流源。</div>
+
+<h4>第四步：Picard 迭代、约束与收敛</h4>
+<ol class="case-steps">
+<li><strong>固定矩阵。</strong>程序先在全部单元组装 GS 椭圆算子，并在计算域外边界施加 Dirichlet 条件；USE3D 编译可用 <code>eta_gs</code> 抑制 psi 的非轴对称变化。</li>
+<li><strong>解线性化磁通。</strong>当前 p' 与 FF' 形成右端项，求得新的 psi。只有 <code>iread_eqdsk=1</code> 的第一轮跳过这次线性求解，以保留 gfile 初值。</li>
+<li><strong>松弛更新。</strong>从第二个已求解轮次起按 \(\psi\leftarrow\mathtt{th\_gs}\,\psi_{solve}+(1-\mathtt{th\_gs})\,\psi_{old}\) 混合。</li>
+<li><strong>重找磁轴和 LCFS。</strong>新的轴与边界磁通改变 \(s_\psi\)，程序据此重新评价 p'、FF' 与磁区。</li>
+<li><strong>施加解析约束。</strong>非完整剖面约束时，<code>q0</code>、<code>djdpsi</code>、<code>tcuro</code> 分别通过 gamma2、gamma3、gamma4 调整 FF' 基函数；<code>nv1equ=1</code> 会把这三个 gamma 全部关掉。</li>
+<li><strong>检查收敛。</strong>第二轮后若解变化误差小于 <code>tol_gs</code> 就提前退出，否则最多执行 <code>igs</code> 轮。</li>
+</ol>
+
+<h4>第五步：LCFS 不是从一个文件轮廓直接复制</h4>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>候选边界</th><th>启用条件</th><th>程序如何使用</th></tr></thead>
+<tbody>
+<tr><td>第一壁</td><td><code>iwall_is_limiter=1</code> 且 mesh/model 中存在 first-wall boundary</td><td>沿第一壁寻找不进入私有磁通区的最内层磁通候选。</td></tr>
+<tr><td>X 点 #1/#2</td><td><code>xnull&gt;0</code> 或 <code>xnull2&gt;0</code></td><td>在搜索启动前只评价输入位置，之后在附近寻找鞍点；两个 X 点地位相同，谁的磁通面更靠近磁轴谁可成为 LCFS。</td></tr>
+<tr><td>内部 limiter #1/#2</td><td><code>xlim!=0</code>，第二点还要求 <code>xlim2&gt;0</code></td><td>评价给定 R-Z 点的 psi，作为 LCFS 候选；若比壁/X 点磁通面更靠近磁轴，则等离子体成为 limiter-limited。</td></tr>
+<tr><td>无内部 limiter</td><td><code>xlim=0</code></td><td>直接采用当前壁/X 点候选，不把 0 当作 R=0 的 limiter。</td></tr>
+</tbody>
+</table>
+</div>
+<p>最终边界取上述有效候选中与磁轴磁通差绝对值最小者。`xnull/znull`、limiter 和第一壁必须都位于 mesh 所覆盖的物理 R-Z 域并与 zone 几何相容；程序不会替用户验证这些物理关系。</p>
+
+<h4>第六步：可选 PF 线圈位置反馈</h4>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>控制对象</th><th>目标</th><th>反馈参数</th><th>限制</th></tr></thead>
+<tbody>
+<tr><td>磁轴位置</td><td><code>xmag0,zmag0</code></td><td><code>gs_radial/vertical_feedback</code> 及对应 <code>_i</code></td><td>仅 <code>idevice=-1</code>；数组索引对应线圈组，P/I 误差按 GS 轮次更新。</td></tr>
+<tr><td>X 点位置</td><td><code>xnull0,znull0</code></td><td>带 <code>_x</code> 的四组反馈数组</td><td>仅 <code>idevice=-1</code> 且从第 11 轮起；因此 <code>igs</code> 太小时不会动作。</td></tr>
+<tr><td>generic 双 limiter 磁通差</td><td>令两个 limiter 的磁通更接近</td><td><code>igs_feedfac=1</code></td><td>只对 <code>idevice=0</code> 的固定公式生效；不是用户可调连续增益。</td></tr>
+</tbody>
+</table>
+</div>
+<p>反馈每轮重新计算 PF 线圈 psi；磁轴反馈结束后写出 <code>current.dat.out</code>。这些反馈是在 GS 初始化迭代中调线圈电流，不是 MHD 时间演化中的主动控制器。</p>
+
+<h4>第七步：求解后才构造密度、温度与转动</h4>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>场</th><th>构造方式</th><th>是否直接改变 GS</th></tr></thead>
+<tbody>
+<tr><td>压力 p</td><td>按最终 psi 查询 p 样条；<code>irot=1</code> 时带 R 依赖指数因子。</td><td>是，p' 是 GS 源；旋转压力只有 <code>irot=1</code> 进入源。</td></tr>
+<tr><td>环向场 F</td><td>由完整 g/F 剖面，或解析基函数与 gamma2/3/4 合成。</td><td>是，FF' 是 GS 源。</td></tr>
+<tr><td>密度 n</td><td>读 <code>iread_ne</code> 文件，或由 <code>den0,den_edge,expn</code> 构造；<code>idenfunc</code> 可在平衡后再次重写。</td><td>静态无旋转时不直接进入 GS；旋转 alpha 和温度分解会用到。</td></tr>
+<tr><td>转动 omega</td><td><code>irot!=0</code> 时读 Input 的 omega 文件或用 <code>alpha0...3</code> 构造，再乘 <code>vscale</code> 并可加抗磁换算。</td><td>只有 <code>irot=1</code> 通过 R 依赖压力进入 GS。</td></tr>
+<tr><td>Te/Ti</td><td>由 Te 文件与 n，或按 <code>pefac=(p0-pi0)/p0</code> 分解总压力。</td><td>主要是最终热力学场；<code>igs_extend_p</code> 与旋转换算时可间接影响剖面。</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="guide-grid compact">
+<div class="guide-block">
+<h4>plasma zone 外的最终场</h4>
+<p>非 plasma zone 的 F 取 <code>bzero*rzero</code>，压力、密度和转动取各样条最外值。vacuum 与 conductor 的材料差异不由 GS 决定，而由后续 Resistive Wall、Transport 和模型方程处理。</p>
+</div>
+<div class="guide-block">
+<h4>私有磁通区</h4>
+<p>程序把 private-flux 区域的剖面坐标镜像到 LCFS 外；<code>gs_pf_psi_width</code> 控制镜像转接的平滑宽度。<code>igs_forcefree_lcfs</code> 可进一步把 LCFS 外的 p'、FF' 和转动约束为无源/常值。</p>
+</div>
+</div>
+
+<h4>官方文档与当前源码差异</h4>
+<div class="guide-table-wrap">
+<table class="guide-table">
+<thead><tr><th>参数</th><th>官方文档表述</th><th>当前源码行为</th></tr></thead>
+<tbody>
+<tr><td><code>inumgs</code></td><td>读取 <code>profile-p/profile-g</code></td><td>实际固定读取复数文件名 <code>profiles-p/profiles-g</code>，且使用固定宽度格式。</td></tr>
+<tr><td><code>igs</code></td><td>最大 Picard 迭代次数</td><td>活动循环只对正值执行；旁边关于负值或 <code>abs(igs)</code> 的注释已与实现脱节。</td></tr>
+<tr><td><code>igs_feedfac</code></td><td>外场反馈比例系数</td><td>只检查是否恰好等于 1，实际是开关；增益由固定公式给出。</td></tr>
+<tr><td><code>igs_forcefree_lcfs</code></td><td>主要列出 1 为 LCFS force-free</td><td>还实现 0、2 和输入默认 -1 的自动选择；1 与 2 对 LCFS 外转动的处理不同。</td></tr>
+<tr><td><code>psiscale</code></td><td>声明注释暗示可丢弃边缘剖面点</td><td>当前只把大于 1 的值重置为 1，之后没有活动使用；剖面磁通缩放实际由 <code>psifrac</code> 完成。</td></tr>
+<tr><td><code>p1/p2</code></td><td>轴上 p' 与 p''</td><td>解析式用归一化磁通，实际为 <code>p'(0)=p0*p1</code>、<code>p''(0)=2*p0*p2</code>。</td></tr>
+<tr><td><code>xnull2</code></td><td>inactive X point</td><td>与 X 点 #1 同样搜索并参与 LCFS 比较，可能成为真正活动的分离面 X 点。</td></tr>
+<tr><td><code>idenfunc</code></td><td>统一列出 0 至 3 的密度公式</td><td>0/4 保留已建密度，1/2 在后处理重写，3 主要在场评价时重写；另实现 20 和专用 21。</td></tr>
+<tr><td><code>tedge</code></td><td>按边缘密度/压力关系设置真空电子温度</td><td>一条压力修正使用样条点数 <code>n0_spline%n</code> 而非边缘密度，和文档公式不一致。</td></tr>
+<tr><td><code>rzero</code></td><td>默认 1</td><td>读入默认 -1；校验时环形几何取 <code>xzero</code>，gfile 路径又用 <code>rmaxis</code> 覆盖。</td></tr>
+<tr><td><code>igs_extend_diagmag</code></td><td>官方表使用该拼写</td><td>源码参数名是 <code>igs_extend_diamag</code>。</td></tr>
+<tr><td><code>adapt_qs/zlow/zup</code></td><td>列在 GS 小节</td><td>唯一活动用途在 Mesh Adaptation；不参与 GS 矩阵、源项或 LCFS。</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>设置 case 时的最小检查顺序</h4>
+<ol class="case-steps">
+<li>确认三个平衡读取入口只有一个非零，并确认是否真的需要 <code>igs&gt;0</code>。</li>
+<li>确认物理 R-Z mesh 覆盖磁轴、LCFS、所有 limiter/X 点、第一壁和线圈场所需区域。</li>
+<li>确认 <code>imulti_region/zone_type</code> 中只有预期等离子体区域承载 GS 源。</li>
+<li>确认 <code>ifixedb</code>、PF 线圈文件与 <code>icsubtract</code> 表达的是同一种固定/自由边界方案。</li>
+<li>按覆盖顺序核对 p/F 文件、缩放、edge 设置，避免参数合法但前面已被后续剖面覆盖。</li>
+<li>给足 <code>igs</code>，并检查收敛误差、磁轴、LCFS 限制类型及最终 <code>current.dat.out</code>，再进入 MHD 演化。</li>
+</ol>
+
+<div class="callout"><strong>源码使用注意：</strong><code>psiscale</code> 当前没有实际缩放作用；<code>igs_feedfac</code> 是开关而非连续系数；<code>xnull2</code> 可成为活动 LCFS X 点；<code>tedge</code> 的压力修正存在可疑索引；<code>adapt_qs/adapt_zlow/adapt_zup</code> 实际属于网格自适应。设置生产 case 时应以本页源码行为列为准。</div>
+</section>
 </div>
 """
     if group == "__legacy_mesh":

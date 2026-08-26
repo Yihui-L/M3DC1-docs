@@ -95,84 +95,84 @@ basicj_vdelt,real,1.,"Width of velocity drop-off, as fraction of ln, in basicj e
 basicj_dexp,real,1.,托卡马克：basicJ 专用输运系数径向缩放函数的幂指数，配合 `basicj_dvac` 使黏性/热传导向外变化；不改变初始密度场本身。仿星器：不使用
 basicj_dvac,real,1.,托卡马克：basicJ 专用输运系数缩放函数在 `r=ln` 处的目标倍率，影响相关黏性与热传导系数，不是外部真空区密度。仿星器：不使用
 ibasicj_solvep,integer,0,"0: Uniform pressure, solve for F. 1: Uniform F, solve for pressure；托卡马克：仅 `itaylor=29/31`。0 使用解析压力并由给定 J 求 F；1 令 F 均匀并由 J 求压力。`itaylor=29` 的解析压力为常数，`itaylor=31` 的解析压力随半径衰减。仿星器：不使用"
-inumgs,integer,0,Grad-Shafranov 求解器相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-igs,integer,80,托卡马克：大于 0 时给出 GS 最大迭代次数，收敛误差达到 `tol_gs` 可提前退出；0 不求解 GS。它与 Input 的平衡入口、Boundary 的 `ifixedb`、Mesh 的 zone 共同决定初始平衡。仿星器：`itaylor=40/41` 不调用 GS
-igs_pp_ffp_rescale,integer,0,Rescale p' and FF' to match p and F
-igs_extend_p,integer,0,Extend p past Psi=1 using ne and Te profiles
-igs_extend_diamag,integer,1,Extend diamagnetic rotation Psi=1
-igs_start_xpoint_search,integer,0,Number of GS its. before searching for xpoint
-igs_forcefree_lcfs,integer,-1,Ensure that GS solution is force-free at LCFS
-nv1equ,integer,0,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-igs_feedfac,integer,1,Grad-Shafranov 求解器相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-eta_gs,real,1e3,Factor for smoothing nonaxisymmetries in psi in GS solve
-tcuro,real,1.,Total current in initial current filament
-xmag,real,1.,R-coordinate of initial current filament
-zmag,real,0.,Z-coordinate of initial current filament
-xmag0,real,0.,Target R-coordinate of magnetic axis for feedback
-zmag0,real,0.,Target Z-coordinate of magnetic axis for feedback
-xlim,real,0.,R-coordinate of limiter #1
-zlim,real,0.,Z-coordinate of limiter #1
-xlim2,real,0.,R-coordinate of limiter #2
-zlim2,real,0.,Z-coordinate of limiter #2
-rzero,real,-1.,-1 表示校验后自动设置：toroidal 几何取 `xzero`，否则取 1；`rzero=-1` 时，toroidal 几何取 `xzero`，其它几何取 1；若最终 `rzero<=0` 只给 warning
-psifrac,real,1.,Fraction of poloidal flux from psimin to psibound used for the mesh
-libetap,real,1.2,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-p0,real,0.01,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-pi0,real,0.005,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-p1,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-p2,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-pedge,real,0.,Pressure outside separatrix (ignore if <= 0)
-tedge,real,0.,Electron temperature outside separatrix (ignore if <= 0)
-tiedge,real,0.,Outermost ion temperature (ignore if <= 0)
-expn,real,0.,Density profile = p^expn
-q0,real,1.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-sigma0,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-djdpsi,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-th_gs,real,0.8,Implicitness of GS Picard iterations
-tol_gs,real,1.e-8,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-psiscale,real,1.,Grad-Shafranov 求解器相关乘性系数，用于缩放对应物理量、剖面、源项或数值模型强度
-pscale,real,1.,Factor multiplying pressure profile
-bscale,real,1.,Factor multiplying toroidal field profile
-batemanscale,real,1.,Bateman scaling factor for TF (keeping current density fixed)
-bpscale,real,1.,Factor multiplying F' (keeping F0 constant)
-iread_bscale,integer,0,1: read profile_bscale for factor to scale F
-iread_pscale,integer,0,1: read profile_pscale for factor to scale p and p'
-vscale,real,1.,Factor multiplying toroidal rotation profile
-gs_vertical_feedback,real array,0.,Proportional feedback of each coil to vertical displacements；数组长度/上限：2000
-gs_radial_feedback,real array,0.,Proportional feedback of each coil to radial displacements；数组长度/上限：2000
-gs_vertical_feedback_i,real array,0.,Integral feedback of each coil to vertical displacements；数组长度/上限：2000
-gs_radial_feedback_i,real array,0.,Integral feedback of each coil to radial displacements；数组长度/上限：2000
-gs_vertical_feedback_x,real array,0.,Proportional feedback of each coil to vertical displacements；数组长度/上限：2000
-gs_radial_feedback_x,real array,0.,Proportional feedback of each coil to radial displacements；数组长度/上限：2000
-gs_vertical_feedback_x_i,real array,0.,Integral feedback of each coil to vertical displacements；数组长度/上限：2000
-gs_radial_feedback_x_i,real array,0.,Integral feedback of each coil to radial displacements；数组长度/上限：2000
-irot,integer,0,Include toroidal rotation
-iscale_rot_by_p,integer,1,"0: omega^2 = 2.*p0*(alphai * Psi^i)/n0； 1: omega^2 = 2.*(alphai * Psi^i)/n0, 2: omega^2 = 2.*(alphai * Psi^i), alphai = a0 + a1*exp(-((psii-a2)/a3)**2)"
-alpha0,real,0.,Constant term in analytic rotation profile
-alpha1,real,0.,Linear term in analytic rotation profile
-alpha2,real,0.,Quadratic term in analytic rotation profile
-alpha3,real,0.,Cubic term in analytic rotation profile
-idenfunc,integer,0,Grad-Shafranov 求解器相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法
-den_edge,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-den0,real,1.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-dendelt,real,0.1,Grad-Shafranov 求解器相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度
-denoff,real,1.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-divertors,integer,0,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-xdiv,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-zdiv,real,0.,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-divcur,real,0.1,Grad-Shafranov 求解器相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置
-xnull,real,0.,Guess for R-coordinate of active x-point
-znull,real,0.,Guess for Z-coordinate of axtive x-point
-mod_null_rs,integer,0,"if 1, you can modify xnull,znull at restart"
-xnull2,real,0.,Guess for R-coordinate of inactive x-point
-znull2,real,0.,Guess for Z-coordinate of inaxtive x-point
-mod_null_rs2,integer,0,"if 1, you can modify xnull2,znul2l at restart"
-gs_pf_psi_width,real,0.,Width of psi smoothing into private flux region
-xnull0,real,0.,Target R-coordinate of x-point for feedback
-znull0,real,0.,Target Z-coordinate of x-point for feedback
-adapt_qs,real array,0.,Safety factor values to pack around；数组长度/上限：32
-adapt_zlow,real,0.,Z-coordinate below which SOL adaptation is coarse
-adapt_zup,real,0.,Z-coordinate above which SOL adaptation is coarse
+inumgs,integer,0,托卡马克：0 使用程序内置解析 p、p'、F、FF' 形状；1 从固定文件 `profiles-p` 与 `profiles-g` 读取完整剖面并约束 GS。若 gfile 或 `iread_p/f` 已建立剖面，本开关不会再生效。仿星器：`itaylor=40/41` 不调用 GS，不使用
+igs,integer,80,托卡马克：GS 最大 Picard 迭代次数；必须取正整数才会执行当前程序的 `1...igs` 循环，0 表示不求解。达到 `tol_gs` 可提前结束；负值在当前实现中不会产生迭代。仿星器：`itaylor=40/41` 不调用 GS，不使用
+igs_pp_ffp_rescale,integer,0,Rescale p' and FF' to match p and F；托卡马克：1 仅在由 gfile 的 p、p'、F、FF' 建立约束剖面时，把 p' 与 FF' 的积分分别重标度到给定 p 与 F；同时改变 `batemanscale` 的应用顺序。0 保留文件导数。仿星器：不使用
+igs_extend_p,integer,0,Extend p past Psi=1 using ne and Te profiles；托卡马克：非零时，若 ne 或 Te 剖面延伸到压力剖面末端之外，就用电子压力加保持末端 Ti 不变的离子压力延伸总压力，并重新计算 p'。0 不延伸。仿星器：不使用
+igs_extend_diamag,integer,1,Extend diamagnetic rotation Psi=1；托卡马克：读取电子或 E×B 转动并换算离子转动时，0 在归一化磁通大于等于 1 处停止加入抗磁修正；非零则继续到转动样条末端。仿星器：不使用
+igs_start_xpoint_search,integer,0,Number of GS its. before searching for xpoint；托卡马克：前 N 次 GS 迭代只在给定 `xnull/znull` 位置评价磁通，从第 N 次起才在其附近搜索真正鞍点；0 表示初始化 LCFS 时即搜索。仿星器：不使用
+igs_forcefree_lcfs,integer,-1,Ensure that GS solution is force-free at LCFS；托卡马克：控制 LCFS 外剖面处理。0 允许剖面按样条继续；1 在非 plasma magnetic region 令 p'、FF'、转动均为 0；2 令 p'、FF' 为 0，并把外侧转动保持为 LCFS 值。-1 会在校验时自动选 0 或 2。仿星器：不使用
+nv1equ,integer,0,托卡马克：1 使非约束解析 GS 路径把 `gamma2/gamma3/gamma4` 全部置 0，跳过 q0、dJ/dpsi 和总电流约束；0 正常计算这些约束。名称中的 numvar 说明已不能完整代表当前行为。仿星器：不使用
+igs_feedfac,integer,1,托卡马克：只按是否等于 1 作为 generic `idevice=0` 双 limiter 外场反馈开关；1 在第二轮以后根据两 limiter 的磁通差修正外边界场，其他值关闭。它不是连续比例系数。仿星器：不使用
+eta_gs,real,1e3,Factor for smoothing nonaxisymmetries in psi in GS solve；托卡马克：仅 USE3D 编译中给 GS 矩阵加入环向导数惩罚，平滑 psi 的非轴对称分量；常规轴对称二维求解中无作用。仿星器：不使用
+tcuro,real,1.,Total current in initial current filament；托卡马克：无 gfile 时是初始电流丝/高斯电流的总电流，也是非约束解析 GS 用 `gamma4` 保持的目标总等离子体电流；gfile 路径会用文件总电流覆盖。完整 p/F 约束路径不再用它重调总电流。仿星器：不使用
+xmag,real,1.,R-coordinate of initial current filament；托卡马克：初始电流丝的 R 位置及磁轴搜索初猜；每次 LCFS 搜索后会更新为求得的磁轴 R。gfile 会先用 `rmaxis` 覆盖。仿星器：不使用
+zmag,real,0.,Z-coordinate of initial current filament；托卡马克：初始电流丝的 Z 位置及磁轴搜索初猜；迭代中更新为求得的磁轴 Z，gfile 会先用 `zmaxis` 覆盖。仿星器：不使用
+xmag0,real,0.,Target R-coordinate of magnetic axis for feedback；托卡马克：`idevice=-1` 线圈反馈的目标磁轴 R；磁轴反馈数组非零而本值为 0 时，自动取初始 `xmag`。还可被部分诊断参数引用。仿星器：不使用 GS 线圈反馈
+zmag0,real,0.,Target Z-coordinate of magnetic axis for feedback；托卡马克：`idevice=-1` 线圈反馈的目标磁轴 Z；与 `xmag0` 配套，反馈是否启用由反馈数组决定。仿星器：不使用 GS 线圈反馈
+xlim,real,0.,R-coordinate of limiter #1；托卡马克：内部 limiter #1 的物理 R 坐标；LCFS 候选取该点磁通。0 表示不设内部 limiter，并沿用第一壁/X 点给出的当前边界磁通。generic PF 场还用它估计小半径。仿星器：不使用
+zlim,real,0.,Z-coordinate of limiter #1；托卡马克：内部 limiter #1 的物理 Z 坐标，仅在 `xlim!=0` 时与之配套评价磁通。仿星器：不使用
+xlim2,real,0.,"R-coordinate of limiter #2；托卡马克：内部 limiter #2 的物理 R 坐标；大于 0 时作为第二个 LCFS 候选。`idevice=0,igs_feedfac=1` 时还与 limiter #1 的磁通差构成外场反馈。仿星器：不使用"
+zlim2,real,0.,Z-coordinate of limiter #2；托卡马克：内部 limiter #2 的物理 Z 坐标，仅在 `xlim2>0` 时使用。仿星器：不使用
+rzero,real,-1.,托卡马克：参考大半径，进入 F=R Bphi、旋转平衡指数和归一化；读入默认 -1，校验时环形几何改取 `xzero`，gfile 又会用 `rmaxis` 覆盖。仿星器：VMEC/外场基态不由它定义；`rzero=-1` 时，toroidal 几何取 `xzero`，其它几何取 1；若最终 `rzero<=0` 只给 warning
+psifrac,real,1.,Fraction of poloidal flux from psimin to psibound used for the mesh；托卡马克：把实际归一化磁通乘以该因子后再查询所有剖面，即 `psi_profile=(psi-psiaxis)/(psiLCFS-psiaxis)*psifrac`。小于 1 会让 LCFS 只用到剖面表的内侧部分，并非裁剪 mesh。仿星器：不使用 GS 剖面坐标
+libetap,real,1.2,托卡马克：只在 `idevice=0` generic 自由边界初值中，作为 Shafranov 竖直场估算的 `li/2+beta_p`；不会由一般 `idevice=-1` 线圈求解自动满足。仿星器：不使用
+p0,real,0.01,托卡马克：内置解析压力剖面的轴上总压力幅值，也是密度幂律归一化和电子/离子压力分配的参考；gfile 或 `profile_p` 建立完整剖面后，其形状不再由本值控制，但直接 gfile 投影仍以它归一化解析密度。仿星器：GS 不使用；其它解析测试平衡可能复用该全局量
+pi0,real,0.005,托卡马克：轴上离子压力参考值；校验阶段以 `(p0-pi0)/p0` 计算电子压力份额 `pefac`，压力外延没有 Te 文件时也用它。它不直接进入 GS 磁通源。仿星器：VMEC 初始化会从总压和 `pefac` 重设该量，GS 不使用
+p1,real,0.,托卡马克：内置解析压力关于归一化磁通的轴上一次形状系数；实际 `p'(0)=p0*p1`，并参与 q0 约束系数。完整 p/F 剖面约束时不控制压力。仿星器：不使用 GS
+p2,real,0.,托卡马克：内置解析压力的轴上二次形状系数；实际 `p''(0)=2*p0*p2`，并参与轴上电流梯度约束。完整 p/F 剖面约束时不生效。仿星器：不使用 GS
+pedge,real,0.,Pressure outside separatrix (ignore if <= 0)；托卡马克：GS 路径中大于 0 时平移整个压力样条，使最外剖面点等于该总压力；直接 gfile 且不求 GS 时，非负值则作为常数直接加到投影压力。它不是给真空 zone 单独增加一条压力方程；`tiedge` 可随后覆盖，`tedge` 也可据密度推算。仿星器：不通过 GS 使用
+tedge,real,0.,Electron temperature outside separatrix (ignore if <= 0)；托卡马克：大于 0 时设置最外电子温度；不能同时读取 Te。程序会平移 Te，并在 `pedge<=0` 时试图相应平移总压力以保持离子温度，当前实现该压力修正含明显索引/数值问题，使用前应验证。仿星器：不通过 GS 使用
+tiedge,real,0.,Outermost ion temperature (ignore if <= 0)；托卡马克：大于 0 时按最外密度和 Te 重新计算 `pedge`，因此覆盖用户给定的 `pedge`，再平移总压力使最外离子温度达到目标。仿星器：不使用 GS
+expn,real,0.,Density profile = p^expn；托卡马克：未读入 ne 时密度随压力的幂指数；0 给常密度，非零构造近似 `n∝p^expn`，可叠加 `den_edge`。直接 gfile 投影也用它从投影压力构造初始密度；它不进入静态无旋转 GS 方程。仿星器：GS 不使用
+q0,real,1.,托卡马克：非约束解析 GS 中目标轴上安全因子，用于计算 `gamma2`；完整 gfile/profile p-F 约束或 `nv1equ=1` 时不再用它调解。仿星器：不使用
+sigma0,real,0.,"托卡马克：初始等离子体电流猜测的物理 R-Z 高斯宽度；0 使用位于 `xmag,zmag` 的 delta 电流，非零使用高斯。它只影响 GS 初猜，不是最终电流剖面宽度。仿星器：不使用"
+djdpsi,real,0.,托卡马克：非约束解析 GS 的目标轴上环向电流对实际磁通的导数，通过 `gamma3` 调节额外 FF' 基函数；完整剖面约束或 `nv1equ=1` 时不生效。仿星器：不使用
+th_gs,real,0.8,Implicitness of GS Picard iterations；托卡马克：从第二个已求解迭代起的 Picard 松弛权重，`psi_new=th_gs*psi_solved+(1-th_gs)*psi_old`；通常应在 0 到 1 之间。仿星器：不使用
+tol_gs,real,1.e-8,托卡马克：第二轮以后 GS 解变化误差 `error2` 的提前停止阈值；约束剖面的残差另用于输出/诊断，但退出判断仍看 `error2`。仿星器：不使用
+psiscale,real,1.,托卡马克：当前程序只检查大于 1 时把它重置为 1，之后没有活动计算使用；不能依靠它缩放或截取磁通剖面，相关用户作用实际由 `psifrac` 完成。仿星器：不使用
+pscale,real,1.,Factor multiplying pressure profile；托卡马克：在剖面来源确定后统一乘 p 与 p'；随后 `profile_pscale`、边缘压力/温度设置仍可进一步修改。仿星器：不经过 GS；固定 VMEC 压力覆盖不使用本开关
+bscale,real,1.,Factor multiplying toroidal field profile；托卡马克：统一缩放 F=R Bphi 的幅值；内部对 g=(F^2-Fedge^2)/2 与 FF' 乘 `bscale^2`，对 `bzero` 乘 `bscale`，随后仍可应用 `bpscale/profile_bscale`。仿星器：不使用
+batemanscale,real,1.,Bateman scaling factor for TF (keeping current density fixed)；托卡马克：gfile 路径的 Bateman 环向场缩放，目标是在改变 F/Bphi 时保持给定 FF' 或电流源关系；与 `igs_pp_ffp_rescale` 的组合决定是在读入时重构 F，还是在 GS 后缩放 `bzero`。仿星器：不使用
+bpscale,real,1.,Factor multiplying F' (keeping F0 constant)；托卡马克：在保持边缘 `F0=bzero*rzero` 不变的条件下缩放 F 的偏离量，从而一致更新 g 与 FF'；不是简单给整个 Bphi 乘常数。仿星器：不使用
+iread_bscale,integer,0,"1: read profile_bscale for factor to scale F；托卡马克：1 读取两列 `profile_bscale(psi_N,scale)`，逐点乘 F 后重新计算 g 与 FF'；它在常数 `bscale/bpscale` 之后执行。仿星器：不使用"
+iread_pscale,integer,0,"1: read profile_pscale for factor to scale p and p'；托卡马克：1 读取两列 `profile_pscale(psi_N,scale)`，令 p→pS，并按乘积法则令 p'→p'S+pS'；在常数 `pscale` 之后执行。仿星器：不使用"
+vscale,real,1.,Factor multiplying toroidal rotation profile；托卡马克：`irot!=0` 时统一乘读入或解析的基础环向角频率，之后才加入可选电子/E×B 抗磁换算。仿星器：VMEC/外场初始化不读取 GS 转动剖面
+gs_vertical_feedback,real array,0.,Proportional feedback of each coil to vertical displacements；托卡马克：`idevice=-1` 时按线圈组给出的磁轴 Z 误差比例反馈系数数组；索引对应 `coil.dat` 的 coil group，电流在每轮 GS 后更新。仿星器：不使用；数组长度/上限：2000
+gs_radial_feedback,real array,0.,Proportional feedback of each coil to radial displacements；托卡马克：`idevice=-1` 时按线圈组给出的磁轴 R 误差比例反馈系数数组，与 `xmag-xmag0` 相乘。仿星器：不使用；数组长度/上限：2000
+gs_vertical_feedback_i,real array,0.,Integral feedback of each coil to vertical displacements；托卡马克：磁轴 Z 误差的积分反馈系数数组；误差逐 GS 迭代累加，不含时间步长。仿星器：不使用；数组长度/上限：2000
+gs_radial_feedback_i,real array,0.,Integral feedback of each coil to radial displacements；托卡马克：磁轴 R 误差的积分反馈系数数组；误差逐 GS 迭代累加，不含时间步长。仿星器：不使用；数组长度/上限：2000
+gs_vertical_feedback_x,real array,0.,Proportional feedback of each coil to vertical displacements；托卡马克：X 点 Z 误差的比例线圈反馈系数数组；仅 `idevice=-1`、X 点反馈数组非零且迭代次数大于 10 时生效。仿星器：不使用；数组长度/上限：2000
+gs_radial_feedback_x,real array,0.,Proportional feedback of each coil to radial displacements；托卡马克：X 点 R 误差的比例线圈反馈系数数组；与 `xnull-xnull0` 相乘，迭代次数必须大于 10。仿星器：不使用；数组长度/上限：2000
+gs_vertical_feedback_x_i,real array,0.,Integral feedback of each coil to vertical displacements；托卡马克：X 点 Z 误差的积分反馈系数数组；从第 11 次迭代起累计。仿星器：不使用；数组长度/上限：2000
+gs_radial_feedback_x_i,real array,0.,Integral feedback of each coil to radial displacements；托卡马克：X 点 R 误差的积分反馈系数数组；从第 11 次迭代起累计。仿星器：不使用；数组长度/上限：2000
+irot,integer,0,"Include toroidal rotation；托卡马克：0 不把环向旋转纳入平衡；1 采用 `p(R,psi)=p0(psi) exp[alpha(psi)(R^2-rzero^2)/rzero^2]` 修改 GS 压力源并输出转动场。其它非零值会建立转动场，但只有等于 1 才进入该旋转 GS 公式。仿星器：不使用 GS 转动平衡"
+iscale_rot_by_p,integer,1,"0: omega^2 = 2.*p0*(alphai * Psi^i)/n0； 1: omega^2 = 2.*(alphai * Psi^i)/n0, 2: omega^2 = 2.*(alphai * Psi^i), alphai = a0 + a1*exp(-((psii-a2)/a3)**2)；托卡马克：只在未读入转动文件时选择解析转动参数化。0 先令 alpha 多项式乘 n/p；1 直接用多项式并把边缘 omega 减到 0；2 使用高斯 alpha 后乘 n/p。仿星器：不使用"
+alpha0,real,0.,Constant term in analytic rotation profile；托卡马克：解析 alpha 剖面的常数项；`iscale_rot_by_p=2` 时为高斯背景项。只有 `irot!=0` 且未读转动文件时使用。仿星器：GS 不使用；其它测试平衡可能复用该全局量
+alpha1,real,0.,Linear term in analytic rotation profile；托卡马克：解析 alpha 剖面的一次项；模式 2 时为高斯幅值。仿星器：GS 不使用
+alpha2,real,0.,Quadratic term in analytic rotation profile；托卡马克：解析 alpha 剖面的二次项；模式 2 时为高斯中心 `psi_N`。仿星器：GS 不使用
+alpha3,real,0.,Cubic term in analytic rotation profile；托卡马克：解析 alpha 剖面的三次项；模式 2 时为高斯宽度且不可为 0。仿星器：GS 不使用
+idenfunc,integer,0,托卡马克：选择 GS 后的平衡密度重写方式。0/4 保留 GS/profile 建立的密度；1 用磁通外侧 tanh 台阶，2 在 `den0` 与 `den_edge` 间作 tanh 过渡，3 在场评价中按磁通与梯度方向区分核心/外侧；程序还实现 20 及专用 21。它不改变无旋转 GS 磁通。仿星器：VMEC/外场可经过通用密度重写，但 1-3 的磁通判据面向托卡马克，不建议直接套用
+den_edge,real,0.,托卡马克：未读取 ne 时的外侧密度；大于 0 可加到压力幂律剖面或作为 `idenfunc=2/3` 的外侧值。与非零 `iread_ne` 冲突；与 `pedge`、`tedge` 三者不能同时显式设置。仿星器：通用密度/输运代码可能复用，但不属于 VMEC 平衡求解
+den0,real,1.,托卡马克：解析密度的核心幅值；`expn=0` 时 GS 剖面为常数 den0，`idenfunc` 1/2/3 又把它作为核心/台阶幅值。仿星器：可能用于固定 VMEC 无外部密度文件时的默认密度，但不进入 GS
+dendelt,real,0.1,托卡马克：`idenfunc=1/2` 的归一化磁通 tanh 过渡宽度；越小过渡越尖，需要相应网格分辨率。仿星器：不建议用于 VMEC 逻辑域的物理壁定义
+denoff,real,1.,托卡马克：`idenfunc=1/2/3` 的归一化磁通偏移位置；1/2 决定 tanh 中心，3 决定核心判据阈值。仿星器：不建议作为 VMEC 边界定义
+divertors,integer,0,"托卡马克：generic/线圈真空场中额外电流丝数；0 无，1 在 `xdiv,zdiv`，2 再在 `xdiv,-zdiv` 放置对称电流丝。它不是 X 点数量开关。仿星器：不使用"
+xdiv,real,0.,托卡马克：附加 divertor 电流丝的物理 R 坐标，仅 `divertors>=1` 使用。仿星器：不使用
+zdiv,real,0.,托卡马克：第一附加 divertor 电流丝的物理 Z 坐标；`divertors=2` 时第二根位于其相反 Z。仿星器：不使用
+divcur,real,0.1,托卡马克：每根附加 divertor 电流丝相对 `tcuro` 的电流比例，实际线圈源用 `tcuro/(2pi)*divcur`。仿星器：不使用
+xnull,real,0.,Guess for R-coordinate of active x-point；托卡马克：X 点 #1 的物理 R 初猜；大于 0 才启用。搜索前可只在该点取磁通，搜索启动后在附近找鞍点，并把所得磁通作为 LCFS 候选。仿星器：不使用
+znull,real,0.,Guess for Z-coordinate of axtive x-point；托卡马克：X 点 #1 的物理 Z 初猜，与 `xnull>0` 配套。仿星器：不使用
+mod_null_rs,integer,0,"if 1, you can modify xnull,znull at restart；托卡马克 restart：0 用 restart 文件保存的 X 点 #1 坐标覆盖 C1input；1 保留本次 C1input 中的 `xnull/znull`。新启动 GS 不受此开关影响。仿星器：通常不使用"
+xnull2,real,0.,Guess for R-coordinate of inactive x-point；托卡马克：X 点 #2 的物理 R 初猜；大于 0 时与第一个 X 点同样搜索并参与 LCFS 候选比较，程序不会强制它保持 inactive。仿星器：不使用
+znull2,real,0.,Guess for Z-coordinate of inaxtive x-point；托卡马克：X 点 #2 的物理 Z 初猜，与 `xnull2>0` 配套。仿星器：不使用
+mod_null_rs2,integer,0,"if 1, you can modify xnull2,znul2l at restart；托卡马克 restart：0 用 restart 文件坐标覆盖 X 点 #2 输入；1 保留本次 C1input 的 `xnull2/znull2`。仿星器：通常不使用"
+gs_pf_psi_width,real,0.,Width of psi smoothing into private flux region；托卡马克：私有磁通区把归一化磁通镜像到 LCFS 外侧时的 tanh 平滑宽度；0 使用尖锐镜像，正值使转接平滑。只影响 private-flux 剖面取样。仿星器：不使用
+xnull0,real,0.,Target R-coordinate of x-point for feedback；托卡马克：`idevice=-1` X 点线圈反馈的目标 R；X 点反馈数组非零而本值为 0 时自动取初始 `xnull`，实际反馈从第 11 轮开始。仿星器：不使用
+znull0,real,0.,Target Z-coordinate of x-point for feedback；托卡马克：X 点线圈反馈的目标 Z，与 `xnull0` 配套。仿星器：不使用
+adapt_qs,real array,0.,Safety factor values to pack around；托卡马克：尽管程序把它注册在 GS 参数组，实际属于 Mesh Adaptation；给出要加密的安全因子 q 值数组，需启用自适应及 q 打包逻辑。仿星器：没有由 GS 生成的轴对称 q 面，通常不使用；数组长度/上限：32
+adapt_zlow,real,0.,Z-coordinate below which SOL adaptation is coarse；托卡马克：实际属于 Mesh Adaptation；非零时把 Z 小于该值的 SOL 区域标为粗化候选，不参与 GS 方程。仿星器：逻辑/物理坐标适用性需单独验证
+adapt_zup,real,0.,Z-coordinate above which SOL adaptation is coarse；托卡马克：实际属于 Mesh Adaptation；非零时把 Z 大于该值的 SOL 区域标为粗化候选，不参与 GS 方程。仿星器：逻辑/物理坐标适用性需单独验证
 numvar,integer,3,1: 2-Field; 2: 4-Field; 3: 6-Field；1: 2-field；2: 4-field/reduced MHD；3: 6-field/compressible MHD
 linear,integer,0,1: Use linearized equations；0 非线性；1 线性化方程。2D 非线性通常需 RL=1；线性/complex 需 COM=1 且 `nplanes=1`
 eqsubtract,integer,0,1: Subtract equilibrium fields；托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果
