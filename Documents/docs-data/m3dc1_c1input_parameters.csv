@@ -1060,7 +1060,7 @@ unstructured/ludef_t.f90:514: if(gyro.eq.1 .or. amupar.ne.0 .or. ipforce.ge.1) t
 unstructured/ludef_t.f90:522: if(gyro.eq.1 .and. db.ne.0.) then
 unstructured/ludef_t.f90:1092: if(gyro.eq.1 .or. amupar.ne.0.) then
 unstructured/ludef_t.f90:1100: if(gyro.eq.1 .and. db.ne.0.) then"
-109,igauge,igauge,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,421,3,unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/model.f90(1),"源码引用 3 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `model.f90` 1处。","unstructured/ludef_t.f90:2694: if(igauge.eq.1) then
+109,igauge,igauge,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择矢势规范相关的数值处理。当前活动方程只在非零时加入规范约束/稳定项；常规算例保持 0。托卡马克与仿星器使用同一场表示。,,unstructured/input.f90,421,3,unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/model.f90(1),"源码引用 3 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `model.f90` 1处。","unstructured/ludef_t.f90:2694: if(igauge.eq.1) then
 unstructured/ludef_t_gpu.f90:3104: if(igauge.eq.1) then
 unstructured/model.f90:510: if(igauge.eq.0) temp(1) = temp(1) + dt*vloop/toroidal_period"
 110,inertia,inertia,&inputnl,Model Options,模型选项,integer,1,1,1: Include V.Grad(V) terms,,,unstructured/input.f90,422,72,unstructured/metricterms_new_gpu.f90(51); unstructured/metricterms_new.f90(21),"源码引用 72 处；主要在 `metricterms_new_gpu.f90` 51处, `metricterms_new.f90` 21处。","unstructured/metricterms_new.f90:268: if(inertia.eq.0) then
@@ -1093,7 +1093,7 @@ unstructured/adapt.f90:374: if(ibootstrap.eq.2 .or. ibootstrap.eq.3 ) Jbs_dtedps
 unstructured/adapt.f90:375: if(ibootstrap.eq.3) Jbs_ftrap_field = 0.
 unstructured/adapt.f90:376: if(ibootstrap.eq.3) Jbs_qR_field = 0.
 unstructured/adapt.f90:377: if(ibootstrap.eq.3) Jbs_invAspectRatio_field = 0."
-113,irunaway,irunaway,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,427,86,unstructured/time_step_split.f90(19); unstructured/time_step_unsplit.f90(12); unstructured/ludef_t.f90(10); unstructured/ludef_t_gpu.f90(10); unstructured/metricterms_new_gpu.f90(8); unstructured/metricterms_new.f90(5); unstructured/electric_field.f90(4); unstructured/runaway.f90(4),"源码引用 86 处；主要在 `time_step_split.f90` 19处, `time_step_unsplit.f90` 12处, `ludef_t.f90` 10处, `ludef_t_gpu.f90` 10处。","unstructured/auxiliary_fields.f90:748: if (irunaway.ge.1) def_fields = def_fields + FIELD_RE
+113,irunaway,irunaway,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,非零时增加 runaway-electron 密度场及其电流耦合；需要同时设置 `cre/radiff/rjra` 等参数。两种装置使用同一演化方程，但初始场和磁场几何来自各自平衡。,,unstructured/input.f90,427,86,unstructured/time_step_split.f90(19); unstructured/time_step_unsplit.f90(12); unstructured/ludef_t.f90(10); unstructured/ludef_t_gpu.f90(10); unstructured/metricterms_new_gpu.f90(8); unstructured/metricterms_new.f90(5); unstructured/electric_field.f90(4); unstructured/runaway.f90(4),"源码引用 86 处；主要在 `time_step_split.f90` 19处, `time_step_unsplit.f90` 12处, `ludef_t.f90` 10处, `ludef_t_gpu.f90` 10处。","unstructured/auxiliary_fields.f90:748: if (irunaway.ge.1) def_fields = def_fields + FIELD_RE
 unstructured/auxiliary_fields.f90:1243: if (irunaway.ge.1) def_fields = def_fields + FIELD_RE
 unstructured/diagnostics.f90:796: if(irunaway.gt.0) then
 unstructured/diagnostics.f90:1000: if(irunaway.gt.0) then
@@ -1103,7 +1103,7 @@ unstructured/electric_field.f90:280: if (.not.((kinetic.eq.1).or.((irunaway.ge.1
 unstructured/electric_field.f90:489: if(irunaway .gt. 0) then
 unstructured/init_common.f90:748: if(irunaway == 2) nre079(:,OP_1) = 0.
 unstructured/init_conds.f90:679: if(irunaway .gt. 0) then"
-114,cre,cre,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,428,8,unstructured/metricterms_new.f90(2); unstructured/metricterms_new_gpu.f90(2); unstructured/runaway.f90(2); unstructured/runaway_advection.f90(2),"源码引用 8 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `runaway.f90` 2处, `runaway_advection.f90` 2处。","unstructured/metricterms_new.f90:9194: temp = temp * 1.000 * cre * bzsign
+114,cre,cre,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,runaway-electron 沿磁场特征线的传播速度输入，读入后按速度归一化换算；仅 `irunaway!=0` 使用。,,unstructured/input.f90,428,8,unstructured/metricterms_new.f90(2); unstructured/metricterms_new_gpu.f90(2); unstructured/runaway.f90(2); unstructured/runaway_advection.f90(2),"源码引用 8 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `runaway.f90` 2处, `runaway_advection.f90` 2处。","unstructured/metricterms_new.f90:9194: temp = temp * 1.000 * cre * bzsign
 unstructured/metricterms_new.f90:9221: temp = temp * 1.000 * cre * bzsign
 unstructured/metricterms_new_gpu.f90:18602: temp = temp * 1.000 * cre
 unstructured/metricterms_new_gpu.f90:18630: temp = temp * 1.000 * cre
@@ -1111,7 +1111,7 @@ unstructured/runaway.f90:115: nra = nre/ec/cre/va
 unstructured/runaway.f90:139: dndt = (sd*esign + sa)*cre*ec*va
 unstructured/runaway_advection.f90:485: if (cre==0) cre=3.0e8/(v0_norm/100.)
 unstructured/runaway_advection.f90:587: dpar%v(1) = v0_norm/100*cre*bzsign"
-115,ra_cyc,ra_cyc,&inputnl,Model Options,模型选项,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,429,15,unstructured/ludef_t.f90(11); unstructured/runaway_advection.f90(2); unstructured/ludef_t_gpu.f90(1); unstructured/time_step_split.f90(1),"源码引用 15 处；主要在 `ludef_t.f90` 11处, `runaway_advection.f90` 2处, `ludef_t_gpu.f90` 1处, `time_step_split.f90` 1处。","unstructured/ludef_t.f90:6163: tempx = nre1nrediff(mu79,nu79(j,:,:))/ra_cyc * radiff
+115,ra_cyc,ra_cyc,&inputnl,Model Options,模型选项,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,每个 MHD 时间步内 runaway 特征线/粒子推进的子循环次数；增大它可缩短 runaway 子步而不改变 MHD 的 `dt`。,,unstructured/input.f90,429,15,unstructured/ludef_t.f90(11); unstructured/runaway_advection.f90(2); unstructured/ludef_t_gpu.f90(1); unstructured/time_step_split.f90(1),"源码引用 15 处；主要在 `ludef_t.f90` 11处, `runaway_advection.f90` 2处, `ludef_t_gpu.f90` 1处, `time_step_split.f90` 1处。","unstructured/ludef_t.f90:6163: tempx = nre1nrediff(mu79,nu79(j,:,:))/ra_cyc * radiff
 unstructured/ludef_t.f90:6169: tempx = nre1nrepsi(mu79,nu79(j,:,:),bi79,pst79)/ra_cyc
 unstructured/ludef_t.f90:6173: tempx = nre1nreu(mu79,nu79(j,:,:),pht79)/ra_cyc
 unstructured/ludef_t.f90:6178: tempx = nre1nrepsi(mu79,nre079,bi79,nu79(j,:,:))/ra_cyc
@@ -1121,16 +1121,16 @@ unstructured/ludef_t.f90:6195: tempx = nre1nrev(mu79,nu79(j,:,:),vzt79)/ra_cyc
 unstructured/ludef_t.f90:6200: tempx = nre1nreb(mu79,nre079,bi79,nu79(j,:,:))/ra_cyc
 unstructured/ludef_t.f90:6203: tempx = nre1nrev(mu79,nre079,nu79(j,:,:))/ra_cyc
 unstructured/ludef_t.f90:6209: tempx = nre1nrechi(mu79,nu79(j,:,:),cht79)/ra_cyc"
-116,radiff,radiff,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,430,2,unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1),"源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。","unstructured/ludef_t.f90:6163: tempx = nre1nrediff(mu79,nu79(j,:,:))/ra_cyc * radiff
+116,radiff,radiff,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,runaway-electron 密度方程的扩散系数，进入 `div(radiff grad(n_RE))`；仅 `irunaway!=0` 使用。,,unstructured/input.f90,430,2,unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1),"源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。","unstructured/ludef_t.f90:6163: tempx = nre1nrediff(mu79,nu79(j,:,:))/ra_cyc * radiff
 unstructured/ludef_t_gpu.f90:6974: rdiff = radiff"
-117,rjra,rjra,&inputnl,Model Options,模型选项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,431,1,unstructured/init_common.f90(1),源码引用 1 处；主要在 `init_common.f90` 1处。,"unstructured/init_common.f90:742: nre079(:,OP_1) = rjra*ps079(:,OP_GS)/bz079(:,OP_1)/bi79(:,OP_1)"
+117,rjra,rjra,&inputnl,Model Options,模型选项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,runaway 电流反馈到广义 Ohm 定律/总电流时的幅值系数；1 使用模型电流，0 去掉该反馈。,,unstructured/input.f90,431,1,unstructured/init_common.f90(1),源码引用 1 处；主要在 `init_common.f90` 1处。,"unstructured/init_common.f90:742: nre079(:,OP_1) = rjra*ps079(:,OP_GS)/bz079(:,OP_1)/bi79(:,OP_1)"
 118,ra_characteristics,ra_characteristics,&inputnl,Model Options,模型选项,integer,0,1,1: Use the method of characteristics to advance the RE advection equation,,,unstructured/input.f90,432,6,unstructured/electric_field.f90(3); unstructured/ludef_t.f90(1); unstructured/newpar.f90(1); unstructured/time_step_split.f90(1),"源码引用 6 处；主要在 `electric_field.f90` 3处, `ludef_t.f90` 1处, `newpar.f90` 1处, `time_step_split.f90` 1处。","unstructured/electric_field.f90:25: if (.not.((kinetic.eq.1).or.((irunaway.ge.1).and.(ra_characteristics.eq.1)))) then
 unstructured/electric_field.f90:155: if (.not.((kinetic.eq.1).or.((irunaway.ge.1).and.(ra_characteristics.eq.1)))) then
 unstructured/electric_field.f90:280: if (.not.((kinetic.eq.1).or.((irunaway.ge.1).and.(ra_characteristics.eq.1)))) then
 unstructured/ludef_t.f90:6167: if (ra_characteristics.eq.1) cycle
 unstructured/newpar.f90:365: if ((irunaway.ge.1).and.(ra_characteristics.eq.1)) call runaway_advection_initialize
 unstructured/time_step_split.f90:694: if((irunaway .ge. 1).and.(ra_characteristics.eq.1)) call runaway_advection_step(dt*t0_norm)"
-119,bzsign,bzsign,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,434,13,unstructured/runaway_advection.f90(4); unstructured/particle.f90(3); unstructured/init_common.f90(2); unstructured/metricterms_new.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 13 处；主要在 `runaway_advection.f90` 4处, `particle.f90` 3处, `init_common.f90` 2处, `metricterms_new.f90` 2处。","unstructured/init_common.f90:758: call mpi_allreduce(bzsign_temp, bzsign, 1, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
+119,bzsign,bzsign,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,runaway 平行传播方向所用的背景环向磁场符号；0 时由初始磁场自动判断，显式正负值用于覆盖自动结果。,,unstructured/input.f90,434,13,unstructured/runaway_advection.f90(4); unstructured/particle.f90(3); unstructured/init_common.f90(2); unstructured/metricterms_new.f90(2); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 13 处；主要在 `runaway_advection.f90` 4处, `particle.f90` 3处, `init_common.f90` 2处, `metricterms_new.f90` 2处。","unstructured/init_common.f90:758: call mpi_allreduce(bzsign_temp, bzsign, 1, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
 unstructured/init_common.f90:759: bzsign=sign(1.0, bzsign)
 unstructured/metricterms_new.f90:9194: temp = temp * 1.000 * cre * bzsign
 unstructured/metricterms_new.f90:9221: temp = temp * 1.000 * cre * bzsign
@@ -1154,7 +1154,7 @@ unstructured/ludef_t.f90:2793: if(imp_bf.eq.1) then"
 unstructured/input.f90:1425: if(myrank.eq.0) print *, 'imp_temp=1 not allowed with ipres=0 and numvar<3'
 unstructured/input.f90:1429: if(myrank.eq.0) print *, 'imp_temp=1 not allowed with isplitstep=1'
 unstructured/newpar.f90:831: if(itemp.eq.0 .and. (numvar.eq.3 .or. ipres.gt.0) .and. imp_temp.eq.0) then"
-122,nosig,nosig,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,439,15,unstructured/metricterms_new_gpu.f90(10); unstructured/metricterms_new.f90(5),"源码引用 15 处；主要在 `metricterms_new_gpu.f90` 10处, `metricterms_new.f90` 5处。","unstructured/metricterms_new.f90:1710: if(idens.eq.0 .or. nosig.eq.1) then
+122,nosig,nosig,&inputnl,Model Options,模型选项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,非零时抑制密度源 `sigma` 对部分动量/温度方程的伴随项；用于源项模型诊断，不会关闭密度方程中的粒子源本身。,,unstructured/input.f90,439,15,unstructured/metricterms_new_gpu.f90(10); unstructured/metricterms_new.f90(5),"源码引用 15 处；主要在 `metricterms_new_gpu.f90` 10处, `metricterms_new.f90` 5处。","unstructured/metricterms_new.f90:1710: if(idens.eq.0 .or. nosig.eq.1) then
 unstructured/metricterms_new.f90:1739: if(idens.eq.0 .or. nosig.eq.1) then
 unstructured/metricterms_new.f90:3253: if(idens.eq.0 .or. nosig.eq.1) then
 unstructured/metricterms_new.f90:5380: if(idens.eq.0 .or. nosig.eq.1) then
@@ -1186,7 +1186,7 @@ unstructured/ludef_t_gpu.f90:5330: if(irad_heating.eq.1) then
 unstructured/ludef_t_gpu.f90:5337: if(irad_heating.eq.1) then
 unstructured/ludef_t_gpu.f90:5349: if(irad_heating.eq.1) then
 unstructured/ludef_t_gpu.f90:5362: if(irad_heating.eq.1) then"
-126,gravr,gravr,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,447,42,unstructured/metricterms_new.f90(19); unstructured/metricterms_new_gpu.f90(19); unstructured/init_mri.f90(2); unstructured/output.f90(1); unstructured/time_step_split.f90(1),"源码引用 42 处；主要在 `metricterms_new.f90` 19处, `metricterms_new_gpu.f90` 19处, `init_mri.f90` 2处, `output.f90` 1处。","unstructured/init_mri.f90:54: fac1 = sqrt(gravr)
+126,gravr,gravr,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,R 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。托卡马克和映射后的仿星器均使用物理柱坐标 R。,,unstructured/input.f90,447,42,unstructured/metricterms_new.f90(19); unstructured/metricterms_new_gpu.f90(19); unstructured/init_mri.f90(2); unstructured/output.f90(1); unstructured/time_step_split.f90(1),"源码引用 42 处；主要在 `metricterms_new.f90` 19处, `metricterms_new_gpu.f90` 19处, `init_mri.f90` 2处, `output.f90` 1处。","unstructured/init_mri.f90:54: fac1 = sqrt(gravr)
 unstructured/init_mri.f90:100: fac1 = eps*sqrt(gravr*x)
 unstructured/metricterms_new.f90:1589: if(gravr.eq.0. .and. gravz.eq.0.) then
 unstructured/metricterms_new.f90:1595: - gravr*intx3(e(:,:,OP_1),ri_79,f(:,OP_DZ))
@@ -1196,7 +1196,7 @@ unstructured/metricterms_new.f90:1646: if(gravr.eq.0. .and. gravz.eq.0.) then
 unstructured/metricterms_new.f90:1655: - gravr*intx3(e(:,:,OP_DZ),ri2_79,temp79a)
 unstructured/metricterms_new.f90:1679: if(gravr.eq.0. .and. gravz.eq.0.) then
 unstructured/metricterms_new.f90:1687: - gravr*intx3(e(:,:,OP_DZ),ri2_79,temp79a)"
-127,gravz,gravz,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,448,47,unstructured/metricterms_new.f90(22); unstructured/metricterms_new_gpu.f90(22); unstructured/init_gmode.f90(1); unstructured/output.f90(1); unstructured/time_step_split.f90(1),"源码引用 47 处；主要在 `metricterms_new.f90` 22处, `metricterms_new_gpu.f90` 22处, `init_gmode.f90` 1处, `output.f90` 1处。","unstructured/init_gmode.f90:53: fac1 = gravz*ln+gam*p0
+127,gravz,gravz,&inputnl,Model Options,模型选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,Z 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。,,unstructured/input.f90,448,47,unstructured/metricterms_new.f90(22); unstructured/metricterms_new_gpu.f90(22); unstructured/init_gmode.f90(1); unstructured/output.f90(1); unstructured/time_step_split.f90(1),"源码引用 47 处；主要在 `metricterms_new.f90` 22处, `metricterms_new_gpu.f90` 22处, `init_gmode.f90` 1处, `output.f90` 1处。","unstructured/init_gmode.f90:53: fac1 = gravz*ln+gam*p0
 unstructured/metricterms_new.f90:1589: if(gravr.eq.0. .and. gravz.eq.0.) then
 unstructured/metricterms_new.f90:1594: temp = gravz*intx3(e(:,:,OP_1), r_79,f(:,OP_DR)) &
 unstructured/metricterms_new.f90:1615: if(gravr.eq.0. .and. gravz.eq.0.) then
@@ -1224,7 +1224,7 @@ unstructured/ludef_t_gpu.f90:3230: if(iestatic.eq.1) then
 unstructured/ludef_t_gpu.f90:5912: if(isplitstep.ge.1 .and. iestatic.eq.0) then
 unstructured/time_step.f90:134: call ludefall(ivel_def, idens, ipres, ipressplit, 1-iestatic)
 unstructured/time_step_split.f90:1271: if(iestatic.eq.0) then"
-130,chiiner,chiiner,&inputnl,Model Options,模型选项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,453,8,unstructured/ludef_t_gpu.f90(5); unstructured/ludef_t.f90(3),"源码引用 8 处；主要在 `ludef_t_gpu.f90` 5处, `ludef_t.f90` 3处。","unstructured/ludef_t.f90:87: tempx = v1chin(trialx,lin,rho79)*chiiner
+130,chiiner,chiiner,&inputnl,Model Options,模型选项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,六场模型中压缩速度势 `chi` 的惯性项乘子；1 为完整项，减小它可改变压缩分量的数值时间尺度。,,unstructured/input.f90,453,8,unstructured/ludef_t_gpu.f90(5); unstructured/ludef_t.f90(3),"源码引用 8 处；主要在 `ludef_t_gpu.f90` 5处, `ludef_t.f90` 3处。","unstructured/ludef_t.f90:87: tempx = v1chin(trialx,lin,rho79)*chiiner
 unstructured/ludef_t.f90:110: tempx = v1chin(trialx,lin,rho79)*chiiner*freq_fac
 unstructured/ludef_t.f90:1355: tempx = v3chin(trialx,lin,rho79)*chiiner*freq_fac
 unstructured/ludef_t_gpu.f90:111: ADDTERM(chi_g,temp,chiiner,0)
@@ -1232,7 +1232,7 @@ unstructured/ludef_t_gpu.f90:143: ADDTERM(chi_g,temp,chiiner*freq_fac,chiiner*fr
 unstructured/ludef_t_gpu.f90:145: ADDTERM(chi_g,temp,chiiner*freq_fac,0)
 unstructured/ludef_t_gpu.f90:1589: ADDTERM(chi_g,temp,chiiner*freq_fac,chiiner*freq_fac*bdf)
 unstructured/ludef_t_gpu.f90:1591: ADDTERM(chi_g,temp,chiiner*freq_fac,0)"
-131,ieq_bdotgradt,ieq_bdotgradt,&inputnl,Model Options,模型选项,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,454,24,unstructured/ludef_t.f90(12); unstructured/ludef_t_gpu.f90(12),"源码引用 24 处；主要在 `ludef_t.f90` 12处, `ludef_t_gpu.f90` 12处。","unstructured/ludef_t.f90:3905: tempx = p1psipsipnkappar(trialx,lin,ps079,pp079,n079,ieq_bdotgradt) &
+131,ieq_bdotgradt,ieq_bdotgradt,&inputnl,Model Options,模型选项,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,决定温度方程平行导热是否保留平衡场的 `B dot grad(T)` 贡献；用于平衡减除/线性化时控制平衡项。,,unstructured/input.f90,454,24,unstructured/ludef_t.f90(12); unstructured/ludef_t_gpu.f90(12),"源码引用 24 处；主要在 `ludef_t.f90` 12处, `ludef_t_gpu.f90` 12处。","unstructured/ludef_t.f90:3905: tempx = p1psipsipnkappar(trialx,lin,ps079,pp079,n079,ieq_bdotgradt) &
 unstructured/ludef_t.f90:3907: + p1psibpnkappar (trialx,lin,bz079,pp079,n079,ieq_bdotgradt,1)
 unstructured/ludef_t.f90:3912: tempx = p1psibpnkappar(trialx,ps079,lin,pp079,n079,1,ieq_bdotgradt)&
 unstructured/ludef_t.f90:3913: + p1bbpnkappar (trialx,lin,bz079,pp079,n079,ieq_bdotgradt) &
@@ -1290,7 +1290,7 @@ unstructured/gradshafranov.f90:670: if ((kinetic.eq.1).and.(kinetic_thermal_ion.
 unstructured/gradshafranov.f90:688: if ((kinetic.eq.1).and.(kinetic_thermal_ion.eq.1)) then
 unstructured/gradshafranov.f90:1709: if ((kinetic.eq.1).and.(particle_couple.ge.0).and.(kinetic_fast_ion.eq.1)) then
 unstructured/gradshafranov.f90:1715: if ((kinetic.eq.1).and.(particle_couple.ge.0).and.(kinetic_thermal_ion.eq.1)) then"
-38,ivisfunc,ivisfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,299,10,unstructured/transport.f90(6); unstructured/m3dc1_nint.f90(4),"源码引用 10 处；主要在 `transport.f90` 6处, `m3dc1_nint.f90` 4处。","unstructured/m3dc1_nint.f90:737: if(ivisfunc.eq.3) fields = ior(fields,FIELD_PSI)
+38,ivisfunc,ivisfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择各向同性粘性空间模型：0 常数；1/2 磁通 tanh 边缘层；3/4 预计算场；10/11 读 `profile_amu`；12 专用 basicJ；21 为 USEST 逻辑 rho 模型。,,unstructured/input.f90,299,10,unstructured/transport.f90(6); unstructured/m3dc1_nint.f90(4),"源码引用 10 处；主要在 `transport.f90` 6处, `m3dc1_nint.f90` 4处。","unstructured/m3dc1_nint.f90:737: if(ivisfunc.eq.3) fields = ior(fields,FIELD_PSI)
 unstructured/m3dc1_nint.f90:738: if(ivisfunc.eq.4) fields = ior(fields,FIELD_WALL)
 unstructured/m3dc1_nint.f90:1685: if(ivisfunc.eq.3) then
 unstructured/m3dc1_nint.f90:1698: else if(ivisfunc.eq.4) then
@@ -1300,7 +1300,7 @@ unstructured/transport.f90:1181: if(ivisfunc.eq.10) temp79a = temp79a*nt79(:,OP_
 unstructured/transport.f90:1199: if(myrank.eq.0) print *, 'ivisfunc = 21 requires igeometry = 1'
 unstructured/transport.f90:1205: if(myrank.eq.0) print *, 'Error: invalid value for ivisfunc: ', ivisfunc
 unstructured/transport.f90:1697: if(ivisfunc.eq.3 .or. ivisfunc.eq.4) def_fields = def_fields + FIELD_MU"
-39,amuoff,amuoff,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,300,5,unstructured/transport.f90(3); unstructured/m3dc1_nint.f90(2),"源码引用 5 处；主要在 `transport.f90` 3处, `m3dc1_nint.f90` 2处。","unstructured/m3dc1_nint.f90:1691: where(real(temp79a).lt.amuoff .and. real(temp79b).gt.0.)
+39,amuoff,amuoff,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`ivisfunc=1/2/21` 的粘性过渡位置；1/2 使用归一化磁通坐标，21 使用逻辑 rho。,,unstructured/input.f90,300,5,unstructured/transport.f90(3); unstructured/m3dc1_nint.f90(2),"源码引用 5 处；主要在 `transport.f90` 3处, `m3dc1_nint.f90` 2处。","unstructured/m3dc1_nint.f90:1691: where(real(temp79a).lt.amuoff .and. real(temp79b).gt.0.)
 unstructured/m3dc1_nint.f90:1699: where(real(wall79(:,OP_1)).gt.amuoff)
 unstructured/transport.f90:1133: tanh((real(pst79(:,OP_1))-(psibound+amuoff*(psibound-psimin))) &
 unstructured/transport.f90:1146: (1. + tanh((real(temp79b) - amuoff)/amudelt))
@@ -1308,7 +1308,7 @@ unstructured/transport.f90:1197: (1. + tanh((temp79b-(1.+amuoff))/amudelt))"
 40,amudelt,amudelt,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,301,3,unstructured/transport.f90(3),源码引用 3 处；主要在 `transport.f90` 3处。,"unstructured/transport.f90:1134: /(amudelt*(psibound-psimin))))
 unstructured/transport.f90:1146: (1. + tanh((real(temp79b) - amuoff)/amudelt))
 unstructured/transport.f90:1197: (1. + tanh((temp79b-(1.+amuoff))/amudelt))"
-41,amuoff2,amuoff2,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,302,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1147: if(amuoff2.ne.0. .and. amudelt2.ne.0.) then
+41,amuoff2,amuoff2,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`ivisfunc=2` 第二个 tanh 过渡中心；只有它与 `amudelt2` 都非零时才加入第二层。,,unstructured/input.f90,302,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1147: if(amuoff2.ne.0. .and. amudelt2.ne.0.) then
 unstructured/transport.f90:1149: (1. + tanh((real(temp79b) - amuoff2)/amudelt2))"
 42,amudelt2,amudelt2,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,303,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1147: if(amuoff2.ne.0. .and. amudelt2.ne.0.) then
 unstructured/transport.f90:1149: (1. + tanh((real(temp79b) - amuoff2)/amudelt2))"
@@ -1329,7 +1329,7 @@ unstructured/m3dc1_nint.f90:1693: vic79(:,OP_1) = amuc
 unstructured/m3dc1_nint.f90:1701: vic79(:,OP_1) = amuc
 unstructured/output.f90:286: call write_real_attr(root_id, ""amuc"" , amuc, error)
 unstructured/transport.f90:2163: call add(visc_c_field, amuc)"
-45,amue,amue,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,308,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1500: if(amue.ne.0) then
+45,amue,amue,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,电子/自举电流闭合使用的粘性系数；不代替流体动量方程的 `amu`。,,unstructured/input.f90,308,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1500: if(amue.ne.0) then
 unstructured/transport.f90:1501: temp79f = -amue * r2_79 * &"
 46,amupar,amupar,&inputnl,Transport Coefficients,输运系数,real,0.,1,Parallel viscosity,,,unstructured/input.f90,309,17,unstructured/ludef_t.f90(7); unstructured/diagnostics.f90(2); unstructured/metricterms_new.f90(2); unstructured/metricterms_new_gpu.f90(2); unstructured/auxiliary_fields.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 17 处；主要在 `ludef_t.f90` 7处, `diagnostics.f90` 2处, `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处。","unstructured/auxiliary_fields.f90:793: if(amupar.ne.0.) then
 unstructured/diagnostics.f90:786: if(gyro.eq.1 .or. amupar.ne.0) then
@@ -1341,7 +1341,7 @@ unstructured/ludef_t.f90:1119: if(amupar.ne.0.) then
 unstructured/ludef_t.f90:1723: if(gyro.eq.1 .or. amupar.gt.0. .or. ipforce.ge.1) then
 unstructured/ludef_t.f90:1748: if(amupar.ne.0.) then
 unstructured/ludef_t.f90:4974: if(gyro.eq.1 .or. amupar.ne.0 .or. kappar.ne.0 .or. ikapparfunc.eq.2 .or. kinetic.ne.0) then"
-47,amu_edge,amu_edge,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,311,9,unstructured/transport.f90(5); unstructured/m3dc1_nint.f90(4),"源码引用 9 处；主要在 `transport.f90` 5处, `m3dc1_nint.f90` 4处。","unstructured/m3dc1_nint.f90:1695: vis79(:,OP_1) = amu_edge
+47,amu_edge,amu_edge,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,粘性边缘增量或外侧幅值，配合 `ivisfunc=1/2/21`；最终各向同性粘性还包含基值 `amu`。,,unstructured/input.f90,311,9,unstructured/transport.f90(5); unstructured/m3dc1_nint.f90(4),"源码引用 9 处；主要在 `transport.f90` 5处, `m3dc1_nint.f90` 4处。","unstructured/m3dc1_nint.f90:1695: vis79(:,OP_1) = amu_edge
 unstructured/m3dc1_nint.f90:1696: vic79(:,OP_1) = amu_edge
 unstructured/m3dc1_nint.f90:1703: vis79(:,OP_1) = amu_edge
 unstructured/m3dc1_nint.f90:1704: vic79(:,OP_1) = amu_edge
@@ -1350,11 +1350,11 @@ unstructured/transport.f90:1145: temp79a = amu_edge*.5* &
 unstructured/transport.f90:1148: temp79a = temp79a + amu_edge*.5* &
 unstructured/transport.f90:1187: val = amu_edge*basicj_dscale(rsq) - amu
 unstructured/transport.f90:1196: temp79a = amu_edge* &"
-48,amu_wall,amu_wall,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,312,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1210: if(amu_wall.ne.0) then
+48,amu_wall,amu_wall,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,靠近 wall-distance 场时附加的粘性幅值；按 `amu_wall_off/amu_wall_delt` 的 tanh 层叠加到其它粘性模型。,,unstructured/input.f90,312,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:1210: if(amu_wall.ne.0) then
 unstructured/transport.f90:1211: temp79a = temp79a + amu_wall* &"
-49,amu_wall_off,amu_wall_off,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,313,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:1212: 2.*(1. - tanh((wall79(:,OP_1) - amu_wall_off)/amu_wall_delt))"
+49,amu_wall_off,amu_wall_off,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,壁面附加粘性层在 wall-distance 坐标中的中心位置。,,unstructured/input.f90,313,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:1212: 2.*(1. - tanh((wall79(:,OP_1) - amu_wall_off)/amu_wall_delt))"
 50,amu_wall_delt,amu_wall_delt,&inputnl,Transport Coefficients,输运系数,real,0.1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,314,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:1212: 2.*(1. - tanh((wall79(:,OP_1) - amu_wall_off)/amu_wall_delt))"
-51,iresfunc,iresfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,316,11,unstructured/m3dc1_nint.f90(5); unstructured/transport.f90(5); unstructured/input.f90(1),"源码引用 11 处；主要在 `m3dc1_nint.f90` 5处, `transport.f90` 5处, `input.f90` 1处。","unstructured/input.f90:1510: if(pefac.eq.0. .and. eta0.ne.0 .and. iresfunc.eq.0) then
+51,iresfunc,iresfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择 plasma zone 电阻率模型：0 Spitzer 型；1 磁通 tanh；2-4 预计算场；5 简化新古典；10/11 读 `profile_eta`；21 为 USEST 逻辑 rho 模型。conductor/vacuum zone 不用此开关。,,unstructured/input.f90,316,11,unstructured/m3dc1_nint.f90(5); unstructured/transport.f90(5); unstructured/input.f90(1),"源码引用 11 处；主要在 `m3dc1_nint.f90` 5处, `transport.f90` 5处, `input.f90` 1处。","unstructured/input.f90:1510: if(pefac.eq.0. .and. eta0.ne.0 .and. iresfunc.eq.0) then
 unstructured/m3dc1_nint.f90:709: if(iresfunc.eq.2 .or. iresfunc.eq.3) fields = ior(fields,FIELD_PSI)
 unstructured/m3dc1_nint.f90:710: if(iresfunc.eq.4) then
 unstructured/m3dc1_nint.f90:1238: if(iresfunc.eq.2) then
@@ -1364,7 +1364,7 @@ unstructured/transport.f90:1000: select case (iresfunc)
 unstructured/transport.f90:1059: if(iresfunc.eq.10) then
 unstructured/transport.f90:1087: if(myrank.eq.0) print *, 'iresfunc = 21 requires igeometry = 1'
 unstructured/transport.f90:1093: if(myrank.eq.0) print *, 'Error: invalid value for iresfunc: ', iresfunc"
-52,etaoff,etaoff,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,317,5,unstructured/m3dc1_nint.f90(3); unstructured/transport.f90(2),"源码引用 5 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 2处。","unstructured/m3dc1_nint.f90:1240: tm79 = ((ps079-psimin)/(psibound-psimin) - etaoff) / etadelt
+52,etaoff,etaoff,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,电阻率 tanh 过渡位置；`iresfunc=1` 使用磁通，`iresfunc=21` 使用逻辑 rho。,,unstructured/input.f90,317,5,unstructured/m3dc1_nint.f90(3); unstructured/transport.f90(2),"源码引用 5 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 2处。","unstructured/m3dc1_nint.f90:1240: tm79 = ((ps079-psimin)/(psibound-psimin) - etaoff) / etadelt
 unstructured/m3dc1_nint.f90:1242: tm79 = ((pst79-psimin)/(psibound-psimin) - etaoff) / etadelt
 unstructured/m3dc1_nint.f90:1264: where(real(temp79a).lt.etaoff .and. real(temp79b).gt.0.)
 unstructured/transport.f90:1026: tanh((real(pst79(:,OP_1))-(psilim+etaoff*(psilim-psimin)))&
@@ -1383,7 +1383,7 @@ unstructured/transport.f90:1003: tmin = (eta_fac*eta0/(eta_max - etar*eta_fac))*
 unstructured/transport.f90:1011: temp79a = eta_max - etar*eta_fac
 unstructured/transport.f90:1015: where(real(temp79a).lt.(eta_min-etar*eta_fac))
 unstructured/transport.f90:1016: temp79a = eta_min - etar*eta_fac"
-55,eta0,eta0,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,321,17,unstructured/transport.f90(8); unstructured/mackenbach_profiles.f90(4); unstructured/input.f90(2); unstructured/m3dc1_nint.f90(2); unstructured/output.f90(1),"源码引用 17 处；主要在 `transport.f90` 8处, `mackenbach_profiles.f90` 4处, `input.f90` 2处, `m3dc1_nint.f90` 2处。","unstructured/input.f90:1510: if(pefac.eq.0. .and. eta0.ne.0 .and. iresfunc.eq.0) then
+55,eta0,eta0,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,温度依赖或 tanh 电阻率的幅值；`iresfunc=0` 中形成 `eta0(Te-eta_te_offset)^(-3/2)`。,,unstructured/input.f90,321,17,unstructured/transport.f90(8); unstructured/mackenbach_profiles.f90(4); unstructured/input.f90(2); unstructured/m3dc1_nint.f90(2); unstructured/output.f90(1),"源码引用 17 处；主要在 `transport.f90` 8处, `mackenbach_profiles.f90` 4处, `input.f90` 2处, `m3dc1_nint.f90` 2处。","unstructured/input.f90:1510: if(pefac.eq.0. .and. eta0.ne.0 .and. iresfunc.eq.0) then
 unstructured/input.f90:1511: if(myrank.eq.0) print *, 'ERROR: Te = 0, but eta0 != 0.'
 unstructured/m3dc1_nint.f90:1258: eta79 = (0.5*eta79*eta0 + etar)*eta_fac
 unstructured/m3dc1_nint.f90:1267: eta79(:,OP_1) = eta0
@@ -1436,7 +1436,7 @@ unstructured/input.f90:1815: print *, 'Te associated with eta_min = ', (efac*z_i
 unstructured/m3dc1_nint.f90:1341: where(real(eta79(:,OP_1)).lt.eta_min) eta79(:,OP_1) = eta_min
 unstructured/transport.f90:1015: where(real(temp79a).lt.(eta_min-etar*eta_fac))
 unstructured/transport.f90:1016: temp79a = eta_min - etar*eta_fac"
-62,ikappafunc,ikappafunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,335,10,unstructured/transport.f90(8); unstructured/m3dc1_nint.f90(2),"源码引用 10 处；主要在 `transport.f90` 8处, `m3dc1_nint.f90` 2处。","unstructured/m3dc1_nint.f90:716: if(ikappafunc.eq.5) then
+62,ikappafunc,ikappafunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择各向同性热输运模型：0 温度依赖；1/2 磁通 tanh；3 反比于 `sqrt(p n)`；4 梯度依赖；5 预计算场；10/11 读 `profile_kappa`；12 专用模型；21 为 USEST 逻辑 rho。,,unstructured/input.f90,335,10,unstructured/transport.f90(8); unstructured/m3dc1_nint.f90(2),"源码引用 10 处；主要在 `transport.f90` 8处, `m3dc1_nint.f90` 2处。","unstructured/m3dc1_nint.f90:716: if(ikappafunc.eq.5) then
 unstructured/m3dc1_nint.f90:1421: if(ikappafunc.eq.5) then
 unstructured/transport.f90:1239: select case (ikappafunc)
 unstructured/transport.f90:1315: if(ikappafunc.eq.10) then
@@ -1446,7 +1446,7 @@ unstructured/transport.f90:1358: if(myrank.eq.0) print *, 'Error: invalid value 
 unstructured/transport.f90:1365: if(kappaf.ge.0. .and. gradp_crit.ne.0 .and. ikappafunc.ne.5) then
 unstructured/transport.f90:1378: if(kappah.ne.0. .and. ikappafunc.ne.5) then
 unstructured/transport.f90:1695: if(ikappafunc.eq.5 .or. ikapparfunc.eq.1 .or. ikapparfunc.eq.2) &"
-63,ikapparfunc,ikapparfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,336,13,unstructured/m3dc1_nint.f90(3); unstructured/transport.f90(3); unstructured/input.f90(2); unstructured/ludef_t.f90(2); unstructured/ludef_t_gpu.f90(2); unstructured/temperature_plots.f90(1),"源码引用 13 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 3处, `input.f90` 2处, `ludef_t.f90` 2处。","unstructured/input.f90:1448: if(itemp.eq.0 .and. ikapparfunc.eq.2) then
+63,ikapparfunc,ikapparfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择平行热导：0 常数 `kappar`；1 用 `tcrit` 低温抑制；2 使用按 `Te^(5/2)` 计算并受上下限约束的预计算场。,,unstructured/input.f90,336,13,unstructured/m3dc1_nint.f90(3); unstructured/transport.f90(3); unstructured/input.f90(2); unstructured/ludef_t.f90(2); unstructured/ludef_t_gpu.f90(2); unstructured/temperature_plots.f90(1),"源码引用 13 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 3处, `input.f90` 2处, `ludef_t.f90` 2处。","unstructured/input.f90:1448: if(itemp.eq.0 .and. ikapparfunc.eq.2) then
 unstructured/input.f90:1449: if(myrank.eq.0) print *, ""ikapparfunc=2 not allowed with itemp=0""
 unstructured/ludef_t.f90:4402: if(kappar.ne.0. .or. ikapparfunc.eq.2) then
 unstructured/ludef_t.f90:4974: if(gyro.eq.1 .or. amupar.ne.0 .or. kappar.ne.0 .or. ikapparfunc.eq.2 .or. kinetic.ne.0) then
@@ -1456,10 +1456,10 @@ unstructured/m3dc1_nint.f90:720: if(ikapparfunc.eq.1) fields = ior(fields,FIELD_
 unstructured/m3dc1_nint.f90:721: if(ikapparfunc.eq.2) then
 unstructured/m3dc1_nint.f90:1516: else if(ikapparfunc.eq.2) then
 unstructured/temperature_plots.f90:461: if(kappar.ne.0. .or. ikapparfunc.eq.2) then"
-64,ikapscale,ikapscale,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,337,1,unstructured/m3dc1_nint.f90(1),源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。,unstructured/m3dc1_nint.f90:1514: if(ikapscale.eq.1) then
+64,ikapscale,ikapscale,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时令平行热导场按局部各向同性 `kappa` 缩放，即使用 `kappar*kappa(x)`；0 时按 `ikapparfunc` 单独构造。,,unstructured/input.f90,337,1,unstructured/m3dc1_nint.f90(1),源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。,unstructured/m3dc1_nint.f90:1514: if(ikapscale.eq.1) then
 65,ikappar_ni,ikappar_ni,&inputnl,Transport Coefficients,输运系数,integer,1,1,Include 1/n terms in parallel heat flux,,,unstructured/input.f90,338,2,unstructured/ludef_t.f90(1); unstructured/parallel_heat_flux.f90(1),"源码引用 2 处；主要在 `ludef_t.f90` 1处, `parallel_heat_flux.f90` 1处。","unstructured/ludef_t.f90:3948: if(ikappar_ni.eq.1) then
 unstructured/parallel_heat_flux.f90:183: if(ikappar_ni.eq.1) temp79a = temp79a*ni79(:,OP_1)"
-66,kappaoff,kappaoff,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,340,3,unstructured/transport.f90(3),源码引用 3 处；主要在 `transport.f90` 3处。,"unstructured/transport.f90:1253: tanh((real(pst79(:,OP_1))-(psilim+kappaoff*(psilim-psimin)))&
+66,kappaoff,kappaoff,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`ikappafunc=1/2/21` 的热导 tanh 过渡中心；坐标分别为磁通或 USEST 逻辑 rho。,,unstructured/input.f90,340,3,unstructured/transport.f90(3),源码引用 3 处；主要在 `transport.f90` 3处。,"unstructured/transport.f90:1253: tanh((real(pst79(:,OP_1))-(psilim+kappaoff*(psilim-psimin)))&
 unstructured/transport.f90:1266: (1. + tanh((real(temp79b) - kappaoff)/kappadelt))
 unstructured/transport.f90:1350: (1. + tanh((temp79b-(1.+kappaoff))/kappadelt))"
 67,kappadelt,kappadelt,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,341,6,unstructured/transport.f90(6),源码引用 6 处；主要在 `transport.f90` 6处。,"unstructured/transport.f90:1254: /(kappadelt*(psilim-psimin))))
@@ -1478,7 +1478,7 @@ unstructured/read_namelist.cpp:621: add_variable_double_(""kappat"", &kappat, &d
 unstructured/transport.f90:1306: temp79a = kap79(:,OP_1) - kappat
 unstructured/transport.f90:1340: val = kappa0*basicj_dscale(rsq) - kappat
 unstructured/transport.f90:1362: temp79a = temp79a + kappat"
-69,kappa0,kappa0,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,344,22,unstructured/transport.f90(11); unstructured/mackenbach_profiles.f90(5); unstructured/m3dc1_nint.f90(4); unstructured/init_basicq.f90(1); unstructured/output.f90(1),"源码引用 22 处；主要在 `transport.f90` 11处, `mackenbach_profiles.f90` 5处, `m3dc1_nint.f90` 4处, `init_basicq.f90` 1处。","unstructured/init_basicq.f90:31: kappa_qp = kappa0
+69,kappa0,kappa0,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,所选各向同性热导函数的可变部分幅值；最终系数通常还加常数 `kappat`。,,unstructured/input.f90,344,22,unstructured/transport.f90(11); unstructured/mackenbach_profiles.f90(5); unstructured/m3dc1_nint.f90(4); unstructured/init_basicq.f90(1); unstructured/output.f90(1),"源码引用 22 处；主要在 `transport.f90` 11处, `mackenbach_profiles.f90` 5处, `m3dc1_nint.f90` 4处, `init_basicq.f90` 1处。","unstructured/init_basicq.f90:31: kappa_qp = kappa0
 unstructured/m3dc1_nint.f90:1423: if(izone.eq.1. .and. kappa0.gt.0) then
 unstructured/m3dc1_nint.f90:1432: where(real(temp79b).gt.(kappa0/(kappa_max-kappat)))
 unstructured/m3dc1_nint.f90:1457: kap79 = kap79*kappa0
@@ -1500,14 +1500,14 @@ unstructured/ludef_t_gpu.f90:5028: if(kappar.ne.0. .or. ikapparfunc.eq.2) then
 unstructured/ludef_t_gpu.f90:5303: if(kappar.ne.0.) then"
 71,kappari_fac,kappari_fac,&inputnl,Transport Coefficients,输运系数,real,1.,1,Ion parallel thermal conductivity factor,,,unstructured/input.f90,347,2,unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1),"源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。","unstructured/ludef_t.f90:4405: if(numvar.ge.3 .and. ipres.eq.1 .and. (.not. electron_temperature)) fac = kappari_fac
 unstructured/ludef_t_gpu.f90:5031: if(numvar.ge.3 .and. ipres.eq.1 .and. (.not. electron_temperature)) fac = kappari_fac"
-72,tcrit,tcrit,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,349,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:1407: temp79a = kappar/( (tcrit/tet79(:,OP_1))**2.5 + 1.)"
+72,tcrit,tcrit,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`ikapparfunc=1` 的低温转折温度，平行热导为 `kappar/[1+(tcrit/Te)^(5/2)]`。,,unstructured/input.f90,349,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:1407: temp79a = kappar/( (tcrit/tet79(:,OP_1))**2.5 + 1.)"
 73,k_fac,k_fac,&inputnl,Transport Coefficients,输运系数,real,1.,1,multiplies toroidal field in denominator of PTC,,,unstructured/input.f90,350,3,unstructured/m3dc1_nint.f90(3),源码引用 3 处；主要在 `m3dc1_nint.f90` 3处。,"unstructured/m3dc1_nint.f90:1172: (pstx79(:,OP_DR)**2 + pstx79(:,OP_DZ)**2 + k_fac*bztx79(:,OP_1)**2)
 unstructured/m3dc1_nint.f90:1187: +k_fac*bztx79(:,OP_1 )*bztx79(:,OP_DR ))
 unstructured/m3dc1_nint.f90:1190: +k_fac*bztx79(:,OP_1 )*bztx79(:,OP_DZ ))"
-74,kappax,kappax,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,352,3,unstructured/ludef_t.f90(2); unstructured/m3dc1_nint.f90(1),"源码引用 3 处；主要在 `ludef_t.f90` 2处, `m3dc1_nint.f90` 1处。","unstructured/ludef_t.f90:3886: if(kappax.ne.0.) then
+74,kappax,kappax,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,交叉场热输运系数；普通 CPU、非 USEPARTICLES 方程中耦合压力与环向磁场，GPU 对应块被注释，USEPARTICLES 路径也排除该项。,,unstructured/input.f90,352,3,unstructured/ludef_t.f90(2); unstructured/m3dc1_nint.f90(1),"源码引用 3 处；主要在 `ludef_t.f90` 2处, `m3dc1_nint.f90` 1处。","unstructured/ludef_t.f90:3886: if(kappax.ne.0.) then
 unstructured/ludef_t.f90:4389: if(kappax.ne.0.) then
 unstructured/m3dc1_nint.f90:1558: kax79(:,OP_1) = kappax"
-75,kappah,kappah,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,353,10,unstructured/m3dc1_nint.f90(8); unstructured/transport.f90(2),"源码引用 10 处；主要在 `m3dc1_nint.f90` 8处, `transport.f90` 2处。","unstructured/m3dc1_nint.f90:1474: if(kappah.ne.0.) then
+75,kappah,kappah,&inputnl,Transport Coefficients,输运系数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,在各向同性热导上附加边界层 `kappah*tanh^2[(psi_N-1)/0.2]`；`ikappafunc=5` 时不加。,,unstructured/input.f90,353,10,unstructured/m3dc1_nint.f90(8); unstructured/transport.f90(2),"源码引用 10 处；主要在 `m3dc1_nint.f90` 8处, `transport.f90` 2处。","unstructured/m3dc1_nint.f90:1474: if(kappah.ne.0.) then
 unstructured/m3dc1_nint.f90:1478: kap79(:,OP_1) = kap79(:,OP_1) + kappah*temp79a**2
 unstructured/m3dc1_nint.f90:1480: + kappah*temp79a*temp79b**2*tm79(:,OP_DR)
 unstructured/m3dc1_nint.f90:1482: + kappah*temp79a*temp79b**2*tm79(:,OP_DZ)
@@ -1517,7 +1517,7 @@ unstructured/m3dc1_nint.f90:1492: + kappah*(temp79a*temp79b**2*tm79(:,OP_DZZ) &
 unstructured/m3dc1_nint.f90:1497: + kappah*temp79a*temp79b**2*tm79(:,OP_DP)
 unstructured/transport.f90:1378: if(kappah.ne.0. .and. ikappafunc.ne.5) then
 unstructured/transport.f90:1380: temp79a = kappah*tanh((real(temp79b) - 1.)/.2)**2"
-76,kappag,kappag,&inputnl,Transport Coefficients,输运系数,real,0.,1,Thermal diffusion proportional to pressure gradient,,,unstructured/input.f90,354,6,unstructured/metricterms_new.f90(2); unstructured/metricterms_new_gpu.f90(2); unstructured/input.f90(1); unstructured/ludef_t.f90(1),"源码引用 6 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `input.f90` 1处, `ludef_t.f90` 1处。","unstructured/input.f90:359: ""Critical pressure gradient in kappag/kappaf models"", transp_grp)
+76,kappag,kappag,&inputnl,Transport Coefficients,输运系数,real,0.,1,Thermal diffusion proportional to pressure gradient,CPU 压力方程中的非线性梯度热流系数，形式含 `-kappag*|grad(p)|^2 grad(p)` 与阈值补偿项；GPU 对应块被注释。当前阈值掩码实际比较 `p^2` 与 `gradp_crit^2`。,,unstructured/input.f90,354,6,unstructured/metricterms_new.f90(2); unstructured/metricterms_new_gpu.f90(2); unstructured/input.f90(1); unstructured/ludef_t.f90(1),"源码引用 6 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `input.f90` 1处, `ludef_t.f90` 1处。","unstructured/input.f90:359: ""Critical pressure gradient in kappag/kappaf models"", transp_grp)
 unstructured/ludef_t.f90:3756: if(kappag.ne.0) then
 unstructured/metricterms_new.f90:8851: b3pppkappag = (gam-1.)*kappag*temp
 unstructured/metricterms_new.f90:8881: b3pkappag = -gradp_crit**2*(gam-1.)*kappag*temp
@@ -1561,7 +1561,7 @@ unstructured/ludef_t_gpu.f90:4923: temp = kappai_fac*temp
 unstructured/metricterms_new.f90:11546: - kappai_fac*( int3(kap79(:,OP_1),norm79(:,1),tit79(:,OP_DR)) &
 unstructured/metricterms_new_gpu.f90:22089: - kappai_fac*( int3(kap79(:,OP_1),norm79(:,1),tit79(:,OP_DR)) &
 unstructured/temperature_plots.f90:157: dofs = (1.+kappai_fac*(1.-pefac)/pefac)*dofs"
-84,idenmfunc,idenmfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,371,6,unstructured/transport.f90(4); unstructured/m3dc1_nint.f90(2),"源码引用 6 处；主要在 `transport.f90` 4处, `m3dc1_nint.f90` 2处。","unstructured/m3dc1_nint.f90:731: if(idenmfunc.eq.1) then
+84,idenmfunc,idenmfunc,&inputnl,Transport Coefficients,输运系数,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,选择主离子密度扩散：0 常数 `denm`；1 使用预计算温度依赖场并限幅；10/11 从 `profile_denm` 读 SI/归一化剖面。,,unstructured/input.f90,371,6,unstructured/transport.f90(4); unstructured/m3dc1_nint.f90(2),"源码引用 6 处；主要在 `transport.f90` 4处, `m3dc1_nint.f90` 2处。","unstructured/m3dc1_nint.f90:731: if(idenmfunc.eq.1) then
 unstructured/m3dc1_nint.f90:1353: if(idenmfunc.eq.1) then
 unstructured/transport.f90:1441: select case (idenmfunc)
 unstructured/transport.f90:1459: if(idenmfunc.eq.10) then
@@ -1593,8 +1593,8 @@ unstructured/m3dc1_nint.f90:1392: denm79(:,OP_1) = denmmax
 unstructured/m3dc1_nint.f90:1402: where(real(temp79a).gt.denmmax) denm79(:,i) = 0.
 unstructured/m3dc1_nint.f90:1405: where(real(temp79a).gt.denmmax) denm79(:,OP_1) = denmmax
 unstructured/transport.f90:1449: temp79a = min(real(temp79a),denmmax)"
-316,deex,deex,&inputnl,Hyper Diffusivity,超扩散,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,785,1,unstructured/m3dc1_nint.f90(1),源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。,unstructured/m3dc1_nint.f90:656: fac = deex**ihypdx
-317,hyper,hyper,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,786,10,unstructured/input.f90(3); unstructured/diagnostics.f90(1); unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/newpar.f90(1); unstructured/newvar.f90(1); unstructured/output.f90(1),"源码引用 10 处；主要在 `input.f90` 3处, `diagnostics.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。","unstructured/diagnostics.f90:792: if(hyper.eq.0.) def_fields = def_fields + FIELD_J
+316,deex,deex,&inputnl,Hyper Diffusivity,超扩散,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,超扩散的参考长度/网格尺度；当 `ihypdx!=0` 时所有 hyper 输入乘 `deex^ihypdx`。,,unstructured/input.f90,785,1,unstructured/m3dc1_nint.f90(1),源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。,unstructured/m3dc1_nint.f90:656: fac = deex**ihypdx
+317,hyper,hyper,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,磁通/极向磁场方程的超电阻率系数，抑制高波数电流结构；0 关闭该项。,,unstructured/input.f90,786,10,unstructured/input.f90(3); unstructured/diagnostics.f90(1); unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/newpar.f90(1); unstructured/newvar.f90(1); unstructured/output.f90(1),"源码引用 10 处；主要在 `input.f90` 3处, `diagnostics.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。","unstructured/diagnostics.f90:792: if(hyper.eq.0.) def_fields = def_fields + FIELD_J
 unstructured/input.f90:195: call add_group(""Hyper Diffusivity"", hyper_grp)
 unstructured/input.f90:795: ""1: implicit hyper-resistivity in psi equation"", hyper_grp)
 unstructured/input.f90:1484: if(jadv.eq.1 .and. hyper.ne.0) &
@@ -1604,20 +1604,20 @@ unstructured/m3dc1_nint.f90:658: hypf = hyper *fac
 unstructured/newpar.f90:678: if(jadv.eq.0 .or. hyper.eq.0. .or. (jadv.eq.1 .and. imp_hyper.ge.1)) return
 unstructured/newvar.f90:113: if(jadv.eq.1 .and. hyper.ne.0. .and. imp_hyper.eq.0) then
 unstructured/output.f90:295: call write_real_attr(root_id, ""hyper"" , hyper, error)"
-318,hyperc,hyperc,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,787,4,unstructured/hypervisc.f90(1); unstructured/input.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 4 处；主要在 `hypervisc.f90` 1处, `input.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/hypervisc.f90:41: if(hyperc.eq.0. .and. hyperv.eq.0.) return
+318,hyperc,hyperc,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,压缩/极向速度势方程的超粘性系数；只在相应速度未知量存在时生效。,,unstructured/input.f90,787,4,unstructured/hypervisc.f90(1); unstructured/input.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 4 处；主要在 `hypervisc.f90` 1处, `input.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/hypervisc.f90:41: if(hyperc.eq.0. .and. hyperv.eq.0.) return
 unstructured/input.f90:1482: if(hyperc.ne.0.) &
 unstructured/m3dc1_nint.f90:661: hypc = hyperc*fac
 unstructured/output.f90:298: call write_real_attr(root_id, ""hyperc"" , hyperc, error)"
-319,hyperi,hyperi,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,788,2,unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/m3dc1_nint.f90:659: hypi = hyperi*fac
+319,hyperi,hyperi,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,环向磁场未知量的超扩散系数；`numvar>=2` 才有对应场。,,unstructured/input.f90,788,2,unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/m3dc1_nint.f90:659: hypi = hyperi*fac
 unstructured/output.f90:296: call write_real_attr(root_id, ""hyperi"" , hyperi, error)"
-320,hyperp,hyperp,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,789,2,unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/m3dc1_nint.f90:662: hypp = hyperp*fac
+320,hyperp,hyperp,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,压力或温度方程的超扩散系数；需要实际推进压力/温度未知量。,,unstructured/input.f90,789,2,unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/m3dc1_nint.f90:662: hypp = hyperp*fac
 unstructured/output.f90:299: call write_real_attr(root_id, ""hyperp"" , hyperp, error)"
-321,hyperv,hyperv,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,790,3,unstructured/hypervisc.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 3 处；主要在 `hypervisc.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/hypervisc.f90:41: if(hyperc.eq.0. .and. hyperv.eq.0.) return
+321,hyperv,hyperv,&inputnl,Hyper Diffusivity,超扩散,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,环向速度方程的超粘性系数；`numvar>=2` 且速度未冻结时使用。,,unstructured/input.f90,790,3,unstructured/hypervisc.f90(1); unstructured/m3dc1_nint.f90(1); unstructured/output.f90(1),"源码引用 3 处；主要在 `hypervisc.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。","unstructured/hypervisc.f90:41: if(hyperc.eq.0. .and. hyperv.eq.0.) return
 unstructured/m3dc1_nint.f90:660: hypv = hyperv*fac
 unstructured/output.f90:297: call write_real_attr(root_id, ""hyperv"" , hyperv, error)"
-322,ihypdx,ihypdx,&inputnl,Hyper Diffusivity,超扩散,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,791,2,unstructured/m3dc1_nint.f90(2),源码引用 2 处；主要在 `m3dc1_nint.f90` 2处。,"unstructured/m3dc1_nint.f90:653: if(ihypdx.eq.0) then
+322,ihypdx,ihypdx,&inputnl,Hyper Diffusivity,超扩散,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,hyper 系数的长度缩放指数：0 不缩放，非零时 `lambda_eff=lambda_input*deex^ihypdx`。当前默认 0。,,unstructured/input.f90,791,2,unstructured/m3dc1_nint.f90(2),源码引用 2 处；主要在 `m3dc1_nint.f90` 2处。,"unstructured/m3dc1_nint.f90:653: if(ihypdx.eq.0) then
 unstructured/m3dc1_nint.f90:656: fac = deex**ihypdx"
-323,ihypeta,ihypeta,&inputnl,Hyper Diffusivity,超扩散,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,792,66,unstructured/metricterms_new_gpu.f90(31); unstructured/metricterms_new.f90(28); unstructured/input.f90(4); unstructured/electrostatic_potential.f90(2); unstructured/diagnostics.f90(1),"源码引用 66 处；主要在 `metricterms_new_gpu.f90` 31处, `metricterms_new.f90` 28处, `input.f90` 4处, `electrostatic_potential.f90` 2处。","unstructured/diagnostics.f90:3064: if(ihypeta.gt.2) bharhypeta = bharmonic(ihypeta)
+323,ihypeta,ihypeta,&inputnl,Hyper Diffusivity,超扩散,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,磁超扩散的空间乘子：0 常数；1 乘电阻率；2 乘压力；大于 2 使用压力与指定磁扰动谐波构造乘子，并要求不超过 `ibh_harmonics`。,,unstructured/input.f90,792,66,unstructured/metricterms_new_gpu.f90(31); unstructured/metricterms_new.f90(28); unstructured/input.f90(4); unstructured/electrostatic_potential.f90(2); unstructured/diagnostics.f90(1),"源码引用 66 处；主要在 `metricterms_new_gpu.f90` 31处, `metricterms_new.f90` 28处, `input.f90` 4处, `electrostatic_potential.f90` 2处。","unstructured/diagnostics.f90:3064: if(ihypeta.gt.2) bharhypeta = bharmonic(ihypeta)
 unstructured/electrostatic_potential.f90:108: if(ihypeta.eq.0) then
 unstructured/electrostatic_potential.f90:191: if(ihypeta.eq.1) then
 unstructured/input.f90:1831: if(ihypeta.gt.2) then
@@ -1627,7 +1627,7 @@ unstructured/input.f90:1835: ihypeta, ibh_harmonics
 unstructured/metricterms_new.f90:6116: if(ihypeta.eq.1) then
 unstructured/metricterms_new.f90:6215: if(ihypeta.eq.1) then
 unstructured/metricterms_new.f90:6267: if(ihypeta.eq.0) then"
-324,ihypkappa,ihypkappa,&inputnl,Hyper Diffusivity,超扩散,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,793,9,unstructured/metricterms_new_gpu.f90(5); unstructured/metricterms_new.f90(4),"源码引用 9 处；主要在 `metricterms_new_gpu.f90` 5处, `metricterms_new.f90` 4处。","unstructured/metricterms_new.f90:8724: if(ihypkappa.eq.1) then
+324,ihypkappa,ihypkappa,&inputnl,Hyper Diffusivity,超扩散,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时压力/温度 hyper 系数乘局部热导率，0 时保持输入常数。,,unstructured/input.f90,793,9,unstructured/metricterms_new_gpu.f90(5); unstructured/metricterms_new.f90(4),"源码引用 9 处；主要在 `metricterms_new_gpu.f90` 5处, `metricterms_new.f90` 4处。","unstructured/metricterms_new.f90:8724: if(ihypkappa.eq.1) then
 unstructured/metricterms_new.f90:8783: if(ihypkappa.eq.1) then
 unstructured/metricterms_new.f90:8937: if(ihypkappa.eq.1) then
 unstructured/metricterms_new.f90:9066: if(ihypkappa.eq.1) then
@@ -1646,9 +1646,9 @@ unstructured/ludef_t.f90:5431: if((jadv.eq.0).or.(jadv.eq.1 .and. imp_hyper.ge.1
 unstructured/ludef_t.f90:5444: if((jadv.eq.0).or.(jadv.eq.1 .and. imp_hyper.ge.1)) then
 unstructured/ludef_t.f90:5451: if((jadv.eq.0).or.(jadv.eq.1 .and. imp_hyper.ge.1)) then
 unstructured/ludef_t.f90:5565: if((jadv.eq.0) .or. (jadv.eq.1 .and. imp_hyper.ge.1)) then"
-326,isurface,isurface,&inputnl,Boundary Conditions,边界条件,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,799,1,unstructured/biharmonic.f90(1),源码引用 1 处；主要在 `biharmonic.f90` 1处。,unstructured/biharmonic.f90:121: if(isurface.eq.0) cycle
-327,icurv,icurv,&inputnl,Boundary Conditions,边界条件,integer,2,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,800,1,unstructured/scorec_mesh.f90(1),源码引用 1 处；主要在 `scorec_mesh.f90` 1处。,unstructured/scorec_mesh.f90:988: if(icurv.eq.0) then
-328,nonrect,nonrect,&inputnl,Boundary Conditions,边界条件,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,801,8,unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1); unstructured/input.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1),"源码引用 8 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处, `input.f90` 1处。","unstructured/init_eigen.f90:95: if(nonrect.eq.0) then
+326,isurface,isurface,&inputnl,Boundary Conditions,边界条件,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,控制分部积分后 Galerkin 弱式中的外边界表面积分；1 保留，0 去掉。它不选择边界位置，位置来自 mesh/model 分类。,,unstructured/input.f90,799,1,unstructured/biharmonic.f90(1),源码引用 1 处；主要在 `biharmonic.f90` 1处。,unstructured/biharmonic.f90:121: if(isurface.eq.0) cycle
+327,icurv,icurv,&inputnl,Boundary Conditions,边界条件,integer,2,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,边界几何曲率处理阶数/开关；大于 0 时使用曲边几何信息，常规高阶曲边网格保持默认 2。,,unstructured/input.f90,800,1,unstructured/scorec_mesh.f90(1),源码引用 1 处；主要在 `scorec_mesh.f90` 1处。,unstructured/scorec_mesh.f90:988: if(icurv.eq.0) then
+328,nonrect,nonrect,&inputnl,Boundary Conditions,边界条件,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 表示非矩形/一般边界并关闭矩形快捷假设；0 仅适合边界拓扑确为规则矩形的测试网格。,,unstructured/input.f90,801,8,unstructured/init_eigen.f90(1); unstructured/init_frs.f90(1); unstructured/init_ftz.f90(1); unstructured/input.f90(1); unstructured/output.f90(1); unstructured/particle.f90(1); unstructured/particle_com.f90(1); unstructured/runaway_advection.f90(1),"源码引用 8 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处, `input.f90` 1处。","unstructured/init_eigen.f90:95: if(nonrect.eq.0) then
 unstructured/init_frs.f90:223: if(nonrect.eq.0) then
 unstructured/init_ftz.f90:127: if(nonrect.eq.0) then
 unstructured/input.f90:1655: is_rectilinear = (nonrect.eq.0)
@@ -1666,10 +1666,10 @@ unstructured/init_eqdsk.f90:77: if(iread_eqdsk.eq.3 .and. ifixedb.eq.0) then
 unstructured/output.f90:276: call write_int_attr (root_id, ""ifixedb"" , ifixedb, error)
 unstructured/particle.f90:292: print *, 'ifixedb = ', ifixedb
 unstructured/particle_com.f90:290: print *, 'ifixedb = ', ifixedb"
-330,com_bc,com_bc,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,804,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:252: if(com_bc.eq.1) ibound = ior(ibound, BOUNDARY_LAPLACIAN)
+330,com_bc,com_bc,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时给压缩速度势 `chi` 增加 `nabla^2 chi=0` 的边界约束。,,unstructured/input.f90,804,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:252: if(com_bc.eq.1) ibound = ior(ibound, BOUNDARY_LAPLACIAN)
 unstructured/model.f90:384: if(com_bc.eq.1 .and. numvar.ge.3) then
 unstructured/model.f90:455: if(com_bc.eq.1 .and. numvar.ge.3) then"
-331,vor_bc,vor_bc,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,805,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:215: if(vor_bc.eq.1) ibound = ior(ibound, BOUNDARY_LAPLACIAN)
+331,vor_bc,vor_bc,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时给极向速度势 `U` 增加 `Delta* U=0` 的涡量边界约束。,,unstructured/input.f90,805,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:215: if(vor_bc.eq.1) ibound = ior(ibound, BOUNDARY_LAPLACIAN)
 unstructured/model.f90:378: if(vor_bc.eq.1) then
 unstructured/model.f90:449: if(vor_bc.eq.1) then"
 332,iconst_p,iconst_p,&inputnl,Boundary Conditions,边界条件,integer,1,1,1: Hold pressure constant on boundary,,,unstructured/input.f90,806,12,unstructured/model.f90(8); unstructured/metricterms_new_gpu.f90(3); unstructured/metricterms_new.f90(1),"源码引用 12 处；主要在 `model.f90` 8处, `metricterms_new_gpu.f90` 3处, `metricterms_new.f90` 1处。","unstructured/metricterms_new.f90:1948: if(inoslip_pol.eq.1 .or. iconst_p.eq.1) then
@@ -1694,13 +1694,13 @@ unstructured/model.f90:114: if(iconst_bn.eq.1) ibound = ior(ibound, BOUNDARY_DIR
 unstructured/model.f90:506: if(iconst_bn.eq.1) then"
 336,iconst_bz,iconst_bz,&inputnl,Boundary Conditions,边界条件,integer,0,1,1: Hold toroidal field constant on boundary,,,unstructured/input.f90,814,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:130: if(iconst_bz.eq.1) ibound = ior(ibound, BOUNDARY_DIRICHLET)
 unstructured/model.f90:545: else if(iconst_bz.eq.1 .and. numvar.ge.2) then"
-337,inograd_p,inograd_p,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,816,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:91: if(inograd_p.eq.1) ibound = ior(ibound, BOUNDARY_NEUMANN)
+337,inograd_p,inograd_p,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 对压力施加零法向梯度 Neumann 条件；不要与同一压力场的固定值条件重复指定。,,unstructured/input.f90,816,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:91: if(inograd_p.eq.1) ibound = ior(ibound, BOUNDARY_NEUMANN)
 unstructured/model.f90:883: if(inograd_p.eq.1) then
 unstructured/model.f90:940: if(inograd_p.eq.1) then"
-338,inograd_t,inograd_t,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,817,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:75: if(inograd_t.eq.1) ibound = ior(ibound, BOUNDARY_NEUMANN)
+338,inograd_t,inograd_t,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 对温度施加零法向梯度 Neumann 条件。,,unstructured/input.f90,817,3,unstructured/model.f90(3),源码引用 3 处；主要在 `model.f90` 3处。,"unstructured/model.f90:75: if(inograd_t.eq.1) ibound = ior(ibound, BOUNDARY_NEUMANN)
 unstructured/model.f90:717: if(inograd_t.eq.1) then
 unstructured/model.f90:796: if(inograd_t.eq.1) then"
-339,inograd_n,inograd_n,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,818,6,unstructured/metricterms_new_gpu.f90(3); unstructured/model.f90(2); unstructured/kprad_m3dc1.f90(1),"源码引用 6 处；主要在 `metricterms_new_gpu.f90` 3处, `model.f90` 2处, `kprad_m3dc1.f90` 1处。","unstructured/kprad_m3dc1.f90:253: if(inograd_n.eq.1) then
+339,inograd_n,inograd_n,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 对主离子密度施加零法向梯度 Neumann 条件。,,unstructured/input.f90,818,6,unstructured/metricterms_new_gpu.f90(3); unstructured/model.f90(2); unstructured/kprad_m3dc1.f90(1),"源码引用 6 处；主要在 `metricterms_new_gpu.f90` 3处, `model.f90` 2处, `kprad_m3dc1.f90` 1处。","unstructured/kprad_m3dc1.f90:253: if(inograd_n.eq.1) then
 unstructured/metricterms_new_gpu.f90:18238: if(inograd_n.eq.1) then
 unstructured/metricterms_new_gpu.f90:18396: if(inograd_n.eq.1) then
 unstructured/metricterms_new_gpu.f90:18447: if(inograd_n.eq.1) then
@@ -1736,9 +1736,9 @@ unstructured/metricterms_new_gpu.f90:16476: if(inoslip_tor.eq.1) then
 unstructured/metricterms_new_gpu.f90:16501: if(inoslip_tor.eq.1) then
 unstructured/metricterms_new_gpu.f90:16526: if(inoslip_tor.eq.1) then
 unstructured/metricterms_new_gpu.f90:16553: if(inoslip_tor.eq.1) then"
-343,inostress_tor,inostress_tor,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,825,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:232: if(inostress_tor.eq.1) ibound = ior(ibound, BOUNDARY_NEUMANN)
+343,inostress_tor,inostress_tor,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 对环向速度施加零法向导数/无切向应力条件；与 `inoslip_tor=1` 是不同选择。,,unstructured/input.f90,825,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:232: if(inostress_tor.eq.1) ibound = ior(ibound, BOUNDARY_NEUMANN)
 unstructured/model.f90:371: if(inostress_tor.eq.1) then"
-344,inocurrent_pol,inocurrent_pol,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,826,19,unstructured/metricterms_new_gpu.f90(17); unstructured/model.f90(2),"源码引用 19 处；主要在 `metricterms_new_gpu.f90` 17处, `model.f90` 2处。","unstructured/metricterms_new_gpu.f90:8646: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
+344,inocurrent_pol,inocurrent_pol,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 通过环向磁场变量的法向导数约束使边界极向电流为零。,,unstructured/input.f90,826,19,unstructured/metricterms_new_gpu.f90(17); unstructured/model.f90(2),"源码引用 19 处；主要在 `metricterms_new_gpu.f90` 17处, `model.f90` 2处。","unstructured/metricterms_new_gpu.f90:8646: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:8675: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:8704: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:8831: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
@@ -1748,7 +1748,7 @@ unstructured/metricterms_new_gpu.f90:8917: if(inocurrent_pol.eq.1 .and. imulti_r
 unstructured/metricterms_new_gpu.f90:8948: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:8979: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:15703: if(inocurrent_pol.eq.1 .and. imulti_region.eq.0) then"
-345,inocurrent_tor,inocurrent_tor,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,827,11,unstructured/metricterms_new_gpu.f90(7); unstructured/model.f90(2); unstructured/newpar.f90(1); unstructured/newvar.f90(1),"源码引用 11 处；主要在 `metricterms_new_gpu.f90` 7处, `model.f90` 2处, `newpar.f90` 1处, `newvar.f90` 1处。","unstructured/metricterms_new_gpu.f90:8738: if(inocurrent_tor.eq.1 .and. imulti_region.eq.0) then
+345,inocurrent_tor,inocurrent_tor,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 通过 `Delta*psi=0` 型边界约束使环向电流为零。,,unstructured/input.f90,827,11,unstructured/metricterms_new_gpu.f90(7); unstructured/model.f90(2); unstructured/newpar.f90(1); unstructured/newvar.f90(1),"源码引用 11 处；主要在 `metricterms_new_gpu.f90` 7处, `model.f90` 2处, `newpar.f90` 1处, `newvar.f90` 1处。","unstructured/metricterms_new_gpu.f90:8738: if(inocurrent_tor.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:8768: if(inocurrent_tor.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:8798: if(inocurrent_tor.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:16649: if(inocurrent_tor.eq.1 .and. imulti_region.eq.0) then
@@ -1758,7 +1758,7 @@ unstructured/metricterms_new_gpu.f90:17010: if(inocurrent_tor.eq.1 .and. imulti_
 unstructured/model.f90:108: if(inocurrent_tor.eq.1) ibound = ior(ibound, BOUNDARY_LAPLACIAN)
 unstructured/model.f90:515: if(inocurrent_tor.eq.1) then
 unstructured/newpar.f90:840: if(inocurrent_tor.eq.1) then"
-346,inocurrent_norm,inocurrent_norm,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,828,17,unstructured/metricterms_new_gpu.f90(15); unstructured/model.f90(2),"源码引用 17 处；主要在 `metricterms_new_gpu.f90` 15处, `model.f90` 2处。","unstructured/metricterms_new_gpu.f90:13444: if(inocurrent_norm.eq.1 .and. imulti_region.eq.0) then
+346,inocurrent_norm,inocurrent_norm,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 对三维磁场变量施加组合边界条件，使法向电流为零；会改变 `psi/bz` 的边界掩码组合。,,unstructured/input.f90,828,17,unstructured/metricterms_new_gpu.f90(15); unstructured/model.f90(2),"源码引用 17 处；主要在 `metricterms_new_gpu.f90` 15处, `model.f90` 2处。","unstructured/metricterms_new_gpu.f90:13444: if(inocurrent_norm.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:13451: if(inocurrent_norm.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:13556: if(inocurrent_norm.eq.1 .and. imulti_region.eq.0) then
 unstructured/metricterms_new_gpu.f90:13607: if(inocurrent_norm.eq.1 .and. imulti_region.eq.0) then
@@ -1778,7 +1778,7 @@ unstructured/model.f90:158: else if(ifbound.eq.2) then
 unstructured/model.f90:564: if(ifbound.eq.1) then
 unstructured/model.f90:566: else if(ifbound.eq.2) then
 unstructured/newvar.f90:100: if(ifbound.eq.1) then"
-348,iconstflux,iconstflux,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,831,2,unstructured/newpar.f90(1); unstructured/time_step.f90(1),"源码引用 2 处；主要在 `newpar.f90` 1处, `time_step.f90` 1处。","unstructured/newpar.f90:921: if(numvar.ge.2 .and. iconstflux.eq.1) then
+348,iconstflux,iconstflux,&inputnl,Boundary Conditions,边界条件,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,非线性推进中重新缩放环向磁场以保持总环向磁通；0 不做该全局修正。,,unstructured/input.f90,831,2,unstructured/newpar.f90(1); unstructured/time_step.f90(1),"源码引用 2 处；主要在 `newpar.f90` 1处, `time_step.f90` 1处。","unstructured/newpar.f90:921: if(numvar.ge.2 .and. iconstflux.eq.1) then
 unstructured/time_step.f90:237: if(iconstflux.eq.1 .and. numvar.ge.2) then"
 349,iper,iper,&inputnl,Boundary Conditions,边界条件,integer,0,1,1: Periodic boundary condition in R direction,,,unstructured/input.f90,832,24,unstructured/model.f90(9); unstructured/boundary.f90(4); unstructured/rmp.f90(3); unstructured/biharmonic.f90(1); unstructured/gradshafranov.f90(1); unstructured/gread_restart_c11.fh(1); unstructured/init_vmec.f90(1); unstructured/kprad_m3dc1.f90(1),"源码引用 24 处；主要在 `model.f90` 9处, `boundary.f90` 4处, `rmp.f90` 3处, `biharmonic.f90` 1处。","unstructured/biharmonic.f90:311: if(iper.eq.1 .and. jper.eq.1) return
 unstructured/boundary.f90:679: if(iper.eq.1 .and. jper.eq.1) return
@@ -1800,9 +1800,9 @@ unstructured/gread_restart_c11.fh:15: call adios_read (adios_handle, ""jper"", i
 unstructured/init_vmec.f90:278: if(iper.eq.1 .and. jper.eq.1) return
 unstructured/kprad_m3dc1.f90:241: if(iper.eq.1 .and. jper.eq.1) return
 unstructured/model.f90:286: if(iper.eq.1 .and. jper.eq.1) return"
-351,tebound,tebound,&inputnl,Boundary Conditions,边界条件,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,836,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:722: if((tebound.gt.0.) .and. is_inner) then
+351,tebound,tebound,&inputnl,Boundary Conditions,边界条件,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,大于 0 时，在标记为 first-wall 的边界把电子温度固定为该归一化值；负值保留初始边界值。,,unstructured/input.f90,836,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:722: if((tebound.gt.0.) .and. is_inner) then
 unstructured/model.f90:724: temp(1) = tebound"
-352,tibound,tibound,&inputnl,Boundary Conditions,边界条件,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,837,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:801: if((tibound.gt.0.) .and. is_inner) then
+352,tibound,tibound,&inputnl,Boundary Conditions,边界条件,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,大于 0 时，在 first-wall 边界把离子温度固定为该归一化值；仅双温模型有独立作用。,,unstructured/input.f90,837,2,unstructured/model.f90(2),源码引用 2 处；主要在 `model.f90` 2处。,"unstructured/model.f90:801: if((tibound.gt.0.) .and. is_inner) then
 unstructured/model.f90:803: temp(1) = tibound"
 353,eta_wall,eta_wall,&inputnl,Resistive Wall,电阻壁/真空/导体区,real,1e-3,1,Resistivity of conducting wall region,,,unstructured/input.f90,840,5,unstructured/input.f90(3); unstructured/output.f90(1); unstructured/resistive_wall.f90(1),"源码引用 5 处；主要在 `input.f90` 3处, `output.f90` 1处, `resistive_wall.f90` 1处。","unstructured/input.f90:1585: if(eta_wall .gt. eta_vac) then
 unstructured/input.f90:1586: if(myrank.eq.0) print *, 'Warning: eta_wall > eta_vac.'
@@ -1893,7 +1893,7 @@ unstructured/resistive_wall.f90:165: theta = atan2(z-zzero_rekc, x-rzero_rekc)"
 unstructured/kprad_test.f90:38: do ntime=1, ntimemax
 unstructured/newpar.f90:363: if(ntimemax.le.ntime) call safestop(0)
 unstructured/newpar.f90:371: do ntime=ntime+1,ntimemax"
-139,integrator,integrator,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,472,6,unstructured/input.f90(1); unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/newpar.f90(1); unstructured/output.f90(1); unstructured/time_step.f90(1),"源码引用 6 处；主要在 `input.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `newpar.f90` 1处。","unstructured/input.f90:1552: if(integrator.eq.1) then
+139,integrator,integrator,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,时间离散选择：0 为 theta/Crank-Nicolson 家族；1 为 BDF2，且程序把 `thimp` 强制为 1，首步使用一阶隐式启动。,,unstructured/input.f90,472,6,unstructured/input.f90(1); unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1); unstructured/newpar.f90(1); unstructured/output.f90(1); unstructured/time_step.f90(1),"源码引用 6 处；主要在 `input.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `newpar.f90` 1处。","unstructured/input.f90:1552: if(integrator.eq.1) then
 unstructured/ludef_t.f90:4994: if(integrator.eq.1 .and. ntime.gt.1) then
 unstructured/ludef_t_gpu.f90:5650: if(integrator.eq.1 .and. ntime.gt.1) then
 unstructured/newpar.f90:556: select case(integrator)
@@ -1909,7 +1909,7 @@ unstructured/input.f90:1443: if(isplitstep.eq.0 .and. idiff.eq.1) then
 unstructured/input.f90:1444: if(myrank.eq.0) print *, ""idiff=1 not allowed with isplitstep=0""
 unstructured/input.f90:1479: if(isplitstep.eq.0) then
 unstructured/input.f90:1483: print *, 'WARNING: poloidal velocity smoothing not available with isplitstep=0'"
-141,iteratephi,iteratephi,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,475,4,unstructured/input.f90(2); unstructured/time_step_split.f90(1); unstructured/time_step_unsplit.f90(1),"源码引用 4 处；主要在 `input.f90` 2处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。","unstructured/input.f90:1408: if(iteratephi.eq.1) then
+141,iteratephi,iteratephi,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,分裂推进中，更新密度/输运后再重算一次磁场推进；只用于非线性分裂步，线性模式禁止。,,unstructured/input.f90,475,4,unstructured/input.f90(2); unstructured/time_step_split.f90(1); unstructured/time_step_unsplit.f90(1),"源码引用 4 处；主要在 `input.f90` 2处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。","unstructured/input.f90:1408: if(iteratephi.eq.1) then
 unstructured/input.f90:1409: if(myrank.eq.0) print *, ""iteratephi=1 is not allowed with linear=1.""
 unstructured/time_step_split.f90:1384: if(iteratephi.eq.1) then
 unstructured/time_step_unsplit.f90:327: if(linear.eq.0 .and. iteratephi.eq.0) call clear_mat(s1_mat)"
@@ -1943,10 +1943,10 @@ unstructured/ludef_t_gpu.f90:5992: if(idifv .gt. 0) dd(:,:, u_g) = dd(:,:, u_g) 
 unstructured/ludef_t_gpu.f90:6021: if(idifv .gt. 0) dd(:,:, vz_g) = dd(:,:, vz_g) - ss(:,:, vz_g)
 unstructured/ludef_t_gpu.f90:6027: if(idifv .gt. 0) dd(:,:, chi_g) = dd(:,:, chi_g) - ss(:,:, chi_g)
 unstructured/time_step_split.f90:899: if(idifv .gt.0) then"
-146,irecalc_eta,irecalc_eta,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,482,2,unstructured/time_step_split.f90(2),源码引用 2 处；主要在 `time_step_split.f90` 2处。,"unstructured/time_step_split.f90:991: if(irecalc_eta.eq.1) then
+146,irecalc_eta,irecalc_eta,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,分裂步密度求解后重新计算输运系数，使电阻率等使用更新后的密度/温度。,,unstructured/input.f90,482,2,unstructured/time_step_split.f90(2),源码引用 2 处；主要在 `time_step_split.f90` 2处。,"unstructured/time_step_split.f90:991: if(irecalc_eta.eq.1) then
 unstructured/time_step_split.f90:1072: if(irecalc_eta.eq.1) then"
-147,iconst_eta,iconst_eta,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,483,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
-148,itime_independent,itime_independent,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,484,45,unstructured/ludef_t.f90(22); unstructured/ludef_t_gpu.f90(19); unstructured/input.f90(2); unstructured/output.f90(1); unstructured/time_step_unsplit.f90(1),"源码引用 45 处；主要在 `ludef_t.f90` 22处, `ludef_t_gpu.f90` 19处, `input.f90` 2处, `output.f90` 1处。","unstructured/input.f90:1556: if(itime_independent.eq.1) then
+147,iconst_eta,iconst_eta,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时冻结初始电阻率场，不随温度/密度演化重新构造。,,unstructured/input.f90,483,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
+148,itime_independent,itime_independent,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,线性模式下去掉普通时间导数并求频域/稳态响应；程序同时令 `thimp=1`，`frequency` 给出复频率。,,unstructured/input.f90,484,45,unstructured/ludef_t.f90(22); unstructured/ludef_t_gpu.f90(19); unstructured/input.f90(2); unstructured/output.f90(1); unstructured/time_step_unsplit.f90(1),"源码引用 45 处；主要在 `ludef_t.f90` 22处, `ludef_t_gpu.f90` 19处, `input.f90` 2处, `output.f90` 1处。","unstructured/input.f90:1556: if(itime_independent.eq.1) then
 unstructured/input.f90:1561: print *, 'itime_independent=1 only available when linear=1'
 unstructured/ludef_t.f90:54: if(itime_independent.eq.1) then
 unstructured/ludef_t.f90:107: if(itime_independent.eq.0) ddterm(:,u_g) = ddterm(:,u_g) + tempx*bdf
@@ -1966,9 +1966,9 @@ unstructured/kprad_m3dc1.f90:328: ddterm(:,j) = ddterm(:,j) + (1.-thimp)*dti*tem
 unstructured/kprad_m3dc1.f90:331: ssterm(:,j) = ssterm(:,j) - thimp *dti*tempx
 unstructured/kprad_m3dc1.f90:332: ddterm(:,j) = ddterm(:,j) + (1.-thimp)*dti*tempx
 unstructured/kprad_m3dc1.f90:340: ssterm(:,j) = ssterm(:,j) - thimp *dti*tempx"
-150,thimpsm,thimpsm,&inputnl,Time Step,时间推进,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,487,2,unstructured/newvar.f90(2),源码引用 2 处；主要在 `newvar.f90` 2处。,"unstructured/newvar.f90:251: temp(:,:,1,2) = -thimpsm*intxx2(mu79(:,:,OP_1),nu79(:,:,OP_GS))
+150,thimpsm,thimpsm,&inputnl,Time Step,时间推进,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,平滑器/辅助隐式项使用的 theta 权重，与主时间离散的 `thimp` 分开。,,unstructured/input.f90,487,2,unstructured/newvar.f90(2),源码引用 2 处；主要在 `newvar.f90` 2处。,"unstructured/newvar.f90:251: temp(:,:,1,2) = -thimpsm*intxx2(mu79(:,:,OP_1),nu79(:,:,OP_GS))
 unstructured/newvar.f90:255: temp(:,:,1,2) = (1.-thimpsm)*&"
-151,harned_mikic,harned_mikic,&inputnl,Time Step,时间推进,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,488,10,unstructured/harned_mikic.f90(8); unstructured/ludef_t.f90(2),"源码引用 10 处；主要在 `harned_mikic.f90` 8处, `ludef_t.f90` 2处。","unstructured/harned_mikic.f90:18: db.eq.0. .or. harned_mikic.eq.0.) then
+151,harned_mikic,harned_mikic,&inputnl,Time Step,时间推进,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,二场模型的 Harned-Mikic 数值稳定项系数；0 关闭，非零时抑制特定高速/高频耦合。,,unstructured/input.f90,488,10,unstructured/harned_mikic.f90(8); unstructured/ludef_t.f90(2),"源码引用 10 处；主要在 `harned_mikic.f90` 8处, `ludef_t.f90` 2处。","unstructured/harned_mikic.f90:18: db.eq.0. .or. harned_mikic.eq.0.) then
 unstructured/harned_mikic.f90:23: psiterm = -db**2*harned_mikic*b1hm(trial,lin,ni79,bzt79,bzt79)
 unstructured/harned_mikic.f90:90: bterm = bterm*db**2*harned_mikic
 unstructured/harned_mikic.f90:91: psiterm = psiterm*db**2*harned_mikic
@@ -1978,14 +1978,14 @@ unstructured/harned_mikic.f90:245: bterm = bterm*db**2*harned_mikic
 unstructured/harned_mikic.f90:246: psiterm = psiterm*db**2*harned_mikic
 unstructured/ludef_t.f90:2661: if(itwofluid.eq.1 .and. harned_mikic.ne.0) then
 unstructured/ludef_t.f90:3362: if(itwofluid.eq.1 .and. harned_mikic.ne.0) then"
-152,isources,isources,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,489,2,unstructured/input.f90(2),源码引用 2 处；主要在 `input.f90` 2处。,"unstructured/input.f90:1521: if(isources.eq.1) then
+152,isources,isources,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时把粒子注入等源项导致的动量修正放入速度推进；要求计算标量诊断以取得所需全局量。,,unstructured/input.f90,489,2,unstructured/input.f90(2),源码引用 2 处；主要在 `input.f90` 2处。,"unstructured/input.f90:1521: if(isources.eq.1) then
 unstructured/input.f90:1522: if(myrank.eq.0) print *, 'ERROR: isources=1 requires icalcscalars=1'"
-153,nskip,nskip,&inputnl,Time Step,时间推进,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,490,1,unstructured/time_step.f90(1),源码引用 1 处；主要在 `time_step.f90` 1处。,"unstructured/time_step.f90:105: .or. (linear.eq.0 .and. mod(ntime,nskip).eq.0) &"
+153,nskip,nskip,&inputnl,Time Step,时间推进,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,有限元系统矩阵重建的时间步间隔；1 每步重建，较大值在系数变化慢时复用矩阵。,,unstructured/input.f90,490,1,unstructured/time_step.f90(1),源码引用 1 处；主要在 `time_step.f90` 1处。,"unstructured/time_step.f90:105: .or. (linear.eq.0 .and. mod(ntime,nskip).eq.0) &"
 154,pskip,pskip,&inputnl,Time Step,时间推进,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,源码当前默认 0；官方文档写 1。控制预条件器重算/复用相关周期。,,unstructured/input.f90,491,4,unstructured/time_step_split.f90(4),源码引用 4 处；主要在 `time_step_split.f90` 4处。,"unstructured/time_step_split.f90:476: if(mod(ntime,pskip)==0) then
 unstructured/time_step_split.f90:484: if(pskip==0) then
 unstructured/time_step_split.f90:488: else if(pskip==1) then
 unstructured/time_step_split.f90:499: if(mod(ntime,pskip)==0) then"
-155,iskippc,iskippc,&inputnl,Time Step,时间推进,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,492,2,unstructured/get_pc_skip_count.f90(2),源码引用 2 处；主要在 `get_pc_skip_count.f90` 2处。,"unstructured/get_pc_skip_count.f90:2: use basic, ONLY: iskippc, myrank
+155,iskippc,iskippc,&inputnl,Time Step,时间推进,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,后端线性求解中预条件器可复用的调用次数/周期控制；与分裂步层面的 `pskip` 分开。,,unstructured/input.f90,492,2,unstructured/get_pc_skip_count.f90(2),源码引用 2 处；主要在 `get_pc_skip_count.f90` 2处。,"unstructured/get_pc_skip_count.f90:2: use basic, ONLY: iskippc, myrank
 unstructured/get_pc_skip_count.f90:7: MAX_SAME_PC_COUNT = iskippc"
 156,dt,dt,&inputnl,Time Step,时间推进,real,0.1,1,Size of time step,,,unstructured/input.f90,493,1498,unstructured/ludef_t.f90(1014); unstructured/ludef_t_gpu.f90(334); unstructured/bootstrap.f90(36); unstructured/electrostatic_potential.f90(20); unstructured/time_step.f90(14); unstructured/error_estimate.f90(9); unstructured/particle.f90(8); unstructured/particle_com.f90(8),"源码引用 1498 处；主要在 `ludef_t.f90` 1014处, `ludef_t_gpu.f90` 334处, `bootstrap.f90` 36处, `electrostatic_potential.f90` 20处。","unstructured/bootstrap.f90:63: ssterm(:,pp_g) = ssterm(:,pp_g) - thimpi *dt*temp
 unstructured/bootstrap.f90:64: ddterm(:,pp_g) = ddterm(:,pp_g) + (1. - thimpi*bdf)*dt*temp
@@ -2040,7 +2040,7 @@ unstructured/auxiliary_fields.f90:1167: if(jadv.eq.0) then
 unstructured/bootstrap.f90:194: if(jadv.eq.0) then
 unstructured/bootstrap.f90:281: if(jadv.eq.0) then
 unstructured/bootstrap.f90:393: if(jadv.eq.0) then"
-171,int_pts_main,int_pts_main,&inputnl,Numerical Options,数值选项,integer,25,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,524,91,unstructured/gradshafranov.f90(13); unstructured/init_common.f90(12); unstructured/particle.f90(11); unstructured/particle_com.f90(8); unstructured/runaway_advection.f90(6); unstructured/output.f90(5); unstructured/kprad_m3dc1.f90(4); unstructured/rmp.f90(4),"源码引用 91 处；主要在 `gradshafranov.f90` 13处, `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处。","unstructured/adapt.f90:112: call define_element_quadrature(itri,int_pts_main,int_pts_tor)
+171,int_pts_main,int_pts_main,&inputnl,Numerical Options,数值选项,integer,25,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,主演化弱式在每个二维三角形上的 Gaussian 积分点数；必须是程序已实现的 Dunavant 阶数。,,unstructured/input.f90,524,91,unstructured/gradshafranov.f90(13); unstructured/init_common.f90(12); unstructured/particle.f90(11); unstructured/particle_com.f90(8); unstructured/runaway_advection.f90(6); unstructured/output.f90(5); unstructured/kprad_m3dc1.f90(4); unstructured/rmp.f90(4),"源码引用 91 处；主要在 `gradshafranov.f90` 13处, `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处。","unstructured/adapt.f90:112: call define_element_quadrature(itri,int_pts_main,int_pts_tor)
 unstructured/biharmonic.f90:98: call define_element_quadrature(itri,int_pts_main,5)
 unstructured/biharmonic.f90:200: call define_element_quadrature(itri,int_pts_main,5)
 unstructured/coils.f90:195: call define_element_quadrature(itri,int_pts_main,int_pts_tor)
@@ -2050,7 +2050,7 @@ unstructured/gradshafranov.f90:1185: call define_element_quadrature(itri,int_pts
 unstructured/gradshafranov.f90:1431: call define_element_quadrature(itri, int_pts_main, int_tor)
 unstructured/gradshafranov.f90:1497: call define_element_quadrature(itri, int_pts_main, int_tor)
 unstructured/gradshafranov.f90:1526: call define_element_quadrature(itri, int_pts_main, int_tor)"
-172,int_pts_aux,int_pts_aux,&inputnl,Numerical Options,数值选项,integer,25,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,525,10,unstructured/auxiliary_fields.f90(5); unstructured/input.f90(3); unstructured/diagnostics.f90(1); unstructured/transport.f90(1),"源码引用 10 处；主要在 `auxiliary_fields.f90` 5处, `input.f90` 3处, `diagnostics.f90` 1处, `transport.f90` 1处。","unstructured/auxiliary_fields.f90:237: call define_element_quadrature(itri, int_pts_aux, 5)
+172,int_pts_aux,int_pts_aux,&inputnl,Numerical Options,数值选项,integer,25,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,辅助场投影/构造所用的二维积分点数；提高它增加后处理与系数构造成本。,,unstructured/input.f90,525,10,unstructured/auxiliary_fields.f90(5); unstructured/input.f90(3); unstructured/diagnostics.f90(1); unstructured/transport.f90(1),"源码引用 10 处；主要在 `auxiliary_fields.f90` 5处, `input.f90` 3处, `diagnostics.f90` 1处, `transport.f90` 1处。","unstructured/auxiliary_fields.f90:237: call define_element_quadrature(itri, int_pts_aux, 5)
 unstructured/auxiliary_fields.f90:359: call define_element_quadrature(itri, int_pts_aux, 5)
 unstructured/auxiliary_fields.f90:503: call define_element_quadrature(itri, int_pts_aux, 5)
 unstructured/auxiliary_fields.f90:754: call define_element_quadrature(itri, int_pts_aux, 5)
@@ -2060,7 +2060,7 @@ unstructured/input.f90:1533: if(int_pts_aux*int_pts_tor .gt. MAX_PTS) then
 unstructured/input.f90:1534: if(myrank.eq.0) print*, 'ERROR: int_pts_aux > MAX_PTS = ', MAX_PTS
 unstructured/input.f90:1542: (.not.quadrature_implemented(int_pts_aux)) .or. &
 unstructured/transport.f90:1718: call define_element_quadrature(itri, int_pts_aux, 5)"
-173,int_pts_diag,int_pts_diag,&inputnl,Numerical Options,数值选项,integer,25,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,526,14,unstructured/diagnostics.f90(6); unstructured/input.f90(3); unstructured/gradshafranov.f90(2); unstructured/init_basicq.f90(1); unstructured/init_conds.f90(1); unstructured/init_kstar.f90(1),"源码引用 14 处；主要在 `diagnostics.f90` 6处, `input.f90` 3处, `gradshafranov.f90` 2处, `init_basicq.f90` 1处。","unstructured/diagnostics.f90:826: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
+173,int_pts_diag,int_pts_diag,&inputnl,Numerical Options,数值选项,integer,25,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,标量和诊断积分使用的二维积分点数。,,unstructured/input.f90,526,14,unstructured/diagnostics.f90(6); unstructured/input.f90(3); unstructured/gradshafranov.f90(2); unstructured/init_basicq.f90(1); unstructured/init_conds.f90(1); unstructured/init_kstar.f90(1),"源码引用 14 处；主要在 `diagnostics.f90` 6处, `input.f90` 3处, `gradshafranov.f90` 2处, `init_basicq.f90` 1处。","unstructured/diagnostics.f90:826: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
 unstructured/diagnostics.f90:1230: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
 unstructured/diagnostics.f90:2428: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
 unstructured/diagnostics.f90:2632: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
@@ -2070,7 +2070,7 @@ unstructured/gradshafranov.f90:2115: call define_element_quadrature(itri,int_pts
 unstructured/gradshafranov.f90:2907: call define_element_quadrature(itri, int_pts_diag, int_tor)
 unstructured/init_basicq.f90:117: call define_element_quadrature(itri,int_pts_diag, int_pts_tor)
 unstructured/init_conds.f90:797: call define_element_quadrature(itri,int_pts_diag, int_pts_tor)"
-174,int_pts_tor,int_pts_tor,&inputnl,Numerical Options,数值选项,integer,5,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,527,76,unstructured/init_common.f90(12); unstructured/particle.f90(11); unstructured/particle_com.f90(8); unstructured/diagnostics.f90(6); unstructured/runaway_advection.f90(6); unstructured/output.f90(5); unstructured/input.f90(4); unstructured/init_basicj.f90(3),"源码引用 76 处；主要在 `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处, `diagnostics.f90` 6处。","unstructured/adapt.f90:112: call define_element_quadrature(itri,int_pts_main,int_pts_tor)
+174,int_pts_tor,int_pts_tor,&inputnl,Numerical Options,数值选项,integer,5,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,三维棱柱在环向 Hermite 方向的积分点数；非 3D 编译会强制为 1，且与二维点数乘积不能超过内部上限。,,unstructured/input.f90,527,76,unstructured/init_common.f90(12); unstructured/particle.f90(11); unstructured/particle_com.f90(8); unstructured/diagnostics.f90(6); unstructured/runaway_advection.f90(6); unstructured/output.f90(5); unstructured/input.f90(4); unstructured/init_basicj.f90(3),"源码引用 76 处；主要在 `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处, `diagnostics.f90` 6处。","unstructured/adapt.f90:112: call define_element_quadrature(itri,int_pts_main,int_pts_tor)
 unstructured/coils.f90:195: call define_element_quadrature(itri,int_pts_main,int_pts_tor)
 unstructured/diagnostics.f90:826: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
 unstructured/diagnostics.f90:1230: call define_element_quadrature(itri, int_pts_diag, int_pts_tor)
@@ -2087,7 +2087,7 @@ unstructured/m3dc1_nint.f90:389: if(equilibrate.ne.0) then
 unstructured/newpar.f90:1212: select case(equilibrate)
 unstructured/newpar.f90:1494: if(equilibrate.ne.0) deallocate(equil_fac)
 unstructured/newpar.f90:1502: if(equilibrate.ne.0) allocate(equil_fac(dofs_per_element,numelms))"
-177,regular,regular,&inputnl,Numerical Options,数值选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,531,21,unstructured/transport.f90(7); unstructured/ludef_t.f90(4); unstructured/init_vmec.f90(3); unstructured/init_common.f90(2); unstructured/newvar.f90(2); unstructured/rmp.f90(2); unstructured/ludef_t_gpu.f90(1),"源码引用 21 处；主要在 `transport.f90` 7处, `ludef_t.f90` 4处, `init_vmec.f90` 3处, `init_common.f90` 2处。","unstructured/init_common.f90:336: temp79b = sqrt((xl_79-xcenter)**2 + (zl_79-zcenter)**2 + regular**2)
+177,regular,regular,&inputnl,Numerical Options,数值选项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,小分母/坐标奇点的正则化尺度；USEST 逻辑 rho 模型使用 `sqrt(rho^2+regular^2)`，压缩势方程也复用该量。,,unstructured/input.f90,531,21,unstructured/transport.f90(7); unstructured/ludef_t.f90(4); unstructured/init_vmec.f90(3); unstructured/init_common.f90(2); unstructured/newvar.f90(2); unstructured/rmp.f90(2); unstructured/ludef_t_gpu.f90(1),"源码引用 21 处；主要在 `transport.f90` 7处, `ludef_t.f90` 4处, `init_vmec.f90` 3处, `init_common.f90` 2处。","unstructured/init_common.f90:336: temp79b = sqrt((xl_79-xcenter)**2 + (zl_79-zcenter)**2 + regular**2)
 unstructured/init_common.f90:346: temp79b = (xl_79-xcenter)**2 + (zl_79-zcenter)**2 + regular**2
 unstructured/init_vmec.f90:129: + regular*intxx3(mu79(:,:,OP_1),nu79(:,:,OP_1),ri2_79)
 unstructured/init_vmec.f90:140: -regular*intxx3(mu79(:,:,OP_1),nu79(:,:,OP_1),ri4_79)
@@ -2229,7 +2229,7 @@ unstructured/scorec_matrix.f90:524: ilu_omega,poly_ord)
 m3dc1_scorec/api/m3dc1_scorec.cc:6218: ilu_omega, int* poly_ord)
 m3dc1_scorec/api/m3dc1_scorec.cc:6358: solver.SetAztecOption(AZ_poly_ord, *poly_ord);
 m3dc1_scorec/api/m3dc1_scorec.h:277: double* ilu_omega, int* poly_ord);"
-501,iadapt,iadapt,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1130,8,unstructured/newpar.f90(5); unstructured/input.f90(1); unstructured/time_step_split.f90(1); unstructured/time_step_unsplit.f90(1),"源码引用 8 处；主要在 `newpar.f90` 5处, `input.f90` 1处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。","unstructured/input.f90:1465: if(iadapt.gt.0) then
+501,iadapt,iadapt,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,SCOREC 网格自适应总模式：0 关闭；1 初始化按磁通；2 推进中按误差；3 两者结合；4 初始化和推进均可按误差。,,unstructured/input.f90,1130,8,unstructured/newpar.f90(5); unstructured/input.f90(1); unstructured/time_step_split.f90(1); unstructured/time_step_unsplit.f90(1),"源码引用 8 处；主要在 `newpar.f90` 5处, `input.f90` 1处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。","unstructured/input.f90:1465: if(iadapt.gt.0) then
 unstructured/newpar.f90:329: if (iadapt.gt.0 .and. iadapt_writevtk .eq. 1) then
 unstructured/newpar.f90:335: if (mod (iadapt, 2) .eq. 1) then
 unstructured/newpar.f90:339: if (iadapt .eq. 4) call adapt_by_error
@@ -2237,7 +2237,7 @@ unstructured/newpar.f90:342: if(irestart.eq.0 .or. iadapt.gt.0) then
 unstructured/newpar.f90:467: if (iadapt .gt. 1 .and. ispradapt .eq.0) then
 unstructured/time_step_split.f90:716: if(iadapt .ne. 0) then
 unstructured/time_step_unsplit.f90:225: if(iadapt .ne. 0) then"
-502,ispradapt,ispradapt,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1132,17,unstructured/newpar.f90(7); unstructured/auxiliary_fields.f90(4); unstructured/gradshafranov.f90(2); unstructured/adapt.f90(1); unstructured/kprad_m3dc1.f90(1); unstructured/time_step_split.f90(1); unstructured/wall.f90(1),"源码引用 17 处；主要在 `newpar.f90` 7处, `auxiliary_fields.f90` 4处, `gradshafranov.f90` 2处, `adapt.f90` 1处。","unstructured/adapt.f90:67: if (ispradapt .eq. 1) then
+502,ispradapt,ispradapt,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 启用 SPR 梯度恢复自适应，并在推进阶段替代普通 residual/error 路径。,,unstructured/input.f90,1132,17,unstructured/newpar.f90(7); unstructured/auxiliary_fields.f90(4); unstructured/gradshafranov.f90(2); unstructured/adapt.f90(1); unstructured/kprad_m3dc1.f90(1); unstructured/time_step_split.f90(1); unstructured/wall.f90(1),"源码引用 17 处；主要在 `newpar.f90` 7处, `auxiliary_fields.f90` 4处, `gradshafranov.f90` 2处, `adapt.f90` 1处。","unstructured/adapt.f90:67: if (ispradapt .eq. 1) then
 unstructured/auxiliary_fields.f90:40: if (ispradapt .eq. 1) then
 unstructured/auxiliary_fields.f90:224: if (ispradapt .eq. 1) then
 unstructured/auxiliary_fields.f90:347: if (ispradapt .eq. 1) then
@@ -2247,44 +2247,44 @@ unstructured/gradshafranov.f90:1418: if (ispradapt .eq. 1) then
 unstructured/kprad_m3dc1.f90:76: if (ispradapt .eq. 1) then
 unstructured/newpar.f90:347: if (ispradapt .eq. 1) call marker
 unstructured/newpar.f90:451: if (ispradapt .eq. 1) then"
-503,isprntime,isprntime,&inputnl,Mesh Adaptation,网格自适应,integer,10,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1133,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:452: if (mod(ntime, isprntime) .eq. 0) then"
-504,isprweight,isprweight,&inputnl,Mesh Adaptation,网格自适应,real,0.1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1134,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
-505,isprmaxsize,isprmaxsize,&inputnl,Mesh Adaptation,网格自适应,real,0.05,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1135,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
-506,isprrefinelevel,isprrefinelevel,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1136,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
-507,isprcoarsenlevel,isprcoarsenlevel,&inputnl,Mesh Adaptation,网格自适应,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1137,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
-508,iadapt_writevtk,iadapt_writevtk,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1140,3,unstructured/adapt.f90(2); unstructured/newpar.f90(1),"源码引用 3 处；主要在 `adapt.f90` 2处, `newpar.f90` 1处。","unstructured/adapt.f90:267: if(iadapt_writevtk .eq. 1) call m3dc1_mesh_write (mesh_file_name,0,ntime)
+503,isprntime,isprntime,&inputnl,Mesh Adaptation,网格自适应,integer,10,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,SPR 自适应的时间步调用周期。,,unstructured/input.f90,1133,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:452: if (mod(ntime, isprntime) .eq. 0) then"
+504,isprweight,isprweight,&inputnl,Mesh Adaptation,网格自适应,real,0.1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,SPR 恢复误差转换为目标尺寸时的权重，控制细化强度。,,unstructured/input.f90,1134,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
+505,isprmaxsize,isprmaxsize,&inputnl,Mesh Adaptation,网格自适应,real,0.05,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,SPR 目标尺寸场允许的最大单元尺寸。,,unstructured/input.f90,1135,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
+506,isprrefinelevel,isprrefinelevel,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,一次 SPR 调用允许的最大细化层级。,,unstructured/input.f90,1136,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
+507,isprcoarsenlevel,isprcoarsenlevel,&inputnl,Mesh Adaptation,网格自适应,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,一次 SPR 调用允许的粗化层级；负值表示使用实现的默认/不强制粗化。,,unstructured/input.f90,1137,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,"unstructured/newpar.f90:463: isprweight, isprmaxsize, isprrefinelevel, isprcoarsenlevel, update_mesh)"
+508,iadapt_writevtk,iadapt_writevtk,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 在自适应阶段写出 VTK 调试网格/尺寸场。,,unstructured/input.f90,1140,3,unstructured/adapt.f90(2); unstructured/newpar.f90(1),"源码引用 3 处；主要在 `adapt.f90` 2处, `newpar.f90` 1处。","unstructured/adapt.f90:267: if(iadapt_writevtk .eq. 1) call m3dc1_mesh_write (mesh_file_name,0,ntime)
 unstructured/adapt.f90:530: if(iadapt_writevtk .eq. 1) call m3dc1_mesh_write (mesh_file_name,0,ntime)
 unstructured/newpar.f90:329: if (iadapt.gt.0 .and. iadapt_writevtk .eq. 1) then"
-509,iadapt_writesmb,iadapt_writesmb,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1143,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:268: if(iadapt_writesmb .eq. 1) call m3dc1_mesh_write (mesh_file_name,1,ntime)
+509,iadapt_writesmb,iadapt_writesmb,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 写出 SCOREC `.smb` 自适应网格快照，便于重启或检查。,,unstructured/input.f90,1143,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:268: if(iadapt_writesmb .eq. 1) call m3dc1_mesh_write (mesh_file_name,1,ntime)
 unstructured/adapt.f90:531: if(iadapt_writesmb .eq. 1) call m3dc1_mesh_write (mesh_file_name,1,ntime)"
-510,iadapt_useH1,iadapt_useH1,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1144,5,unstructured/error_estimate.f90(5),源码引用 5 处；主要在 `error_estimate.f90` 5处。,"unstructured/error_estimate.f90:342: if(iadapt_useH1 .eq. 1) edge_error(edges(iedge)+1,:) = edge_error(edges(iedge)+1,:) /edge_len(1)**2;
+510,iadapt_useH1,iadapt_useH1,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 用 H1 型误差度量替代默认高阶度量构造目标尺寸。,,unstructured/input.f90,1144,5,unstructured/error_estimate.f90(5),源码引用 5 处；主要在 `error_estimate.f90` 5处。,"unstructured/error_estimate.f90:342: if(iadapt_useH1 .eq. 1) edge_error(edges(iedge)+1,:) = edge_error(edges(iedge)+1,:) /edge_len(1)**2;
 unstructured/error_estimate.f90:760: elm_res_U (itri) = int1 (fn_eval_elm) *CONJG (int1 (fn_eval_elm)) * ((d%a+d%b)*d%c)**(2-iadapt_useH1)
 unstructured/error_estimate.f90:763: elm_res_U (itri) = int1 (fn_eval_elm) **2 * ((d%a+d%b)*d%c)**(2-iadapt_useH1)
 unstructured/error_estimate.f90:813: elm_res_psi (itri) = int1 (fn_eval_elm) *CONJG(int1 (fn_eval_elm)) * ((d%a+d%b)*d%c)**(2-iadapt_useH1)
 unstructured/error_estimate.f90:816: elm_res_psi (itri) = int1 (fn_eval_elm) **2 * ((d%a+d%b)*d%c)**(2-iadapt_useH1)"
-511,iadapt_removeEquiv,iadapt_removeEquiv,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1145,1,unstructured/error_estimate.f90(1),源码引用 1 处；主要在 `error_estimate.f90` 1处。,unstructured/error_estimate.f90:439: if(iadapt_removeEquiv .eq. 1) then
-512,adapt_target_error,adapt_target_error,&inputnl,Mesh Adaptation,网格自适应,real,0.0001,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1146,7,m3dc1_scorec/api/m3dc1_scorec.cc(4); unstructured/adapt.f90(3),"源码引用 7 处；主要在 `m3dc1_scorec.cc` 4处, `adapt.f90` 3处。","unstructured/adapt.f90:510: if (max_error(1) .gt. error_tol * adapt_target_error .or. max_error(2) &
+511,iadapt_removeEquiv,iadapt_removeEquiv,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 在误差估计前去掉环向等价节点/重复贡献，供周期网格的专用适配路径使用。,,unstructured/input.f90,1145,1,unstructured/error_estimate.f90(1),源码引用 1 处；主要在 `error_estimate.f90` 1处。,unstructured/error_estimate.f90:439: if(iadapt_removeEquiv .eq. 1) then
+512,adapt_target_error,adapt_target_error,&inputnl,Mesh Adaptation,网格自适应,real,0.0001,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,普通误差自适应的目标/触发误差；估计误差未超过它时不换网格。,,unstructured/input.f90,1146,7,m3dc1_scorec/api/m3dc1_scorec.cc(4); unstructured/adapt.f90(3),"源码引用 7 处；主要在 `m3dc1_scorec.cc` 4处, `adapt.f90` 3处。","unstructured/adapt.f90:510: if (max_error(1) .gt. error_tol * adapt_target_error .or. max_error(2) &
 unstructured/adapt.f90:511: .gt. error_tol * adapt_target_error) then
 unstructured/adapt.f90:528: call adapt_by_error_field(sqrt(node_error(1,:)**2+node_error(2,:)**2), adapt_target_error, &
 m3dc1_scorec/api/m3dc1_scorec.cc:4727: // double* errorAimed: Parameter ""adapt_target_error"" from the user input parameter file
 m3dc1_scorec/api/m3dc1_scorec.cc:4730: // Maximum node number in the adapted mesh. If the estimated mesh node number from adapt_target_error exceeds iadapt_max_node,
 m3dc1_scorec/api/m3dc1_scorec.cc:4733: // 0: adapt_target_error is global (integral over the domain)
 m3dc1_scorec/api/m3dc1_scorec.cc:4734: // 1: adapt_target_error is local (integral over the element)"
-513,adapt_ke,adapt_ke,&inputnl,Mesh Adaptation,网格自适应,real,0.0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1147,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:621: if(linear .eq. 1 .and. adapt_ke .gt. 0 .and. ekin .gt. adapt_ke) then
+513,adapt_ke,adapt_ke,&inputnl,Mesh Adaptation,网格自适应,real,0.0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,线性计算中触发动态自适应的动能阈值；0 不使用该触发条件。,,unstructured/input.f90,1147,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:621: if(linear .eq. 1 .and. adapt_ke .gt. 0 .and. ekin .gt. adapt_ke) then
 unstructured/adapt.f90:623: if (myrank .eq. 0) print *, ""diagnose_adapt: run adaptation as ekin is greater than adapt_ke"", adapt_ke, ""(linear)"""
-514,iadapt_ntime,iadapt_ntime,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1148,3,unstructured/adapt.f90(3),源码引用 3 处；主要在 `adapt.f90` 3处。,"unstructured/adapt.f90:611: if (iadapt_ntime .gt. 0 .and. mod(ntime, iadapt_ntime) .eq. 0) then
+514,iadapt_ntime,iadapt_ntime,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,普通动态自适应检查的时间步周期；非线性且为 0 时当前流程可每步检查。,,unstructured/input.f90,1148,3,unstructured/adapt.f90(3),源码引用 3 处；主要在 `adapt.f90` 3处。,"unstructured/adapt.f90:611: if (iadapt_ntime .gt. 0 .and. mod(ntime, iadapt_ntime) .eq. 0) then
 unstructured/adapt.f90:613: if (myrank .eq. 0) print *, ""diagnose_adapt: run adaptation every"", iadapt_ntime, ""time step(s)""
 unstructured/adapt.f90:616: if (linear .eq. 0 .and. iadapt_ntime .eq. 0) then"
-515,iadapt_max_node,iadapt_max_node,&inputnl,Mesh Adaptation,网格自适应,integer,10000,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1149,4,unstructured/adapt.f90(2); m3dc1_scorec/api/m3dc1_scorec.cc(2),"源码引用 4 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 2处。","unstructured/adapt.f90:12: data iadapt_max_node /100/
+515,iadapt_max_node,iadapt_max_node,&inputnl,Mesh Adaptation,网格自适应,integer,10000,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,自适应后允许的节点数上限，用于限制内存和网格增长。,,unstructured/input.f90,1149,4,unstructured/adapt.f90(2); m3dc1_scorec/api/m3dc1_scorec.cc(2),"源码引用 4 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 2处。","unstructured/adapt.f90:12: data iadapt_max_node /100/
 unstructured/adapt.f90:529: iadapt_max_node, adapt_control);
 m3dc1_scorec/api/m3dc1_scorec.cc:4730: // Maximum node number in the adapted mesh. If the estimated mesh node number from adapt_target_error exceeds iadapt_max_node,
 m3dc1_scorec/api/m3dc1_scorec.cc:4731: // the target mesh size in the adapted mesh is scaled such that the mesh node number is below iadapt_max_node."
-516,adapt_control,adapt_control,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1150,3,unstructured/adapt.f90(2); m3dc1_scorec/api/m3dc1_scorec.cc(1),"源码引用 3 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 1处。","unstructured/adapt.f90:497: if (adapt_control .eq. 0) then
+516,adapt_control,adapt_control,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,误差到目标尺寸的控制模式/方向参数；常规保持默认 1。,,unstructured/input.f90,1150,3,unstructured/adapt.f90(2); m3dc1_scorec/api/m3dc1_scorec.cc(1),"源码引用 3 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 1处。","unstructured/adapt.f90:497: if (adapt_control .eq. 0) then
 unstructured/adapt.f90:529: iadapt_max_node, adapt_control);
 m3dc1_scorec/api/m3dc1_scorec.cc:4732: // int* option: Parameter ""adapt_control"" from the user input parameter file and is either 0 or 1"
-517,iadapt_order_p,iadapt_order_p,&inputnl,Mesh Adaptation,网格自适应,real,3.0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1151,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:11: data iadapt_order_p /3/
+517,iadapt_order_p,iadapt_order_p,&inputnl,Mesh Adaptation,网格自适应,real,3.0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,误差随网格尺寸收敛的假定阶数，用于由目标误差反算目标尺寸。,,unstructured/input.f90,1151,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:11: data iadapt_order_p /3/
 unstructured/adapt.f90:527: call set_adapt_p(iadapt_order_p)"
-518,iadaptFaceNumber,iadaptFaceNumber,&inputnl,Mesh Adaptation,网格自适应,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1152,8,m3dc1_scorec/api/m3dc1_scorec.cc(5); unstructured/adapt.f90(2); m3dc1_scorec/api/m3dc1_scorec.h(1),"源码引用 8 处；主要在 `m3dc1_scorec.cc` 5处, `adapt.f90` 2处, `m3dc1_scorec.h` 1处。","unstructured/adapt.f90:260: if (iadaptFaceNumber.gt.0) then
+518,iadaptFaceNumber,iadaptFaceNumber,&inputnl,Mesh Adaptation,网格自适应,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,只适配指定几何模型 face 的编号；-1 表示不按单一 face 限制。,,unstructured/input.f90,1152,8,m3dc1_scorec/api/m3dc1_scorec.cc(5); unstructured/adapt.f90(2); m3dc1_scorec/api/m3dc1_scorec.h(1),"源码引用 8 处；主要在 `m3dc1_scorec.cc` 5处, `adapt.f90` 2处, `m3dc1_scorec.h` 1处。","unstructured/adapt.f90:260: if (iadaptFaceNumber.gt.0) then
 unstructured/adapt.f90:261: call adapt_model_face(temporary_field%vec%id,psimin,psibound,iadaptFaceNumber)
 m3dc1_scorec/api/m3dc1_scorec.cc:5476: int adapt_model_face(int * fieldId, double* psi0, double * psil, int* iadaptFaceNumber)
 m3dc1_scorec/api/m3dc1_scorec.cc:5499: if (gmi_tag(model, gf) == *iadaptFaceNumber)
@@ -2292,16 +2292,16 @@ m3dc1_scorec/api/m3dc1_scorec.cc:5508: std::cout << ""The model face to adapt (I
 m3dc1_scorec/api/m3dc1_scorec.cc:5518: std::cout << ""The model face to adapt with ID "" << *iadaptFaceNumber << "" found in the model"" << ""\n"";
 m3dc1_scorec/api/m3dc1_scorec.cc:5554: int adaptFaceNumber = *iadaptFaceNumber;
 m3dc1_scorec/api/m3dc1_scorec.h:237: int adapt_model_face(int * fieldId, double* psi0, double * psil, int* iadaptFaceNumber);"
-519,iadapt_snap,iadapt_snap,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1153,1,unstructured/scorec_mesh.f90(1),源码引用 1 处；主要在 `scorec_mesh.f90` 1处。,unstructured/scorec_mesh.f90:121: if (iadapt_snap.eq.1) call m3dc1_model_settopo()
-520,adapt_factor,adapt_factor,&inputnl,Mesh Adaptation,网格自适应,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1155,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
-521,adapt_hmin,adapt_hmin,&inputnl,Mesh Adaptation,网格自适应,real,0.001,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1156,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:521: abs_size(1) = adapt_hmin
-522,adapt_hmax,adapt_hmax,&inputnl,Mesh Adaptation,网格自适应,real,0.1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1157,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:522: abs_size(2) = adapt_hmax
-523,adapt_hmin_rel,adapt_hmin_rel,&inputnl,Mesh Adaptation,网格自适应,real,0.5,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1158,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:523: rel_size(1) = adapt_hmin_rel
-524,adapt_hmax_rel,adapt_hmax_rel,&inputnl,Mesh Adaptation,网格自适应,real,2.0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1159,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:524: rel_size(2) = adapt_hmax_rel
-525,adapt_smooth,adapt_smooth,&inputnl,Mesh Adaptation,网格自适应,real,2./3. (约 0.6667),1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1160,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
-526,adapt_psin_vacuum,adapt_psin_vacuum,&inputnl,Mesh Adaptation,网格自适应,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1161,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:157: if(izone.ge.3 .and. adapt_psin_vacuum.ge.0) then
+519,iadapt_snap,iadapt_snap,&inputnl,Mesh Adaptation,网格自适应,integer,1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 时把新边界节点投影/贴合回既有几何模型边界；不会创建新的壁面或 LCFS。,,unstructured/input.f90,1153,1,unstructured/scorec_mesh.f90(1),源码引用 1 处；主要在 `scorec_mesh.f90` 1处。,unstructured/scorec_mesh.f90:121: if (iadapt_snap.eq.1) call m3dc1_model_settopo()
+520,adapt_factor,adapt_factor,&inputnl,Mesh Adaptation,网格自适应,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,保留的自适应缩放输入；当前活动源码未读取其值，修改它不会改变网格。,,unstructured/input.f90,1155,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
+521,adapt_hmin,adapt_hmin,&inputnl,Mesh Adaptation,网格自适应,real,0.001,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,磁通/误差尺寸场允许的绝对最小单元尺度。,,unstructured/input.f90,1156,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:521: abs_size(1) = adapt_hmin
+522,adapt_hmax,adapt_hmax,&inputnl,Mesh Adaptation,网格自适应,real,0.1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,磁通/误差尺寸场允许的绝对最大单元尺度。,,unstructured/input.f90,1157,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:522: abs_size(2) = adapt_hmax
+523,adapt_hmin_rel,adapt_hmin_rel,&inputnl,Mesh Adaptation,网格自适应,real,0.5,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,相对当前单元尺寸的一次最小缩放比，限制单次细化幅度。,,unstructured/input.f90,1158,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:523: rel_size(1) = adapt_hmin_rel
+524,adapt_hmax_rel,adapt_hmax_rel,&inputnl,Mesh Adaptation,网格自适应,real,2.0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,相对当前单元尺寸的一次最大缩放比，限制单次粗化幅度。,,unstructured/input.f90,1159,1,unstructured/adapt.f90(1),源码引用 1 处；主要在 `adapt.f90` 1处。,unstructured/adapt.f90:524: rel_size(2) = adapt_hmax_rel
+525,adapt_smooth,adapt_smooth,&inputnl,Mesh Adaptation,网格自适应,real,2./3. (约 0.6667),1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,保留的尺寸场平滑输入；当前活动源码未读取其值。,,unstructured/input.f90,1160,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
+526,adapt_psin_vacuum,adapt_psin_vacuum,&inputnl,Mesh Adaptation,网格自适应,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,按磁通适配时 vacuum 区的归一化磁通阈值/目标范围；负值关闭该专用阈值。,,unstructured/input.f90,1161,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:157: if(izone.ge.3 .and. adapt_psin_vacuum.ge.0) then
 unstructured/adapt.f90:158: temp79b = adapt_psin_vacuum"
-527,adapt_psin_wall,adapt_psin_wall,&inputnl,Mesh Adaptation,网格自适应,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1163,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:154: if(izone.eq.2 .and. adapt_psin_wall.ge.0) then
+527,adapt_psin_wall,adapt_psin_wall,&inputnl,Mesh Adaptation,网格自适应,real,-1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,按磁通适配时 wall 区的归一化磁通阈值/目标范围；负值关闭该专用阈值。,,unstructured/input.f90,1163,2,unstructured/adapt.f90(2),源码引用 2 处；主要在 `adapt.f90` 2处。,"unstructured/adapt.f90:154: if(izone.eq.2 .and. adapt_psin_wall.ge.0) then
 unstructured/adapt.f90:155: temp79b = adapt_psin_wall"
 528,iadapt_pack_rationals,iadapt_pack_rationals,&inputnl,Mesh Adaptation,网格自适应,integer,0,1,Number of mode-rational surfaces to pack mesh around,,,unstructured/input.f90,1165,4,unstructured/adapt.f90(4),源码引用 4 处；主要在 `adapt.f90` 4处。,"unstructured/adapt.f90:164: if(iadapt_pack_rationals.gt.0 .and. ntor.ne.0) then
 unstructured/adapt.f90:166: print *, 'Error, iadapt_pack_rationals > 0, but q profile not set'
@@ -2319,11 +2319,11 @@ unstructured/adapt.f90:86: p_dt = 2.*adapt_pellet_delta/p_v
 unstructured/adapt.f90:226: if(adapt_pellet_delta.gt.0) then
 unstructured/adapt.f90:232: (2.*adapt_pellet_delta**2))
 unstructured/adapt.f90:251: if(adapt_pellet_delta.gt.0) then"
-16,iheat_sink,iheat_sink,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,243,4,unstructured/ludef_t.f90(2); unstructured/input.f90(1); unstructured/transport.f90(1),"源码引用 4 处；主要在 `ludef_t.f90` 2处, `input.f90` 1处, `transport.f90` 1处。","unstructured/input.f90:1671: iheat_sink.eq.1)
+16,iheat_sink,iheat_sink,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 启用 `itaylor=27` 专用热沉；其它平衡类型下不产生通用热沉。,,unstructured/input.f90,243,4,unstructured/ludef_t.f90(2); unstructured/input.f90(1); unstructured/transport.f90(1),"源码引用 4 处；主要在 `ludef_t.f90` 2处, `input.f90` 1处, `transport.f90` 1处。","unstructured/input.f90:1671: iheat_sink.eq.1)
 unstructured/ludef_t.f90:3523: if(iheat_sink.eq.1 .and. itaylor.eq.27) then
 unstructured/ludef_t.f90:4152: if(iheat_sink.eq.1 .and. itaylor.eq.27) then
 unstructured/transport.f90:669: if(iheat_sink.eq.1 .and. itaylor.eq.27) then"
-379,vloop,vloop,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,896,19,unstructured/newpar.f90(5); unstructured/restart_hdf5.f90(3); unstructured/mackenbach_profiles.f90(2); unstructured/electric_field.f90(1); unstructured/gread_restart_c11.fh(1); unstructured/input.f90(1); unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1),"源码引用 19 处；主要在 `newpar.f90` 5处, `restart_hdf5.f90` 3处, `mackenbach_profiles.f90` 2处, `electric_field.f90` 1处。","unstructured/electric_field.f90:887: o = -vloop*ri2_79*bzt79(:,OP_1)/toroidal_period
+379,vloop,vloop,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,施加在环向 Ohm/磁通方程中的回路电压幅值；无电流反馈时按 `vloop*cos(2*pi*vloop_freq*t)` 使用。,,unstructured/input.f90,896,19,unstructured/newpar.f90(5); unstructured/restart_hdf5.f90(3); unstructured/mackenbach_profiles.f90(2); unstructured/electric_field.f90(1); unstructured/gread_restart_c11.fh(1); unstructured/input.f90(1); unstructured/ludef_t.f90(1); unstructured/ludef_t_gpu.f90(1),"源码引用 19 处；主要在 `newpar.f90` 5处, `restart_hdf5.f90` 3处, `mackenbach_profiles.f90` 2处, `electric_field.f90` 1处。","unstructured/electric_field.f90:887: o = -vloop*ri2_79*bzt79(:,OP_1)/toroidal_period
 unstructured/gread_restart_c11.fh:41: call adios_read (adios_handle, ""vloop"", vloop, adios_buf_size, adios_err)
 unstructured/input.f90:1572: vloop = -vloop
 unstructured/ludef_t.f90:2696: vloop*intx1(trialx(:,:,OP_1))/toroidal_period
@@ -2333,8 +2333,8 @@ unstructured/mackenbach_profiles.f90:548: print *, ""vloop = "", VL/2.18122e+06
 unstructured/metricterms_new.f90:11504: temp = -vloop/toroidal_period * &
 unstructured/metricterms_new_gpu.f90:22046: temp = -vloop/toroidal_period * &
 unstructured/model.f90:510: if(igauge.eq.0) temp(1) = temp(1) + dt*vloop/toroidal_period"
-380,vloopRZ,vloopRZ,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,897,1,unstructured/model.f90(1),源码引用 1 处；主要在 `model.f90` 1处。,unstructured/model.f90:548: temp(1) = temp(1) + dt*vloopRZ
-381,tcur,tcur,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,898,7,unstructured/newpar.f90(3); unstructured/control.f90(2); unstructured/input.f90(1); unstructured/mackenbach_profiles.f90(1),"源码引用 7 处；主要在 `newpar.f90` 3处, `control.f90` 2处, `input.f90` 1处, `mackenbach_profiles.f90` 1处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
+380,vloopRZ,vloopRZ,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,R-Z/极向磁场方程使用的回路电压分量，独立于主环向 `vloop`。,,unstructured/input.f90,897,1,unstructured/model.f90(1),源码引用 1 处；主要在 `model.f90` 1处。,unstructured/model.f90:548: temp(1) = temp(1) + dt*vloopRZ
+381,tcur,tcur,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,电流反馈的目标总等离子体电流；若给定 `tcuri/tcurf`，运行时目标可被时间 ramp 覆盖。,,unstructured/input.f90,898,7,unstructured/newpar.f90(3); unstructured/control.f90(2); unstructured/input.f90(1); unstructured/mackenbach_profiles.f90(1),"源码引用 7 处；主要在 `newpar.f90` 3处, `control.f90` 2处, `input.f90` 1处, `mackenbach_profiles.f90` 1处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
 unstructured/control.f90:57: tcur = tcuri + (tcurf-tcuri)*.5*(1.+tanh((time - tcur_t0)/tcur_tw))
 unstructured/input.f90:1573: tcur = -tcur
 unstructured/mackenbach_profiles.f90:549: print *, ""tcur = "", IP/795217.
@@ -2342,23 +2342,23 @@ unstructured/newpar.f90:404: call variable_tcur(tcuri,tcurf,tcur_t0,tcur_tw,time
 unstructured/newpar.f90:405: i_control%target_val = tcur
 unstructured/newpar.f90:514: i_control%target_val = tcur"
 382,vloop_freq,vloop_freq,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,Loop voltage frequency,,,unstructured/input.f90,899,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:420: vloop = vloop0*cos(2.*pi*vloop_freq*time)
-383,tcuri,tcuri,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,902,4,unstructured/control.f90(2); unstructured/newpar.f90(2),"源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
+383,tcuri,tcuri,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,电流反馈 tanh ramp 的初始目标电流。,,unstructured/input.f90,902,4,unstructured/control.f90(2); unstructured/newpar.f90(2),"源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
 unstructured/control.f90:57: tcur = tcuri + (tcurf-tcuri)*.5*(1.+tanh((time - tcur_t0)/tcur_tw))
 unstructured/newpar.f90:402: if(tcurf .ne. tcuri) then
 unstructured/newpar.f90:404: call variable_tcur(tcuri,tcurf,tcur_t0,tcur_tw,time,tcur)"
-384,tcurf,tcurf,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,903,4,unstructured/control.f90(2); unstructured/newpar.f90(2),"源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
+384,tcurf,tcurf,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,电流反馈 tanh ramp 的最终目标电流。,,unstructured/input.f90,903,4,unstructured/control.f90(2); unstructured/newpar.f90(2),"源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
 unstructured/control.f90:57: tcur = tcuri + (tcurf-tcuri)*.5*(1.+tanh((time - tcur_t0)/tcur_tw))
 unstructured/newpar.f90:402: if(tcurf .ne. tcuri) then
 unstructured/newpar.f90:404: call variable_tcur(tcuri,tcurf,tcur_t0,tcur_tw,time,tcur)"
-385,tcur_t0,tcur_t0,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,904,3,unstructured/control.f90(2); unstructured/newpar.f90(1),"源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
+385,tcur_t0,tcur_t0,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,目标电流 tanh ramp 的中心时间。,,unstructured/input.f90,904,3,unstructured/control.f90(2); unstructured/newpar.f90(1),"源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
 unstructured/control.f90:57: tcur = tcuri + (tcurf-tcuri)*.5*(1.+tanh((time - tcur_t0)/tcur_tw))
 unstructured/newpar.f90:404: call variable_tcur(tcuri,tcurf,tcur_t0,tcur_tw,time,tcur)"
-386,tcur_tw,tcur_tw,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,905,3,unstructured/control.f90(2); unstructured/newpar.f90(1),"源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
+386,tcur_tw,tcur_tw,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,目标电流 tanh ramp 的时间宽度；用于从 `tcuri` 平滑过渡到 `tcurf`。,,unstructured/input.f90,905,3,unstructured/control.f90(2); unstructured/newpar.f90(1),"源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。","unstructured/control.f90:51: subroutine variable_tcur(tcuri, tcurf, tcur_t0, tcur_tw, time, tcur)
 unstructured/control.f90:57: tcur = tcuri + (tcurf-tcuri)*.5*(1.+tanh((time - tcur_t0)/tcur_tw))
 unstructured/newpar.f90:404: call variable_tcur(tcuri,tcurf,tcur_t0,tcur_tw,time,tcur)"
-387,control_p,control_p,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,907,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:511: i_control%p = control_p
-388,control_i,control_i,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,908,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:512: i_control%i = control_i
-389,control_d,control_d,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,909,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:513: i_control%d = control_d
+387,control_p,control_p,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`control_type=1` 电流 PID 的比例增益 P。,,unstructured/input.f90,907,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:511: i_control%p = control_p
+388,control_i,control_i,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`control_type=1` 电流 PID 的积分增益 I。,,unstructured/input.f90,908,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:512: i_control%i = control_i
+389,control_d,control_d,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`control_type=1` 电流 PID 的微分增益 D。,,unstructured/input.f90,909,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:513: i_control%d = control_d
 390,control_type,control_type,&inputnl,Sources/Sinks,源项/汇项,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,-1 不启用电流控制；0 旧算法；1 标准 PID，配合 `control_p/i/d`。,,unstructured/input.f90,910,2,unstructured/newpar.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 2 处；主要在 `newpar.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/newpar.f90:515: i_control%icontrol_type = control_type
 unstructured/restart_hdf5.f90:254: if(control_type.ne.-1) then"
 391,ipellet,ipellet,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,1 = include a gaussian pellet source,源码用法：在 `pellet.f90` 中选择密度源分布；正值为持续源，负值用于初始扰动；双位数分布按 `Lor_vol` 数值归一化。,,unstructured/input.f90,914,27,unstructured/init_common.f90(5); unstructured/output.f90(5); unstructured/pellet.f90(5); unstructured/input.f90(3); unstructured/kprad_m3dc1.f90(3); unstructured/restart_hdf5.f90(2); unstructured/transport.f90(2); unstructured/diagnostics.f90(1),"源码引用 27 处；主要在 `init_common.f90` 5处, `output.f90` 5处, `pellet.f90` 5处, `input.f90` 3处。","unstructured/diagnostics.f90:814: if(ipellet.ne.0) call calculate_Lor_vol
@@ -2487,7 +2487,7 @@ unstructured/pellet.f90:385: if((ipellet_abl.gt.0).and.(ipellet_fixed_dep.eq.0))
 unstructured/pellet.f90:455: select case(ipellet_abl)"
 405,ipellet_fixed_dep,ipellet_fixed_dep,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,1 = use fixed input pellet_var when ipellet_abl=1,,,unstructured/input.f90,939,2,unstructured/pellet.f90(2),源码引用 2 处；主要在 `pellet.f90` 2处。,"unstructured/pellet.f90:125: if((ipellet_abl.gt.0).and.(ipellet_fixed_dep.eq.0)) then
 unstructured/pellet.f90:385: if((ipellet_abl.gt.0).and.(ipellet_fixed_dep.eq.0)) then"
-406,r_p,r_p_scl,&inputnl,Sources/Sinks,源项/汇项,real,1.e-3,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,941,34,unstructured/pellet.f90(25); unstructured/restart_hdf5.f90(3); unstructured/diagnostics.f90(2); unstructured/output.f90(2); m3dc1_scorec/src/Expression.cc(2),"源码引用 34 处；主要在 `pellet.f90` 25处, `restart_hdf5.f90` 3处, `diagnostics.f90` 2处, `output.f90` 2处。","unstructured/diagnostics.f90:1019: if((pellet_state(ip).eq.1).and.(r_p(ip).ge.1e-8)) then
+406,r_p,r_p_scl,&inputnl,Sources/Sinks,源项/汇项,real,1.e-3,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,pellet 实体半径，供 ablation 模型计算剩余粒子数和烧蚀率；不是沉积 Gaussian 宽度。,,unstructured/input.f90,941,34,unstructured/pellet.f90(25); unstructured/restart_hdf5.f90(3); unstructured/diagnostics.f90(2); unstructured/output.f90(2); m3dc1_scorec/src/Expression.cc(2),"源码引用 34 处；主要在 `pellet.f90` 25处, `restart_hdf5.f90` 3处, `diagnostics.f90` 2处, `output.f90` 2处。","unstructured/diagnostics.f90:1019: if((pellet_state(ip).eq.1).and.(r_p(ip).ge.1e-8)) then
 unstructured/diagnostics.f90:1179: print *, "" radius (in cm) = "", r_p(ip)*l0_norm
 unstructured/output.f90:442: call output_1dextendarr(pel_group_id, ""r_p"", r_p, npellets, ntime, error)
 unstructured/output.f90:464: call output_scalar(scalar_group_id, ""r_p"", r_p(1), ntime, error)
@@ -2497,7 +2497,7 @@ unstructured/pellet.f90:100: call read_ascii_column(pellet_filename, r_p, npelle
 unstructured/pellet.f90:126: pellet_var = cloud_pel*r_p
 unstructured/pellet.f90:386: pellet_var = cloud_pel*r_p
 unstructured/pellet.f90:428: if((r_p(ip)*l0_norm).lt.1e-8 .or. &"
-407,cloud_pel,cloud_pel_scl,&inputnl,Sources/Sinks,源项/汇项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,942,7,unstructured/pellet.f90(5); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 7 处；主要在 `pellet.f90` 5处, `output.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/output.f90:443: call output_1dextendarr(pel_group_id, ""cloud_pel"", cloud_pel, npellets, ntime, error)
+407,cloud_pel,cloud_pel_scl,&inputnl,Sources/Sinks,源项/汇项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,pellet ablation 云团/沉积宽度的乘性系数，控制烧蚀物质相对 pellet 的扩散尺度。,,unstructured/input.f90,942,7,unstructured/pellet.f90(5); unstructured/output.f90(1); unstructured/restart_hdf5.f90(1),"源码引用 7 处；主要在 `pellet.f90` 5处, `output.f90` 1处, `restart_hdf5.f90` 1处。","unstructured/output.f90:443: call output_1dextendarr(pel_group_id, ""cloud_pel"", cloud_pel, npellets, ntime, error)
 unstructured/pellet.f90:73: allocate(cloud_pel(npellets))
 unstructured/pellet.f90:87: cloud_pel(1) = cloud_pel_scl
 unstructured/pellet.f90:101: call read_ascii_column(pellet_filename, cloud_pel, npellets, icol=11)
@@ -2605,7 +2605,7 @@ unstructured/transport.f90:618: (exp(-(phi_79-ghs_phi)**2/(2.*ghs_var_tor**2)) &
 unstructured/transport.f90:619: +exp(-(phi_79-ghs_phi+toroidal_period)**2/(2.*ghs_var_tor**2)) &
 unstructured/transport.f90:620: +exp(-(phi_79-ghs_phi-toroidal_period)**2/(2.*ghs_var_tor**2))) &
 unstructured/transport.f90:621: / (sqrt(2.*pi)*ghs_var_tor)"
-438,ionization,ionization,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1015,6,unstructured/input.f90(4); unstructured/diagnostics.f90(1); unstructured/transport.f90(1),"源码引用 6 处；主要在 `input.f90` 4处, `diagnostics.f90` 1处, `transport.f90` 1处。","unstructured/diagnostics.f90:1170: print *, "" Ionization loss = "", ionrad
+438,ionization,ionization,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 在主离子密度方程加入温度门控的电离粒子源，并可用 `coolrate` 从热方程扣除能量。,,unstructured/input.f90,1015,6,unstructured/input.f90(4); unstructured/diagnostics.f90(1); unstructured/transport.f90(1),"源码引用 6 处；主要在 `input.f90` 4处, `diagnostics.f90` 1处, `transport.f90` 1处。","unstructured/diagnostics.f90:1170: print *, "" Ionization loss = "", ionrad
 unstructured/input.f90:286: ""Use maximum value of dt for KPRAD ionization"", kprad_grp)
 unstructured/input.f90:288: ""Specify maximum value of dt for KPRAD ionization"", kprad_grp)
 unstructured/input.f90:290: ""Internally evolve ne and Te within KPRAD ionization"", kprad_grp)
@@ -2618,11 +2618,11 @@ unstructured/ludef_t.f90:3526: ddterm(:,pp_g) = ddterm(:,pp_g) - (1.-thimpb*bdf)
 unstructured/ludef_t.f90:4154: ssterm(:,pp_g) = ssterm(:,pp_g) + thimpb *dt*(gam-1.)*coolrate*tempx
 unstructured/ludef_t.f90:4155: ddterm(:,pp_g) = ddterm(:,pp_g) - (1.-thimpb*bdf)*dt*(gam-1.)*coolrate*tempx
 unstructured/transport.f90:674: temp79a(j) = pefac*coolrate*(pfunc(rsq)) ! now use new time p in pressure_lin"
-441,ionization_temp,ionization_temp,&inputnl,Sources/Sinks,源项/汇项,real,0.01,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1018,3,unstructured/transport.f90(3),源码引用 3 处；主要在 `transport.f90` 3处。,"unstructured/transport.f90:343: if(real(temp79d(j)) .gt. ionization_temp) then
+441,ionization_temp,ionization_temp,&inputnl,Sources/Sinks,源项/汇项,real,0.01,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,电离源中的特征温度，同时出现在 Arrhenius 型 `exp(-Tion/T)` 因子和高温衰减门控中。,,unstructured/input.f90,1018,3,unstructured/transport.f90(3),源码引用 3 处；主要在 `transport.f90` 3处。,"unstructured/transport.f90:343: if(real(temp79d(j)) .gt. ionization_temp) then
 unstructured/transport.f90:344: temp79e(j) = exp(-(temp79d(j) - ionization_temp) &
 unstructured/transport.f90:352: exp(-ionization_temp / temp79d)"
-442,ionization_depth,ionization_depth,&inputnl,Sources/Sinks,源项/汇项,real,0.01,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1019,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,unstructured/transport.f90:345: / ionization_depth)
-443,isink,isink,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1021,3,unstructured/transport.f90(2); unstructured/input.f90(1),"源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。","unstructured/input.f90:1661: (ionization.ge.1 .or. isink.gt.0 &
+442,ionization_depth,ionization_depth,&inputnl,Sources/Sinks,源项/汇项,real,0.01,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,温度高于 `ionization_temp` 后电离源指数衰减的温度宽度。,,unstructured/input.f90,1019,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,unstructured/transport.f90:345: / ionization_depth)
+443,isink,isink,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,启用局部 Gaussian 粒子汇的数量：1 使用 sink1，2 同时使用 sink1 和 sink2。,,unstructured/input.f90,1021,3,unstructured/transport.f90(2); unstructured/input.f90(1),"源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。","unstructured/input.f90:1661: (ionization.ge.1 .or. isink.gt.0 &
 unstructured/transport.f90:395: if(isink.ge.1) then
 unstructured/transport.f90:402: if(isink.ge.2) then"
 444,sink1_x,sink1_x,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1022,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,unstructured/transport.f90:398: *exp(-((x_79 - sink1_x)**2 + (z_79 - sink1_z)**2) &
@@ -2635,18 +2635,18 @@ unstructured/transport.f90:399: /(2.*sink1_var**2))"
 450,sink2_rate,sink2_rate,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1028,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:404: - nt79(:,OP_1)*ri_79*sink2_rate/(2.*pi*sink2_var**2) &"
 451,sink2_var,sink2_var,&inputnl,Sources/Sinks,源项/汇项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1029,2,unstructured/transport.f90(2),源码引用 2 处；主要在 `transport.f90` 2处。,"unstructured/transport.f90:404: - nt79(:,OP_1)*ri_79*sink2_rate/(2.*pi*sink2_var**2) &
 unstructured/transport.f90:406: /(2.*sink2_var**2))"
-452,iarc_source,iarc_source,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1031,3,unstructured/transport.f90(2); unstructured/input.f90(1),"源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。","unstructured/input.f90:1664: .or. iarc_source.ne.0)
+452,iarc_source,iarc_source,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 启用与壁面法向电流和 wall-distance 相关的 arc 粒子源。,,unstructured/input.f90,1031,3,unstructured/transport.f90(2); unstructured/input.f90(1),"源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。","unstructured/input.f90:1664: .or. iarc_source.ne.0)
 unstructured/transport.f90:411: if(iarc_source.eq.1) then
 unstructured/transport.f90:1701: if(iarc_source.ne.0) def_fields = def_fields + FIELD_WALL"
-453,arc_source_alpha,arc_source_alpha,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1032,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,unstructured/transport.f90:422: temp79b = arc_source_alpha*temp79a* &
-454,arc_source_eta,arc_source_eta,&inputnl,Sources/Sinks,源项/汇项,real,0.01,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1033,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:423: (wall79(:,OP_1)/arc_source_eta)*exp(-wall79(:,OP_1)/arc_source_eta)"
-455,idenfloor,idenfloor,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1035,2,unstructured/input.f90(1); unstructured/transport.f90(1),"源码引用 2 处；主要在 `input.f90` 1处, `transport.f90` 1处。","unstructured/input.f90:1662: .or. idenfloor.gt.0 .or. ibeam.eq.1 &
+453,arc_source_alpha,arc_source_alpha,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,arc 粒子源的总幅值系数，乘正向法向电流。,,unstructured/input.f90,1032,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,unstructured/transport.f90:422: temp79b = arc_source_alpha*temp79a* &
+454,arc_source_eta,arc_source_eta,&inputnl,Sources/Sinks,源项/汇项,real,0.01,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,arc 源随 wall-distance 的尺度长度，形状含 `(w/eta)*exp(-w/eta)`。,,unstructured/input.f90,1033,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:423: (wall79(:,OP_1)/arc_source_eta)*exp(-wall79(:,OP_1)/arc_source_eta)"
+455,idenfloor,idenfloor,&inputnl,Sources/Sinks,源项/汇项,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,1 在外侧非 plasma magnetic region 加入恢复型密度源，把密度拉向 `den_edge`；它不是逐节点硬截断。,,unstructured/input.f90,1035,2,unstructured/input.f90(1); unstructured/transport.f90(1),"源码引用 2 处；主要在 `input.f90` 1处, `transport.f90` 1处。","unstructured/input.f90:1662: .or. idenfloor.gt.0 .or. ibeam.eq.1 &
 unstructured/transport.f90:431: if(idenfloor.ge.1) then"
-456,alphadenfloor,alphadenfloor,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1036,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:437: temp79a(j) = alphadenfloor*( den_edge - nt79(j,OP_1))"
-457,n_target,n_target,&inputnl,Sources/Sinks,源项/汇项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1038,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:520: n_control%target_val = n_target
-458,n_control_p,n_control_p,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1039,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:517: n_control%p = n_control_p
-459,n_control_i,n_control_i,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1040,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:518: n_control%i = n_control_i
-460,n_control_d,n_control_d,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1041,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:519: n_control%d = n_control_d
+456,alphadenfloor,alphadenfloor,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,密度恢复源 `alphadenfloor*(den_edge-n)` 的速率系数。,,unstructured/input.f90,1036,1,unstructured/transport.f90(1),源码引用 1 处；主要在 `transport.f90` 1处。,"unstructured/transport.f90:437: temp79a(j) = alphadenfloor*( den_edge - nt79(j,OP_1))"
+457,n_target,n_target,&inputnl,Sources/Sinks,源项/汇项,real,1.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,pellet 密度反馈所追踪的目标全局粒子数/密度诊断量。,,unstructured/input.f90,1038,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:520: n_control%target_val = n_target
+458,n_control_p,n_control_p,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,`n_control_type=1` pellet-rate PID 的比例增益。,,unstructured/input.f90,1039,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:517: n_control%p = n_control_p
+459,n_control_i,n_control_i,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,pellet-rate PID 的积分增益。,,unstructured/input.f90,1040,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:518: n_control%i = n_control_i
+460,n_control_d,n_control_d,&inputnl,Sources/Sinks,源项/汇项,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,pellet-rate PID 的微分增益。,,unstructured/input.f90,1041,1,unstructured/newpar.f90(1),源码引用 1 处；主要在 `newpar.f90` 1处。,unstructured/newpar.f90:519: n_control%d = n_control_d
 461,n_control_type,n_control_type,&inputnl,Sources/Sinks,源项/汇项,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,-1 不启用密度控制；0 旧算法；1 标准 PID，配合 `n_control_p/i/d`。,,unstructured/input.f90,1042,2,unstructured/newpar.f90(1); unstructured/pellet.f90(1),"源码引用 2 处；主要在 `newpar.f90` 1处, `pellet.f90` 1处。","unstructured/newpar.f90:521: n_control%icontrol_type = n_control_type
 unstructured/pellet.f90:185: if((pellet_state(ip).ne.1 .and. n_control_type .eq.-1) &"
 20,iprad,iprad,&inputnl,PRAD Options,PRAD 简单辐射模型,integer,0,1,1: Teng's PRad module with one impurity species,1 启用 Teng PRAD 单杂质辐射模型；当前 PRAD 表中 C/Ar/Fe 常用。,,unstructured/input.f90,252,3,unstructured/input.f90(2); unstructured/transport.f90(1),"源码引用 3 处；主要在 `input.f90` 2处, `transport.f90` 1处。","unstructured/input.f90:1675: (iprad.ne.0 .or. ikprad.ne.0)
@@ -2918,7 +2918,7 @@ unstructured/output.f90:608: if(iflux_loops.ne.0) call h5gclose_f(fl_group_id, e
 498,ifixed_temax,ifixed_temax,&inputnl,Diagnostics,诊断,integer,0,1,"if nonzero, evaluate temax at xmag0,zmag0",,,unstructured/input.f90,1121,3,unstructured/newpar.f90(3),源码引用 3 处；主要在 `newpar.f90` 3处。,"unstructured/newpar.f90:770: if(ifixed_temax .eq. 0) then
 unstructured/newpar.f90:789: if(ifixed_temax .eq. 0) then
 unstructured/newpar.f90:802: if(ifixed_temax .eq. 0) then"
-462,iprint,iprint,&inputnl,Output,输出与重启,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1046,465,unstructured/gradshafranov.f90(64); unstructured/newpar.f90(50); unstructured/diagnostics.f90(41); unstructured/transport.f90(32); unstructured/m3dc1_nint.f90(29); unstructured/time_step_split.f90(27); unstructured/output.f90(24); unstructured/kprad_m3dc1.f90(22),"源码引用 465 处；主要在 `gradshafranov.f90` 64处, `newpar.f90` 50处, `diagnostics.f90` 41处, `transport.f90` 32处。","unstructured/adapt.f90:296: if(myrank.eq.0 .and. iprint.ge.2) print *, "" transport coefficients""
+462,iprint,iprint,&inputnl,Output,输出与重启,integer,0,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,终端日志详细度：0 最少；1 打印主要步骤/迭代；2 及以上打印更多矩阵、系数和输出阶段信息。它不控制 HDF5 字段内容。,,unstructured/input.f90,1046,465,unstructured/gradshafranov.f90(64); unstructured/newpar.f90(50); unstructured/diagnostics.f90(41); unstructured/transport.f90(32); unstructured/m3dc1_nint.f90(29); unstructured/time_step_split.f90(27); unstructured/output.f90(24); unstructured/kprad_m3dc1.f90(22),"源码引用 465 处；主要在 `gradshafranov.f90` 64处, `newpar.f90` 50处, `diagnostics.f90` 41处, `transport.f90` 32处。","unstructured/adapt.f90:296: if(myrank.eq.0 .and. iprint.ge.2) print *, "" transport coefficients""
 unstructured/adapt.f90:394: if(myrank.eq.0 .and. iprint.ge.2) print *, "" transport coefficients""
 unstructured/adapt.f90:590: if(myrank.eq.0 .and. iprint.ge.2) print *, "" transport coefficients""
 unstructured/auxiliary_fields.f90:222: if(myrank.eq.0 .and. iprint.ge.1) print *, ' Calculating pressures'
@@ -3001,7 +3001,7 @@ unstructured/hdf5_output.f90:831: if(idouble_out.eq.1) then
 unstructured/hdf5_output.f90:956: if(idouble_out.eq.1) then
 unstructured/particle.f90:3758: if (idouble_out .eq. 1) then
 unstructured/particle_com.f90:3715: if (idouble_out .eq. 1) then"
-479,irestart_slice,irestart_slice,&inputnl,Output,输出与重启,integer,-1,1,Field output slice from which to restart,-1 使用最后一个 time slice；否则从指定 `time_nnn.h5` restart。,,unstructured/input.f90,1077,3,unstructured/restart_hdf5.f90(3),源码引用 3 处；主要在 `restart_hdf5.f90` 3处。,"unstructured/restart_hdf5.f90:47: if(irestart_slice.ge.0 .and. irestart_slice.lt.times_output) then
+479,irestart_slice,irestart_slice,&inputnl,Output,输出与重启,integer,-1,1,Field output slice from which to restart,-1 从 HDF5 中最后一个已保存时间片重启；非负值选择指定时间片索引，并在同一输出文件中删除其后的时间片组后续写。,,unstructured/input.f90,1077,3,unstructured/restart_hdf5.f90(3),源码引用 3 处；主要在 `restart_hdf5.f90` 3处。,"unstructured/restart_hdf5.f90:47: if(irestart_slice.ge.0 .and. irestart_slice.lt.times_output) then
 unstructured/restart_hdf5.f90:49: do i = irestart_slice+1, times_output
 unstructured/restart_hdf5.f90:53: times_output = irestart_slice"
 480,iveldif,iveldif,&inputnl,Output,输出与重启,integer,0,1,ne.0: veldif plot contains only partial results,,,unstructured/input.f90,1080,1,unstructured/electric_field.f90(1),源码引用 1 处；主要在 `electric_field.f90` 1处。,unstructured/electric_field.f90:652: select case(iveldif)
@@ -3029,7 +3029,7 @@ unstructured/electrostatic_potential.f90:680: temp = b4psibd(trial,lin,bz079,ni7
 91,db_fac,db_fac,&inputnl,Miscellaneous,杂项物理参数,real,0.,1,Factor multiplying physical value of ion skin depth,`db<0` 时乘在物理 ion skin depth 上；默认 0 等价于关闭 two-fluid skin-depth 贡献。,,unstructured/input.f90,385,3,unstructured/input.f90(3),源码引用 3 处；主要在 `input.f90` 3处。,"unstructured/input.f90:384: ""Collisionless ion skin depth (overrides db_fac)"", misc_grp)
 unstructured/input.f90:1826: print *, 'Scaled value of db = ', db*db_fac
 unstructured/input.f90:1828: db = db*db_fac"
-92,mass_ratio,mass_ratio,&inputnl,Miscellaneous,杂项物理参数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,387,8,unstructured/metricterms_new.f90(4); unstructured/metricterms_new_gpu.f90(4),"源码引用 8 处；主要在 `metricterms_new.f90` 4处, `metricterms_new_gpu.f90` 4处。","unstructured/metricterms_new.f90:5837: if(mass_ratio.eq.0. .or. db.eq.0.) then
+92,mass_ratio,mass_ratio,&inputnl,Miscellaneous,杂项物理参数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,已注册但当前活动计算未读取的兼容参数；电子/离子质量比由内部常数和 `ion_mass` 形成，用户不应依赖此值。,,unstructured/input.f90,387,8,unstructured/metricterms_new.f90(4); unstructured/metricterms_new_gpu.f90(4),"源码引用 8 处；主要在 `metricterms_new.f90` 4处, `metricterms_new_gpu.f90` 4处。","unstructured/metricterms_new.f90:5837: if(mass_ratio.eq.0. .or. db.eq.0.) then
 unstructured/metricterms_new.f90:5847: b1psid = temp*me_mp*mass_ratio*db**2
 unstructured/metricterms_new.f90:7831: if(mass_ratio.eq.0. .or. db.eq.0.) then
 unstructured/metricterms_new.f90:7843: b2bd = temp*me_mp*mass_ratio*db**2
@@ -3037,7 +3037,7 @@ unstructured/metricterms_new_gpu.f90:12525: if(mass_ratio.eq.0. .or. db.eq.0.) t
 unstructured/metricterms_new_gpu.f90:12536: temp79a= me_mp*mass_ratio*db**2
 unstructured/metricterms_new_gpu.f90:16445: if(mass_ratio.eq.0. .or. db.eq.0.) then
 unstructured/metricterms_new_gpu.f90:16458: temp79a=me_mp*mass_ratio*db**2"
-93,lambdae,lambdae,&inputnl,Miscellaneous,杂项物理参数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,388,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
+93,lambdae,lambdae,&inputnl,Miscellaneous,杂项物理参数,real,0.,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,已注册但当前活动计算未读取的兼容参数；不会单独打开电子惯性或改变广义 Ohm 定律。,,unstructured/input.f90,388,0,,未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。,
 94,z_ion,z_ion,&inputnl,Miscellaneous,杂项物理参数,real,1.,1,Z effective,,,unstructured/input.f90,389,39,unstructured/gradshafranov.f90(14); unstructured/input.f90(9); unstructured/mackenbach_profiles.f90(3); unstructured/auxiliary_fields.f90(2); unstructured/newpar.f90(2); unstructured/particle.f90(2); unstructured/particle_com.f90(2); unstructured/init_cyl.f90(1),"源码引用 39 处；主要在 `gradshafranov.f90` 14处, `input.f90` 9处, `mackenbach_profiles.f90` 3处, `auxiliary_fields.f90` 2处。","unstructured/auxiliary_fields.f90:490: call mult(ne, z_ion)
 unstructured/auxiliary_fields.f90:517: temp79a = nt79(:,OP_1)*z_ion
 unstructured/gradshafranov.f90:724: n0_spline%y(i) = pefac*pval/(z_ion*te_spline%y(i))
@@ -3081,8 +3081,8 @@ unstructured/init_frs.f90:59: m=mpol
 unstructured/init_kstar.f90:198: m = mpol
 unstructured/input.f90:586: &2: Apply mpol/ntor vacuum fields (itor=0 only)"", eq_grp)
 unstructured/read_vmec.f90:249: ierr = nc_inq_varid(ncid, ""mpol""//c_null_char, id)"
-602,ibform,idum,&inputnl,Deprecated,已废弃兼容参数,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1320,0,,兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。,
-603,igs_method,idum,&inputnl,Deprecated,已废弃兼容参数,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,,,unstructured/input.f90,1321,0,,兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。,
+602,ibform,idum,&inputnl,Deprecated,已废弃兼容参数,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,旧磁场形式开关的占位参数，读入后写入 dummy 变量；当前方程形式不会随它改变。,,unstructured/input.f90,1320,0,,兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。,
+603,igs_method,idum,&inputnl,Deprecated,已废弃兼容参数,integer,-1,1,源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。,旧 GS 算法选择的占位参数，当前 GS 求解器不读取其值。,,unstructured/input.f90,1321,0,,兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。,
 604,iwrite_restart,idum,&inputnl,Deprecated,已废弃兼容参数,integer,0,1,1: Write restart files,,,unstructured/input.f90,1322,0,,兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。,
 605,zeff,dum,&inputnl,Deprecated,已废弃兼容参数,real,0.,1,zeff is deprecated.  Use z_ion instead.,,,unstructured/input.f90,1324,0,,兼容旧输入：读入到 dummy 变量 `dum`，未见模型计算使用。,
 606,ivform,idum,&inputnl,Deprecated,已废弃兼容参数,integer,1,1,ivform is deprecated.  Only ivform=1 is now implemented.,,,unstructured/input.f90,1326,0,,兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。,
