@@ -20,7 +20,6 @@ DOC_INPUTS = ROOT / "doc/inputs.tex"
 OLD_DOC = DOCUMENTS_ROOT / "tools/reference_old_doc.txt"
 OUTDIR = DOCUMENTS_ROOT / "docs-data"
 DOC_AUDIT_MD = OUTDIR / "M3DC1_official_doc_vs_source_audit.md"
-DOC_AUDIT_CSV = OUTDIR / "m3dc1_official_doc_vs_source_audit.csv"
 USAGE_MD = OUTDIR / "M3DC1_parameter_source_usage.md"
 USAGE_CSV = OUTDIR / "m3dc1_parameter_source_usage.csv"
 HTML_GUIDE = OUTDIR / "M3DC1_C1input_reader_guide.html"
@@ -3093,7 +3092,7 @@ def write_markdown(params: list[Param], path: Path) -> None:
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def write_doc_audit(params: list[Param], md_path: Path, csv_path: Path) -> None:
+def write_doc_audit(params: list[Param], md_path: Path) -> None:
     input_doc_text = DOC_INPUTS.read_text(encoding="utf-8", errors="replace")
     all_doc_text = all_official_doc_text()
     doc_names = parse_doc_option_names(input_doc_text)
@@ -3112,83 +3111,6 @@ def write_doc_audit(params: list[Param], md_path: Path, csv_path: Path) -> None:
         and not any(real == p.name and mentioned_in_official_docs(alias, all_doc_text)
                     for alias, real in DOC_ALIASES.items())
     ]
-
-    rows: list[dict[str, str]] = []
-    for name in unregistered:
-        rows.append({
-            "category": "doc_name_not_registered",
-            "doc_name": name,
-            "source_name": "",
-            "source_default": "",
-            "doc_default": "",
-            "note": "官方 doc/inputs.tex 提到，但源码 set_defaults 未注册；C1input 中使用会触发未识别变量警告。",
-        })
-    for alias, real in DOC_ALIASES.items():
-        rows.append({
-            "category": "doc_old_or_misspelled_name",
-            "doc_name": alias,
-            "source_name": real,
-            "source_default": by_name[real].default if real in by_name else "",
-            "doc_default": "",
-            "note": "官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。",
-        })
-    for name, (doc_default, note) in DOC_DEFAULT_MISMATCHES.items():
-        p = by_name[name]
-        rows.append({
-            "category": "default_mismatch",
-            "doc_name": name,
-            "source_name": name,
-            "source_default": p.default,
-            "doc_default": doc_default,
-            "note": note,
-        })
-    for name, note in DOC_USAGE_MISMATCHES.items():
-        if name not in by_name:
-            continue
-        rows.append({
-            "category": "usage_or_value_range_mismatch",
-            "doc_name": name,
-            "source_name": name,
-            "source_default": by_name[name].default,
-            "doc_default": "",
-            "note": note,
-        })
-    for name, note in RUNTIME_DEFAULT_NOTES.items():
-        if name not in by_name:
-            continue
-        rows.append({
-            "category": "runtime_default_or_validation_behavior",
-            "doc_name": name,
-            "source_name": name,
-            "source_default": by_name[name].default,
-            "doc_default": "",
-            "note": note,
-        })
-    for p in undocumented:
-        rows.append({
-            "category": "source_registered_not_found_in_official_doc",
-            "doc_name": "",
-            "source_name": p.name,
-            "source_default": p.default,
-            "doc_default": "",
-            "note": f"源码注册在 {p.group}；未在 doc/*.tex 中直接提到。",
-        })
-
-    with csv_path.open("w", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(
-            f,
-            fieldnames=[
-                "category",
-                "doc_name",
-                "source_name",
-                "source_default",
-                "doc_default",
-                "note",
-            ],
-            lineterminator="\n",
-        )
-        w.writeheader()
-        w.writerows(rows)
 
     lines: list[str] = []
     lines.append("# M3D-C1 官方文档与源码差异清单")
@@ -3245,15 +3167,12 @@ def write_doc_audit(params: list[Param], md_path: Path, csv_path: Path) -> None:
 
     lines.append("## 6. 源码注册但官方文档未直接提到")
     lines.append("")
-    lines.append(f"共 {len(undocumented)} 个。完整机器可筛选清单见 `m3dc1_official_doc_vs_source_audit.csv` 的 `source_registered_not_found_in_official_doc` 行。")
+    lines.append(f"共 {len(undocumented)} 个，完整列于下表。")
     lines.append("")
     lines.append("| 参数 | 逻辑组 | 源码默认值 |")
     lines.append("|---|---|---:|")
-    preview = undocumented[:80]
-    for p in preview:
+    for p in undocumented:
         lines.append(f"| `{p.name}` | {p.group} | `{p.default}` |")
-    if len(undocumented) > len(preview):
-        lines.append(f"| ... | 另有 {len(undocumented) - len(preview)} 个，见 CSV | ... |")
     lines.append("")
     md_path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -3282,6 +3201,7 @@ def write_template(params: list[Param], path: Path) -> None:
 
 def main() -> None:
     OUTDIR.mkdir(parents=True, exist_ok=True)
+    (OUTDIR / "m3dc1_official_doc_vs_source_audit.csv").unlink(missing_ok=True)
     params = parse_params()
     enrich_params(params)
     scan_source_usage(params)
@@ -3289,7 +3209,7 @@ def main() -> None:
     params_json.write_text(json.dumps([asdict(p) for p in sorted_params(params)], ensure_ascii=False, indent=2), encoding="utf-8")
     write_csv(params, OUTDIR / "m3dc1_c1input_parameters.csv")
     write_usage_files(params, USAGE_MD, USAGE_CSV)
-    write_doc_audit(params, DOC_AUDIT_MD, DOC_AUDIT_CSV)
+    write_doc_audit(params, DOC_AUDIT_MD)
     write_simplified_markdown(params, SIMPLIFIED_MD)
     write_simplified_csv(params, SIMPLIFIED_CSV)
     write_simplified_html(params, SIMPLIFIED_HTML)

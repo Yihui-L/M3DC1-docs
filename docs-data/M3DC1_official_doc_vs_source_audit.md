@@ -121,7 +121,7 @@
 
 ## 6. 源码注册但官方文档未直接提到
 
-共 90 个。完整机器可筛选清单见 `m3dc1_official_doc_vs_source_audit.csv` 的 `source_registered_not_found_in_official_doc` 行。
+共 90 个，完整列于下表。
 
 | 参数 | 逻辑组 | 源码默认值 |
 |---|---|---:|
@@ -205,4 +205,13 @@
 | `mode_filter_ntor` | Particle Simulation Options | `0` |
 | `smooth_par` | Particle Simulation Options | `1.e-8` |
 | `smooth_dens_parallel` | Particle Simulation Options | `0.` |
-| ... | 另有 10 个，见 CSV | ... |
+| `ntimers` | Output | `0` |
+| `iwrite_adjacency` | Output | `1` |
+| `iwrite_quad_points` | Output | `0` |
+| `iwrite_restart` | Deprecated | `0` |
+| `zeff` | Deprecated | `0.` |
+| `iwrite_adios` | Deprecated | `0` |
+| `iglobalout` | Deprecated | `0` |
+| `iglobalin` | Deprecated | `0` |
+| `iread_adios` | Deprecated | `0` |
+| `iread_hdf5` | Deprecated | `1` |

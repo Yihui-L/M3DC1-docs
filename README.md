@@ -25,7 +25,7 @@ open Documents/index.html
 - `index.html`：独立的参数使用手册与 GitHub Pages 发布内容。
 - `docs-data/M3DC1_C1input_parameters.md`：与网页采用相同独立表述的 Markdown 参数手册。
 - `docs-data/M3DC1_official_doc_vs_source_audit.md`：官方文档与程序实现的对比清单；对比内容不进入使用手册网页。
-- `docs-data/`：参数表、源码使用统计、对比审计数据和输入模板。
+- `docs-data/`：参数表、源码使用统计、独立的 Markdown 对比清单和输入模板。
 - `tools/extract_m3dc1_params.py`：从相邻 `M3DC1/` 源码快照重新生成参数资料的脚本。
 - `SOURCE_VERSION.md`：上游来源、提交版本和同步说明。
 
