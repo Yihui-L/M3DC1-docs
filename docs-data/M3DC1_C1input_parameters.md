@@ -259,29 +259,29 @@
 | `itemp` | `itemp` | integer | `0` | 1: Advance Temperatures rather than Pressures | 1 时推进温度而不是压力；要求 `ipressplit=1`，且 `z_ion` 必须为 1。 | 源码引用 50 处；主要在 `input.f90` 11处, `time_step_split.f90` 8处, `transport.f90` 7处, `ludef_t.f90` 6处。 | 415 |
 | `iadiabat` | `iadiabat` | integer | `1` | 1: Correct itemp=1 for time-varying density | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `ludef_t.f90` 3处, `ludef_t_gpu.f90` 3处, `temperature_plots.f90` 1处。 | 417 |
 | `gyro` | `gyro` | integer | `0` | 1: Include Braginskii gyroviscosity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 25 处；主要在 `ludef_t.f90` 8处, `diagnostics.f90` 3处, `read_gyro.f90` 3处, `ludef_t_gpu.f90` 2处。 | 419 |
-| `igauge` | `igauge` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `model.f90` 1处。 | 421 |
+| `igauge` | `igauge` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 选择矢势规范相关的数值处理。当前活动方程只在非零时加入规范约束/稳定项；常规算例保持 0。托卡马克与仿星器使用同一场表示。 | 源码引用 3 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `model.f90` 1处。 | 421 |
 | `inertia` | `inertia` | integer | `1` | 1: Include V.Grad(V) terms | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 72 处；主要在 `metricterms_new_gpu.f90` 51处, `metricterms_new.f90` 21处。 | 422 |
 | `itwofluid` | `itwofluid` | integer | `1` | 1: -electron 2F,  2: ion 2F | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 89 处；主要在 `metricterms_new.f90` 33处, `metricterms_new_gpu.f90` 33处, `ludef_t.f90` 13处, `electrostatic_potential.f90` 6处。 | 424 |
 | `ibootstrap` | `ibootstrap` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 `1-Te/Temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0。 | 源码引用 115 处；主要在 `newpar.f90` 25处, `adapt.f90` 20处, `bootstrap.f90` 19处, `transport.f90` 19处。 | 426 |
-| `irunaway` | `irunaway` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 86 处；主要在 `time_step_split.f90` 19处, `time_step_unsplit.f90` 12处, `ludef_t.f90` 10处, `ludef_t_gpu.f90` 10处。 | 427 |
-| `cre` | `cre` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `runaway.f90` 2处, `runaway_advection.f90` 2处。 | 428 |
-| `ra_cyc` | `ra_cyc` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 15 处；主要在 `ludef_t.f90` 11处, `runaway_advection.f90` 2处, `ludef_t_gpu.f90` 1处, `time_step_split.f90` 1处。 | 429 |
-| `radiff` | `radiff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。 | 430 |
-| `rjra` | `rjra` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `init_common.f90` 1处。 | 431 |
+| `irunaway` | `irunaway` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 非零时增加 runaway-electron 密度场及其电流耦合；需要同时设置 `cre/radiff/rjra` 等参数。两种装置使用同一演化方程，但初始场和磁场几何来自各自平衡。 | 源码引用 86 处；主要在 `time_step_split.f90` 19处, `time_step_unsplit.f90` 12处, `ludef_t.f90` 10处, `ludef_t_gpu.f90` 10处。 | 427 |
+| `cre` | `cre` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | runaway-electron 沿磁场特征线的传播速度输入，读入后按速度归一化换算；仅 `irunaway!=0` 使用。 | 源码引用 8 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `runaway.f90` 2处, `runaway_advection.f90` 2处。 | 428 |
+| `ra_cyc` | `ra_cyc` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 每个 MHD 时间步内 runaway 特征线/粒子推进的子循环次数；增大它可缩短 runaway 子步而不改变 MHD 的 `dt`。 | 源码引用 15 处；主要在 `ludef_t.f90` 11处, `runaway_advection.f90` 2处, `ludef_t_gpu.f90` 1处, `time_step_split.f90` 1处。 | 429 |
+| `radiff` | `radiff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | runaway-electron 密度方程的扩散系数，进入 `div(radiff grad(n_RE))`；仅 `irunaway!=0` 使用。 | 源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。 | 430 |
+| `rjra` | `rjra` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | runaway 电流反馈到广义 Ohm 定律/总电流时的幅值系数；1 使用模型电流，0 去掉该反馈。 | 源码引用 1 处；主要在 `init_common.f90` 1处。 | 431 |
 | `ra_characteristics` | `ra_characteristics` | integer | `0` | 1: Use the method of characteristics to advance the RE advection equation | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `electric_field.f90` 3处, `ludef_t.f90` 1处, `newpar.f90` 1处, `time_step_split.f90` 1处。 | 432 |
-| `bzsign` | `bzsign` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 13 处；主要在 `runaway_advection.f90` 4处, `particle.f90` 3处, `init_common.f90` 2处, `metricterms_new.f90` 2处。 | 434 |
+| `bzsign` | `bzsign` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | runaway 平行传播方向所用的背景环向磁场符号；0 时由初始磁场自动判断，显式正负值用于覆盖自动结果。 | 源码引用 13 处；主要在 `runaway_advection.f90` 4处, `particle.f90` 3处, `init_common.f90` 2处, `metricterms_new.f90` 2处。 | 434 |
 | `imp_bf` | `imp_bf` | integer | `0` | 1: Include implicit equation for f | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 64 处；主要在 `ludef_t.f90` 21处, `ludef_t_gpu.f90` 21处, `time_step_split.f90` 8处, `time_step_unsplit.f90` 6处。 | 435 |
 | `imp_temp` | `imp_temp` | integer | `0` | 1: Include implicit equation for temperature | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `input.f90` 3处, `newpar.f90` 1处。 | 437 |
-| `nosig` | `nosig` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 15 处；主要在 `metricterms_new_gpu.f90` 10处, `metricterms_new.f90` 5处。 | 439 |
+| `nosig` | `nosig` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 非零时抑制密度源 `sigma` 对部分动量/温度方程的伴随项；用于源项模型诊断，不会关闭密度方程中的粒子源本身。 | 源码引用 15 处；主要在 `metricterms_new_gpu.f90` 10处, `metricterms_new.f90` 5处。 | 439 |
 | `itor` | `itor` | integer | `0` | 1: Use toroidal geometry | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 457 处；主要在 `metricterms_new_gpu.f90` 192处, `metricterms_new.f90` 133处, `gyroviscosity.f90` 40处, `harned_mikic.f90` 14处。 | 440 |
 | `iohmic_heating` | `iohmic_heating` | integer | `1` | 1: Include Ohmic heating | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `ludef_t.f90` 2处, `ludef_t_gpu.f90` 2处。 | 442 |
 | `irad_heating` | `irad_heating` | integer | `1` | 1: Include radiation heat source | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `ludef_t.f90` 4处, `ludef_t_gpu.f90` 4处。 | 444 |
-| `gravr` | `gravr` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 42 处；主要在 `metricterms_new.f90` 19处, `metricterms_new_gpu.f90` 19处, `init_mri.f90` 2处, `output.f90` 1处。 | 447 |
-| `gravz` | `gravz` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 47 处；主要在 `metricterms_new.f90` 22处, `metricterms_new_gpu.f90` 22处, `init_gmode.f90` 1处, `output.f90` 1处。 | 448 |
+| `gravr` | `gravr` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | R 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。托卡马克和映射后的仿星器均使用物理柱坐标 R。 | 源码引用 42 处；主要在 `metricterms_new.f90` 19处, `metricterms_new_gpu.f90` 19处, `init_mri.f90` 2处, `output.f90` 1处。 | 447 |
+| `gravz` | `gravz` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | Z 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。 | 源码引用 47 处；主要在 `metricterms_new.f90` 22处, `metricterms_new_gpu.f90` 22处, `init_gmode.f90` 1处, `output.f90` 1处。 | 448 |
 | `istatic` | `istatic` | integer | `0` | 1: Do not advance velocity fields | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `ludef_t.f90` 4处, `ludef_t_gpu.f90` 4处, `time_step.f90` 1处, `time_step_split.f90` 1处。 | 449 |
 | `iestatic` | `iestatic` | integer | `0` | 1: Do not advance magnetic fields | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `ludef_t.f90` 3处, `ludef_t_gpu.f90` 3处, `time_step.f90` 1处, `time_step_split.f90` 1处。 | 451 |
-| `chiiner` | `chiiner` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `ludef_t_gpu.f90` 5处, `ludef_t.f90` 3处。 | 453 |
-| `ieq_bdotgradt` | `ieq_bdotgradt` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 24 处；主要在 `ludef_t.f90` 12处, `ludef_t_gpu.f90` 12处。 | 454 |
+| `chiiner` | `chiiner` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 六场模型中压缩速度势 `chi` 的惯性项乘子；1 为完整项，减小它可改变压缩分量的数值时间尺度。 | 源码引用 8 处；主要在 `ludef_t_gpu.f90` 5处, `ludef_t.f90` 3处。 | 453 |
+| `ieq_bdotgradt` | `ieq_bdotgradt` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 决定温度方程平行导热是否保留平衡场的 `B dot grad(T)` 贡献；用于平衡减除/线性化时控制平衡项。 | 源码引用 24 处；主要在 `ludef_t.f90` 12处, `ludef_t_gpu.f90` 12处。 | 454 |
 | `iwall_is_limiter` | `iwall_is_limiter` | integer | `1` | 1 = Wall acts as limiter | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `gradshafranov.f90` 3处, `diagnostics.f90` 2处, `particle.f90` 1处, `particle_com.f90` 1处。 | 455 |
 | `no_vdg_T` | `no_vdg_T` | integer | `0` | 1: do not include V dot grad T in Temp equation (debug) | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。 | 457 |
 | `ibootstrap_model` | `ibootstrap_model` | integer | `0` | 1: J_BS = alpha F <p,psi> B | 托卡马克：1/3 选 Sauter-Angioni，2/4 选 Redl，3/4 为简化方程实现，5 为 constant-Lambda；应与非零 `ibootstrap` 配套。`ibootstrap=3` 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合。 源码用法：在 `bootstrap.f90` 中选择 bootstrap closure：1/3 为 Sauter & Angioni，2/4 为 Redl，5 为 constant-Lambda 分支。 | 源码引用 29 处；主要在 `bootstrap.f90` 24处, `ludef_t.f90` 4处, `output.f90` 1处。 | 460 |
@@ -295,45 +295,45 @@
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `ivisfunc` | `ivisfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `transport.f90` 6处, `m3dc1_nint.f90` 4处。 | 299 |
-| `amuoff` | `amuoff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 5 处；主要在 `transport.f90` 3处, `m3dc1_nint.f90` 2处。 | 300 |
+| `ivisfunc` | `ivisfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 选择各向同性粘性空间模型：0 常数；1/2 磁通 tanh 边缘层；3/4 预计算场；10/11 读 `profile_amu`；12 专用 basicJ；21 为 USEST 逻辑 rho 模型。 | 源码引用 10 处；主要在 `transport.f90` 6处, `m3dc1_nint.f90` 4处。 | 299 |
+| `amuoff` | `amuoff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `ivisfunc=1/2/21` 的粘性过渡位置；1/2 使用归一化磁通坐标，21 使用逻辑 rho。 | 源码引用 5 处；主要在 `transport.f90` 3处, `m3dc1_nint.f90` 2处。 | 300 |
 | `amudelt` | `amudelt` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `transport.f90` 3处。 | 301 |
-| `amuoff2` | `amuoff2` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 302 |
+| `amuoff2` | `amuoff2` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `ivisfunc=2` 第二个 tanh 过渡中心；只有它与 `amudelt2` 都非零时才加入第二层。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 302 |
 | `amudelt2` | `amudelt2` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 303 |
 | `amu` | `amu` | real | `0.` | Isotropic viscosity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 13 处；主要在 `input.f90` 3处, `transport.f90` 3处, `m3dc1_nint.f90` 2处, `read_namelist.cpp` 2处。 | 304 |
 | `amuc` | `amuc` | real | `0.` | Compressional viscosity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `input.f90` 3处, `m3dc1_nint.f90` 2处, `output.f90` 1处, `transport.f90` 1处。 | 306 |
-| `amue` | `amue` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 308 |
+| `amue` | `amue` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 电子/自举电流闭合使用的粘性系数；不代替流体动量方程的 `amu`。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 308 |
 | `amupar` | `amupar` | real | `0.` | Parallel viscosity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 17 处；主要在 `ludef_t.f90` 7处, `diagnostics.f90` 2处, `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处。 | 309 |
-| `amu_edge` | `amu_edge` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 9 处；主要在 `transport.f90` 5处, `m3dc1_nint.f90` 4处。 | 311 |
-| `amu_wall` | `amu_wall` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 312 |
-| `amu_wall_off` | `amu_wall_off` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 313 |
+| `amu_edge` | `amu_edge` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 粘性边缘增量或外侧幅值，配合 `ivisfunc=1/2/21`；最终各向同性粘性还包含基值 `amu`。 | 源码引用 9 处；主要在 `transport.f90` 5处, `m3dc1_nint.f90` 4处。 | 311 |
+| `amu_wall` | `amu_wall` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 靠近 wall-distance 场时附加的粘性幅值；按 `amu_wall_off/amu_wall_delt` 的 tanh 层叠加到其它粘性模型。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 312 |
+| `amu_wall_off` | `amu_wall_off` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 壁面附加粘性层在 wall-distance 坐标中的中心位置。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 313 |
 | `amu_wall_delt` | `amu_wall_delt` | real | `0.1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 314 |
-| `iresfunc` | `iresfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 11 处；主要在 `m3dc1_nint.f90` 5处, `transport.f90` 5处, `input.f90` 1处。 | 316 |
-| `etaoff` | `etaoff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 5 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 2处。 | 317 |
+| `iresfunc` | `iresfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 选择 plasma zone 电阻率模型：0 Spitzer 型；1 磁通 tanh；2-4 预计算场；5 简化新古典；10/11 读 `profile_eta`；21 为 USEST 逻辑 rho 模型。conductor/vacuum zone 不用此开关。 | 源码引用 11 处；主要在 `m3dc1_nint.f90` 5处, `transport.f90` 5处, `input.f90` 1处。 | 316 |
+| `etaoff` | `etaoff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 电阻率 tanh 过渡位置；`iresfunc=1` 使用磁通，`iresfunc=21` 使用逻辑 rho。 | 源码引用 5 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 2处。 | 317 |
 | `etadelt` | `etadelt` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `m3dc1_nint.f90` 2处, `transport.f90` 2处。 | 318 |
 | `etar` | `etar` | real | `0.` | Isotropic resistivity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 16 处；主要在 `transport.f90` 10处, `m3dc1_nint.f90` 2处, `read_namelist.cpp` 2处, `error_estimate.f90` 1处。 | 319 |
-| `eta0` | `eta0` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 17 处；主要在 `transport.f90` 8处, `mackenbach_profiles.f90` 4处, `input.f90` 2处, `m3dc1_nint.f90` 2处。 | 321 |
+| `eta0` | `eta0` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 温度依赖或 tanh 电阻率的幅值；`iresfunc=0` 中形成 `eta0(Te-eta_te_offset)^(-3/2)`。 | 源码引用 17 处；主要在 `transport.f90` 8处, `mackenbach_profiles.f90` 4处, `input.f90` 2处, `m3dc1_nint.f90` 2处。 | 321 |
 | `eta_fac` | `eta_fac` | real | `1.` | Uniform resistivity multiplier | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 21 处；主要在 `transport.f90` 14处, `mackenbach_profiles.f90` 4处, `m3dc1_nint.f90` 2处, `input.f90` 1处。 | 322 |
 | `eta_mod` | `eta_mod` | integer | `0` | 1 = remove d/dphi terms in resistivity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `ludef_t.f90` 4处, `ludef_t_gpu.f90` 4处。 | 324 |
 | `eta_te_offset` | `eta_te_offset` | real | `0.` | Offset in Te when calculating eta | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `m3dc1_nint.f90` 2处, `transport.f90` 2处, `diagnostics.f90` 1处, `input.f90` 1处。 | 326 |
 | `ikprad_te_offset` | `ikprad_te_offset` | integer | `0` | If 1, eta_te_offset also applied to kprad | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `diagnostics.f90` 1处, `kprad_m3dc1.f90` 1处。 | 328 |
 | `eta_max` | `eta_max` | real | `0.` | Maximum value of resistivity in the plasma region | 若 <=0，校验阶段置为 `eta_vac`。 运行时默认：`eta_max<=0` 时改为 `eta_vac`。 | 源码引用 8 处；主要在 `input.f90` 3处, `m3dc1_nint.f90` 3处, `transport.f90` 2处。 | 330 |
 | `eta_min` | `eta_min` | real | `0.` | Minimum value of resistivity in the plasma region | 若 <=0，校验阶段置为 0。 运行时默认：`eta_min<=0` 时改为 0。 | 源码引用 7 处；主要在 `input.f90` 4处, `transport.f90` 2处, `m3dc1_nint.f90` 1处。 | 332 |
-| `ikappafunc` | `ikappafunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `transport.f90` 8处, `m3dc1_nint.f90` 2处。 | 335 |
-| `ikapparfunc` | `ikapparfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 13 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 3处, `input.f90` 2处, `ludef_t.f90` 2处。 | 336 |
-| `ikapscale` | `ikapscale` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。 | 337 |
+| `ikappafunc` | `ikappafunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 选择各向同性热输运模型：0 温度依赖；1/2 磁通 tanh；3 反比于 `sqrt(p n)`；4 梯度依赖；5 预计算场；10/11 读 `profile_kappa`；12 专用模型；21 为 USEST 逻辑 rho。 | 源码引用 10 处；主要在 `transport.f90` 8处, `m3dc1_nint.f90` 2处。 | 335 |
+| `ikapparfunc` | `ikapparfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 选择平行热导：0 常数 `kappar`；1 用 `tcrit` 低温抑制；2 使用按 `Te^(5/2)` 计算并受上下限约束的预计算场。 | 源码引用 13 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 3处, `input.f90` 2处, `ludef_t.f90` 2处。 | 336 |
+| `ikapscale` | `ikapscale` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时令平行热导场按局部各向同性 `kappa` 缩放，即使用 `kappar*kappa(x)`；0 时按 `ikapparfunc` 单独构造。 | 源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。 | 337 |
 | `ikappar_ni` | `ikappar_ni` | integer | `1` | Include 1/n terms in parallel heat flux | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `ludef_t.f90` 1处, `parallel_heat_flux.f90` 1处。 | 338 |
-| `kappaoff` | `kappaoff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `transport.f90` 3处。 | 340 |
+| `kappaoff` | `kappaoff` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `ikappafunc=1/2/21` 的热导 tanh 过渡中心；坐标分别为磁通或 USEST 逻辑 rho。 | 源码引用 3 处；主要在 `transport.f90` 3处。 | 340 |
 | `kappadelt` | `kappadelt` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `transport.f90` 6处。 | 341 |
 | `kappat` | `kappat` | real | `0.` | Isotropic thermal conductivity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `m3dc1_nint.f90` 3处, `transport.f90` 3处, `read_namelist.cpp` 2处, `mackenbach_profiles.f90` 1处。 | 342 |
-| `kappa0` | `kappa0` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 22 处；主要在 `transport.f90` 11处, `mackenbach_profiles.f90` 5处, `m3dc1_nint.f90` 4处, `init_basicq.f90` 1处。 | 344 |
+| `kappa0` | `kappa0` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 所选各向同性热导函数的可变部分幅值；最终系数通常还加常数 `kappat`。 | 源码引用 22 处；主要在 `transport.f90` 11处, `mackenbach_profiles.f90` 5处, `m3dc1_nint.f90` 4处, `init_basicq.f90` 1处。 | 344 |
 | `kappar` | `kappar` | real | `0.` | Parallel thermal conductivity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 23 处；主要在 `ludef_t.f90` 4处, `ludef_t_gpu.f90` 4处, `input.f90` 3处, `transport.f90` 3处。 | 345 |
 | `kappari_fac` | `kappari_fac` | real | `1.` | Ion parallel thermal conductivity factor | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。 | 347 |
-| `tcrit` | `tcrit` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 349 |
+| `tcrit` | `tcrit` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `ikapparfunc=1` 的低温转折温度，平行热导为 `kappar/[1+(tcrit/Te)^(5/2)]`。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 349 |
 | `k_fac` | `k_fac` | real | `1.` | multiplies toroidal field in denominator of PTC | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `m3dc1_nint.f90` 3处。 | 350 |
-| `kappax` | `kappax` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `ludef_t.f90` 2处, `m3dc1_nint.f90` 1处。 | 352 |
-| `kappah` | `kappah` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `m3dc1_nint.f90` 8处, `transport.f90` 2处。 | 353 |
-| `kappag` | `kappag` | real | `0.` | Thermal diffusion proportional to pressure gradient | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `input.f90` 1处, `ludef_t.f90` 1处。 | 354 |
+| `kappax` | `kappax` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 交叉场热输运系数；普通 CPU、非 USEPARTICLES 方程中耦合压力与环向磁场，GPU 对应块被注释，USEPARTICLES 路径也排除该项。 | 源码引用 3 处；主要在 `ludef_t.f90` 2处, `m3dc1_nint.f90` 1处。 | 352 |
+| `kappah` | `kappah` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 在各向同性热导上附加边界层 `kappah*tanh^2[(psi_N-1)/0.2]`；`ikappafunc=5` 时不加。 | 源码引用 10 处；主要在 `m3dc1_nint.f90` 8处, `transport.f90` 2处。 | 353 |
+| `kappag` | `kappag` | real | `0.` | Thermal diffusion proportional to pressure gradient | CPU 压力方程中的非线性梯度热流系数，形式含 `-kappag*\|grad(p)\|^2 grad(p)` 与阈值补偿项；GPU 对应块被注释。当前阈值掩码实际比较 `p^2` 与 `gradp_crit^2`。 | 源码引用 6 处；主要在 `metricterms_new.f90` 2处, `metricterms_new_gpu.f90` 2处, `input.f90` 1处, `ludef_t.f90` 1处。 | 354 |
 | `kappaf` | `kappaf` | real | `1.` | Factor to multiply kappa when grad(p) < gradp_crit | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 5 处；主要在 `m3dc1_nint.f90` 2处, `transport.f90` 2处, `input.f90` 1处。 | 356 |
 | `gradp_crit` | `gradp_crit` | real | `0.` | Critical pressure gradient in kappag/kappaf models | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `m3dc1_nint.f90` 2处, `transport.f90` 2处, `input.f90` 1处, `ludef_t.f90` 1处。 | 358 |
 | `kappa_max` | `kappa_max` | real | `0.` | Maximum value of kappa in the plasma region | 若 <=0，校验阶段置为 `kappar`。 运行时默认：`kappa_max<=0` 时改为 `kappar`。 | 源码引用 6 处；主要在 `m3dc1_nint.f90` 5处, `input.f90` 1处。 | 360 |
@@ -341,7 +341,7 @@
 | `kappar_min` | `kappar_min` | real | `0.` | Maximum value of kappa in the plasma region | 若 <=0，校验阶段置为 `kappar`。 运行时默认：`kappar_min<=0` 时改为 `kappar`。 | 源码引用 4 处；主要在 `m3dc1_nint.f90` 3处, `input.f90` 1处。 | 364 |
 | `temin_qd` | `temin_qd` | real | `0.` | Min. Temp. used in Equipartition term for ipres=1 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 366 |
 | `kappai_fac` | `kappai_fac` | real | `1.` | Factor to multiply kappa when evaluating ion perp. thermal diffusivity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 9 处；主要在 `input.f90` 2处, `ludef_t.f90` 2处, `ludef_t_gpu.f90` 2处, `metricterms_new.f90` 1处。 | 368 |
-| `idenmfunc` | `idenmfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `transport.f90` 4处, `m3dc1_nint.f90` 2处。 | 371 |
+| `idenmfunc` | `idenmfunc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 选择主离子密度扩散：0 常数 `denm`；1 使用预计算温度依赖场并限幅；10/11 从 `profile_denm` 读 SI/归一化剖面。 | 源码引用 6 处；主要在 `transport.f90` 4处, `m3dc1_nint.f90` 2处。 | 371 |
 | `denm` | `denm` | real | `0.` | Density diffusion coefficient | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 11 处；主要在 `m3dc1_nint.f90` 5处, `output.f90` 2处, `transport.f90` 2处, `diagnostics.f90` 1处。 | 372 |
 | `denmt` | `denmt` | real | `0.` | Temperature dependent density diffusion coefficient | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 5 处；主要在 `m3dc1_nint.f90` 5处。 | 374 |
 | `denmmin` | `denmmin` | real | `0.` | Minimum density diffusion coefficient | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 5 处；主要在 `m3dc1_nint.f90` 4处, `transport.f90` 1处。 | 376 |
@@ -353,15 +353,15 @@
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `deex` | `deex` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。 | 785 |
-| `hyper` | `hyper` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `input.f90` 3处, `diagnostics.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。 | 786 |
-| `hyperc` | `hyperc` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `hypervisc.f90` 1处, `input.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 787 |
-| `hyperi` | `hyperi` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 788 |
-| `hyperp` | `hyperp` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 789 |
-| `hyperv` | `hyperv` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `hypervisc.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 790 |
-| `ihypdx` | `ihypdx` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `m3dc1_nint.f90` 2处。 | 791 |
-| `ihypeta` | `ihypeta` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 66 处；主要在 `metricterms_new_gpu.f90` 31处, `metricterms_new.f90` 28处, `input.f90` 4处, `electrostatic_potential.f90` 2处。 | 792 |
-| `ihypkappa` | `ihypkappa` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 9 处；主要在 `metricterms_new_gpu.f90` 5处, `metricterms_new.f90` 4处。 | 793 |
+| `deex` | `deex` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 超扩散的参考长度/网格尺度；当 `ihypdx!=0` 时所有 hyper 输入乘 `deex^ihypdx`。 | 源码引用 1 处；主要在 `m3dc1_nint.f90` 1处。 | 785 |
+| `hyper` | `hyper` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 磁通/极向磁场方程的超电阻率系数，抑制高波数电流结构；0 关闭该项。 | 源码引用 10 处；主要在 `input.f90` 3处, `diagnostics.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处。 | 786 |
+| `hyperc` | `hyperc` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 压缩/极向速度势方程的超粘性系数；只在相应速度未知量存在时生效。 | 源码引用 4 处；主要在 `hypervisc.f90` 1处, `input.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 787 |
+| `hyperi` | `hyperi` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 环向磁场未知量的超扩散系数；`numvar>=2` 才有对应场。 | 源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 788 |
+| `hyperp` | `hyperp` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 压力或温度方程的超扩散系数；需要实际推进压力/温度未知量。 | 源码引用 2 处；主要在 `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 789 |
+| `hyperv` | `hyperv` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 环向速度方程的超粘性系数；`numvar>=2` 且速度未冻结时使用。 | 源码引用 3 处；主要在 `hypervisc.f90` 1处, `m3dc1_nint.f90` 1处, `output.f90` 1处。 | 790 |
+| `ihypdx` | `ihypdx` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | hyper 系数的长度缩放指数：0 不缩放，非零时 `lambda_eff=lambda_input*deex^ihypdx`。当前默认 0。 | 源码引用 2 处；主要在 `m3dc1_nint.f90` 2处。 | 791 |
+| `ihypeta` | `ihypeta` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 磁超扩散的空间乘子：0 常数；1 乘电阻率；2 乘压力；大于 2 使用压力与指定磁扰动谐波构造乘子，并要求不超过 `ibh_harmonics`。 | 源码引用 66 处；主要在 `metricterms_new_gpu.f90` 31处, `metricterms_new.f90` 28处, `input.f90` 4处, `electrostatic_potential.f90` 2处。 | 792 |
+| `ihypkappa` | `ihypkappa` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时压力/温度 hyper 系数乘局部热导率，0 时保持输入常数。 | 源码引用 9 处；主要在 `metricterms_new_gpu.f90` 5处, `metricterms_new.f90` 4处。 | 793 |
 | `imp_hyper` | `imp_hyper` | integer | `0` | 1: implicit hyper-resistivity in psi equation | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 44 处；主要在 `ludef_t.f90` 10处, `metricterms_new_gpu.f90` 8处, `time_step_split.f90` 6处, `ludef_t_gpu.f90` 5处。 | 794 |
 
 ## 边界条件 / Boundary Conditions
@@ -370,33 +370,33 @@
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `isurface` | `isurface` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `biharmonic.f90` 1处。 | 799 |
-| `icurv` | `icurv` | integer | `2` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `scorec_mesh.f90` 1处。 | 800 |
-| `nonrect` | `nonrect` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处, `input.f90` 1处。 | 801 |
+| `isurface` | `isurface` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 控制分部积分后 Galerkin 弱式中的外边界表面积分；1 保留，0 去掉。它不选择边界位置，位置来自 mesh/model 分类。 | 源码引用 1 处；主要在 `biharmonic.f90` 1处。 | 799 |
+| `icurv` | `icurv` | integer | `2` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 边界几何曲率处理阶数/开关；大于 0 时使用曲边几何信息，常规高阶曲边网格保持默认 2。 | 源码引用 1 处；主要在 `scorec_mesh.f90` 1处。 | 800 |
+| `nonrect` | `nonrect` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 表示非矩形/一般边界并关闭矩形快捷假设；0 仅适合边界拓扑确为规则矩形的测试网格。 | 源码引用 8 处；主要在 `init_eigen.f90` 1处, `init_frs.f90` 1处, `init_ftz.f90` 1处, `input.f90` 1处。 | 801 |
 | `ifixedb` | `ifixedb` | integer | `0` | 1: Force psi=0 on boundary | 托卡马克：GS 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/PF 线圈真空场边界值并允许 LCFS 在域内更新。仿星器：VMEC/外场初始化不通过它选择固定或自由边界。 | 源码引用 11 处；主要在 `gradshafranov.f90` 3处, `init_eqdsk.f90` 2处, `diagnostics.f90` 1处, `init_dskbal.f90` 1处。 | 802 |
-| `com_bc` | `com_bc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 804 |
-| `vor_bc` | `vor_bc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 805 |
+| `com_bc` | `com_bc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时给压缩速度势 `chi` 增加 `nabla^2 chi=0` 的边界约束。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 804 |
+| `vor_bc` | `vor_bc` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时给极向速度势 `U` 增加 `Delta* U=0` 的涡量边界约束。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 805 |
 | `iconst_p` | `iconst_p` | integer | `1` | 1: Hold pressure constant on boundary | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 12 处；主要在 `model.f90` 8处, `metricterms_new_gpu.f90` 3处, `metricterms_new.f90` 1处。 | 806 |
 | `iconst_n` | `iconst_n` | integer | `1` | 1: Hold density constant on boundary | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `model.f90` 2处, `kprad_m3dc1.f90` 1处。 | 808 |
 | `iconst_t` | `iconst_t` | integer | `1` | 1: Hold temperature constant on boundary | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `model.f90` 4处。 | 810 |
 | `iconst_bn` | `iconst_bn` | integer | `1` | 1: Hold normal field constant on boundary | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `model.f90` 2处, `ludef_t.f90` 1处。 | 812 |
 | `iconst_bz` | `iconst_bz` | integer | `0` | 1: Hold toroidal field constant on boundary | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 814 |
-| `inograd_p` | `inograd_p` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 816 |
-| `inograd_t` | `inograd_t` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 817 |
-| `inograd_n` | `inograd_n` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `metricterms_new_gpu.f90` 3处, `model.f90` 2处, `kprad_m3dc1.f90` 1处。 | 818 |
+| `inograd_p` | `inograd_p` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 对压力施加零法向梯度 Neumann 条件；不要与同一压力场的固定值条件重复指定。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 816 |
+| `inograd_t` | `inograd_t` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 对温度施加零法向梯度 Neumann 条件。 | 源码引用 3 处；主要在 `model.f90` 3处。 | 817 |
+| `inograd_n` | `inograd_n` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 对主离子密度施加零法向梯度 Neumann 条件。 | 源码引用 6 处；主要在 `metricterms_new_gpu.f90` 3处, `model.f90` 2处, `kprad_m3dc1.f90` 1处。 | 818 |
 | `inonormalflow` | `inonormalflow` | integer | `1` | 1: No-normal-flow boundary condition | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 34 处；主要在 `metricterms_new_gpu.f90` 22处, `model.f90` 7处, `ludef_t.f90` 3处, `ludef_t_gpu.f90` 2处。 | 819 |
 | `inoslip_pol` | `inoslip_pol` | integer | `1` | 1: No-slip boundary condition on pol. velocity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 36 处；主要在 `metricterms_new_gpu.f90` 23处, `model.f90` 7处, `ludef_t.f90` 3处, `ludef_t_gpu.f90` 2处。 | 821 |
 | `inoslip_tor` | `inoslip_tor` | integer | `1` | 1: No-slip boundary condition on tor. velocity | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 14 处；主要在 `metricterms_new_gpu.f90` 12处, `model.f90` 2处。 | 823 |
-| `inostress_tor` | `inostress_tor` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 825 |
-| `inocurrent_pol` | `inocurrent_pol` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 19 处；主要在 `metricterms_new_gpu.f90` 17处, `model.f90` 2处。 | 826 |
-| `inocurrent_tor` | `inocurrent_tor` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 11 处；主要在 `metricterms_new_gpu.f90` 7处, `model.f90` 2处, `newpar.f90` 1处, `newvar.f90` 1处。 | 827 |
-| `inocurrent_norm` | `inocurrent_norm` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 17 处；主要在 `metricterms_new_gpu.f90` 15处, `model.f90` 2处。 | 828 |
+| `inostress_tor` | `inostress_tor` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 对环向速度施加零法向导数/无切向应力条件；与 `inoslip_tor=1` 是不同选择。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 825 |
+| `inocurrent_pol` | `inocurrent_pol` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 通过环向磁场变量的法向导数约束使边界极向电流为零。 | 源码引用 19 处；主要在 `metricterms_new_gpu.f90` 17处, `model.f90` 2处。 | 826 |
+| `inocurrent_tor` | `inocurrent_tor` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 通过 `Delta*psi=0` 型边界约束使环向电流为零。 | 源码引用 11 处；主要在 `metricterms_new_gpu.f90` 7处, `model.f90` 2处, `newpar.f90` 1处, `newvar.f90` 1处。 | 827 |
+| `inocurrent_norm` | `inocurrent_norm` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 对三维磁场变量施加组合边界条件，使法向电流为零；会改变 `psi/bz` 的边界掩码组合。 | 源码引用 17 处；主要在 `metricterms_new_gpu.f90` 15处, `model.f90` 2处。 | 828 |
 | `ifbound` | `ifbound` | integer | `-1` | Boundary condition on 'f' field. 1 = Dirichlet, 2 = Neumann | -1 表示校验后按编译版本设置：complex 为 2，real 为 1。 运行时默认：`ifbound=-1` 时，complex 版本默认 2，real 版本默认 1。 | 源码引用 12 处；主要在 `model.f90` 4处, `input.f90` 3处, `newvar.f90` 3处, `ludef_t.f90` 1处。 | 829 |
-| `iconstflux` | `iconstflux` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `newpar.f90` 1处, `time_step.f90` 1处。 | 831 |
+| `iconstflux` | `iconstflux` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 非线性推进中重新缩放环向磁场以保持总环向磁通；0 不做该全局修正。 | 源码引用 2 处；主要在 `newpar.f90` 1处, `time_step.f90` 1处。 | 831 |
 | `iper` | `iper` | integer | `0` | 1: Periodic boundary condition in R direction | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 24 处；主要在 `model.f90` 9处, `boundary.f90` 4处, `rmp.f90` 3处, `biharmonic.f90` 1处。 | 832 |
 | `jper` | `jper` | integer | `0` | 1: Preiodic boundary condition in Z direction | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 24 处；主要在 `model.f90` 9处, `boundary.f90` 4处, `rmp.f90` 3处, `biharmonic.f90` 1处。 | 834 |
-| `tebound` | `tebound` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 836 |
-| `tibound` | `tibound` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 837 |
+| `tebound` | `tebound` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 大于 0 时，在标记为 first-wall 的边界把电子温度固定为该归一化值；负值保留初始边界值。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 836 |
+| `tibound` | `tibound` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 大于 0 时，在 first-wall 边界把离子温度固定为该归一化值；仅双温模型有独立作用。 | 源码引用 2 处；主要在 `model.f90` 2处。 | 837 |
 
 ## 电阻壁/真空/导体区 / Resistive Wall
 
@@ -438,23 +438,23 @@
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
 | `ntimemax` | `ntimemax` | integer | `20` | Total number of timesteps | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `kprad_test.f90` 2处, `newpar.f90` 2处。 | 470 |
-| `integrator` | `integrator` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `input.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `newpar.f90` 1处。 | 472 |
+| `integrator` | `integrator` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 时间离散选择：0 为 theta/Crank-Nicolson 家族；1 为 BDF2，且程序把 `thimp` 强制为 1，首步使用一阶隐式启动。 | 源码引用 6 处；主要在 `input.f90` 1处, `ludef_t.f90` 1处, `ludef_t_gpu.f90` 1处, `newpar.f90` 1处。 | 472 |
 | `isplitstep` | `isplitstep` | integer | `1` | 0: Unsplit time step;  1: Split time step | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 57 处；主要在 `ludef_t.f90` 17处, `ludef_t_gpu.f90` 15处, `input.f90` 11处, `time_step.f90` 8处。 | 473 |
-| `iteratephi` | `iteratephi` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `input.f90` 2处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。 | 475 |
+| `iteratephi` | `iteratephi` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 分裂推进中，更新密度/输运后再重算一次磁场推进；只用于非线性分裂步，线性模式禁止。 | 源码引用 4 处；主要在 `input.f90` 2处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。 | 475 |
 | `imp_mod` | `imp_mod` | integer | `1` | Type of split step.  0: Standard;  1: Caramana | 源码当前默认 1。0: standard/theta implicit；1: Caramana split-step 形式。 运行时默认：`isplitstep=0` 时校验阶段强制 `imp_mod=0`。 | 源码引用 20 处；主要在 `ludef_t.f90` 9处, `ludef_t_gpu.f90` 9处, `electrostatic_potential.f90` 1处, `input.f90` 1处。 | 476 |
 | `caramana_fac` | `caramana_fac` | real | `1.` | Coefficient for the explicit term in Caramana method. 1: Caramana; 0: implicit | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `ludef_t.f90` 3处。 | 478 |
 | `idiff` | `idiff` | integer | `0` | only solve for difference in B,p | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 48 处；主要在 `model.f90` 14处, `ludef_t.f90` 13处, `ludef_t_gpu.f90` 13处, `time_step_split.f90` 5处。 | 480 |
 | `idifv` | `idifv` | integer | `0` | only solve for difference in v | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `ludef_t.f90` 3处, `ludef_t_gpu.f90` 3处, `time_step_split.f90` 1处。 | 481 |
-| `irecalc_eta` | `irecalc_eta` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `time_step_split.f90` 2处。 | 482 |
-| `iconst_eta` | `iconst_eta` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 483 |
-| `itime_independent` | `itime_independent` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 45 处；主要在 `ludef_t.f90` 22处, `ludef_t_gpu.f90` 19处, `input.f90` 2处, `output.f90` 1处。 | 484 |
+| `irecalc_eta` | `irecalc_eta` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 分裂步密度求解后重新计算输运系数，使电阻率等使用更新后的密度/温度。 | 源码引用 2 处；主要在 `time_step_split.f90` 2处。 | 482 |
+| `iconst_eta` | `iconst_eta` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时冻结初始电阻率场，不随温度/密度演化重新构造。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 483 |
+| `itime_independent` | `itime_independent` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 线性模式下去掉普通时间导数并求频域/稳态响应；程序同时令 `thimp=1`，`frequency` 给出复频率。 | 源码引用 45 处；主要在 `ludef_t.f90` 22处, `ludef_t_gpu.f90` 19处, `input.f90` 2处, `output.f90` 1处。 | 484 |
 | `thimp` | `thimp` | real | `0.5` | Implicitness of timestep (.5<thimp<1) | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 445 处；主要在 `ludef_t.f90` 310处, `ludef_t_gpu.f90` 113处, `kprad_m3dc1.f90` 16处, `input.f90` 3处。 | 485 |
-| `thimpsm` | `thimpsm` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `newvar.f90` 2处。 | 487 |
-| `harned_mikic` | `harned_mikic` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `harned_mikic.f90` 8处, `ludef_t.f90` 2处。 | 488 |
-| `isources` | `isources` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `input.f90` 2处。 | 489 |
-| `nskip` | `nskip` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `time_step.f90` 1处。 | 490 |
+| `thimpsm` | `thimpsm` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 平滑器/辅助隐式项使用的 theta 权重，与主时间离散的 `thimp` 分开。 | 源码引用 2 处；主要在 `newvar.f90` 2处。 | 487 |
+| `harned_mikic` | `harned_mikic` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 二场模型的 Harned-Mikic 数值稳定项系数；0 关闭，非零时抑制特定高速/高频耦合。 | 源码引用 10 处；主要在 `harned_mikic.f90` 8处, `ludef_t.f90` 2处。 | 488 |
+| `isources` | `isources` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时把粒子注入等源项导致的动量修正放入速度推进；要求计算标量诊断以取得所需全局量。 | 源码引用 2 处；主要在 `input.f90` 2处。 | 489 |
+| `nskip` | `nskip` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 有限元系统矩阵重建的时间步间隔；1 每步重建，较大值在系数变化慢时复用矩阵。 | 源码引用 1 处；主要在 `time_step.f90` 1处。 | 490 |
 | `pskip` | `pskip` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 源码当前默认 0；官方文档写 1。控制预条件器重算/复用相关周期。 | 源码引用 4 处；主要在 `time_step_split.f90` 4处。 | 491 |
-| `iskippc` | `iskippc` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `get_pc_skip_count.f90` 2处。 | 492 |
+| `iskippc` | `iskippc` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 后端线性求解中预条件器可复用的调用次数/周期控制；与分裂步层面的 `pskip` 分开。 | 源码引用 2 处；主要在 `get_pc_skip_count.f90` 2处。 | 492 |
 | `dt` | `dt` | real | `0.1` | Size of time step | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1498 处；主要在 `ludef_t.f90` 1014处, `ludef_t_gpu.f90` 334处, `bootstrap.f90` 36处, `electrostatic_potential.f90` 20处。 | 493 |
 | `ddt` | `ddt` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 495 |
 | `frequency` | `frequency` | real | `0.` | Frequency in time-independent calculations | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 25 处；主要在 `ludef_t.f90` 9处, `ludef_t_gpu.f90` 9处, `input.f90` 4处, `init_circle.f90` 1处。 | 497 |
@@ -477,13 +477,13 @@
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
 | `jadv` | `jadv` | integer | `1` | Use Del*(psi) eqn. instead of psi eqn. | 1 使用环向电流密度方程代替极向磁通方程；官方文档旧表写 0，但当前源码默认是 1。 | 源码引用 174 处；主要在 `metricterms_new_gpu.f90` 56处, `metricterms_new.f90` 42处, `ludef_t.f90` 11处, `electric_field.f90` 8处。 | 521 |
-| `int_pts_main` | `int_pts_main` | integer | `25` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 91 处；主要在 `gradshafranov.f90` 13处, `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处。 | 524 |
-| `int_pts_aux` | `int_pts_aux` | integer | `25` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `auxiliary_fields.f90` 5处, `input.f90` 3处, `diagnostics.f90` 1处, `transport.f90` 1处。 | 525 |
-| `int_pts_diag` | `int_pts_diag` | integer | `25` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 14 处；主要在 `diagnostics.f90` 6处, `input.f90` 3处, `gradshafranov.f90` 2处, `init_basicq.f90` 1处。 | 526 |
-| `int_pts_tor` | `int_pts_tor` | integer | `5` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 76 处；主要在 `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处, `diagnostics.f90` 6处。 | 527 |
+| `int_pts_main` | `int_pts_main` | integer | `25` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 主演化弱式在每个二维三角形上的 Gaussian 积分点数；必须是程序已实现的 Dunavant 阶数。 | 源码引用 91 处；主要在 `gradshafranov.f90` 13处, `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处。 | 524 |
+| `int_pts_aux` | `int_pts_aux` | integer | `25` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 辅助场投影/构造所用的二维积分点数；提高它增加后处理与系数构造成本。 | 源码引用 10 处；主要在 `auxiliary_fields.f90` 5处, `input.f90` 3处, `diagnostics.f90` 1处, `transport.f90` 1处。 | 525 |
+| `int_pts_diag` | `int_pts_diag` | integer | `25` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 标量和诊断积分使用的二维积分点数。 | 源码引用 14 处；主要在 `diagnostics.f90` 6处, `input.f90` 3处, `gradshafranov.f90` 2处, `init_basicq.f90` 1处。 | 526 |
+| `int_pts_tor` | `int_pts_tor` | integer | `5` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 三维棱柱在环向 Hermite 方向的积分点数；非 3D 编译会强制为 1，且与二维点数乘积不能超过内部上限。 | 源码引用 76 处；主要在 `init_common.f90` 12处, `particle.f90` 11处, `particle_com.f90` 8处, `diagnostics.f90` 6处。 | 527 |
 | `max_ke` | `max_ke` | real | `1.` | Value of ke at which linear sims are rescaled；(ignore if 0) | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `time_step.f90` 1处。 | 528 |
 | `equilibrate` | `equilibrate` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `newpar.f90` 3处, `gradshafranov.f90` 1处, `kprad_m3dc1.f90` 1处, `m3dc1_nint.f90` 1处。 | 530 |
-| `regular` | `regular` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 21 处；主要在 `transport.f90` 7处, `ludef_t.f90` 4处, `init_vmec.f90` 3处, `init_common.f90` 2处。 | 531 |
+| `regular` | `regular` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 小分母/坐标奇点的正则化尺度；USEST 逻辑 rho 模型使用 `sqrt(rho^2+regular^2)`，压缩势方程也复用该量。 | 源码引用 21 处；主要在 `transport.f90` 7处, `ludef_t.f90` 4处, `init_vmec.f90` 3处, `init_common.f90` 2处。 | 531 |
 | `iset_pe_floor` | `iset_pe_floor` | integer | `0` | 1: Do not let pe drop below pe_floor | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `m3dc1_nint.f90` 3处, `input.f90` 1处。 | 532 |
 | `pe_floor` | `pe_floor` | real | `0.` | Minimum allowed value for pe when iset_pe_floor=1 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `m3dc1_nint.f90` 5处, `input.f90` 1处。 | 534 |
 | `iset_pi_floor` | `iset_pi_floor` | integer | `0` | 1: Do not let pi drop below pi_floor | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `m3dc1_nint.f90` 3处, `input.f90` 1处。 | 536 |
@@ -531,33 +531,33 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `iadapt` | `iadapt` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `newpar.f90` 5处, `input.f90` 1处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。 | 1130 |
-| `ispradapt` | `ispradapt` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 17 处；主要在 `newpar.f90` 7处, `auxiliary_fields.f90` 4处, `gradshafranov.f90` 2处, `adapt.f90` 1处。 | 1132 |
-| `isprntime` | `isprntime` | integer | `10` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1133 |
-| `isprweight` | `isprweight` | real | `0.1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1134 |
-| `isprmaxsize` | `isprmaxsize` | real | `0.05` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1135 |
-| `isprrefinelevel` | `isprrefinelevel` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1136 |
-| `isprcoarsenlevel` | `isprcoarsenlevel` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1137 |
-| `iadapt_writevtk` | `iadapt_writevtk` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `adapt.f90` 2处, `newpar.f90` 1处。 | 1140 |
-| `iadapt_writesmb` | `iadapt_writesmb` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1143 |
-| `iadapt_useH1` | `iadapt_useH1` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 5 处；主要在 `error_estimate.f90` 5处。 | 1144 |
-| `iadapt_removeEquiv` | `iadapt_removeEquiv` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `error_estimate.f90` 1处。 | 1145 |
-| `adapt_target_error` | `adapt_target_error` | real | `0.0001` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `m3dc1_scorec.cc` 4处, `adapt.f90` 3处。 | 1146 |
-| `adapt_ke` | `adapt_ke` | real | `0.0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1147 |
-| `iadapt_ntime` | `iadapt_ntime` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `adapt.f90` 3处。 | 1148 |
-| `iadapt_max_node` | `iadapt_max_node` | integer | `10000` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 2处。 | 1149 |
-| `adapt_control` | `adapt_control` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 1处。 | 1150 |
-| `iadapt_order_p` | `iadapt_order_p` | real | `3.0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1151 |
-| `iadaptFaceNumber` | `iadaptFaceNumber` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `m3dc1_scorec.cc` 5处, `adapt.f90` 2处, `m3dc1_scorec.h` 1处。 | 1152 |
-| `iadapt_snap` | `iadapt_snap` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `scorec_mesh.f90` 1处。 | 1153 |
-| `adapt_factor` | `adapt_factor` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 1155 |
-| `adapt_hmin` | `adapt_hmin` | real | `0.001` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1156 |
-| `adapt_hmax` | `adapt_hmax` | real | `0.1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1157 |
-| `adapt_hmin_rel` | `adapt_hmin_rel` | real | `0.5` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1158 |
-| `adapt_hmax_rel` | `adapt_hmax_rel` | real | `2.0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1159 |
-| `adapt_smooth` | `adapt_smooth` | real | `2./3. (约 0.6667)` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 1160 |
-| `adapt_psin_vacuum` | `adapt_psin_vacuum` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1161 |
-| `adapt_psin_wall` | `adapt_psin_wall` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1163 |
+| `iadapt` | `iadapt` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | SCOREC 网格自适应总模式：0 关闭；1 初始化按磁通；2 推进中按误差；3 两者结合；4 初始化和推进均可按误差。 | 源码引用 8 处；主要在 `newpar.f90` 5处, `input.f90` 1处, `time_step_split.f90` 1处, `time_step_unsplit.f90` 1处。 | 1130 |
+| `ispradapt` | `ispradapt` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 启用 SPR 梯度恢复自适应，并在推进阶段替代普通 residual/error 路径。 | 源码引用 17 处；主要在 `newpar.f90` 7处, `auxiliary_fields.f90` 4处, `gradshafranov.f90` 2处, `adapt.f90` 1处。 | 1132 |
+| `isprntime` | `isprntime` | integer | `10` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | SPR 自适应的时间步调用周期。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1133 |
+| `isprweight` | `isprweight` | real | `0.1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | SPR 恢复误差转换为目标尺寸时的权重，控制细化强度。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1134 |
+| `isprmaxsize` | `isprmaxsize` | real | `0.05` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | SPR 目标尺寸场允许的最大单元尺寸。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1135 |
+| `isprrefinelevel` | `isprrefinelevel` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 一次 SPR 调用允许的最大细化层级。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1136 |
+| `isprcoarsenlevel` | `isprcoarsenlevel` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 一次 SPR 调用允许的粗化层级；负值表示使用实现的默认/不强制粗化。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1137 |
+| `iadapt_writevtk` | `iadapt_writevtk` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 在自适应阶段写出 VTK 调试网格/尺寸场。 | 源码引用 3 处；主要在 `adapt.f90` 2处, `newpar.f90` 1处。 | 1140 |
+| `iadapt_writesmb` | `iadapt_writesmb` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 写出 SCOREC `.smb` 自适应网格快照，便于重启或检查。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1143 |
+| `iadapt_useH1` | `iadapt_useH1` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 用 H1 型误差度量替代默认高阶度量构造目标尺寸。 | 源码引用 5 处；主要在 `error_estimate.f90` 5处。 | 1144 |
+| `iadapt_removeEquiv` | `iadapt_removeEquiv` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 在误差估计前去掉环向等价节点/重复贡献，供周期网格的专用适配路径使用。 | 源码引用 1 处；主要在 `error_estimate.f90` 1处。 | 1145 |
+| `adapt_target_error` | `adapt_target_error` | real | `0.0001` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 普通误差自适应的目标/触发误差；估计误差未超过它时不换网格。 | 源码引用 7 处；主要在 `m3dc1_scorec.cc` 4处, `adapt.f90` 3处。 | 1146 |
+| `adapt_ke` | `adapt_ke` | real | `0.0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 线性计算中触发动态自适应的动能阈值；0 不使用该触发条件。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1147 |
+| `iadapt_ntime` | `iadapt_ntime` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 普通动态自适应检查的时间步周期；非线性且为 0 时当前流程可每步检查。 | 源码引用 3 处；主要在 `adapt.f90` 3处。 | 1148 |
+| `iadapt_max_node` | `iadapt_max_node` | integer | `10000` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 自适应后允许的节点数上限，用于限制内存和网格增长。 | 源码引用 4 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 2处。 | 1149 |
+| `adapt_control` | `adapt_control` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 误差到目标尺寸的控制模式/方向参数；常规保持默认 1。 | 源码引用 3 处；主要在 `adapt.f90` 2处, `m3dc1_scorec.cc` 1处。 | 1150 |
+| `iadapt_order_p` | `iadapt_order_p` | real | `3.0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 误差随网格尺寸收敛的假定阶数，用于由目标误差反算目标尺寸。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1151 |
+| `iadaptFaceNumber` | `iadaptFaceNumber` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 只适配指定几何模型 face 的编号；-1 表示不按单一 face 限制。 | 源码引用 8 处；主要在 `m3dc1_scorec.cc` 5处, `adapt.f90` 2处, `m3dc1_scorec.h` 1处。 | 1152 |
+| `iadapt_snap` | `iadapt_snap` | integer | `1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 时把新边界节点投影/贴合回既有几何模型边界；不会创建新的壁面或 LCFS。 | 源码引用 1 处；主要在 `scorec_mesh.f90` 1处。 | 1153 |
+| `adapt_factor` | `adapt_factor` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 保留的自适应缩放输入；当前活动源码未读取其值，修改它不会改变网格。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 1155 |
+| `adapt_hmin` | `adapt_hmin` | real | `0.001` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 磁通/误差尺寸场允许的绝对最小单元尺度。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1156 |
+| `adapt_hmax` | `adapt_hmax` | real | `0.1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 磁通/误差尺寸场允许的绝对最大单元尺度。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1157 |
+| `adapt_hmin_rel` | `adapt_hmin_rel` | real | `0.5` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 相对当前单元尺寸的一次最小缩放比，限制单次细化幅度。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1158 |
+| `adapt_hmax_rel` | `adapt_hmax_rel` | real | `2.0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 相对当前单元尺寸的一次最大缩放比，限制单次粗化幅度。 | 源码引用 1 处；主要在 `adapt.f90` 1处。 | 1159 |
+| `adapt_smooth` | `adapt_smooth` | real | `2./3. (约 0.6667)` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 保留的尺寸场平滑输入；当前活动源码未读取其值。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 1160 |
+| `adapt_psin_vacuum` | `adapt_psin_vacuum` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按磁通适配时 vacuum 区的归一化磁通阈值/目标范围；负值关闭该专用阈值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1161 |
+| `adapt_psin_wall` | `adapt_psin_wall` | real | `-1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按磁通适配时 wall 区的归一化磁通阈值/目标范围；负值关闭该专用阈值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1163 |
 | `iadapt_pack_rationals` | `iadapt_pack_rationals` | integer | `0` | Number of mode-rational surfaces to pack mesh around | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `adapt.f90` 4处。 | 1165 |
 | `adapt_pack_factor` | `adapt_pack_factor` | real | `0.02` | Width of Lorentzian (in psi_N) for rational mesh packing | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `adapt.f90` 2处。 | 1167 |
 | `adapt_coil_delta` | `adapt_coil_delta` | real | `0.` | Parameter for packing mesh around coil locations | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `adapt.f90` 3处。 | 1169 |
@@ -570,18 +570,18 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `iheat_sink` | `iheat_sink` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `ludef_t.f90` 2处, `input.f90` 1处, `transport.f90` 1处。 | 243 |
-| `vloop` | `vloop` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 19 处；主要在 `newpar.f90` 5处, `restart_hdf5.f90` 3处, `mackenbach_profiles.f90` 2处, `electric_field.f90` 1处。 | 896 |
-| `vloopRZ` | `vloopRZ` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `model.f90` 1处。 | 897 |
-| `tcur` | `tcur` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `newpar.f90` 3处, `control.f90` 2处, `input.f90` 1处, `mackenbach_profiles.f90` 1处。 | 898 |
+| `iheat_sink` | `iheat_sink` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 启用 `itaylor=27` 专用热沉；其它平衡类型下不产生通用热沉。 | 源码引用 4 处；主要在 `ludef_t.f90` 2处, `input.f90` 1处, `transport.f90` 1处。 | 243 |
+| `vloop` | `vloop` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 施加在环向 Ohm/磁通方程中的回路电压幅值；无电流反馈时按 `vloop*cos(2*pi*vloop_freq*t)` 使用。 | 源码引用 19 处；主要在 `newpar.f90` 5处, `restart_hdf5.f90` 3处, `mackenbach_profiles.f90` 2处, `electric_field.f90` 1处。 | 896 |
+| `vloopRZ` | `vloopRZ` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | R-Z/极向磁场方程使用的回路电压分量，独立于主环向 `vloop`。 | 源码引用 1 处；主要在 `model.f90` 1处。 | 897 |
+| `tcur` | `tcur` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 电流反馈的目标总等离子体电流；若给定 `tcuri/tcurf`，运行时目标可被时间 ramp 覆盖。 | 源码引用 7 处；主要在 `newpar.f90` 3处, `control.f90` 2处, `input.f90` 1处, `mackenbach_profiles.f90` 1处。 | 898 |
 | `vloop_freq` | `vloop_freq` | real | `0.` | Loop voltage frequency | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 899 |
-| `tcuri` | `tcuri` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。 | 902 |
-| `tcurf` | `tcurf` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。 | 903 |
-| `tcur_t0` | `tcur_t0` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。 | 904 |
-| `tcur_tw` | `tcur_tw` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。 | 905 |
-| `control_p` | `control_p` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 907 |
-| `control_i` | `control_i` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 908 |
-| `control_d` | `control_d` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 909 |
+| `tcuri` | `tcuri` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 电流反馈 tanh ramp 的初始目标电流。 | 源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。 | 902 |
+| `tcurf` | `tcurf` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 电流反馈 tanh ramp 的最终目标电流。 | 源码引用 4 处；主要在 `control.f90` 2处, `newpar.f90` 2处。 | 903 |
+| `tcur_t0` | `tcur_t0` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 目标电流 tanh ramp 的中心时间。 | 源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。 | 904 |
+| `tcur_tw` | `tcur_tw` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 目标电流 tanh ramp 的时间宽度；用于从 `tcuri` 平滑过渡到 `tcurf`。 | 源码引用 3 处；主要在 `control.f90` 2处, `newpar.f90` 1处。 | 905 |
+| `control_p` | `control_p` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `control_type=1` 电流 PID 的比例增益 P。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 907 |
+| `control_i` | `control_i` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `control_type=1` 电流 PID 的积分增益 I。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 908 |
+| `control_d` | `control_d` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `control_type=1` 电流 PID 的微分增益 D。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 909 |
 | `control_type` | `control_type` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | -1 不启用电流控制；0 旧算法；1 标准 PID，配合 `control_p/i/d`。 | 源码引用 2 处；主要在 `newpar.f90` 1处, `restart_hdf5.f90` 1处。 | 910 |
 | `ipellet` | `ipellet` | integer | `0` | 1 = include a gaussian pellet source | 源码用法：在 `pellet.f90` 中选择密度源分布；正值为持续源，负值用于初始扰动；双位数分布按 `Lor_vol` 数值归一化。 | 源码引用 27 处；主要在 `init_common.f90` 5处, `output.f90` 5处, `pellet.f90` 5处, `input.f90` 3处。 | 914 |
 | `irestart_pellet` | `irestart_pellet` | integer | `0` | 1 = read some pellet restart parameters from C1input | restart 时仍从 C1input 覆盖部分 pellet 参数，如 pellet_rate、pellet_var_tor、pellet_var、cloud_pel、pellet_mix、cauchy_fraction。 | 源码引用 3 处；主要在 `restart_hdf5.f90` 3处。 | 916 |
@@ -598,8 +598,8 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 | `pellet_velz` | `pellet_velz_scl` | real | `0.` | Initial vertical velocity of the pellet | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 14 处；主要在 `pellet.f90` 7处, `restart_hdf5.f90` 3处, `adapt.f90` 2处, `output.f90` 2处。 | 935 |
 | `ipellet_abl` | `ipellet_abl` | integer | `0` | 1 = include an ablation model | 源码用法：选择 pellet ablation 模型；1/2 lithium，3 neon，43 carbon/Sergeev06。`ipellet_z=0` 时会由模型推断默认 Z。 | 源码引用 20 处；主要在 `pellet.f90` 10处, `diagnostics.f90` 5处, `transport.f90` 2处, `input.f90` 1处。 | 937 |
 | `ipellet_fixed_dep` | `ipellet_fixed_dep` | integer | `0` | 1 = use fixed input pellet_var when ipellet_abl=1 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `pellet.f90` 2处。 | 939 |
-| `r_p` | `r_p_scl` | real | `1.e-3` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 34 处；主要在 `pellet.f90` 25处, `restart_hdf5.f90` 3处, `diagnostics.f90` 2处, `output.f90` 2处。 | 941 |
-| `cloud_pel` | `cloud_pel_scl` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `pellet.f90` 5处, `output.f90` 1处, `restart_hdf5.f90` 1处。 | 942 |
+| `r_p` | `r_p_scl` | real | `1.e-3` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | pellet 实体半径，供 ablation 模型计算剩余粒子数和烧蚀率；不是沉积 Gaussian 宽度。 | 源码引用 34 处；主要在 `pellet.f90` 25处, `restart_hdf5.f90` 3处, `diagnostics.f90` 2处, `output.f90` 2处。 | 941 |
+| `cloud_pel` | `cloud_pel_scl` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | pellet ablation 云团/沉积宽度的乘性系数，控制烧蚀物质相对 pellet 的扩散尺度。 | 源码引用 7 处；主要在 `pellet.f90` 5处, `output.f90` 1处, `restart_hdf5.f90` 1处。 | 942 |
 | `pellet_mix` | `pellet_mix_scl` | real | `0.` | Molar fraction of deuterium in pellet | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 27 处；主要在 `pellet.f90` 17处, `init_common.f90` 4处, `transport.f90` 3处, `input.f90` 1处。 | 943 |
 | `temin_abl` | `temin_abl` | real | `0.` | Min. Temp. at which ablation turns on | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `pellet.f90` 1处。 | 945 |
 | `cauchy_fraction` | `cauchy_fraction_scl` | real | `0.` | For ipellet=14, fraction of distribution that is Cauchy, vs von Mises | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `pellet.f90` 5处, `output.f90` 1处, `restart_hdf5.f90` 1处。 | 947 |
@@ -630,12 +630,12 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 | `ghs_rate` | `ghs_rate` | real | `0.` | Amplitude of gaussian heat source | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `transport.f90` 3处。 | 1008 |
 | `ghs_var` | `ghs_var` | real | `1.` | Variance of gaussian heat source | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 4 处；主要在 `transport.f90` 4处。 | 1010 |
 | `ghs_var_tor` | `ghs_var_tor` | real | `0.` | Toroidal variance of gaussian heat source | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 7 处；主要在 `transport.f90` 7处。 | 1012 |
-| `ionization` | `ionization` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `input.f90` 4处, `diagnostics.f90` 1处, `transport.f90` 1处。 | 1015 |
+| `ionization` | `ionization` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 在主离子密度方程加入温度门控的电离粒子源，并可用 `coolrate` 从热方程扣除能量。 | 源码引用 6 处；主要在 `input.f90` 4处, `diagnostics.f90` 1处, `transport.f90` 1处。 | 1015 |
 | `ionization_rate` | `ionization_rate` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1016 |
 | `coolrate` | `coolrate` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `ludef_t.f90` 4处, `init_basicq.f90` 1处, `transport.f90` 1处。 | 1017 |
-| `ionization_temp` | `ionization_temp` | real | `0.01` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `transport.f90` 3处。 | 1018 |
-| `ionization_depth` | `ionization_depth` | real | `0.01` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1019 |
-| `isink` | `isink` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。 | 1021 |
+| `ionization_temp` | `ionization_temp` | real | `0.01` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 电离源中的特征温度，同时出现在 Arrhenius 型 `exp(-Tion/T)` 因子和高温衰减门控中。 | 源码引用 3 处；主要在 `transport.f90` 3处。 | 1018 |
+| `ionization_depth` | `ionization_depth` | real | `0.01` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 温度高于 `ionization_temp` 后电离源指数衰减的温度宽度。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1019 |
+| `isink` | `isink` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 启用局部 Gaussian 粒子汇的数量：1 使用 sink1，2 同时使用 sink1 和 sink2。 | 源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。 | 1021 |
 | `sink1_x` | `sink1_x` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1022 |
 | `sink1_z` | `sink1_z` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1023 |
 | `sink1_rate` | `sink1_rate` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1024 |
@@ -644,15 +644,15 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 | `sink2_z` | `sink2_z` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1027 |
 | `sink2_rate` | `sink2_rate` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1028 |
 | `sink2_var` | `sink2_var` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `transport.f90` 2处。 | 1029 |
-| `iarc_source` | `iarc_source` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。 | 1031 |
-| `arc_source_alpha` | `arc_source_alpha` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1032 |
-| `arc_source_eta` | `arc_source_eta` | real | `0.01` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1033 |
-| `idenfloor` | `idenfloor` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `input.f90` 1处, `transport.f90` 1处。 | 1035 |
-| `alphadenfloor` | `alphadenfloor` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1036 |
-| `n_target` | `n_target` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1038 |
-| `n_control_p` | `n_control_p` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1039 |
-| `n_control_i` | `n_control_i` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1040 |
-| `n_control_d` | `n_control_d` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1041 |
+| `iarc_source` | `iarc_source` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 启用与壁面法向电流和 wall-distance 相关的 arc 粒子源。 | 源码引用 3 处；主要在 `transport.f90` 2处, `input.f90` 1处。 | 1031 |
+| `arc_source_alpha` | `arc_source_alpha` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | arc 粒子源的总幅值系数，乘正向法向电流。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1032 |
+| `arc_source_eta` | `arc_source_eta` | real | `0.01` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | arc 源随 wall-distance 的尺度长度，形状含 `(w/eta)*exp(-w/eta)`。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1033 |
+| `idenfloor` | `idenfloor` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 1 在外侧非 plasma magnetic region 加入恢复型密度源，把密度拉向 `den_edge`；它不是逐节点硬截断。 | 源码引用 2 处；主要在 `input.f90` 1处, `transport.f90` 1处。 | 1035 |
+| `alphadenfloor` | `alphadenfloor` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 密度恢复源 `alphadenfloor*(den_edge-n)` 的速率系数。 | 源码引用 1 处；主要在 `transport.f90` 1处。 | 1036 |
+| `n_target` | `n_target` | real | `1.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | pellet 密度反馈所追踪的目标全局粒子数/密度诊断量。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1038 |
+| `n_control_p` | `n_control_p` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | `n_control_type=1` pellet-rate PID 的比例增益。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1039 |
+| `n_control_i` | `n_control_i` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | pellet-rate PID 的积分增益。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1040 |
+| `n_control_d` | `n_control_d` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | pellet-rate PID 的微分增益。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1041 |
 | `n_control_type` | `n_control_type` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | -1 不启用密度控制；0 旧算法；1 标准 PID，配合 `n_control_p/i/d`。 | 源码引用 2 处；主要在 `newpar.f90` 1处, `pellet.f90` 1处。 | 1042 |
 
 ## PRAD 简单辐射模型 / PRAD Options
@@ -749,7 +749,7 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `iprint` | `iprint` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 465 处；主要在 `gradshafranov.f90` 64处, `newpar.f90` 50处, `diagnostics.f90` 41处, `transport.f90` 32处。 | 1046 |
+| `iprint` | `iprint` | integer | `0` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 终端日志详细度：0 最少；1 打印主要步骤/迭代；2 及以上打印更多矩阵、系数和输出阶段信息。它不控制 HDF5 字段内容。 | 源码引用 465 处；主要在 `gradshafranov.f90` 64处, `newpar.f90` 50处, `diagnostics.f90` 41处, `transport.f90` 32处。 | 1046 |
 | `ntimepr` | `ntimepr` | integer | `1` | Number of time steps per field output | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `input.f90` 2处, `newpar.f90` 1处, `output.f90` 1处, `particle.f90` 1处。 | 1047 |
 | `ntimers` | `ntimers` | integer | `0` | Number of time steps per restart output | 0 表示校验后取 `ntimepr`；否则为 restart 输出周期。 运行时默认：`ntimers<=0` 时源码把它设为 `ntimepr`。 | 源码引用 1 处；主要在 `input.f90` 1处。 | 1049 |
 | `ifout` | `ifout` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | -1 表示校验后按编译维度默认：3D 输出 f，2D 不输出；也可显式 0/1。 运行时默认：`ifout=-1` 在 `validate_input` 中改为 `i3d`：3D 默认输出 f 场，2D 默认不输出。 | 源码引用 7 处；主要在 `output.f90` 4处, `input.f90` 1处, `newpar.f90` 1处, `newvar.f90` 1处。 | 1051 |
@@ -766,7 +766,7 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 | `itemp_plot` | `itemp_plot` | integer | `0` | 1: Output additional temperature plots | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 10 处；主要在 `auxiliary_fields.f90` 8处, `output.f90` 2处。 | 1071 |
 | `ibdgp` | `ibdgp` | integer | `0` | ne.0: bdgp plot contains only partial results | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `electric_field.f90` 1处。 | 1073 |
 | `idouble_out` | `idouble_out` | integer | `0` | 1: Use double-precision floating points in output | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 6 处；主要在 `hdf5_output.f90` 4处, `particle.f90` 1处, `particle_com.f90` 1处。 | 1075 |
-| `irestart_slice` | `irestart_slice` | integer | `-1` | Field output slice from which to restart | -1 使用最后一个 time slice；否则从指定 `time_nnn.h5` restart。 | 源码引用 3 处；主要在 `restart_hdf5.f90` 3处。 | 1077 |
+| `irestart_slice` | `irestart_slice` | integer | `-1` | Field output slice from which to restart | -1 从 HDF5 中最后一个已保存时间片重启；非负值选择指定时间片索引，并在同一输出文件中删除其后的时间片组后续写。 | 源码引用 3 处；主要在 `restart_hdf5.f90` 3处。 | 1077 |
 | `iveldif` | `iveldif` | integer | `0` | ne.0: veldif plot contains only partial results | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `electric_field.f90` 1处。 | 1080 |
 | `write_ts_on_job_timeout` | `write_ts_on_job_timeout` | integer | `0` | 1: Write time slice and stop code before job hits timeout or is preempted | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 1 处；主要在 `newpar.f90` 1处。 | 1082 |
 
@@ -777,8 +777,8 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 | `gam` | `gam` | real | `5./3. (约 1.6667)` | Ratio of specific heats | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 482 处；主要在 `metricterms_new_gpu.f90` 251处, `metricterms_new.f90` 113处, `temperature_plots.f90` 29处, `ludef_t.f90` 22处。 | 381 |
 | `db` | `db` | real | `-1.` | Collisionless ion skin depth (overrides db_fac) | 源码默认 -1，表示按物理归一化自动计算 ion skin depth 并乘以 `db_fac`；若显式给非负值则覆盖。 运行时默认：`db<0` 时源码按 `b0_norm/n0_norm/l0_norm/ion_mass` 计算物理 ion skin depth，再乘 `db_fac`；显式给非负 `db` 会覆盖该自动计算。 | 源码引用 396 处；主要在 `ludef_t.f90` 291处, `electrostatic_potential.f90` 25处, `particle.f90` 17处, `particle_com.f90` 11处。 | 383 |
 | `db_fac` | `db_fac` | real | `0.` | Factor multiplying physical value of ion skin depth | `db<0` 时乘在物理 ion skin depth 上；默认 0 等价于关闭 two-fluid skin-depth 贡献。 | 源码引用 3 处；主要在 `input.f90` 3处。 | 385 |
-| `mass_ratio` | `mass_ratio` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 8 处；主要在 `metricterms_new.f90` 4处, `metricterms_new_gpu.f90` 4处。 | 387 |
-| `lambdae` | `lambdae` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 388 |
+| `mass_ratio` | `mass_ratio` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 已注册但当前活动计算未读取的兼容参数；电子/离子质量比由内部常数和 `ion_mass` 形成，用户不应依赖此值。 | 源码引用 8 处；主要在 `metricterms_new.f90` 4处, `metricterms_new_gpu.f90` 4处。 | 387 |
+| `lambdae` | `lambdae` | real | `0.` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 已注册但当前活动计算未读取的兼容参数；不会单独打开电子惯性或改变广义 Ohm 定律。 | 未发现除注册/声明外的源码引用；可能是废弃参数、条件编译路径参数，或仅由外部工具/库间接使用。 | 388 |
 | `z_ion` | `z_ion` | real | `1.` | Z effective | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 39 处；主要在 `gradshafranov.f90` 14处, `input.f90` 9处, `mackenbach_profiles.f90` 3处, `auxiliary_fields.f90` 2处。 | 389 |
 | `ion_mass` | `ion_mass` | real | `1.` | Ion mass (in units of m_p) | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 20 处；主要在 `gradshafranov.f90` 6处, `init_conds.f90` 2处, `input.f90` 2处, `neutral_beam.f90` 2处。 | 390 |
 | `lambda_coulomb` | `lambda_coulomb` | real | `17.` | Coulomb logarithm | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 源码引用 2 处；主要在 `input.f90` 2处。 | 392 |
@@ -792,8 +792,8 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 
 | 参数 | 内部变量 | 类型 | 默认值 | 含义 | 使用方法/注意 | 源码使用摘要 | 注册行 |
 |---|---|---|---|---|---|---|---:|
-| `ibform` | `idum` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。 | 1320 |
-| `igs_method` | `idum` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。 | 1321 |
+| `ibform` | `idum` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 旧磁场形式开关的占位参数，读入后写入 dummy 变量；当前方程形式不会随它改变。 | 兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。 | 1320 |
+| `igs_method` | `idum` | integer | `-1` | 源码 `add_var_*` 注册说明为空；请结合所在逻辑组和下方源码使用位置判断。 | 旧 GS 算法选择的占位参数，当前 GS 求解器不读取其值。 | 兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。 | 1321 |
 | `iwrite_restart` | `idum` | integer | `0` | 1: Write restart files | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。 | 1322 |
 | `zeff` | `dum` | real | `0.` | zeff is deprecated.  Use z_ion instead. | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 兼容旧输入：读入到 dummy 变量 `dum`，未见模型计算使用。 | 1324 |
 | `ivform` | `idum` | integer | `1` | ivform is deprecated.  Only ivform=1 is now implemented. | 按需在 `C1input` 中写 `name = value`；未设置则使用默认值。 | 兼容旧输入：读入到 dummy 变量 `idum`，未见模型计算使用。 | 1326 |

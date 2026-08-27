@@ -84,6 +84,18 @@
 | `adapt_qs` | `0.` | 官方输入表把它放在 GS 小节，且源码也误用 `gs_grp` 注册；实际唯一活动使用位于 `adapt.f90`，用于按 q 面打包自适应网格，不参与 GS 求解。 |
 | `adapt_zlow` | `0.` | 官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。 |
 | `adapt_zup` | `0.` | 官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。 |
+| `ivisfunc` | `0` | 官方文档只说明 0-3；当前源码还实现 4、10/11（读取 `profile_amu`）、12（basicJ 专用）以及 USEST 条件下的 21（逻辑 rho）。 |
+| `iresfunc` | `0` | 官方文档把 2/3/4 分别描述为解析台阶/Spitzer 等模型；当前 `resistivity_func` 中 2、3、4 都直接使用预先构造的 `eta_field`。源码还实现 10/11 的 `profile_eta` 和 USEST 模式 21。 |
+| `ikappafunc` | `0` | 官方文档列到 12；当前源码还在 USEST 条件下实现 21，按逻辑 rho 构造 tanh 热导。 |
+| `ikapparfunc` | `0` | 官方文档只列 0/1；当前源码还实现 2，使用按 Te^(5/2) 构造并由 `kappar_min/max` 截断的场。 |
+| `kappag` | `0.` | 官方文档称其按压力梯度阈值启用。CPU 弱式的热流项确含压力梯度平方范数，但当前 mask 实际比较 `p**2` 与 `gradp_crit**2`；GPU 对应实现被注释。 |
+| `kappax` | `0.` | 官方文档把它列为 B×grad(T) 交叉热输运。当前普通 CPU、非 USEPARTICLES 路径有耦合项；GPU 版本的对应块被注释，USEPARTICLES 编译也排除该项。 |
+| `ifixedb` | `0` | 官方边界表把它概括为运行时 `psi=0` 边界；当前活动用途集中在 gfile/GS 初始化和 LCFS 诊断。时间演化磁边界由 `iconst_bn`、`inocurrent_*`、`ifbound` 与多区域模型决定。 |
+| `jper` | `0` | 官方文档表写 `2: Top/bottom boundaries periodic`；当前网格与边界源码实际测试 `jper.eq.1`。 |
+| `imp_mod` | `1` | 官方文档称模式 1 为 implicit leapfrog；当前输入注册和活动分支将其称为 Caramana split-step，并由 `caramana_fac` 控制显式部分。 |
+| `mass_ratio` | `0.` | 官方文档列出该输入但没有说明；当前源码除注册/存储外没有活动计算引用，电子质量仍使用内部常数。 |
+| `lambdae` | `0.` | 官方文档只写 `lambdae`；当前源码除注册/存储外没有活动计算引用，非零值不会打开电子惯性。 |
+| `imode_filter` | `0` | 输入注册说明称其为要过滤的环向模数量；当前实现中负值只保留所列模，而正值只从各场减去所列模重构幅值的 0.1，并非完全删除。 |
 
 ## 5. 运行时默认值/校验阶段会改写
 

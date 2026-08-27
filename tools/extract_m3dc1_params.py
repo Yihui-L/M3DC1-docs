@@ -432,6 +432,18 @@ DOC_USAGE_MISMATCHES = {
     "adapt_qs": "官方输入表把它放在 GS 小节，且源码也误用 `gs_grp` 注册；实际唯一活动使用位于 `adapt.f90`，用于按 q 面打包自适应网格，不参与 GS 求解。",
     "adapt_zlow": "官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。",
     "adapt_zup": "官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。",
+    "ivisfunc": "官方文档只说明 0-3；当前源码还实现 4、10/11（读取 `profile_amu`）、12（basicJ 专用）以及 USEST 条件下的 21（逻辑 rho）。",
+    "iresfunc": "官方文档把 2/3/4 分别描述为解析台阶/Spitzer 等模型；当前 `resistivity_func` 中 2、3、4 都直接使用预先构造的 `eta_field`。源码还实现 10/11 的 `profile_eta` 和 USEST 模式 21。",
+    "ikappafunc": "官方文档列到 12；当前源码还在 USEST 条件下实现 21，按逻辑 rho 构造 tanh 热导。",
+    "ikapparfunc": "官方文档只列 0/1；当前源码还实现 2，使用按 Te^(5/2) 构造并由 `kappar_min/max` 截断的场。",
+    "kappag": "官方文档称其按压力梯度阈值启用。CPU 弱式的热流项确含压力梯度平方范数，但当前 mask 实际比较 `p**2` 与 `gradp_crit**2`；GPU 对应实现被注释。",
+    "kappax": "官方文档把它列为 B×grad(T) 交叉热输运。当前普通 CPU、非 USEPARTICLES 路径有耦合项；GPU 版本的对应块被注释，USEPARTICLES 编译也排除该项。",
+    "ifixedb": "官方边界表把它概括为运行时 `psi=0` 边界；当前活动用途集中在 gfile/GS 初始化和 LCFS 诊断。时间演化磁边界由 `iconst_bn`、`inocurrent_*`、`ifbound` 与多区域模型决定。",
+    "jper": "官方文档表写 `2: Top/bottom boundaries periodic`；当前网格与边界源码实际测试 `jper.eq.1`。",
+    "imp_mod": "官方文档称模式 1 为 implicit leapfrog；当前输入注册和活动分支将其称为 Caramana split-step，并由 `caramana_fac` 控制显式部分。",
+    "mass_ratio": "官方文档列出该输入但没有说明；当前源码除注册/存储外没有活动计算引用，电子质量仍使用内部常数。",
+    "lambdae": "官方文档只写 `lambdae`；当前源码除注册/存储外没有活动计算引用，非零值不会打开电子惯性。",
+    "imode_filter": "输入注册说明称其为要过滤的环向模数量；当前实现中负值只保留所列模，而正值只从各场减去所列模重构幅值的 0.1，并非完全删除。",
 }
 
 RUNTIME_DEFAULT_NOTES = {
@@ -465,6 +477,151 @@ SOURCE_USAGE_OVERRIDES = {
     "ipellet_abl": "选择 pellet ablation 模型；1/2 lithium，3 neon，43 carbon/Sergeev06。`ipellet_z=0` 时会由模型推断默认 Z。",
     "itaylor": "主初始化分发开关；不同几何下选择 tilting cylinder、GS、VMEC/stellarator、fixed-q、basicJ、RWM、wave/diffusion tests 等分支。",
 }
+
+
+# Parameters whose registration strings are empty or too terse need an explicit
+# user-facing meaning.  Keep these descriptions about the mathematical/numerical
+# role; source locations belong in the audit artifacts, not in the reader guide.
+MANUAL_USAGE.update({
+    "igauge": "选择矢势规范相关的数值处理。当前活动方程只在非零时加入规范约束/稳定项；常规算例保持 0。托卡马克与仿星器使用同一场表示。",
+    "irunaway": "非零时增加 runaway-electron 密度场及其电流耦合；需要同时设置 `cre/radiff/rjra` 等参数。两种装置使用同一演化方程，但初始场和磁场几何来自各自平衡。",
+    "cre": "runaway-electron 沿磁场特征线的传播速度输入，读入后按速度归一化换算；仅 `irunaway!=0` 使用。",
+    "ra_cyc": "每个 MHD 时间步内 runaway 特征线/粒子推进的子循环次数；增大它可缩短 runaway 子步而不改变 MHD 的 `dt`。",
+    "radiff": "runaway-electron 密度方程的扩散系数，进入 `div(radiff grad(n_RE))`；仅 `irunaway!=0` 使用。",
+    "rjra": "runaway 电流反馈到广义 Ohm 定律/总电流时的幅值系数；1 使用模型电流，0 去掉该反馈。",
+    "bzsign": "runaway 平行传播方向所用的背景环向磁场符号；0 时由初始磁场自动判断，显式正负值用于覆盖自动结果。",
+    "nosig": "非零时抑制密度源 `sigma` 对部分动量/温度方程的伴随项；用于源项模型诊断，不会关闭密度方程中的粒子源本身。",
+    "gravr": "R 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。托卡马克和映射后的仿星器均使用物理柱坐标 R。",
+    "gravz": "Z 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。",
+    "chiiner": "六场模型中压缩速度势 `chi` 的惯性项乘子；1 为完整项，减小它可改变压缩分量的数值时间尺度。",
+    "ieq_bdotgradt": "决定温度方程平行导热是否保留平衡场的 `B dot grad(T)` 贡献；用于平衡减除/线性化时控制平衡项。",
+
+    "ivisfunc": "选择各向同性粘性空间模型：0 常数；1/2 磁通 tanh 边缘层；3/4 预计算场；10/11 读 `profile_amu`；12 专用 basicJ；21 为 USEST 逻辑 rho 模型。",
+    "amuoff": "`ivisfunc=1/2/21` 的粘性过渡位置；1/2 使用归一化磁通坐标，21 使用逻辑 rho。",
+    "amuoff2": "`ivisfunc=2` 第二个 tanh 过渡中心；只有它与 `amudelt2` 都非零时才加入第二层。",
+    "amue": "电子/自举电流闭合使用的粘性系数；不代替流体动量方程的 `amu`。",
+    "amu_edge": "粘性边缘增量或外侧幅值，配合 `ivisfunc=1/2/21`；最终各向同性粘性还包含基值 `amu`。",
+    "amu_wall": "靠近 wall-distance 场时附加的粘性幅值；按 `amu_wall_off/amu_wall_delt` 的 tanh 层叠加到其它粘性模型。",
+    "amu_wall_off": "壁面附加粘性层在 wall-distance 坐标中的中心位置。",
+    "iresfunc": "选择 plasma zone 电阻率模型：0 Spitzer 型；1 磁通 tanh；2-4 预计算场；5 简化新古典；10/11 读 `profile_eta`；21 为 USEST 逻辑 rho 模型。conductor/vacuum zone 不用此开关。",
+    "etaoff": "电阻率 tanh 过渡位置；`iresfunc=1` 使用磁通，`iresfunc=21` 使用逻辑 rho。",
+    "eta0": "温度依赖或 tanh 电阻率的幅值；`iresfunc=0` 中形成 `eta0(Te-eta_te_offset)^(-3/2)`。",
+    "ikappafunc": "选择各向同性热输运模型：0 温度依赖；1/2 磁通 tanh；3 反比于 `sqrt(p n)`；4 梯度依赖；5 预计算场；10/11 读 `profile_kappa`；12 专用模型；21 为 USEST 逻辑 rho。",
+    "ikapparfunc": "选择平行热导：0 常数 `kappar`；1 用 `tcrit` 低温抑制；2 使用按 `Te^(5/2)` 计算并受上下限约束的预计算场。",
+    "ikapscale": "1 时令平行热导场按局部各向同性 `kappa` 缩放，即使用 `kappar*kappa(x)`；0 时按 `ikapparfunc` 单独构造。",
+    "kappaoff": "`ikappafunc=1/2/21` 的热导 tanh 过渡中心；坐标分别为磁通或 USEST 逻辑 rho。",
+    "kappa0": "所选各向同性热导函数的可变部分幅值；最终系数通常还加常数 `kappat`。",
+    "tcrit": "`ikapparfunc=1` 的低温转折温度，平行热导为 `kappar/[1+(tcrit/Te)^(5/2)]`。",
+    "kappax": "交叉场热输运系数；普通 CPU、非 USEPARTICLES 方程中耦合压力与环向磁场，GPU 对应块被注释，USEPARTICLES 路径也排除该项。",
+    "kappag": "CPU 压力方程中的非线性梯度热流系数，形式含 `-kappag*|grad(p)|^2 grad(p)` 与阈值补偿项；GPU 对应块被注释。当前阈值掩码实际比较 `p^2` 与 `gradp_crit^2`。",
+    "kappah": "在各向同性热导上附加边界层 `kappah*tanh^2[(psi_N-1)/0.2]`；`ikappafunc=5` 时不加。",
+    "idenmfunc": "选择主离子密度扩散：0 常数 `denm`；1 使用预计算温度依赖场并限幅；10/11 从 `profile_denm` 读 SI/归一化剖面。",
+
+    "deex": "超扩散的参考长度/网格尺度；当 `ihypdx!=0` 时所有 hyper 输入乘 `deex^ihypdx`。",
+    "hyper": "磁通/极向磁场方程的超电阻率系数，抑制高波数电流结构；0 关闭该项。",
+    "hyperc": "压缩/极向速度势方程的超粘性系数；只在相应速度未知量存在时生效。",
+    "hyperi": "环向磁场未知量的超扩散系数；`numvar>=2` 才有对应场。",
+    "hyperp": "压力或温度方程的超扩散系数；需要实际推进压力/温度未知量。",
+    "hyperv": "环向速度方程的超粘性系数；`numvar>=2` 且速度未冻结时使用。",
+    "ihypdx": "hyper 系数的长度缩放指数：0 不缩放，非零时 `lambda_eff=lambda_input*deex^ihypdx`。当前默认 0。",
+    "ihypeta": "磁超扩散的空间乘子：0 常数；1 乘电阻率；2 乘压力；大于 2 使用压力与指定磁扰动谐波构造乘子，并要求不超过 `ibh_harmonics`。",
+    "ihypkappa": "1 时压力/温度 hyper 系数乘局部热导率，0 时保持输入常数。",
+
+    "isurface": "控制分部积分后 Galerkin 弱式中的外边界表面积分；1 保留，0 去掉。它不选择边界位置，位置来自 mesh/model 分类。",
+    "icurv": "边界几何曲率处理阶数/开关；大于 0 时使用曲边几何信息，常规高阶曲边网格保持默认 2。",
+    "nonrect": "1 表示非矩形/一般边界并关闭矩形快捷假设；0 仅适合边界拓扑确为规则矩形的测试网格。",
+    "com_bc": "1 时给压缩速度势 `chi` 增加 `nabla^2 chi=0` 的边界约束。",
+    "vor_bc": "1 时给极向速度势 `U` 增加 `Delta* U=0` 的涡量边界约束。",
+    "inograd_p": "1 对压力施加零法向梯度 Neumann 条件；不要与同一压力场的固定值条件重复指定。",
+    "inograd_t": "1 对温度施加零法向梯度 Neumann 条件。",
+    "inograd_n": "1 对主离子密度施加零法向梯度 Neumann 条件。",
+    "inostress_tor": "1 对环向速度施加零法向导数/无切向应力条件；与 `inoslip_tor=1` 是不同选择。",
+    "inocurrent_pol": "1 通过环向磁场变量的法向导数约束使边界极向电流为零。",
+    "inocurrent_tor": "1 通过 `Delta*psi=0` 型边界约束使环向电流为零。",
+    "inocurrent_norm": "1 对三维磁场变量施加组合边界条件，使法向电流为零；会改变 `psi/bz` 的边界掩码组合。",
+    "iconstflux": "非线性推进中重新缩放环向磁场以保持总环向磁通；0 不做该全局修正。",
+    "tebound": "大于 0 时，在标记为 first-wall 的边界把电子温度固定为该归一化值；负值保留初始边界值。",
+    "tibound": "大于 0 时，在 first-wall 边界把离子温度固定为该归一化值；仅双温模型有独立作用。",
+
+    "integrator": "时间离散选择：0 为 theta/Crank-Nicolson 家族；1 为 BDF2，且程序把 `thimp` 强制为 1，首步使用一阶隐式启动。",
+    "iteratephi": "分裂推进中，更新密度/输运后再重算一次磁场推进；只用于非线性分裂步，线性模式禁止。",
+    "irecalc_eta": "分裂步密度求解后重新计算输运系数，使电阻率等使用更新后的密度/温度。",
+    "iconst_eta": "1 时冻结初始电阻率场，不随温度/密度演化重新构造。",
+    "itime_independent": "线性模式下去掉普通时间导数并求频域/稳态响应；程序同时令 `thimp=1`，`frequency` 给出复频率。",
+    "thimpsm": "平滑器/辅助隐式项使用的 theta 权重，与主时间离散的 `thimp` 分开。",
+    "harned_mikic": "二场模型的 Harned-Mikic 数值稳定项系数；0 关闭，非零时抑制特定高速/高频耦合。",
+    "isources": "1 时把粒子注入等源项导致的动量修正放入速度推进；要求计算标量诊断以取得所需全局量。",
+    "nskip": "有限元系统矩阵重建的时间步间隔；1 每步重建，较大值在系数变化慢时复用矩阵。",
+    "iskippc": "后端线性求解中预条件器可复用的调用次数/周期控制；与分裂步层面的 `pskip` 分开。",
+
+    "int_pts_main": "主演化弱式在每个二维三角形上的 Gaussian 积分点数；必须是程序已实现的 Dunavant 阶数。",
+    "int_pts_aux": "辅助场投影/构造所用的二维积分点数；提高它增加后处理与系数构造成本。",
+    "int_pts_diag": "标量和诊断积分使用的二维积分点数。",
+    "int_pts_tor": "三维棱柱在环向 Hermite 方向的积分点数；非 3D 编译会强制为 1，且与二维点数乘积不能超过内部上限。",
+    "regular": "小分母/坐标奇点的正则化尺度；USEST 逻辑 rho 模型使用 `sqrt(rho^2+regular^2)`，压缩势方程也复用该量。",
+
+    "iadapt": "SCOREC 网格自适应总模式：0 关闭；1 初始化按磁通；2 推进中按误差；3 两者结合；4 初始化和推进均可按误差。",
+    "ispradapt": "1 启用 SPR 梯度恢复自适应，并在推进阶段替代普通 residual/error 路径。",
+    "isprntime": "SPR 自适应的时间步调用周期。",
+    "isprweight": "SPR 恢复误差转换为目标尺寸时的权重，控制细化强度。",
+    "isprmaxsize": "SPR 目标尺寸场允许的最大单元尺寸。",
+    "isprrefinelevel": "一次 SPR 调用允许的最大细化层级。",
+    "isprcoarsenlevel": "一次 SPR 调用允许的粗化层级；负值表示使用实现的默认/不强制粗化。",
+    "iadapt_writevtk": "1 在自适应阶段写出 VTK 调试网格/尺寸场。",
+    "iadapt_writesmb": "1 写出 SCOREC `.smb` 自适应网格快照，便于重启或检查。",
+    "iadapt_useH1": "1 用 H1 型误差度量替代默认高阶度量构造目标尺寸。",
+    "iadapt_removeEquiv": "1 在误差估计前去掉环向等价节点/重复贡献，供周期网格的专用适配路径使用。",
+    "adapt_target_error": "普通误差自适应的目标/触发误差；估计误差未超过它时不换网格。",
+    "adapt_ke": "线性计算中触发动态自适应的动能阈值；0 不使用该触发条件。",
+    "iadapt_ntime": "普通动态自适应检查的时间步周期；非线性且为 0 时当前流程可每步检查。",
+    "iadapt_max_node": "自适应后允许的节点数上限，用于限制内存和网格增长。",
+    "adapt_control": "误差到目标尺寸的控制模式/方向参数；常规保持默认 1。",
+    "iadapt_order_p": "误差随网格尺寸收敛的假定阶数，用于由目标误差反算目标尺寸。",
+    "iadaptFaceNumber": "只适配指定几何模型 face 的编号；-1 表示不按单一 face 限制。",
+    "iadapt_snap": "1 时把新边界节点投影/贴合回既有几何模型边界；不会创建新的壁面或 LCFS。",
+    "adapt_factor": "保留的自适应缩放输入；当前活动源码未读取其值，修改它不会改变网格。",
+    "adapt_hmin": "磁通/误差尺寸场允许的绝对最小单元尺度。",
+    "adapt_hmax": "磁通/误差尺寸场允许的绝对最大单元尺度。",
+    "adapt_hmin_rel": "相对当前单元尺寸的一次最小缩放比，限制单次细化幅度。",
+    "adapt_hmax_rel": "相对当前单元尺寸的一次最大缩放比，限制单次粗化幅度。",
+    "adapt_smooth": "保留的尺寸场平滑输入；当前活动源码未读取其值。",
+    "adapt_psin_vacuum": "按磁通适配时 vacuum 区的归一化磁通阈值/目标范围；负值关闭该专用阈值。",
+    "adapt_psin_wall": "按磁通适配时 wall 区的归一化磁通阈值/目标范围；负值关闭该专用阈值。",
+
+    "iheat_sink": "1 启用 `itaylor=27` 专用热沉；其它平衡类型下不产生通用热沉。",
+    "vloop": "施加在环向 Ohm/磁通方程中的回路电压幅值；无电流反馈时按 `vloop*cos(2*pi*vloop_freq*t)` 使用。",
+    "vloopRZ": "R-Z/极向磁场方程使用的回路电压分量，独立于主环向 `vloop`。",
+    "tcur": "电流反馈的目标总等离子体电流；若给定 `tcuri/tcurf`，运行时目标可被时间 ramp 覆盖。",
+    "tcuri": "电流反馈 tanh ramp 的初始目标电流。",
+    "tcurf": "电流反馈 tanh ramp 的最终目标电流。",
+    "tcur_t0": "目标电流 tanh ramp 的中心时间。",
+    "tcur_tw": "目标电流 tanh ramp 的时间宽度；用于从 `tcuri` 平滑过渡到 `tcurf`。",
+    "control_p": "`control_type=1` 电流 PID 的比例增益 P。",
+    "control_i": "`control_type=1` 电流 PID 的积分增益 I。",
+    "control_d": "`control_type=1` 电流 PID 的微分增益 D。",
+    "r_p": "pellet 实体半径，供 ablation 模型计算剩余粒子数和烧蚀率；不是沉积 Gaussian 宽度。",
+    "cloud_pel": "pellet ablation 云团/沉积宽度的乘性系数，控制烧蚀物质相对 pellet 的扩散尺度。",
+    "ionization": "1 在主离子密度方程加入温度门控的电离粒子源，并可用 `coolrate` 从热方程扣除能量。",
+    "ionization_temp": "电离源中的特征温度，同时出现在 Arrhenius 型 `exp(-Tion/T)` 因子和高温衰减门控中。",
+    "ionization_depth": "温度高于 `ionization_temp` 后电离源指数衰减的温度宽度。",
+    "isink": "启用局部 Gaussian 粒子汇的数量：1 使用 sink1，2 同时使用 sink1 和 sink2。",
+    "iarc_source": "1 启用与壁面法向电流和 wall-distance 相关的 arc 粒子源。",
+    "arc_source_alpha": "arc 粒子源的总幅值系数，乘正向法向电流。",
+    "arc_source_eta": "arc 源随 wall-distance 的尺度长度，形状含 `(w/eta)*exp(-w/eta)`。",
+    "idenfloor": "1 在外侧非 plasma magnetic region 加入恢复型密度源，把密度拉向 `den_edge`；它不是逐节点硬截断。",
+    "alphadenfloor": "密度恢复源 `alphadenfloor*(den_edge-n)` 的速率系数。",
+    "n_target": "pellet 密度反馈所追踪的目标全局粒子数/密度诊断量。",
+    "n_control_p": "`n_control_type=1` pellet-rate PID 的比例增益。",
+    "n_control_i": "pellet-rate PID 的积分增益。",
+    "n_control_d": "pellet-rate PID 的微分增益。",
+
+    "iprint": "终端日志详细度：0 最少；1 打印主要步骤/迭代；2 及以上打印更多矩阵、系数和输出阶段信息。它不控制 HDF5 字段内容。",
+    "irestart_slice": "-1 从 HDF5 中最后一个已保存时间片重启；非负值选择指定时间片索引，并在同一输出文件中删除其后的时间片组后续写。",
+    "mass_ratio": "已注册但当前活动计算未读取的兼容参数；电子/离子质量比由内部常数和 `ion_mass` 形成，用户不应依赖此值。",
+    "lambdae": "已注册但当前活动计算未读取的兼容参数；不会单独打开电子惯性或改变广义 Ohm 定律。",
+    "ibform": "旧磁场形式开关的占位参数，读入后写入 dummy 变量；当前方程形式不会随它改变。",
+    "igs_method": "旧 GS 算法选择的占位参数，当前 GS 求解器不读取其值。",
+})
 
 
 ARRAY_USAGE = "数组参数在 C1input 中使用 Fortran 一基索引，例如 `name(1)=...`；未赋值元素保持默认值。"
@@ -876,7 +1033,7 @@ def scan_source_usage(params: list[Param]) -> None:
 
 def write_csv(params: list[Param], path: Path) -> None:
     with path.open("w", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(f, fieldnames=list(asdict(params[0]).keys()))
+        w = csv.DictWriter(f, fieldnames=list(asdict(params[0]).keys()), lineterminator="\n")
         w.writeheader()
         for p in sorted_params(params):
             w.writerow(asdict(p))
@@ -914,7 +1071,7 @@ def write_usage_files(params: list[Param], md_path: Path, csv_path: Path) -> Non
         "source_use_examples",
     ]
     with csv_path.open("w", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
+        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         w.writeheader()
         for p in sorted_params(params):
             row = asdict(p)
@@ -1497,7 +1654,7 @@ def render_simplified_meaning(p: Param) -> str:
 
 def write_simplified_csv(params: list[Param], path: Path) -> None:
     with path.open("w", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(f, fieldnames=["参数名", "数据类型", "默认值", "含义"])
+        w = csv.DictWriter(f, fieldnames=["参数名", "数据类型", "默认值", "含义"], lineterminator="\n")
         w.writeheader()
         for p in sorted_params(params):
             w.writerow({
@@ -1544,7 +1701,320 @@ def write_simplified_markdown(params: list[Param], path: Path) -> None:
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
+def remaining_module_supplement(group: str) -> str:
+    if group == "Normalizations":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Normalizations：先把所有物理输入放到同一单位系统</h3><p>这三个参数在 mesh 和平衡读入之后用于建立全程序的归一化尺度；<code>ion_mass</code> 也参与 Alfvén 速度和时间尺度。除明确标有 SI/cgs 单位并由读取器转换的文件外，C1input 中的演化系数通常应给归一化值。</p></div><span class="guide-kicker">CASE 第 1 层</span></div>
+<div class="formula">\[v_0=\frac{B_0}{\sqrt{4\pi m_i n_0}},\qquad \tau_0=\frac{L_0}{v_0}=\frac{L_0\sqrt{4\pi m_i n_0}}{B_0}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>量</th><th>归一化单位</th><th>用户含义</th></tr></thead><tbody>
+<tr><td>压力/能量密度</td><td>\(p_0=B_0^2/(4\pi)\)</td><td>压力、电子/离子温度方程中的能量尺度。</td></tr>
+<tr><td>温度</td><td>\(T_0=B_0^2/(4\pi n_0)\)</td><td>程序温度以能量表示；读取器注明 keV/eV 时会转换。</td></tr>
+<tr><td>扩散率</td><td>\(D_0=L_0^2/\tau_0\)</td><td><code>denm</code> 等粒子扩散系数的单位。</td></tr>
+<tr><td>电阻率</td><td>\(\eta_0=4\pi L_0^2/(c^2\tau_0)\)</td><td>plasma、vacuum 和 conductor 的电阻率统一使用此尺度。</td></tr>
+<tr><td>热导率</td><td>\(\kappa_0=n_0L_0^2/\tau_0\)</td><td><code>kappa/kappar</code> 的单位；profile 模式可显式从 SI 转换。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>物理 R-Z mesh 和 gfile 量先按各自声明单位读入</h4></div><p>归一化不改变 mesh 几何或 LCFS，只改变场、时间和输运系数进入方程时的数值尺度。改变三项后必须同步重算所有手工给定的归一化系数。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>VMEC 映射后的物理场使用同一归一化</h4></div><p>逻辑坐标映射本身是几何过程；wout/外场被投影后仍按同一 \(B_0,n_0,L_0\) 标度进入 MHD 方程。两种装置没有第二套单位系统。</p></section>
+</div>"""
+
+    if group == "Model Options":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Model Options：决定实际求解哪一组 extended-MHD 方程</h3><p>本组承接 Mesh/Input/Equilibrium 的初始场。先选未知量数和线性化方式，再打开密度、压力/温度、two-fluid、bootstrap、runaway 或 kinetic 闭合；未被选择的场即使在平衡文件中存在，也不会成为独立演化未知量。</p></div><span class="guide-kicker">CASE 物理核心</span></div>
+<div class="formula">\[\frac{\partial n_i}{\partial t}+\nabla\!\cdot(n_i\mathbf v)=\nabla\!\cdot(D\nabla n_i)+\sigma_i\]</div>
+<div class="formula">\[\rho\left(\frac{\partial\mathbf v}{\partial t}+\mathbf v\!\cdot\nabla\mathbf v\right)=\mathbf J\!\times\mathbf B-\nabla p-\nabla\!\cdot\Pi-\varpi\mathbf v\]</div>
+<div class="formula">\[\frac{\partial\mathbf B}{\partial t}=-\nabla\times\mathbf E,\qquad \mathbf E=-\mathbf v\times\mathbf B+\eta(\mathbf J-\mathbf J_x)+\frac{d_i}{n_e}(\mathbf J\times\mathbf B-\nabla p_e).\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>设置层</th><th>主要参数</th><th>实际作用</th></tr></thead><tbody>
+<tr><td>场数</td><td><code>numvar</code>, <code>idens</code>, <code>ipres</code></td><td>1 为 \(U,\psi\) 二场；2 再加环向速度和环向磁场；3 再加压缩势与压力槽。密度和附加热力学场由独立开关加入。</td></tr>
+<tr><td>热力学</td><td><code>ipressplit</code>, <code>itemp</code>, <code>iadiabat</code>, <code>imp_temp</code></td><td>选择总压/电子压或电子/离子温度表示及分裂求解。<code>itemp=1</code> 要求 <code>numvar=3,ipressplit=1,z_ion=1</code>。</td></tr>
+<tr><td>线性化</td><td><code>linear</code>, <code>eqsubtract</code>, <code>extsubtract</code>, <code>icsubtract</code></td><td>线性模式强制减去轴对称平衡；外场和 PF 场是否从演化量中扣除由另外两个开关决定。</td></tr>
+<tr><td>非理想闭合</td><td><code>itwofluid</code>, <code>gyro</code>, <code>inertia</code>, <code>iohmic_heating</code>, <code>irad_heating</code></td><td>控制 Hall/电子压强、gyroviscosity、非线性惯性和热方程源项。two-fluid 的实际幅值还取决于 <code>db</code>。</td></tr>
+<tr><td>专用模型</td><td><code>ibootstrap*</code>, <code>irunaway*</code>, <code>kinetic</code></td><td>在基本 MHD 上加入 bootstrap 电流闭合、runaway 密度/电流或 PIC/CGL 模型；这些开关不重做初始平衡。</td></tr>
+<tr><td>冻结/调试</td><td><code>istatic</code>, <code>iestatic</code>, <code>no_vdg_T</code>, <code>nosig</code></td><td>冻结速度或磁场，或移除特定热力学项；主要用于响应、验证和模型拆分。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>可从轴对称平衡进入 2D、单 n complex 或真实 3D 演化</h4></div><p><code>ntor</code> 定义 complex 线性模；真实三维使用 <code>nplanes&gt;1</code>。bootstrap、runaway 和若干径向闭合使用磁通面/轴对称几何量，托卡马克是其主要使用路径。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>映射完成后求解同一套三维弱式</h4></div><p>没有另一套“stellarator MHD 方程”；差别来自三维几何和平衡场。完整 3D 模型可用，但依赖轴对称 \(\psi,q,R_0\) 的 bootstrap/runaway/剖面闭合不能因语法可读就视为已对仿星器验证。</p></section>
+<div class="callout"><strong>合法组合：</strong><code>linear=1</code> 禁止 <code>iteratephi=1</code>；<code>kinetic=2/3</code> 要求 <code>linear=1,isplitstep=0,ipres=1,itemp=0,ipressplit=0</code>；<code>kinetic=1</code> 还要求 USEPARTICLES 编译。</div>
+</div>"""
+
+    if group == "Transport Coefficients":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Transport：把平衡场变成每个积分点上的耗散系数</h3><p>Model Options 先决定哪些方程存在，本组再为动量、Ohm、温度和密度方程构造粘性、电阻率、热导与粒子扩散。函数型参数只改变 plasma zone；conductor 和 vacuum 的电阻率由 Resistive Wall 组接管。</p></div><span class="guide-kicker">CASE 耗散层</span></div>
+<div class="formula">\[\mathbf q_s=-\kappa_s\nabla T_s-\kappa_{\parallel s}\frac{\mathbf B\mathbf B}{B^2}\!\cdot\nabla T_s,\qquad \partial_t n_i\supset\nabla\!\cdot(D\nabla n_i).\]</div>
+<div class="formula">\[\eta_{\mathrm{Sp}}=\eta_{fac}\!\left[\eta_r+\eta_0(T_e-T_{off})^{-3/2}\right],\quad \eta_{min}\le\eta\le\eta_{max}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>系数</th><th>模式选择</th><th>用户设置逻辑</th></tr></thead><tbody>
+<tr><td>粘性</td><td><code>ivisfunc=0,1,2,3,4,10,11,12,21</code></td><td>先给基值 <code>amu</code>，再由边缘层、预计算场或 <code>profile_amu</code> 加空间变化；<code>amu_wall</code> 是独立叠加层。<code>amuc=0</code> 会取 <code>amu</code>。</td></tr>
+<tr><td>plasma 电阻率</td><td><code>iresfunc=0,1,2,3,4,5,10,11,21</code></td><td>0 为 Spitzer 型；1 为磁通 tanh；2-4 使用先前构造的电阻率场；5 为简化新古典；10/11 读 SI/归一化剖面；21 只在 USEST+逻辑几何。</td></tr>
+<tr><td>垂直热导</td><td><code>ikappafunc=0..5,10,11,12,21</code></td><td><code>kappat</code> 是常数底值，<code>kappa0</code> 是函数幅值；<code>kappaf/kappah</code> 可再按压强梯度或边界层修改。</td></tr>
+<tr><td>平行热导</td><td><code>ikapparfunc=0,1,2</code></td><td>0 常数；1 在低温按 \([1+(T_{crit}/T_e)^{5/2}]^{-1}\) 抑制；2 使用 \(T_e^{5/2}\) 场并按 <code>kappar_min/max</code> 截断。</td></tr>
+<tr><td>密度扩散</td><td><code>idenmfunc=0,1,10,11</code></td><td>0 常数；1 用温度依赖预计算场并限幅；10/11 读 <code>profile_denm</code>。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>磁通剖面模式按 \(\psi_N\) 取样</h4></div><p>模式 1/2 和 profile 10/11 依赖磁轴、LCFS 与 private-flux 判定；用户应保证当前平衡能稳定定义这些量。真空和壁区不会沿用 plasma 的 <code>iresfunc</code>。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>优先使用常数、物理场或 USEST 逻辑 rho 模型</h4></div><p>通用三维弱式使用相同系数，但普通 \(\psi_N\) profile 分支面向轴对称磁区。USEST 编译下的模式 21 明确使用映射前逻辑 \(\rho\)，要求 <code>igeometry=1</code>；它仍不会自动识别真实 LCFS/壁。</p></section>
+<div class="callout"><strong>编译路径差异：</strong><code>kappag</code> 和 <code>kappax</code> 在普通 CPU 弱式中有活动实现，但 GPU 对应代码被注释；<code>kappax</code> 还被 USEPARTICLES 路径排除。<code>kappag</code> 的当前阈值掩码实际比较 \(p^2\) 与 <code>gradp_crit^2</code>，不是注释所称的 \(|\nabla p|^2\)。</div>
+</div>"""
+
+    if group == "Hyper Diffusivity":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Hyper Diffusivity：针对有限元高波数结构的高阶耗散</h3><p>它位于常规 Transport 之后，不改变平衡或低阶输运模型；只有对应未知量存在且系数非零时才加入弱式。使用时应先做网格收敛性比较，因为 hyper 项会直接改变小尺度增长率。</p></div><span class="guide-kicker">数值稳定层</span></div>
+<div class="formula">\[\lambda_{eff}=\lambda_{input}\,\mathtt{deex}^{\mathtt{ihypdx}},\qquad \mathbf E_H\sim-\nabla\times(\lambda_H\nabla\times\mathbf J).\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>参数族</th><th>作用场</th><th>控制</th></tr></thead><tbody>
+<tr><td><code>hyper</code>, <code>hyperi</code></td><td>极向磁通/环向磁场</td><td><code>imp_hyper=0</code> 显式 psi 形式；1 隐式 \(\nabla^2\mathbf J\)；2 隐式场对齐 \(\sigma=\mathbf J\cdot\mathbf B/B^2\) 形式。</td></tr>
+<tr><td><code>hyperc</code>, <code>hyperv</code></td><td>压缩/极向与环向速度</td><td>作为超粘性抑制网格尺度速度振荡。</td></tr>
+<tr><td><code>hyperp</code></td><td>压力/温度</td><td><code>ihypkappa=1</code> 时再乘局部热导。</td></tr>
+<tr><td><code>ihypeta</code></td><td>磁 hyper 空间权重</td><td>0 常数，1 乘 \(\eta\)，2 乘 \(p\)，大于 2 依赖已输出的磁扰动谐波。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>同一系数可用于 2D、complex 与真实 3D</h4></div><p>complex/谐波加权模式需令 <code>ibh_harmonics</code> 覆盖 <code>ihypeta</code> 所需模数；它不会只在 LCFS 内自动生效。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>作用在映射后的物理三维场</h4></div><p>公式相同，几何导数由 VMEC 映射后的 metric 给出。不要把 <code>deex</code> 当成 bloat 或逻辑 rho 尺度。</p></section>
+<div class="callout"><strong>文档旧项：</strong>官方表中的 <code>ihypamu</code> 未在当前输入注册；速度 hyper 不会由该名字缩放。当前 <code>ihypdx</code> 默认是 0。</div>
+</div>"""
+
+    if group == "Boundary Conditions":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Boundary Conditions：把弱式自由度约束到 mesh 的物理外边界</h3><p>本组不创建边界。Mesh 的 model 分类和 <code>boundary_type</code> 先确定 first wall/domain boundary，随后这些开关为已经存在的场选择 Dirichlet、Neumann 或组合条件；内部 plasma-vacuum-conductor 界面仍由多区域方程耦合。</p></div><span class="guide-kicker">CASE 边界层</span></div>
+<div class="formula">\[\int_\Omega \mu\,\nabla\!\cdot(\eta\nabla q)\,dV=-\int_\Omega\eta\nabla\mu\!\cdot\nabla q\,dV+\oint_{\partial\Omega}\mu\eta\,\hat n\!\cdot\nabla q\,dS.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>物理量</th><th>固定值</th><th>零法向梯度/导出量</th></tr></thead><tbody>
+<tr><td>压力、温度、密度</td><td><code>iconst_p/t/n</code></td><td><code>inograd_p/t/n</code>；<code>tebound/tibound&gt;0</code> 只覆盖 first-wall 温度值。</td></tr>
+<tr><td>磁场/电流</td><td><code>iconst_bn</code>, <code>iconst_bz</code>, <code>ifbound</code></td><td><code>inocurrent_tor/pol/norm</code> 通过 psi、F/f 的导数约束相应电流分量。</td></tr>
+<tr><td>速度</td><td><code>inonormalflow</code>, <code>inoslip_pol</code>, <code>inoslip_tor</code></td><td><code>inostress_tor</code>, <code>vor_bc</code>, <code>com_bc</code> 给导数/涡量/压缩边界条件。</td></tr>
+<tr><td>数值几何</td><td><code>iper</code>, <code>jper</code>, <code>nonrect</code></td><td>规则矩形测试可把相对边配成周期；一般托卡马克/仿星器外边界不使用此方式。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>运行时外边界条件与 GS 的 <code>ifixedb</code> 要分开理解</h4></div><p><code>ifixedb</code> 用于 GS 初始化阶段是否令外边界 \(\psi=0\)；它不是演化阶段的一整套壁模型。运行时磁边界由 <code>iconst_bn</code>、电流条件及是否显式包含真空/导体 zone 共同决定。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>逻辑外边界映射后才成为物理边界</h4></div><p>同样的掩码作用于映射后的三维曲面。固定边界 VMEC 的最外面常是 LCFS；bloat/multi-region case 的最外面可能是计算域或壁，必须由用户保证边界标签与物理面一致。</p></section>
+<div class="callout"><strong>避免过约束：</strong>同一场通常在固定值和零法向梯度中选一种。多区域 case 的内部界面不是把所有 <code>inocurrent_*</code> 全部打开即可得到理想壁。</div>
+</div>"""
+
+    if group == "Resistive Wall":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Resistive Wall：为已有 conductor/vacuum zone 分配电阻率</h3><p>前置条件是 <code>imulti_region=1</code> 且 Mesh 已含 <code>zone_type=2</code> 导体和/或 <code>zone_type=3</code> 真空。该模块不生成有限厚度壁，也不按 LCFS 或第一壁坐标自动分类单元。</p></div><span class="guide-kicker">多区域材料层</span></div>
+<div class="formula">\[\partial_t\mathbf B=-\nabla\times(\eta\mathbf J),\qquad \mathbf J=\nabla\times\mathbf B\quad (\mathbf v=0\text{ 的被动导体/真空区}).\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>优先级（低→高）</th><th>参数</th><th>含义</th></tr></thead><tbody>
+<tr><td>区域类型基值</td><td><code>eta_wall</code>, <code>eta_vac</code>, <code>eta_wallRZ</code></td><td>导体/真空默认值；RZ 值负数时取对应标量值。</td></tr>
+<tr><td>mesh zone 覆盖</td><td><code>eta_zone(i)</code>, <code>etaRZ_zone(i)</code></td><td>按 zone 编号指定材料；正值优先于全局壁值。</td></tr>
+<tr><td>几何 region 覆盖</td><td><code>iwall_regions</code>, <code>wall_region_*</code></td><td>从文件读空间 region；后定义的匹配 region 优先。</td></tr>
+<tr><td>wall break</td><td><code>iwall_breaks</code>, <code>wall_break_*</code>, <code>eta_break</code></td><td>矩形 R-Z-phi 范围内覆盖为缝隙电阻率；3D 才使用 phi 范围。</td></tr>
+<tr><td>REKC</td><td><code>eta_rekc</code>, <code>ntor/mpol/sigma/phi/theta_rekc</code></td><td>以螺旋相位构造平滑局部电阻率；这是材料分布，不是外加线圈磁场。</td></tr>
+</tbody></table></div>
+<div class="formula">\[\Theta=\tan^{-1}\!\frac{Z-Z_0}{R-R_0},\quad \alpha=n(\phi-\phi_0)\frac{2\pi}{N_{period}}-m(\Theta-\Theta_0),\quad w=e^{(\cos\alpha-1)/\sigma^2}.\]</div>
+<div class="formula">\[\eta=10^{(1-w)\log_{10}\eta_{base}+w\log_{10}\eta_{REKC}}.\]</div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>典型用途是 plasma-vacuum-finite-thickness-wall 网格</h4></div><p>物理 R-Z mesh 可直接把第一壁外的有限厚度单元标为 conductor，再按 zone、region、break 设置材料。自由边界演化来自等离子体与外部磁场/导体的耦合，不来自把 plasma zone 单纯画大。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>只有几何上真实存在的映射 zone 才能充当壁</h4></div><p>固定边界 VMEC 常把域截断在最外磁面，因此没有 conductor zone 可供本组使用。外扩逻辑 multi-region mesh 可以使用同一电阻壁方程，但必须验证映射后的 zone 真正落在真空/壁位置。</p></section>
+</div>"""
+
+    if group == "Time Step":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Time Step：把已选物理方程变成逐步线性系统</h3><p>这一步位于模型、输运、边界之后。先选 split/unsplit 和积分器，再决定矩阵与预条件器复用，最后才启用基于动能/KSP 迭代数的自适应时间步。</p></div><span class="guide-kicker">CASE 推进层</span></div>
+<div class="formula">\[\frac{q^{n+1}-q^n}{\Delta t}=F\!\left(q^n+\theta(q^{n+1}-q^n)\right),\qquad \theta=\mathtt{thimp}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>阶段</th><th>参数</th><th>使用逻辑</th></tr></thead><tbody>
+<tr><td>积分公式</td><td><code>integrator</code>, <code>thimp</code>, <code>dt</code>, <code>ddt</code></td><td>0 为 theta 法（0.5 为 CN）；1 为 BDF2 并强制 theta=1。<code>ddt</code> 是每步时间步增量。</td></tr>
+<tr><td>方程拆分</td><td><code>isplitstep</code>, <code>imp_mod</code>, <code>caramana_fac</code>, <code>ipressplit</code></td><td>split 按磁场、速度、密度、热力学分块；unsplit 组装整体系统并强制 <code>imp_mod=0</code>。</td></tr>
+<tr><td>系数更新</td><td><code>iteratephi</code>, <code>irecalc_eta</code>, <code>iconst_eta</code></td><td>决定在分块之间是否用新密度/温度重算输运及磁场。</td></tr>
+<tr><td>矩阵复用</td><td><code>nskip</code>, <code>pskip</code>, <code>iskippc</code></td><td>分别控制矩阵和不同层次预条件器的更新/复用；系数变化快时应缩短周期。</td></tr>
+<tr><td>可变步长</td><td><code>dtkecrit</code>, <code>dtmin/max</code>, <code>dtfrac</code>, <code>ksp_min/warn/max</code>, <code>max_repeat</code></td><td>只有 <code>dtkecrit&gt;0</code> 才进入此控制；步长每次乘/除 \(1+dtfrac\)，并限制在 min/max。3D 迭代超限可重做当前步。</td></tr>
+<tr><td>停止条件</td><td><code>gamma_gr_stop</code>, <code>nt_gamma_gr</code>, <code>gamma_gr_stop_std</code></td><td>线性计算用动能增长率滑动标准差判断收敛，写出时间片后停止。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>2D/complex 与真实 3D 的代价控制不同</h4></div><p>复杂线性响应可用 <code>itime_independent=1</code> 与 <code>frequency</code>；真实 3D 才使用全局最大 KSP 迭代数触发重复/调步。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>通常是完整三维 split/unsplit 推进</h4></div><p>时间算法相同，但强三维几何常使矩阵与预条件器复用更敏感。VMEC 固定/自由边界的选择在初始化完成，此组不会改变计算域边界类型。</p></section>
+<div class="callout"><strong>实际门控：</strong><code>dtmin/dtmax/ksp_*</code> 不会仅因被设置就自动生效；当前变量步长入口由 <code>dtkecrit&gt;0</code> 打开。<code>pskip</code> 当前默认 0，不是官方旧表的 1。</div>
+</div>"""
+
+    if group == "Numerical Options":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Numerical Options：控制弱式积分、变量形式和物理量保护</h3><p>这些参数不改变初始平衡来源，但会改变离散方程、积分精度和推进后场值。先保持默认建立基准，再针对收敛、负温度/密度或矩阵代价逐项调整。</p></div><span class="guide-kicker">离散细节</span></div>
+<div class="formula">\[q(\mathbf x)=\sum_j\nu_j(\mathbf x)q_j,\qquad M_{ij}\dot q_j=S_{ij}q_j,\qquad \int_K f\,dV\approx\sum_{a=1}^{N_q}w_af(\mathbf x_a).\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>参数族</th><th>数值作用</th><th>注意</th></tr></thead><tbody>
+<tr><td><code>jadv</code></td><td>1 推进环向电流/\(\Delta^*\psi\) 形式，0 推进磁通 \(\psi\) 形式。</td><td>这是离散未知量选择，不是电流源开关；当前默认 1。</td></tr>
+<tr><td><code>int_pts_main/aux/diag/tor</code></td><td>主演化、辅助场、诊断和环向方向的 Gaussian 积分点数。</td><td>只能选实现支持的阶数，且二维点数与环向点数乘积受内部最大点数限制。</td></tr>
+<tr><td><code>max_ke</code></td><td>线性扰动动能超过阈值时整体缩放扰动，避免数值溢出。</td><td>0 关闭；不代表物理饱和机制。</td></tr>
+<tr><td><code>equilibrate</code></td><td>对线性系统行/列或未知量做尺度平衡以改善条件数。</td><td>只影响求解数值尺度，不应改变收敛后的物理解。</td></tr>
+<tr><td><code>iset_*_floor</code>, <code>*_floor</code></td><td>时间推进后把相应 p/n/T 的低值截到下限。</td><td>在 <code>eqsubtract=1</code> 时修正扰动，使“平衡+扰动”满足 floor；不是连续方程中的源项。</td></tr>
+<tr><td><code>iprecompute_metric</code></td><td>预计算完整几何 metric，换内存为重复积分速度。</td><td>USEST 几何会强制使用；不改变几何映射本身。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>轴对称 mesh 仍需要柱坐标 metric 与足够积分阶数</h4></div><p>2D 令 <code>int_pts_tor=1</code>；complex/3D 项再增加环向积分。floor 常用于边缘低温/低压区，但会破坏严格守恒，应记录敏感性。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>VMEC 映射使 metric 变化更强</h4></div><p>应优先检查 <code>int_pts_main/tor</code> 和 <code>iprecompute_metric</code> 的收敛/内存；逻辑网格圆滑不代表物理单元 metric 简单。</p></section>
+</div>"""
+
+    if group == "Solver":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Solver：求解每个时间块形成的线性系统</h3><p>Time Step 组决定何时组装矩阵，本组给通用容差、直接/迭代选择、最大迭代数和初猜策略。具体后端还受编译选项以及 PETSc 命令行/选项文件控制。</p></div><span class="guide-kicker">线性代数层</span></div>
+<div class="formula">\[A\,\delta q=b,\qquad \frac{\|b-A\delta q\|}{\|b\|}\lesssim\mathtt{solver\_tol}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>参数</th><th>作用</th><th>用户判断</th></tr></thead><tbody>
+<tr><td><code>solver_type</code></td><td>SCOREC/PETSc 通用接口中 0 直接、1 迭代；Trilinos/Aztec 路径本质上走迭代配置。</td><td>最终算法可能被后端选项覆盖，应以运行日志为准。</td></tr>
+<tr><td><code>solver_tol</code></td><td>线性残差收敛容差。</td><td>必须明显小于时间离散/非线性误差；过松会污染增长率与守恒。</td></tr>
+<tr><td><code>num_iter</code></td><td>通用/Trilinos 最大迭代数。</td><td>PETSc 常由命令行 KSP 最大迭代数进一步控制。</td></tr>
+<tr><td><code>isolve_with_guess</code></td><td>用已有场/上一次解作为非零初猜。</td><td>连续时间步常有利，重建矩阵或突变源项后需观察迭代数。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>按 2D、complex、3D 和 wall 模型选择求解规模</h4></div><p>装置类型不改变参数语义；多区域电阻壁、六场和真实 3D 会显著增大系统并更依赖预条件器。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>三维映射几何通常更依赖可扩展迭代求解</h4></div><p>同样使用本组容差，但 PETSc/Trilinos 的实际预条件配置应结合映射 metric、平面数和 MPI 分解调节。</p></section>
+</div>"""
+
+    if group == "Trilinos Options":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Trilinos Options：只配置 Aztec/Trilinos 编译路径</h3><p>这些字符串不会配置现代 PETSc 路径。先从编译和启动日志确认正在使用 Trilinos/Aztec，再设置 Krylov、预条件器、子域求解器及 ILU 参数。</p></div><span class="guide-kicker">条件后端</span></div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>层次</th><th>合法源码字符串/参数</th><th>作用</th></tr></thead><tbody>
+<tr><td>Krylov</td><td><code>cg</code>, <code>cg_condnum</code>, <code>gmres</code>, <code>gmres_condnum</code>, <code>cgs</code>, <code>tfqmr</code></td><td><code>krylov_solver</code> 选择外迭代算法。</td></tr>
+<tr><td>预条件器</td><td><code>none</code>, <code>Jacobi</code>, <code>Neumann</code>, <code>ls</code>, <code>sym_GS</code>, <code>dom_decomp</code></td><td><code>preconditioner</code> 字符串区分大小写。</td></tr>
+<tr><td>子域</td><td><code>ilu</code>, <code>lu</code>, <code>ilut</code>, <code>rilu</code>, <code>bilu</code>, <code>icc</code></td><td><code>sub_dom_solver</code> 与 <code>subdomain_overlap/graph_fill</code> 控制 domain decomposition。</td></tr>
+<tr><td>ILU/多项式</td><td><code>drop_tolerance</code>, <code>ilu_fill_level</code>, <code>ilu_omega</code>, <code>poly_ord</code></td><td>控制填充、丢弃、松弛及多项式阶数，只有相应预条件器读取。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>参数语义与装置无关</h4></div><p>场数、多区域 wall 和三维平面数决定矩阵难度；这些选项不改变平衡或物理模型。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>参数语义与装置无关</h4></div><p>映射 metric 会改变矩阵条件数，但同一 Aztec 选项集适用。若运行的是 PETSc，应改 PETSc options，而不是本组字符串。</p></section>
+</div>"""
+
+    if group == "Sources/Sinks":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Sources/Sinks：在已建立的演化方程上加入外部驱动和反馈</h3><p>本组不负责初始平衡。只有 Model Options 中对应方程存在、计算为非线性且源项门控满足时，粒子、动量、热和电流源才进入时间推进；多个同类源会相加。</p></div><span class="guide-kicker">CASE 驱动层</span></div>
+<div class="formula">\[\partial_t n_i+\nabla\!\cdot(n_i\mathbf v)=\nabla\!\cdot(D\nabla n_i)+\sigma_{pel}+\sigma_{beam}+\sigma_{ion}-\sigma_{sink}+\sigma_{arc}.\]</div>
+<div class="formula">\[S_G(R,Z)=\frac{A}{2\pi\sigma^2R}\exp\!\left[-\frac{(R-R_0)^2+(Z-Z_0)^2}{2\sigma^2}\right].\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>源族</th><th>主要参数</th><th>生效条件与覆盖</th></tr></thead><tbody>
+<tr><td>回路电压/电流控制</td><td><code>vloop*</code>, <code>tcur*</code>, <code>control_*</code></td><td>只在非线性且未减去平衡电流的反馈路径工作。无反馈时回路电压可按 <code>cos(2*pi*vloop_freq*t)</code> 振荡；PID 会更新控制量。</td></tr>
+<tr><td>pellet</td><td><code>ipellet</code>, <code>pellet_*</code>, <code>iread_pellet</code>, <code>ipellet_abl</code></td><td>持续粒子源或初始扰动；可由标量定义一个 pellet，或从 <code>pellet.dat</code> 定义多个。ablation 会随局部等离子体状态更新速率/宽度。</td></tr>
+<tr><td>neutral beam</td><td><code>ibeam</code>, <code>beam_*</code></td><td>模式 1-5 选择向密度、动量和热方程加入哪些沉积项；沉积为 R-Z Gaussian，强度由 ions/s 与束能换算。</td></tr>
+<tr><td>电流/极向动量</td><td><code>icd_source</code>, <code>J_0cd/R_0cd/...</code>, <code>ipforce</code>, <code>*force</code></td><td>current-drive 模式 1 为物理 R-Z Gaussian，2/3 是 USEST 逻辑 rho/profile 路径；极向力按磁通坐标构造。</td></tr>
+<tr><td>热源</td><td><code>igaussian_heat_source</code>, <code>ghs_*</code>, <code>iread_heatsource</code></td><td>需要非线性压力/温度方程；Gaussian 与文件剖面相加。<code>iheat_sink=1</code> 只实现于专用 <code>itaylor=27</code>。</td></tr>
+<tr><td>粒子化学/汇</td><td><code>ionization*</code>, <code>isink/sink*</code>, <code>iarc_source*</code>, <code>idenfloor*</code></td><td>需要 <code>idens=1,linear=0</code>。ionization 有温度门控；sink 是最多两个局部 Gaussian；density floor 是恢复源而非硬截断。</td></tr>
+<tr><td>密度反馈</td><td><code>n_target</code>, <code>n_control_*</code></td><td>用全局密度误差调节每个 pellet 的 <code>pellet_rate</code>。</td></tr>
+</tbody></table></div>
+<div class="formula">\[I_{target}(t)=I_i+\frac{I_f-I_i}{2}\left[1+\tanh\frac{t-t_0}{t_w}\right],\qquad u_{PID}=-(K_Pe+K_I\!\int e\,dt+K_D\dot e).\]</div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>磁通剖面源与回路电压/总电流反馈是主要路径</h4></div><p><code>profile_particlesource/profile_heatsource</code> 以 \(\psi_N\) 为横坐标；<code>ipforce</code> 和大部分 current-drive 模式也依赖轴对称磁区。物理 R-Z-phi Gaussian 坐标必须落在 mesh 内。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>先区分逻辑径向源与物理空间源</h4></div><p>Input 读入的粒子/热源剖面以逻辑 \(s=x_l^2+z_l^2\) 取样；物理 Gaussian/pellet 坐标则在映射后的柱坐标域中运动。轴对称总电流、\(\psi_N\) 极向力和 loop-voltage 控制不应未经验证直接移植。</p></section>
+<div class="callout"><strong>总门控：</strong>density source 要求 <code>idens=1,linear=0</code>；momentum source 要求非线性并选择相应 beam；heat source 要求非线性且 <code>numvar&gt;=3</code> 或 <code>ipres=1</code>。仅设置幅值而未满足这些条件不会创建方程。</div>
+</div>"""
+
+    if group == "PRAD Options":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>PRAD：不演化电荷态的单杂质瞬时辐射模型</h3><p>PRAD 在现有电子密度和温度上计算单一杂质的辐射冷却，不增加每个电荷态的连续方程。它需要非线性压力/温度方程，且 Model Options 中 <code>irad_heating=1</code> 才把损失写入热方程。</p></div><span class="guide-kicker">简单辐射</span></div>
+<div class="formula">\[P_{rad}=n_e n_Z L_Z(T_e),\qquad n_Z=\mathtt{prad\_fz}\,n_e\ \text{或由 profile\_nz 给定}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>参数</th><th>用法</th></tr></thead><tbody>
+<tr><td><code>iprad</code></td><td>1 开启；0 不计算 PRAD。</td></tr>
+<tr><td><code>prad_z</code></td><td>选择辐射表的原子序数；当前活动表面向 C=6、Ar=18、Fe=26，其它值只给警告，不能视为有可靠数据。</td></tr>
+<tr><td><code>prad_fz</code></td><td>未读文件时的杂质总密度/电子密度比例。</td></tr>
+<tr><td><code>iread_prad</code></td><td>1 读 <code>profile_nz</code>：第一列 \(\psi_N\)，第二列为 \(10^{20}\,m^{-3}\) 杂质密度，并覆盖比例模型。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>文件剖面按归一化磁通使用</h4></div><p>PRAD 本身只读局部 \(n_e,T_e,n_Z\)，但 <code>profile_nz</code> 的空间映射依赖轴对称磁通坐标。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>局部比例模型可工作，普通 psi 剖面不具有明确三维映射</h4></div><p><code>prad_fz</code> 的局部比例公式不区分装置；若要给三维仿星器杂质分布，应确认当前版本的 profile 映射，不要默认它等于 VMEC 的 s。</p></section>
+</div>"""
+
+    if group == "KPRAD Options":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>KPRAD：逐电荷态演化、准中性和辐射能量耦合</h3><p>KPRAD 在主离子 MHD 上增加一个杂质元素的中性态与所有离化态密度；电离/复合在每个 MHD 步内自适应子循环，随后更新电子密度、质量密度和热损失。</p></div><span class="guide-kicker">多电荷态杂质</span></div>
+<div class="formula">\[\partial_t n_Z^{(j)}+\nabla\!\cdot(n_Z^{(j)}\mathbf v)=\nabla\!\cdot(D_j\nabla n_Z^{(j)})+\sigma_Z^{(j)},\qquad n_e=Z_i n_i+\sum_{j=1}^{Z}j\,n_Z^{(j)}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>步骤</th><th>参数</th><th>作用</th></tr></thead><tbody>
+<tr><td>原子数据</td><td><code>ikprad</code>, <code>kprad_z</code>, <code>adas_adf11</code></td><td>1 用内置拟合（支持 Z=1,2,4,5,6,10,18）；-1 仅在 USEADAS 编译下读 ADF11 路径。</td></tr>
+<tr><td>初始中性杂质</td><td><code>kprad_nz</code>, <code>kprad_fz</code>, <code>iread_lp_source</code></td><td>初始中性密度为常数项加电子密度比例；Lagrangian-particle 源读取 <code>cloud.txt</code>，属于专用 pellet 工作流。</td></tr>
+<tr><td>空间输运</td><td><code>ikprad_evolve_neutrals</code>, <code>kprad_n0_denm_fac</code></td><td>0 中性不对流/扩散；1 对流并扩散；2 只扩散。离化态随主流体并使用密度扩散。</td></tr>
+<tr><td>低值处理</td><td><code>kprad_nemin</code>, <code>kprad_temin</code>, <code>ikprad_min_option</code></td><td>选项 1 使用默认全反应；2 低值处禁电离/辐射但允许受限复合；3 在子循环中低于阈值时关闭电离、复合和辐射。</td></tr>
+<tr><td>子步</td><td><code>ikprad_max_dt</code>, <code>kprad_max_dt</code></td><td>选项 1 令上限为 \(dt/(Z+1)\)，显式正值可进一步限制；算法在电子密度变化超过 20% 时回退减半，小于 2% 时增大子步。</td></tr>
+<tr><td>内部热反馈</td><td><code>ikprad_evolve_internal</code></td><td>1 在每个 KPRAD 子步内更新局部 \(n_e,T_e\) 和反应率；0 在整 MHD 步内冻结输入反应率。</td></tr>
+</tbody></table></div>
+<div class="formula">\[Q_e\supset-\left(P_{line}+P_{brem}+P_{ion}+P_{rec,kin}\right).\]</div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>电荷态方程作用于 plasma zone 并随 MHD 流演化</h4></div><p>可与 pellet/杂质注入联合使用。KPRAD 不重新求 GS，也不会覆盖初始主离子剖面；它在时间推进中通过准中性和质量项反馈。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>同一局部反应与三维输运方程作用于映射域</h4></div><p>原子率只依赖局部 \(n_e,T_e\)，装置无关；中性/杂质源的空间位置和逻辑/物理坐标仍需与 VMEC 映射及 zone 对齐。</p></section>
+<div class="callout"><strong>能量含义：</strong>程序计算复合释放的动能与势能，但热方程只扣除 kinetic recombination 项；势能释放不再次从电子流体动能中扣除。</div>
+</div>"""
+
+    if group == "Particle Simulation Options":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Particle Simulation：USEPARTICLES 下的混合 MHD-PIC 闭合</h3><p>这些参数只有编译了 USEPARTICLES 才能读入，并且 Model Options 的 <code>kinetic=1</code> 才启动 PIC。<code>kinetic=2/3</code> 是 CGL 流体模型，不使用本组粒子参数。</p></div><span class="guide-kicker">条件物理模块</span></div>
+<div class="formula">\[\dot{\mathbf x}=\mathbf v,\qquad m_s\dot{\mathbf v}=q_s(\mathbf E+\mathbf v\times\mathbf B),\qquad \Delta t_p=\frac{\Delta t_{MHD}}{N_{substep}N_{subcycle}}.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>参数族</th><th>选择</th><th>作用</th></tr></thead><tbody>
+<tr><td>物种</td><td><code>kinetic_fast_ion</code>, <code>kinetic_thermal_ion</code>, <code>fast_ion_mass/z</code></td><td>打开快离子和/或热离子 PIC；质量/电荷为 0 时分别继承 <code>ion_mass/z_ion</code>。</td></tr>
+<tr><td>分布</td><td><code>fast_ion_dist=0/1/2</code>, <code>fast_ion_max_energy</code></td><td>0 读三维分布；1 Maxwellian；2 slowing-down，并用最大能量截断采样。</td></tr>
+<tr><td>表示与耦合</td><td><code>particle_linear</code>, <code>ifullf</code>, <code>iconst_f0</code>, <code>particle_couple</code></td><td>选择 delta-f/full-f、背景分布及 -1 test-particle、0 压力耦合、1 电流耦合。<code>eqsubtract=0</code> 会强制 full-f。</td></tr>
+<tr><td>时间与容量</td><td><code>particle_substeps/subcycles</code>, <code>num_par_max</code>, <code>num_par_scale</code></td><td>控制粒子子步和最多粒子数；未启用 thermal-ion PIC 时 subcycles 被强制为 1。</td></tr>
+<tr><td>平滑/同步</td><td><code>igyroaverage</code>, <code>smooth_par</code>, <code>smooth_dens_parallel</code>, <code>ikinetic_vpar</code>, <code>vpar_reduce</code></td><td>控制 gyro-average、PIC 矩到 FE 场的平滑及平行流同步/衰减。</td></tr>
+<tr><td>径向/模过滤</td><td><code>kinetic_rhomax</code>, <code>imode_filter</code>, <code>mode_filter_ntor</code></td><td>限制粒子权重范围并筛选环向模。负 <code>imode_filter</code> 只保留所列模；正值当前仅从各场减去所列模幅值的 0.1，不能理解为完全删除。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>快离子分布和 rho 截断通常按轴对称平衡构造</h4></div><p>物理 pusher 使用有限元三维 E/B；初始分布、磁通半径和 mode filter 应与所选 2D/3D 表示一致。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>pusher 可使用映射后的三维场，初始化假设需另行验证</h4></div><p>本组没有 stellarator 专用开关。使用读取分布、<code>kinetic_rhomax</code> 或轴对称构造的 Maxwellian/slowing-down 前，应确认其坐标和权重定义与 VMEC/外场域一致。</p></section>
+</div>"""
+
+    if group == "Diagnostics":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Diagnostics：在映射后的物理场上布置合成测量</h3><p>诊断不参与求解，但依赖 Mesh/Equilibrium 已经建立的物理坐标。数组长度上限为 100；先给数量，再按一基索引填写位置和方向。</p></div><span class="guide-kicker">合成诊断</span></div>
+<div class="formula">\[B_{probe}=\hat{\mathbf n}\cdot\mathbf B(R,\phi,Z),\qquad \Phi_{loop}(R,Z)=\int_{\phi\ domain}\psi(R,\phi,Z)\,d\phi.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>诊断</th><th>参数</th><th>输出含义</th></tr></thead><tbody>
+<tr><td>X-ray chord</td><td><code>xray_detector_enabled</code>, <code>xray_r0/phi0/z0</code>, <code>xray_theta/sigma</code></td><td>从给定探测器点、弦方向和角扩展构造 chord mask；phi/theta/sigma 输入为度并在内部转弧度。</td></tr>
+<tr><td>磁探针</td><td><code>imag_probes</code>, <code>mag_probe_x/phi/z</code>, <code>mag_probe_nx/nphi/nz</code></td><td>在探针点评价 B 并投影到给定法向。法向分量由用户给出，程序不替你归一化或检查传感器是否在域内。</td></tr>
+<tr><td>磁通环</td><td><code>iflux_loops</code>, <code>flux_loop_x/z</code></td><td>在固定 R-Z 位置沿当前环向计算域积分磁通场；点不在域内时输出 0。</td></tr>
+<tr><td>固定温度诊断点</td><td><code>ifixed_temax</code></td><td>非零时不搜索温度最大值，而在平衡磁轴参考点 <code>xmag0,zmag0</code> 评价温度。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>位置使用物理柱坐标 R-phi-Z</h4></div><p>二维探针常令 phi=0；三维/complex 信号需按实际环向相位布置。磁通环本质上是固定 R-Z 的环向积分。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>必须填写 VMEC 映射后的物理位置</h4></div><p>不能把逻辑圆盘的 x,z 直接写入探针参数。若只计算一个 field-period 扇区，环向积分和可布置的 phi 范围也只覆盖该计算域。</p></section>
+</div>"""
+
+    if group == "Output":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Output：决定何时保存场、标量、辅助量和可重启状态</h3><p>输出在每步求解和诊断之后执行。标量通常每步写，完整场按 <code>ntimepr</code>；timeout 或线性增长率收敛会强制写一个时间片后安全停止。</p></div><span class="guide-kicker">CASE 结果层</span></div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>目标</th><th>参数</th><th>实际行为</th></tr></thead><tbody>
+<tr><td>日志/计时</td><td><code>iprint</code>, <code>itimer</code></td><td>控制终端详细度及内部阶段计时输出，不改变物理字段。</td></tr>
+<tr><td>场时间片</td><td><code>ntimepr</code>, <code>iwrite_aux_vars</code>, <code>iwrite_transport_coeffs</code></td><td>每 <code>ntimepr</code> 步计算可选辅助场并写 HDF5；关闭辅助量可明显减少计算和文件体积。</td></tr>
+<tr><td>标量/谐波</td><td><code>icalc_scalars</code>, <code>ike_only</code>, <code>ike_harmonics</code>, <code>ibh_harmonics</code></td><td>选择全局标量以及 3D 动能/磁扰动谐波；某些控制和 hyper 模式依赖这些诊断，不能为省时随意关闭。</td></tr>
+<tr><td>文件结构</td><td><code>ifout</code>, <code>iwrite_adjacency</code>, <code>iwrite_quad_points</code>, <code>idouble_out</code></td><td>控制 f 场、网格邻接、积分点和浮点精度；<code>ifout=-1</code> 运行时取 3D=1、2D=0。</td></tr>
+<tr><td>温度/电场调试</td><td><code>itemp_plot</code>, <code>ibdgp</code>, <code>iveldif</code></td><td>额外写热源/导热/Ohmic 或电场分解；非零 partial 模式只输出所选贡献，不能当作完整物理量。</td></tr>
+<tr><td>重启</td><td><code>irestart</code>, <code>irestart_slice</code>, <code>ntimers</code></td><td>0 新启动；1 普通 HDF5 restart；2 用 restart 场初始化 GS；3 用 2D real restart 启动 complex。slice=-1 取最后时间片，否则选指定索引并丢弃其后的输出组。</td></tr>
+<tr><td>调度保护</td><td><code>write_ts_on_job_timeout</code></td><td>1 安装作业超时/抢占信号处理，收到信号后强制写时间片再停止。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>2D、complex、3D restart 的维度转换有专用入口</h4></div><p>从 2D 扩展到 3D、从 real 2D 转 complex 或改变环向周期时，程序把它视为新算例，重置步数/时间并重新初始化扰动。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>restart 必须保持映射几何和场周期相容</h4></div><p>输出保存的是物理 mesh/场及参数属性；改变 VMEC 文件、逻辑 mesh、周期或平面数并非普通续算，应按新初始化路径验证。</p></section>
+<div class="callout"><strong>运行时默认：</strong><code>ntimepr&lt;1</code> 被改为 1；<code>ntimers&lt;=0</code> 被改为 <code>ntimepr</code>。旧参数 <code>iwrite_restart</code> 已废弃，不能代替当前 HDF5 输出流程。</div>
+</div>"""
+
+    if group == "Miscellaneous":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Miscellaneous：物种常数、two-fluid 尺度与环向模数</h3><p>这些量被多个前述模块共享，应在选择模型之前确定。<code>ion_mass</code> 会改变整个时间/速度归一化；<code>z_ion</code> 同时进入准中性、电阻率、skin depth 和剖面换算。</p></div><span class="guide-kicker">共享物理常数</span></div>
+<div class="formula">\[d_i=\frac{c}{L_0\sqrt{4\pi n_0(Z_ie)^2/m_i}}\,\mathtt{db\_fac},\qquad n_e=Z_i n_i.\]</div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>参数</th><th>物理/数值作用</th></tr></thead><tbody>
+<tr><td><code>gam</code></td><td>比热比 \(\Gamma\)，进入压缩功、温度方程和热通量系数；默认 5/3。</td></tr>
+<tr><td><code>ion_mass</code>, <code>z_ion</code></td><td>主离子质量（质子质量单位）和电荷态；决定 \(m_i,n_e\)、归一化、束流/粒子及 KPRAD 耦合。</td></tr>
+<tr><td><code>db</code>, <code>db_fac</code></td><td><code>db&gt;=0</code> 直接覆盖；<code>db&lt;0</code> 时由物理尺度计算再乘 factor。默认 factor=0，因此自动计算后仍关闭 two-fluid 幅值。</td></tr>
+<tr><td><code>lambda_coulomb</code></td><td>Coulomb 对数，进入碰撞频率、Spitzer 电阻率和能量均分系数。</td></tr>
+<tr><td><code>thermal_force_coeff</code></td><td>旋转/抗磁换算中的电子温度梯度热力系数。</td></tr>
+<tr><td><code>mass_ratio</code>, <code>lambdae</code></td><td>当前仅注册，无活动计算读取；不能用它们打开电子惯性。</td></tr>
+<tr><td><code>ntor</code>, <code>mpol</code></td><td>环向/极向模数；<code>ntor</code> 主要用于 complex 线性模，二者也被若干解析扰动、外场和 REKC 设置复用。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>complex 单 n 模和轴对称 two-fluid 闭合最常使用本组</h4></div><p><code>ntor</code> 不等于真实 3D 的平面数；真实 3D 由 <code>nplanes</code> 表示并可同时含多个环向模。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>物种常数相同，单 n 解释通常不适用于三维平衡</h4></div><p>完整仿星器场通过平面和场周期表示；<code>ntor/mpol</code> 只在明确的专用扰动/REKC 分支使用，不描述 VMEC 的全部傅里叶谱。</p></section>
+</div>"""
+
+    if group == "Deprecated":
+        return r"""
+<div class="guide" data-guide>
+<div class="guide-title"><div><h3>Deprecated：只为旧 C1input 保持可解析</h3><p>这些名字仍可读入，目的是让旧模板不因未知参数立即失败；它们写入 dummy 变量或已被当前 HDF5/场表示取代。新 case 不应设置。</p></div><span class="guide-kicker">兼容层</span></div>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>旧参数</th><th>当前替代/行为</th></tr></thead><tbody>
+<tr><td><code>ibform</code>, <code>igs_method</code></td><td>dummy 占位；当前磁场形式和 GS 算法不随其值改变。</td></tr>
+<tr><td><code>zeff</code></td><td>改用 <code>z_ion</code>；旧值不会作为主离子电荷进入当前模型。</td></tr>
+<tr><td><code>ivform</code></td><td>只实现当前固定的 velocity form；旧选择值不再提供其它形式。</td></tr>
+<tr><td><code>iwrite_restart</code></td><td>重启时间片由当前 HDF5 输出流程、<code>ntimepr/ntimers</code> 和 <code>irestart</code> 管理。</td></tr>
+<tr><td><code>iwrite_adios</code>, <code>iread_adios</code>, <code>iglobalout</code>, <code>iglobalin</code>, <code>iread_hdf5</code></td><td>旧 I/O 后端/全局文件开关；当前代码使用 HDF5 初始化与 restart 路径。</td></tr>
+</tbody></table></div>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>不用于新 case</h4></div><p>若旧托卡马克模板含这些名字，可删除并按替代参数重新确认行为。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>不用于新 case</h4></div><p>它们同样不会选择 VMEC/外场、几何映射或三维输出格式。</p></section>
+</div>"""
+
+    return ""
+
+
 def simplified_html_supplement(group: str) -> str:
+    remaining = remaining_module_supplement(group)
+    if remaining:
+        return remaining
     if group == "Mesh":
         return """
 <div class="guide" data-guide>
@@ -2736,6 +3206,7 @@ def write_doc_audit(params: list[Param], md_path: Path, csv_path: Path) -> None:
                 "doc_default",
                 "note",
             ],
+            lineterminator="\n",
         )
         w.writeheader()
         w.writerows(rows)

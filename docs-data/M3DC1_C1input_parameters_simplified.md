@@ -230,29 +230,29 @@
 | `itemp` | integer | `0` | 1: Advance Temperatures rather than Pressures；1 时推进温度而不是压力；要求 `ipressplit=1`，且 `z_ion` 必须为 1 |
 | `iadiabat` | integer | `1` | 1: Correct itemp=1 for time-varying density |
 | `gyro` | integer | `0` | 1: Include Braginskii gyroviscosity |
-| `igauge` | integer | `0` | 模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `igauge` | integer | `0` | 选择矢势规范相关的数值处理。当前活动方程只在非零时加入规范约束/稳定项；常规算例保持 0。托卡马克与仿星器使用同一场表示 |
 | `inertia` | integer | `1` | 1: Include V.Grad(V) terms |
 | `itwofluid` | integer | `1` | 1: -electron 2F, 2: ion 2F |
 | `ibootstrap` | integer | `0` | 托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 `1-Te/Temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0 |
-| `irunaway` | integer | `0` | 模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `cre` | integer | `0` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `ra_cyc` | integer | `1` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `radiff` | real | `0.` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `rjra` | real | `1.` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `irunaway` | integer | `0` | 非零时增加 runaway-electron 密度场及其电流耦合；需要同时设置 `cre/radiff/rjra` 等参数。两种装置使用同一演化方程，但初始场和磁场几何来自各自平衡 |
+| `cre` | integer | `0` | runaway-electron 沿磁场特征线的传播速度输入，读入后按速度归一化换算；仅 `irunaway!=0` 使用 |
+| `ra_cyc` | integer | `1` | 每个 MHD 时间步内 runaway 特征线/粒子推进的子循环次数；增大它可缩短 runaway 子步而不改变 MHD 的 `dt` |
+| `radiff` | real | `0.` | runaway-electron 密度方程的扩散系数，进入 `div(radiff grad(n_RE))`；仅 `irunaway!=0` 使用 |
+| `rjra` | real | `1.` | runaway 电流反馈到广义 Ohm 定律/总电流时的幅值系数；1 使用模型电流，0 去掉该反馈 |
 | `ra_characteristics` | integer | `0` | 1: Use the method of characteristics to advance the RE advection equation |
-| `bzsign` | real | `0.` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `bzsign` | real | `0.` | runaway 平行传播方向所用的背景环向磁场符号；0 时由初始磁场自动判断，显式正负值用于覆盖自动结果 |
 | `imp_bf` | integer | `0` | 1: Include implicit equation for f |
 | `imp_temp` | integer | `0` | 1: Include implicit equation for temperature |
-| `nosig` | integer | `0` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `nosig` | integer | `0` | 非零时抑制密度源 `sigma` 对部分动量/温度方程的伴随项；用于源项模型诊断，不会关闭密度方程中的粒子源本身 |
 | `itor` | integer | `0` | 1: Use toroidal geometry |
 | `iohmic_heating` | integer | `1` | 1: Include Ohmic heating |
 | `irad_heating` | integer | `1` | 1: Include radiation heat source |
-| `gravr` | real | `0.` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `gravz` | real | `0.` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `gravr` | real | `0.` | R 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。托卡马克和映射后的仿星器均使用物理柱坐标 R |
+| `gravz` | real | `0.` | Z 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力 |
 | `istatic` | integer | `0` | 1: Do not advance velocity fields |
 | `iestatic` | integer | `0` | 1: Do not advance magnetic fields |
-| `chiiner` | real | `1.` | 模型选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `ieq_bdotgradt` | integer | `1` | 模型选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `chiiner` | real | `1.` | 六场模型中压缩速度势 `chi` 的惯性项乘子；1 为完整项，减小它可改变压缩分量的数值时间尺度 |
+| `ieq_bdotgradt` | integer | `1` | 决定温度方程平行导热是否保留平衡场的 `B dot grad(T)` 贡献；用于平衡减除/线性化时控制平衡项 |
 | `iwall_is_limiter` | integer | `1` | 1 = Wall acts as limiter |
 | `no_vdg_T` | integer | `0` | 1: do not include V dot grad T in Temp equation (debug) |
 | `ibootstrap_model` | integer | `0` | 1: J_BS = alpha F <p,psi> B；托卡马克：1/3 选 Sauter-Angioni，2/4 选 Redl，3/4 为简化方程实现，5 为 constant-Lambda；应与非零 `ibootstrap` 配套。`ibootstrap=3` 配模型 1/3 当前会停止。仿星器：没有专用三维 bootstrap 平衡闭合；选择 bootstrap closure：1/3 为 Sauter & Angioni，2/4 为 Redl，5 为 constant-Lambda 分支 |
@@ -266,45 +266,45 @@
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `ivisfunc` | integer | `0` | 输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `amuoff` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `ivisfunc` | integer | `0` | 选择各向同性粘性空间模型：0 常数；1/2 磁通 tanh 边缘层；3/4 预计算场；10/11 读 `profile_amu`；12 专用 basicJ；21 为 USEST 逻辑 rho 模型 |
+| `amuoff` | real | `0.` | `ivisfunc=1/2/21` 的粘性过渡位置；1/2 使用归一化磁通坐标，21 使用逻辑 rho |
 | `amudelt` | real | `0.` | 输运系数相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度 |
-| `amuoff2` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `amuoff2` | real | `0.` | `ivisfunc=2` 第二个 tanh 过渡中心；只有它与 `amudelt2` 都非零时才加入第二层 |
 | `amudelt2` | real | `0.` | 输运系数相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度 |
 | `amu` | real | `0.` | Isotropic viscosity |
 | `amuc` | real | `0.` | Compressional viscosity |
-| `amue` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `amue` | real | `0.` | 电子/自举电流闭合使用的粘性系数；不代替流体动量方程的 `amu` |
 | `amupar` | real | `0.` | Parallel viscosity |
-| `amu_edge` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `amu_wall` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `amu_wall_off` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `amu_edge` | real | `0.` | 粘性边缘增量或外侧幅值，配合 `ivisfunc=1/2/21`；最终各向同性粘性还包含基值 `amu` |
+| `amu_wall` | real | `0.` | 靠近 wall-distance 场时附加的粘性幅值；按 `amu_wall_off/amu_wall_delt` 的 tanh 层叠加到其它粘性模型 |
+| `amu_wall_off` | real | `0.` | 壁面附加粘性层在 wall-distance 坐标中的中心位置 |
 | `amu_wall_delt` | real | `0.1` | 输运系数相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度 |
-| `iresfunc` | integer | `0` | 输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `etaoff` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `iresfunc` | integer | `0` | 选择 plasma zone 电阻率模型：0 Spitzer 型；1 磁通 tanh；2-4 预计算场；5 简化新古典；10/11 读 `profile_eta`；21 为 USEST 逻辑 rho 模型。conductor/vacuum zone 不用此开关 |
+| `etaoff` | real | `0.` | 电阻率 tanh 过渡位置；`iresfunc=1` 使用磁通，`iresfunc=21` 使用逻辑 rho |
 | `etadelt` | real | `0.` | 输运系数相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度 |
 | `etar` | real | `0.` | Isotropic resistivity |
-| `eta0` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `eta0` | real | `0.` | 温度依赖或 tanh 电阻率的幅值；`iresfunc=0` 中形成 `eta0(Te-eta_te_offset)^(-3/2)` |
 | `eta_fac` | real | `1.` | Uniform resistivity multiplier |
 | `eta_mod` | integer | `0` | 1 = remove d/dphi terms in resistivity |
 | `eta_te_offset` | real | `0.` | Offset in Te when calculating eta |
 | `ikprad_te_offset` | integer | `0` | If 1, eta_te_offset also applied to kprad |
 | `eta_max` | real | `0.` | Maximum value of resistivity in the plasma region；若 <=0，校验阶段置为 `eta_vac`；`eta_max<=0` 时改为 `eta_vac` |
 | `eta_min` | real | `0.` | Minimum value of resistivity in the plasma region；若 <=0，校验阶段置为 0；`eta_min<=0` 时改为 0 |
-| `ikappafunc` | integer | `0` | 输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `ikapparfunc` | integer | `0` | 输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `ikapscale` | integer | `0` | 输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `ikappafunc` | integer | `0` | 选择各向同性热输运模型：0 温度依赖；1/2 磁通 tanh；3 反比于 `sqrt(p n)`；4 梯度依赖；5 预计算场；10/11 读 `profile_kappa`；12 专用模型；21 为 USEST 逻辑 rho |
+| `ikapparfunc` | integer | `0` | 选择平行热导：0 常数 `kappar`；1 用 `tcrit` 低温抑制；2 使用按 `Te^(5/2)` 计算并受上下限约束的预计算场 |
+| `ikapscale` | integer | `0` | 1 时令平行热导场按局部各向同性 `kappa` 缩放，即使用 `kappar*kappa(x)`；0 时按 `ikapparfunc` 单独构造 |
 | `ikappar_ni` | integer | `1` | Include 1/n terms in parallel heat flux |
-| `kappaoff` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `kappaoff` | real | `0.` | `ikappafunc=1/2/21` 的热导 tanh 过渡中心；坐标分别为磁通或 USEST 逻辑 rho |
 | `kappadelt` | real | `0.` | 输运系数相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度 |
 | `kappat` | real | `0.` | Isotropic thermal conductivity |
-| `kappa0` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `kappa0` | real | `0.` | 所选各向同性热导函数的可变部分幅值；最终系数通常还加常数 `kappat` |
 | `kappar` | real | `0.` | Parallel thermal conductivity |
 | `kappari_fac` | real | `1.` | Ion parallel thermal conductivity factor |
-| `tcrit` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `tcrit` | real | `0.` | `ikapparfunc=1` 的低温转折温度，平行热导为 `kappar/[1+(tcrit/Te)^(5/2)]` |
 | `k_fac` | real | `1.` | multiplies toroidal field in denominator of PTC |
-| `kappax` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `kappah` | real | `0.` | 输运系数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `kappag` | real | `0.` | Thermal diffusion proportional to pressure gradient |
+| `kappax` | real | `0.` | 交叉场热输运系数；普通 CPU、非 USEPARTICLES 方程中耦合压力与环向磁场，GPU 对应块被注释，USEPARTICLES 路径也排除该项 |
+| `kappah` | real | `0.` | 在各向同性热导上附加边界层 `kappah*tanh^2[(psi_N-1)/0.2]`；`ikappafunc=5` 时不加 |
+| `kappag` | real | `0.` | Thermal diffusion proportional to pressure gradient；CPU 压力方程中的非线性梯度热流系数，形式含 `-kappag*\|grad(p)\|^2 grad(p)` 与阈值补偿项；GPU 对应块被注释。当前阈值掩码实际比较 `p^2` 与 `gradp_crit^2` |
 | `kappaf` | real | `1.` | Factor to multiply kappa when grad(p) < gradp_crit |
 | `gradp_crit` | real | `0.` | Critical pressure gradient in kappag/kappaf models |
 | `kappa_max` | real | `0.` | Maximum value of kappa in the plasma region；若 <=0，校验阶段置为 `kappar`；`kappa_max<=0` 时改为 `kappar` |
@@ -312,7 +312,7 @@
 | `kappar_min` | real | `0.` | Maximum value of kappa in the plasma region；若 <=0，校验阶段置为 `kappar`；`kappar_min<=0` 时改为 `kappar` |
 | `temin_qd` | real | `0.` | Min. Temp. used in Equipartition term for ipres=1 |
 | `kappai_fac` | real | `1.` | Factor to multiply kappa when evaluating ion perp. thermal diffusivity |
-| `idenmfunc` | integer | `0` | 输运系数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `idenmfunc` | integer | `0` | 选择主离子密度扩散：0 常数 `denm`；1 使用预计算温度依赖场并限幅；10/11 从 `profile_denm` 读 SI/归一化剖面 |
 | `denm` | real | `0.` | Density diffusion coefficient |
 | `denmt` | real | `0.` | Temperature dependent density diffusion coefficient |
 | `denmmin` | real | `0.` | Minimum density diffusion coefficient |
@@ -324,15 +324,15 @@
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `deex` | real | `1.` | 超扩散相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `hyper` | real | `0.` | 超扩散相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `hyperc` | real | `0.` | 超扩散相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `hyperi` | real | `0.` | 超扩散相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `hyperp` | real | `0.` | 超扩散相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `hyperv` | real | `0.` | 超扩散相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `ihypdx` | integer | `0` | 超扩散相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `ihypeta` | integer | `1` | 超扩散相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `ihypkappa` | integer | `1` | 超扩散相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `deex` | real | `1.` | 超扩散的参考长度/网格尺度；当 `ihypdx!=0` 时所有 hyper 输入乘 `deex^ihypdx` |
+| `hyper` | real | `0.` | 磁通/极向磁场方程的超电阻率系数，抑制高波数电流结构；0 关闭该项 |
+| `hyperc` | real | `0.` | 压缩/极向速度势方程的超粘性系数；只在相应速度未知量存在时生效 |
+| `hyperi` | real | `0.` | 环向磁场未知量的超扩散系数；`numvar>=2` 才有对应场 |
+| `hyperp` | real | `0.` | 压力或温度方程的超扩散系数；需要实际推进压力/温度未知量 |
+| `hyperv` | real | `0.` | 环向速度方程的超粘性系数；`numvar>=2` 且速度未冻结时使用 |
+| `ihypdx` | integer | `0` | hyper 系数的长度缩放指数：0 不缩放，非零时 `lambda_eff=lambda_input*deex^ihypdx`。当前默认 0 |
+| `ihypeta` | integer | `1` | 磁超扩散的空间乘子：0 常数；1 乘电阻率；2 乘压力；大于 2 使用压力与指定磁扰动谐波构造乘子，并要求不超过 `ibh_harmonics` |
+| `ihypkappa` | integer | `1` | 1 时压力/温度 hyper 系数乘局部热导率，0 时保持输入常数 |
 | `imp_hyper` | integer | `0` | 1: implicit hyper-resistivity in psi equation |
 
 ## 边界条件 / Boundary Conditions
@@ -341,33 +341,33 @@
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `isurface` | integer | `1` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `icurv` | integer | `2` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `nonrect` | integer | `1` | 边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `isurface` | integer | `1` | 控制分部积分后 Galerkin 弱式中的外边界表面积分；1 保留，0 去掉。它不选择边界位置，位置来自 mesh/model 分类 |
+| `icurv` | integer | `2` | 边界几何曲率处理阶数/开关；大于 0 时使用曲边几何信息，常规高阶曲边网格保持默认 2 |
+| `nonrect` | integer | `1` | 1 表示非矩形/一般边界并关闭矩形快捷假设；0 仅适合边界拓扑确为规则矩形的测试网格 |
 | `ifixedb` | integer | `0` | 1: Force psi=0 on boundary；托卡马克：GS 外边界开关；大于等于 1 时把计算域外边界磁通置 0，0 时使用已建立的 plasma/PF 线圈真空场边界值并允许 LCFS 在域内更新。仿星器：VMEC/外场初始化不通过它选择固定或自由边界 |
-| `com_bc` | integer | `0` | 边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `vor_bc` | integer | `0` | 边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `com_bc` | integer | `0` | 1 时给压缩速度势 `chi` 增加 `nabla^2 chi=0` 的边界约束 |
+| `vor_bc` | integer | `0` | 1 时给极向速度势 `U` 增加 `Delta* U=0` 的涡量边界约束 |
 | `iconst_p` | integer | `1` | 1: Hold pressure constant on boundary |
 | `iconst_n` | integer | `1` | 1: Hold density constant on boundary |
 | `iconst_t` | integer | `1` | 1: Hold temperature constant on boundary |
 | `iconst_bn` | integer | `1` | 1: Hold normal field constant on boundary |
 | `iconst_bz` | integer | `0` | 1: Hold toroidal field constant on boundary |
-| `inograd_p` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `inograd_t` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `inograd_n` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `inograd_p` | integer | `0` | 1 对压力施加零法向梯度 Neumann 条件；不要与同一压力场的固定值条件重复指定 |
+| `inograd_t` | integer | `0` | 1 对温度施加零法向梯度 Neumann 条件 |
+| `inograd_n` | integer | `0` | 1 对主离子密度施加零法向梯度 Neumann 条件 |
 | `inonormalflow` | integer | `1` | 1: No-normal-flow boundary condition |
 | `inoslip_pol` | integer | `1` | 1: No-slip boundary condition on pol. velocity |
 | `inoslip_tor` | integer | `1` | 1: No-slip boundary condition on tor. velocity |
-| `inostress_tor` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `inocurrent_pol` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `inocurrent_tor` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `inocurrent_norm` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `inostress_tor` | integer | `0` | 1 对环向速度施加零法向导数/无切向应力条件；与 `inoslip_tor=1` 是不同选择 |
+| `inocurrent_pol` | integer | `0` | 1 通过环向磁场变量的法向导数约束使边界极向电流为零 |
+| `inocurrent_tor` | integer | `0` | 1 通过 `Delta*psi=0` 型边界约束使环向电流为零 |
+| `inocurrent_norm` | integer | `0` | 1 对三维磁场变量施加组合边界条件，使法向电流为零；会改变 `psi/bz` 的边界掩码组合 |
 | `ifbound` | integer | `-1` | Boundary condition on 'f' field. 1 = Dirichlet, 2 = Neumann；-1 表示校验后按编译版本设置：complex 为 2，real 为 1；`ifbound=-1` 时，complex 版本默认 2，real 版本默认 1 |
-| `iconstflux` | integer | `0` | 边界条件相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `iconstflux` | integer | `0` | 非线性推进中重新缩放环向磁场以保持总环向磁通；0 不做该全局修正 |
 | `iper` | integer | `0` | 1: Periodic boundary condition in R direction |
 | `jper` | integer | `0` | 1: Preiodic boundary condition in Z direction |
-| `tebound` | real | `-1.` | 边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `tibound` | real | `-1.` | 边界条件相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `tebound` | real | `-1.` | 大于 0 时，在标记为 first-wall 的边界把电子温度固定为该归一化值；负值保留初始边界值 |
+| `tibound` | real | `-1.` | 大于 0 时，在 first-wall 边界把离子温度固定为该归一化值；仅双温模型有独立作用 |
 
 ## 电阻壁/真空/导体区 / Resistive Wall
 
@@ -409,23 +409,23 @@
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
 | `ntimemax` | integer | `20` | Total number of timesteps |
-| `integrator` | integer | `0` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `integrator` | integer | `0` | 时间离散选择：0 为 theta/Crank-Nicolson 家族；1 为 BDF2，且程序把 `thimp` 强制为 1，首步使用一阶隐式启动 |
 | `isplitstep` | integer | `1` | 0: Unsplit time step; 1: Split time step |
-| `iteratephi` | integer | `0` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `iteratephi` | integer | `0` | 分裂推进中，更新密度/输运后再重算一次磁场推进；只用于非线性分裂步，线性模式禁止 |
 | `imp_mod` | integer | `1` | Type of split step. 0: Standard; 1: Caramana；当前默认 1。0: standard/theta implicit；1: Caramana split-step 形式；`isplitstep=0` 时校验阶段强制 `imp_mod=0` |
 | `caramana_fac` | real | `1.` | Coefficient for the explicit term in Caramana method. 1: Caramana; 0: implicit |
 | `idiff` | integer | `0` | only solve for difference in B,p |
 | `idifv` | integer | `0` | only solve for difference in v |
-| `irecalc_eta` | integer | `0` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iconst_eta` | integer | `0` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `itime_independent` | integer | `0` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `irecalc_eta` | integer | `0` | 分裂步密度求解后重新计算输运系数，使电阻率等使用更新后的密度/温度 |
+| `iconst_eta` | integer | `0` | 1 时冻结初始电阻率场，不随温度/密度演化重新构造 |
+| `itime_independent` | integer | `0` | 线性模式下去掉普通时间导数并求频域/稳态响应；程序同时令 `thimp=1`，`frequency` 给出复频率 |
 | `thimp` | real | `0.5` | Implicitness of timestep (.5<thimp<1) |
-| `thimpsm` | real | `1.` | 时间推进相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `harned_mikic` | real | `0.` | 时间推进相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `isources` | integer | `0` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `nskip` | integer | `1` | 时间推进相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `thimpsm` | real | `1.` | 平滑器/辅助隐式项使用的 theta 权重，与主时间离散的 `thimp` 分开 |
+| `harned_mikic` | real | `0.` | 二场模型的 Harned-Mikic 数值稳定项系数；0 关闭，非零时抑制特定高速/高频耦合 |
+| `isources` | integer | `0` | 1 时把粒子注入等源项导致的动量修正放入速度推进；要求计算标量诊断以取得所需全局量 |
+| `nskip` | integer | `1` | 有限元系统矩阵重建的时间步间隔；1 每步重建，较大值在系数变化慢时复用矩阵 |
 | `pskip` | integer | `0` | 当前默认 0；控制预条件器重算/复用相关周期 |
-| `iskippc` | integer | `1` | 时间推进相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `iskippc` | integer | `1` | 后端线性求解中预条件器可复用的调用次数/周期控制；与分裂步层面的 `pskip` 分开 |
 | `dt` | real | `0.1` | Size of time step |
 | `ddt` | real | `0.` | 时间推进参数，用于设置时间步长及其允许变化范围 |
 | `frequency` | real | `0.` | Frequency in time-independent calculations |
@@ -448,13 +448,13 @@
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
 | `jadv` | integer | `1` | Use Del*(psi) eqn. instead of psi eqn.；1 使用环向电流密度方程代替极向磁通方程 |
-| `int_pts_main` | integer | `25` | 数值选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `int_pts_aux` | integer | `25` | 数值选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `int_pts_diag` | integer | `25` | 数值选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `int_pts_tor` | integer | `5` | 数值选项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `int_pts_main` | integer | `25` | 主演化弱式在每个二维三角形上的 Gaussian 积分点数；必须是程序已实现的 Dunavant 阶数 |
+| `int_pts_aux` | integer | `25` | 辅助场投影/构造所用的二维积分点数；提高它增加后处理与系数构造成本 |
+| `int_pts_diag` | integer | `25` | 标量和诊断积分使用的二维积分点数 |
+| `int_pts_tor` | integer | `5` | 三维棱柱在环向 Hermite 方向的积分点数；非 3D 编译会强制为 1，且与二维点数乘积不能超过内部上限 |
 | `max_ke` | real | `1.` | Value of ke at which linear sims are rescaled；(ignore if 0) |
 | `equilibrate` | integer | `0` | 数值选项相关速率/源强参数，表示注入、损失、冷却、控制或演化的强度 |
-| `regular` | real | `0.` | 数值选项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `regular` | real | `0.` | 小分母/坐标奇点的正则化尺度；USEST 逻辑 rho 模型使用 `sqrt(rho^2+regular^2)`，压缩势方程也复用该量 |
 | `iset_pe_floor` | integer | `0` | 1: Do not let pe drop below pe_floor |
 | `pe_floor` | real | `0.` | Minimum allowed value for pe when iset_pe_floor=1 |
 | `iset_pi_floor` | integer | `0` | 1: Do not let pi drop below pi_floor |
@@ -502,33 +502,33 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `iadapt` | integer | `0` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `ispradapt` | integer | `0` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `isprntime` | integer | `10` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `isprweight` | real | `0.1` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `isprmaxsize` | real | `0.05` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `isprrefinelevel` | integer | `1` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `isprcoarsenlevel` | integer | `-1` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iadapt_writevtk` | integer | `0` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iadapt_writesmb` | integer | `1` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iadapt_useH1` | integer | `0` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iadapt_removeEquiv` | integer | `0` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `adapt_target_error` | real | `0.0001` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_ke` | real | `0.0` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `iadapt_ntime` | integer | `0` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iadapt_max_node` | integer | `10000` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `adapt_control` | integer | `1` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `iadapt_order_p` | real | `3.0` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `iadaptFaceNumber` | integer | `-1` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `iadapt_snap` | integer | `1` | 网格自适应相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `adapt_factor` | real | `1.` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_hmin` | real | `0.001` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_hmax` | real | `0.1` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_hmin_rel` | real | `0.5` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_hmax_rel` | real | `2.0` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_smooth` | real | `2./3. (约 0.6667)` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_psin_vacuum` | real | `-1.` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `adapt_psin_wall` | real | `-1.` | 网格自适应相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `iadapt` | integer | `0` | SCOREC 网格自适应总模式：0 关闭；1 初始化按磁通；2 推进中按误差；3 两者结合；4 初始化和推进均可按误差 |
+| `ispradapt` | integer | `0` | 1 启用 SPR 梯度恢复自适应，并在推进阶段替代普通 residual/error 路径 |
+| `isprntime` | integer | `10` | SPR 自适应的时间步调用周期 |
+| `isprweight` | real | `0.1` | SPR 恢复误差转换为目标尺寸时的权重，控制细化强度 |
+| `isprmaxsize` | real | `0.05` | SPR 目标尺寸场允许的最大单元尺寸 |
+| `isprrefinelevel` | integer | `1` | 一次 SPR 调用允许的最大细化层级 |
+| `isprcoarsenlevel` | integer | `-1` | 一次 SPR 调用允许的粗化层级；负值表示使用实现的默认/不强制粗化 |
+| `iadapt_writevtk` | integer | `0` | 1 在自适应阶段写出 VTK 调试网格/尺寸场 |
+| `iadapt_writesmb` | integer | `1` | 1 写出 SCOREC `.smb` 自适应网格快照，便于重启或检查 |
+| `iadapt_useH1` | integer | `0` | 1 用 H1 型误差度量替代默认高阶度量构造目标尺寸 |
+| `iadapt_removeEquiv` | integer | `0` | 1 在误差估计前去掉环向等价节点/重复贡献，供周期网格的专用适配路径使用 |
+| `adapt_target_error` | real | `0.0001` | 普通误差自适应的目标/触发误差；估计误差未超过它时不换网格 |
+| `adapt_ke` | real | `0.0` | 线性计算中触发动态自适应的动能阈值；0 不使用该触发条件 |
+| `iadapt_ntime` | integer | `0` | 普通动态自适应检查的时间步周期；非线性且为 0 时当前流程可每步检查 |
+| `iadapt_max_node` | integer | `10000` | 自适应后允许的节点数上限，用于限制内存和网格增长 |
+| `adapt_control` | integer | `1` | 误差到目标尺寸的控制模式/方向参数；常规保持默认 1 |
+| `iadapt_order_p` | real | `3.0` | 误差随网格尺寸收敛的假定阶数，用于由目标误差反算目标尺寸 |
+| `iadaptFaceNumber` | integer | `-1` | 只适配指定几何模型 face 的编号；-1 表示不按单一 face 限制 |
+| `iadapt_snap` | integer | `1` | 1 时把新边界节点投影/贴合回既有几何模型边界；不会创建新的壁面或 LCFS |
+| `adapt_factor` | real | `1.` | 保留的自适应缩放输入；当前活动程序未读取其值，修改它不会改变网格 |
+| `adapt_hmin` | real | `0.001` | 磁通/误差尺寸场允许的绝对最小单元尺度 |
+| `adapt_hmax` | real | `0.1` | 磁通/误差尺寸场允许的绝对最大单元尺度 |
+| `adapt_hmin_rel` | real | `0.5` | 相对当前单元尺寸的一次最小缩放比，限制单次细化幅度 |
+| `adapt_hmax_rel` | real | `2.0` | 相对当前单元尺寸的一次最大缩放比，限制单次粗化幅度 |
+| `adapt_smooth` | real | `2./3. (约 0.6667)` | 保留的尺寸场平滑输入；当前活动程序未读取其值 |
+| `adapt_psin_vacuum` | real | `-1.` | 按磁通适配时 vacuum 区的归一化磁通阈值/目标范围；负值关闭该专用阈值 |
+| `adapt_psin_wall` | real | `-1.` | 按磁通适配时 wall 区的归一化磁通阈值/目标范围；负值关闭该专用阈值 |
 | `iadapt_pack_rationals` | integer | `0` | Number of mode-rational surfaces to pack mesh around |
 | `adapt_pack_factor` | real | `0.02` | Width of Lorentzian (in psi_N) for rational mesh packing |
 | `adapt_coil_delta` | real | `0.` | Parameter for packing mesh around coil locations |
@@ -541,18 +541,18 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `iheat_sink` | integer | `0` | 源项/汇项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `vloop` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `vloopRZ` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `tcur` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `iheat_sink` | integer | `0` | 1 启用 `itaylor=27` 专用热沉；其它平衡类型下不产生通用热沉 |
+| `vloop` | real | `0.` | 施加在环向 Ohm/磁通方程中的回路电压幅值；无电流反馈时按 `vloop*cos(2*pi*vloop_freq*t)` 使用 |
+| `vloopRZ` | real | `0.` | R-Z/极向磁场方程使用的回路电压分量，独立于主环向 `vloop` |
+| `tcur` | real | `0.` | 电流反馈的目标总等离子体电流；若给定 `tcuri/tcurf`，运行时目标可被时间 ramp 覆盖 |
 | `vloop_freq` | real | `0.` | Loop voltage frequency |
-| `tcuri` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `tcurf` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `tcur_t0` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `tcur_tw` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `control_p` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `control_i` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `control_d` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `tcuri` | real | `0.` | 电流反馈 tanh ramp 的初始目标电流 |
+| `tcurf` | real | `0.` | 电流反馈 tanh ramp 的最终目标电流 |
+| `tcur_t0` | real | `0.` | 目标电流 tanh ramp 的中心时间 |
+| `tcur_tw` | real | `0.` | 目标电流 tanh ramp 的时间宽度；用于从 `tcuri` 平滑过渡到 `tcurf` |
+| `control_p` | real | `0.` | `control_type=1` 电流 PID 的比例增益 P |
+| `control_i` | real | `0.` | `control_type=1` 电流 PID 的积分增益 I |
+| `control_d` | real | `0.` | `control_type=1` 电流 PID 的微分增益 D |
 | `control_type` | integer | `-1` | -1 不启用电流控制；0 旧算法；1 标准 PID，配合 `control_p/i/d` |
 | `ipellet` | integer | `0` | 1 = include a gaussian pellet source；选择密度源分布；正值为持续源，负值用于初始扰动；双位数分布按 `Lor_vol` 数值归一化 |
 | `irestart_pellet` | integer | `0` | 1 = read some pellet restart parameters from C1input；restart 时仍从 C1input 覆盖部分 pellet 参数，如 pellet_rate、pellet_var_tor、pellet_var、cloud_pel、pellet_mix、cauchy_fraction |
@@ -569,8 +569,8 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 | `pellet_velz` | real | `0.` | Initial vertical velocity of the pellet |
 | `ipellet_abl` | integer | `0` | 1 = include an ablation model；选择 pellet ablation 模型；1/2 lithium，3 neon，43 carbon/Sergeev06。`ipellet_z=0` 时会由模型推断默认 Z |
 | `ipellet_fixed_dep` | integer | `0` | 1 = use fixed input pellet_var when ipellet_abl=1 |
-| `r_p` | real | `1.e-3` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `cloud_pel` | real | `1.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `r_p` | real | `1.e-3` | pellet 实体半径，供 ablation 模型计算剩余粒子数和烧蚀率；不是沉积 Gaussian 宽度 |
+| `cloud_pel` | real | `1.` | pellet ablation 云团/沉积宽度的乘性系数，控制烧蚀物质相对 pellet 的扩散尺度 |
 | `pellet_mix` | real | `0.` | Molar fraction of deuterium in pellet |
 | `temin_abl` | real | `0.` | Min. Temp. at which ablation turns on |
 | `cauchy_fraction` | real | `0.` | For ipellet=14, fraction of distribution that is Cauchy, vs von Mises |
@@ -601,12 +601,12 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 | `ghs_rate` | real | `0.` | Amplitude of gaussian heat source |
 | `ghs_var` | real | `1.` | Variance of gaussian heat source |
 | `ghs_var_tor` | real | `0.` | Toroidal variance of gaussian heat source |
-| `ionization` | integer | `0` | 源项/汇项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `ionization` | integer | `0` | 1 在主离子密度方程加入温度门控的电离粒子源，并可用 `coolrate` 从热方程扣除能量 |
 | `ionization_rate` | real | `0.` | 源项/汇项相关速率/源强参数，表示注入、损失、冷却、控制或演化的强度 |
 | `coolrate` | real | `0.` | 源项/汇项相关速率/源强参数，表示注入、损失、冷却、控制或演化的强度 |
-| `ionization_temp` | real | `0.01` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `ionization_depth` | real | `0.01` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `isink` | integer | `0` | 源项/汇项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `ionization_temp` | real | `0.01` | 电离源中的特征温度，同时出现在 Arrhenius 型 `exp(-Tion/T)` 因子和高温衰减门控中 |
+| `ionization_depth` | real | `0.01` | 温度高于 `ionization_temp` 后电离源指数衰减的温度宽度 |
+| `isink` | integer | `0` | 启用局部 Gaussian 粒子汇的数量：1 使用 sink1，2 同时使用 sink1 和 sink2 |
 | `sink1_x` | real | `0.` | 源项/汇项相关几何位置参数，用于给定 R/Z/phi 等空间坐标 |
 | `sink1_z` | real | `0.` | 源项/汇项相关几何位置参数，用于给定 R/Z/phi 等空间坐标 |
 | `sink1_rate` | real | `0.` | 源项/汇项相关速率/源强参数，表示注入、损失、冷却、控制或演化的强度 |
@@ -615,15 +615,15 @@ SCOREC/SPR 网格自适应控制；部分参数仅在启用对应库/流程时�
 | `sink2_z` | real | `0.` | 源项/汇项相关几何位置参数，用于给定 R/Z/phi 等空间坐标 |
 | `sink2_rate` | real | `0.` | 源项/汇项相关速率/源强参数，表示注入、损失、冷却、控制或演化的强度 |
 | `sink2_var` | real | `1.` | 源项/汇项相关宽度/方差参数，用于定义剖面过渡层、Gaussian 分布或数值平滑尺度 |
-| `iarc_source` | integer | `0` | 源项/汇项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `arc_source_alpha` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `arc_source_eta` | real | `0.01` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `idenfloor` | integer | `0` | 源项/汇项相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `alphadenfloor` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `n_target` | real | `1.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `n_control_p` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `n_control_i` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `n_control_d` | real | `0.` | 源项/汇项相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `iarc_source` | integer | `0` | 1 启用与壁面法向电流和 wall-distance 相关的 arc 粒子源 |
+| `arc_source_alpha` | real | `0.` | arc 粒子源的总幅值系数，乘正向法向电流 |
+| `arc_source_eta` | real | `0.01` | arc 源随 wall-distance 的尺度长度，形状含 `(w/eta)*exp(-w/eta)` |
+| `idenfloor` | integer | `0` | 1 在外侧非 plasma magnetic region 加入恢复型密度源，把密度拉向 `den_edge`；它不是逐节点硬截断 |
+| `alphadenfloor` | real | `0.` | 密度恢复源 `alphadenfloor*(den_edge-n)` 的速率系数 |
+| `n_target` | real | `1.` | pellet 密度反馈所追踪的目标全局粒子数/密度诊断量 |
+| `n_control_p` | real | `0.` | `n_control_type=1` pellet-rate PID 的比例增益 |
+| `n_control_i` | real | `0.` | pellet-rate PID 的积分增益 |
+| `n_control_d` | real | `0.` | pellet-rate PID 的微分增益 |
 | `n_control_type` | integer | `-1` | -1 不启用密度控制；0 旧算法；1 标准 PID，配合 `n_control_p/i/d` |
 
 ## PRAD 简单辐射模型 / PRAD Options
@@ -720,7 +720,7 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `iprint` | integer | `0` | 输出与重启相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `iprint` | integer | `0` | 终端日志详细度：0 最少；1 打印主要步骤/迭代；2 及以上打印更多矩阵、系数和输出阶段信息。它不控制 HDF5 字段内容 |
 | `ntimepr` | integer | `1` | Number of time steps per field output |
 | `ntimers` | integer | `0` | Number of time steps per restart output；0 表示校验后取 `ntimepr`；否则为 restart 输出周期；`ntimers<=0` 时程序把它设为 `ntimepr` |
 | `ifout` | integer | `-1` | -1 表示校验后按编译维度默认：3D 输出 f，2D 不输出；也可显式 0/1；`ifout=-1` 在 `validate_input` 中改为 `i3d`：3D 默认输出 f 场，2D 默认不输出 |
@@ -737,7 +737,7 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 | `itemp_plot` | integer | `0` | 1: Output additional temperature plots |
 | `ibdgp` | integer | `0` | ne.0: bdgp plot contains only partial results |
 | `idouble_out` | integer | `0` | 1: Use double-precision floating points in output |
-| `irestart_slice` | integer | `-1` | Field output slice from which to restart；-1 使用最后一个 time slice；否则从指定 `time_nnn.h5` restart |
+| `irestart_slice` | integer | `-1` | Field output slice from which to restart；-1 从 HDF5 中最后一个已保存时间片重启；非负值选择指定时间片索引，并在同一输出文件中删除其后的时间片组后续写 |
 | `iveldif` | integer | `0` | ne.0: veldif plot contains only partial results |
 | `write_ts_on_job_timeout` | integer | `0` | 1: Write time slice and stop code before job hits timeout or is preempted |
 
@@ -748,8 +748,8 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 | `gam` | real | `5./3. (约 1.6667)` | Ratio of specific heats |
 | `db` | real | `-1.` | Collisionless ion skin depth (overrides db_fac)；默认 -1，表示按物理归一化自动计算 ion skin depth 并乘以 `db_fac`；若显式给非负值则覆盖；`db<0` 时程序按 `b0_norm/n0_norm/l0_norm/ion_mass` 计算物理 ion skin depth，再乘 `db_fac`；显式给非负 `db` 会覆盖该自动计算 |
 | `db_fac` | real | `0.` | Factor multiplying physical value of ion skin depth；`db<0` 时乘在物理 ion skin depth 上；默认 0 等价于关闭 two-fluid skin-depth 贡献 |
-| `mass_ratio` | real | `0.` | 杂项物理参数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
-| `lambdae` | real | `0.` | 杂项物理参数相关参数，用于控制该组对应的物理模型、输入输出或数值算法；通常只在对应功能启用时显式设置 |
+| `mass_ratio` | real | `0.` | 已注册但当前活动计算未读取的兼容参数；电子/离子质量比由内部常数和 `ion_mass` 形成，用户不应依赖此值 |
+| `lambdae` | real | `0.` | 已注册但当前活动计算未读取的兼容参数；不会单独打开电子惯性或改变广义 Ohm 定律 |
 | `z_ion` | real | `1.` | Z effective |
 | `ion_mass` | real | `1.` | Ion mass (in units of m_p) |
 | `lambda_coulomb` | real | `17.` | Coulomb logarithm |
@@ -763,8 +763,8 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `ibform` | integer | `-1` | 已废弃兼容参数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
-| `igs_method` | integer | `-1` | 已废弃兼容参数相关整数开关或模式选择参数；通常 0 表示关闭或默认路径，非零值选择相应物理模型、输入输出或数值算法 |
+| `ibform` | integer | `-1` | 旧磁场形式开关的占位参数，读入后写入 dummy 变量；当前方程形式不会随它改变 |
+| `igs_method` | integer | `-1` | 旧 GS 算法选择的占位参数，当前 GS 求解器不读取其值 |
 | `iwrite_restart` | integer | `0` | 1: Write restart files |
 | `zeff` | real | `0.` | zeff is deprecated. Use z_ion instead. |
 | `ivform` | integer | `1` | ivform is deprecated. Only ivform=1 is now implemented. |
