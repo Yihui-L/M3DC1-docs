@@ -125,7 +125,7 @@ LOGICAL_GROUP_ORDER = [
 
 
 MANUAL_USAGE = {
-    "iread_eqdsk": "托卡马克：轴对称 g-file 平衡入口。1 直接投影 `geqdsk`；2 读入 gfile 后在 GS 中改用默认压力/F；3 不使用 `psirz`，只取磁轴、电流和剖面重新求解 GS。仿星器：必须为 0，否则会在 `itaylor=40/41` 之前抢占初始化入口。",
+    "iread_eqdsk": "托卡马克：轴对称 g-file 平衡入口。1 直接投影 `geqdsk`；2 读入 gfile 后在 GS 中改用默认压力/F；3 不使用 `psirz`，只取磁轴、电流和剖面重新求解 GS。仿星器：必须为 0；非零值的执行优先级高于 `itaylor=40/41`。",
     "iread_dskbal": "托卡马克：旧 BAL 平衡入口。1 使用文件 psi、F、FF′、ne 并由 ne(Te+Ti) 计算压力；2 压力/F 改用默认剖面；两者都调用 GS。仿星器：必须为 0，否则屏蔽 VMEC/外场初始化。",
     "iread_jsolver": "托卡马克：旧 Jsolver 平衡入口，读取 `fixed`；`igs>0` 时 1 使用文件 p/F、2 改用默认 p/F，`igs=0` 时直接投影。仿星器：必须为 0，否则屏蔽 VMEC/外场初始化。",
     "iread_omega": "托卡马克：仅 GS 且 `irot!=0` 时读取，模式 1/2/3/4/5/20 分别对应 `profile_omega`、`dtrot.xy`、`profile_vphi`、rho 文件、带表头文件和 `iterdb`，之后乘 `vscale`。仿星器：VMEC 与 `itaylor=41` 路径均不读取。",
@@ -178,9 +178,9 @@ MANUAL_USAGE = {
     "zone_type": "托卡马克：`imulti_region=1` 时按 zone 编号标记 1=plasma、2=conductor、3=vacuum。仿星器：取值相同，但必须由用户确认逻辑 zone 经 VMEC/bloat 映射后确实落在相应物理区域；程序只检查标签是否存在，不检查与平衡的一致性。",
     "ntor": "2D/complex 线性模拟的环向模数；RMP 等也会使用。",
     "mpol": "若干测试/外场/REKC 设置中使用的极向模数。",
-    "jadv": "1 使用环向电流密度方程代替极向磁通方程；官方文档旧表写 0，但当前源码默认是 1。",
+    "jadv": "1 使用环向电流密度方程代替极向磁通方程；默认值为 1。",
     "imp_mod": "源码当前默认 1。0: standard/theta implicit；1: Caramana split-step 形式。",
-    "pskip": "源码当前默认 0；官方文档写 1。控制预条件器重算/复用相关周期。",
+    "pskip": "控制预条件器重算与复用周期；默认值为 0。",
     "ntimers": "0 表示校验后取 `ntimepr`；否则为 restart 输出周期。",
     "ifout": "-1 表示校验后按编译维度默认：3D 输出 f，2D 不输出；也可显式 0/1。",
     "ifbound": "-1 表示校验后按编译版本设置：complex 为 2，real 为 1。",
@@ -289,7 +289,7 @@ MANUAL_USAGE.update({
     "igs_pp_ffp_rescale": "托卡马克：1 仅在由 gfile 的 p、p'、F、FF' 建立约束剖面时，把 p' 与 FF' 的积分分别重标度到给定 p 与 F；同时改变 `batemanscale` 的应用顺序。0 保留文件导数。仿星器：不使用。",
     "igs_extend_p": "托卡马克：非零时，若 ne 或 Te 剖面延伸到压力剖面末端之外，就用电子压力加保持末端 Ti 不变的离子压力延伸总压力，并重新计算 p'。0 不延伸。仿星器：不使用。",
     "igs_extend_diamag": "托卡马克：读取电子或 E×B 转动并换算离子转动时，0 在归一化磁通大于等于 1 处停止加入抗磁修正；非零则继续到转动样条末端。仿星器：不使用。",
-    "igs_start_xpoint_search": "托卡马克：前 N 次 GS 迭代只在给定 `xnull/znull` 位置评价磁通，从第 N 次起才在其附近搜索真正鞍点；0 表示初始化 LCFS 时即搜索。仿星器：不使用。",
+    "igs_start_xpoint_search": "托卡马克：前 N 次 GS 迭代只在给定 `xnull/znull` 位置评价磁通，从第 N 次起在其附近搜索鞍点；0 表示初始化 LCFS 时即搜索。仿星器：不使用。",
     "igs_forcefree_lcfs": "托卡马克：控制 LCFS 外剖面处理。0 允许剖面按样条继续；1 在非 plasma magnetic region 令 p'、FF'、转动均为 0；2 令 p'、FF' 为 0，并把外侧转动保持为 LCFS 值。-1 会在校验时自动选 0 或 2。仿星器：不使用。",
     "nv1equ": "托卡马克：1 使非约束解析 GS 路径把 `gamma2/gamma3/gamma4` 全部置 0，跳过 q0、dJ/dpsi 和总电流约束；0 正常计算这些约束。名称中的 numvar 说明已不能完整代表当前行为。仿星器：不使用。",
     "igs_feedfac": "托卡马克：只按是否等于 1 作为 generic `idevice=0` 双 limiter 外场反馈开关；1 在第二轮以后根据两 limiter 的磁通差修正外边界场，其他值关闭。它不是连续比例系数。仿星器：不使用。",
@@ -1673,9 +1673,9 @@ def write_simplified_markdown(params: list[Param], path: Path) -> None:
     group_order.extend(g for g in by_group if g not in group_order)
 
     lines: list[str] = []
-    lines.append("# M3D-C1 `C1input` 参数简表")
+    lines.append("# M3D-C1 `C1input` 参数使用手册")
     lines.append("")
-    lines.append("本简表面向写算例输入文件的用户，只保留用户需要提供/理解的四项：参数名、数据类型、默认值和含义。所有条目均为主程序 `C1input` 可读参数，属于 `&inputnl`；分组仅用于阅读。")
+    lines.append("本文是面向 M3D-C1 算例配置的独立发布版本，逐项给出参数名、数据类型、默认值和含义。所有条目均为主程序 `C1input` 可读参数，属于 `&inputnl`；逻辑分组用于组织阅读顺序。")
     lines.append("")
     lines.append(f"参数总数：{len(params)}。默认值以当前程序注册值为准。")
     lines.append("")
@@ -1741,7 +1741,7 @@ def remaining_module_supplement(group: str) -> str:
     if group == "Transport Coefficients":
         return r"""
 <div class="guide" data-guide>
-<div class="guide-title"><div><h3>Transport：把平衡场变成每个积分点上的耗散系数</h3><p>Model Options 先决定哪些方程存在，本组再为动量、Ohm、温度和密度方程构造粘性、电阻率、热导与粒子扩散。函数型参数只改变 plasma zone；conductor 和 vacuum 的电阻率由 Resistive Wall 组接管。</p></div><span class="guide-kicker">CASE 耗散层</span></div>
+<div class="guide-title"><div><h3>Transport：构造各积分点上的耗散系数</h3><p>Model Options 决定参与演化的方程，本组为动量、Ohm、温度和密度方程构造粘性、电阻率、热导率与粒子扩散率。函数型参数仅修改 plasma zone；conductor 和 vacuum 的电阻率由 Resistive Wall 组控制。</p></div><span class="guide-kicker">CASE 耗散层</span></div>
 <div class="formula">\[\mathbf q_s=-\kappa_s\nabla T_s-\kappa_{\parallel s}\frac{\mathbf B\mathbf B}{B^2}\!\cdot\nabla T_s,\qquad \partial_t n_i\supset\nabla\!\cdot(D\nabla n_i).\]</div>
 <div class="formula">\[\eta_{\mathrm{Sp}}=\eta_{fac}\!\left[\eta_r+\eta_0(T_e-T_{off})^{-3/2}\right],\quad \eta_{min}\le\eta\le\eta_{max}.\]</div>
 <div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>系数</th><th>模式选择</th><th>用户设置逻辑</th></tr></thead><tbody>
@@ -1753,7 +1753,7 @@ def remaining_module_supplement(group: str) -> str:
 </tbody></table></div>
 <section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>磁通剖面模式按 \(\psi_N\) 取样</h4></div><p>模式 1/2 和 profile 10/11 依赖磁轴、LCFS 与 private-flux 判定；用户应保证当前平衡能稳定定义这些量。真空和壁区不会沿用 plasma 的 <code>iresfunc</code>。</p></section>
 <section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>优先使用常数、物理场或 USEST 逻辑 rho 模型</h4></div><p>通用三维弱式使用相同系数，但普通 \(\psi_N\) profile 分支面向轴对称磁区。USEST 编译下的模式 21 明确使用映射前逻辑 \(\rho\)，要求 <code>igeometry=1</code>；它仍不会自动识别真实 LCFS/壁。</p></section>
-<div class="callout"><strong>编译路径差异：</strong><code>kappag</code> 和 <code>kappax</code> 在普通 CPU 弱式中有活动实现，但 GPU 对应代码被注释；<code>kappax</code> 还被 USEPARTICLES 路径排除。<code>kappag</code> 的当前阈值掩码实际比较 \(p^2\) 与 <code>gradp_crit^2</code>，不是注释所称的 \(|\nabla p|^2\)。</div>
+<div class="callout"><strong>编译路径限制：</strong><code>kappag</code> 和 <code>kappax</code> 仅在普通 CPU 弱式中启用；GPU 路径不启用这两项，USEPARTICLES 路径也不启用 <code>kappax</code>。<code>kappag</code> 的阈值掩码比较 \(p^2\) 与 <code>gradp_crit^2</code>。</div>
 </div>"""
 
     if group == "Hyper Diffusivity":
@@ -1769,7 +1769,7 @@ def remaining_module_supplement(group: str) -> str:
 </tbody></table></div>
 <section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>同一系数可用于 2D、complex 与真实 3D</h4></div><p>complex/谐波加权模式需令 <code>ibh_harmonics</code> 覆盖 <code>ihypeta</code> 所需模数；它不会只在 LCFS 内自动生效。</p></section>
 <section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>作用在映射后的物理三维场</h4></div><p>公式相同，几何导数由 VMEC 映射后的 metric 给出。不要把 <code>deex</code> 当成 bloat 或逻辑 rho 尺度。</p></section>
-<div class="callout"><strong>文档旧项：</strong>官方表中的 <code>ihypamu</code> 未在当前输入注册；速度 hyper 不会由该名字缩放。当前 <code>ihypdx</code> 默认是 0。</div>
+<div class="callout"><strong>参数约束：</strong>速度 hyper 由 <code>hyperc</code> 和 <code>hyperv</code> 控制；<code>ihypdx</code> 的默认值为 0。</div>
 </div>"""
 
     if group == "Boundary Conditions":
@@ -1803,7 +1803,7 @@ def remaining_module_supplement(group: str) -> str:
 <div class="formula">\[\Theta=\tan^{-1}\!\frac{Z-Z_0}{R-R_0},\quad \alpha=n(\phi-\phi_0)\frac{2\pi}{N_{period}}-m(\Theta-\Theta_0),\quad w=e^{(\cos\alpha-1)/\sigma^2}.\]</div>
 <div class="formula">\[\eta=10^{(1-w)\log_{10}\eta_{base}+w\log_{10}\eta_{REKC}}.\]</div>
 <section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>典型用途是 plasma-vacuum-finite-thickness-wall 网格</h4></div><p>物理 R-Z mesh 可直接把第一壁外的有限厚度单元标为 conductor，再按 zone、region、break 设置材料。自由边界演化来自等离子体与外部磁场/导体的耦合，不来自把 plasma zone 单纯画大。</p></section>
-<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>只有几何上真实存在的映射 zone 才能充当壁</h4></div><p>固定边界 VMEC 常把域截断在最外磁面，因此没有 conductor zone 可供本组使用。外扩逻辑 multi-region mesh 可以使用同一电阻壁方程，但必须验证映射后的 zone 真正落在真空/壁位置。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>导体壁必须对应映射后的实际几何区域</h4></div><p>固定边界 VMEC 通常将计算域截断在最外磁面，因此没有 conductor zone 可供本组使用。外扩逻辑 multi-region mesh 可以使用同一电阻壁方程，但必须确认映射后的 zone 位于预定的真空或导体壁区域。</p></section>
 </div>"""
 
     if group == "Time Step":
@@ -1821,7 +1821,7 @@ def remaining_module_supplement(group: str) -> str:
 </tbody></table></div>
 <section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>2D/complex 与真实 3D 的代价控制不同</h4></div><p>复杂线性响应可用 <code>itime_independent=1</code> 与 <code>frequency</code>；真实 3D 才使用全局最大 KSP 迭代数触发重复/调步。</p></section>
 <section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>通常是完整三维 split/unsplit 推进</h4></div><p>时间算法相同，但强三维几何常使矩阵与预条件器复用更敏感。VMEC 固定/自由边界的选择在初始化完成，此组不会改变计算域边界类型。</p></section>
-<div class="callout"><strong>实际门控：</strong><code>dtmin/dtmax/ksp_*</code> 不会仅因被设置就自动生效；当前变量步长入口由 <code>dtkecrit&gt;0</code> 打开。<code>pskip</code> 当前默认 0，不是官方旧表的 1。</div>
+<div class="callout"><strong>生效条件：</strong><code>dtmin/dtmax/ksp_*</code> 不会仅因被设置而自动生效；变量步长控制由 <code>dtkecrit&gt;0</code> 启用。<code>pskip</code> 的默认值为 0。</div>
 </div>"""
 
     if group == "Numerical Options":
@@ -1860,7 +1860,7 @@ def remaining_module_supplement(group: str) -> str:
         return r"""
 <div class="guide" data-guide>
 <div class="guide-title"><div><h3>Trilinos Options：只配置 Aztec/Trilinos 编译路径</h3><p>这些字符串不会配置现代 PETSc 路径。先从编译和启动日志确认正在使用 Trilinos/Aztec，再设置 Krylov、预条件器、子域求解器及 ILU 参数。</p></div><span class="guide-kicker">条件后端</span></div>
-<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>层次</th><th>合法源码字符串/参数</th><th>作用</th></tr></thead><tbody>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>层次</th><th>有效字符串或参数</th><th>作用</th></tr></thead><tbody>
 <tr><td>Krylov</td><td><code>cg</code>, <code>cg_condnum</code>, <code>gmres</code>, <code>gmres_condnum</code>, <code>cgs</code>, <code>tfqmr</code></td><td><code>krylov_solver</code> 选择外迭代算法。</td></tr>
 <tr><td>预条件器</td><td><code>none</code>, <code>Jacobi</code>, <code>Neumann</code>, <code>ls</code>, <code>sym_GS</code>, <code>dom_decomp</code></td><td><code>preconditioner</code> 字符串区分大小写。</td></tr>
 <tr><td>子域</td><td><code>ilu</code>, <code>lu</code>, <code>ilut</code>, <code>rilu</code>, <code>bilu</code>, <code>icc</code></td><td><code>sub_dom_solver</code> 与 <code>subdomain_overlap/graph_fill</code> 控制 domain decomposition。</td></tr>
@@ -2072,7 +2072,7 @@ def simplified_html_supplement(group: str) -> str:
 <table class="guide-table">
 <thead><tr><th>目标</th><th>推荐组合</th><th>用户需要确认</th></tr></thead>
 <tbody>
-<tr><td>固定边界 VMEC</td><td><code>itaylor=40</code>, <code>igeometry=1</code>, <code>iread_vmec=1</code>, <code>bloat_factor=0</code>, <code>bloat_distance=0</code></td><td>逻辑外边界与 wout 最外磁面对应；通常使用单一 plasma zone。源码只显式检查 <code>bloat_factor=0</code>，但物理上的固定边界也应关闭距离外扩。</td></tr>
+<tr><td>固定边界 VMEC</td><td><code>itaylor=40</code>, <code>igeometry=1</code>, <code>iread_vmec=1</code>, <code>bloat_factor=0</code>, <code>bloat_distance=0</code></td><td>逻辑外边界与 wout 最外磁面对应；通常使用单一 plasma zone。程序显式要求 <code>bloat_factor=0</code>，同时应关闭距离外扩。</td></tr>
 <tr><td>外扩计算域</td><td><code>igeometry=1</code>, <code>iread_vmec=1</code>，并选择一种 <code>bloat_*</code></td><td>外扩只改变几何映射；真空、壁和材料区域仍须在 mesh/model 与 zone 参数中显式设计。</td></tr>
 <tr><td>周期扇区</td><td><code>ifull_torus=0</code>, 合理的 <code>nperiods</code> 和 <code>nplanes</code></td><td>需满足 \\(n_{\\mathrm{fp}}\\bmod n_{\\mathrm{periods}}=0\\)，且所有自定义 <code>plane_positions</code> 均位于当前扇区角度范围内。</td></tr>
 <tr><td>几何阶数调节</td><td><code>nzer_manual</code> 优先；否则使用非负 <code>nzer_factor</code></td><td>只在 VMEC 到 Zernike 几何表示的精度测试中调整；默认值通常更稳妥。</td></tr>
@@ -2095,7 +2095,7 @@ def simplified_html_supplement(group: str) -> str:
 <span class="guide-kicker">CASE 设置链条</span>
 </div>
 
-<div class="callout"><strong>唯一平衡入口：</strong>初始化分支的源码优先级为 <code>iread_eqdsk</code> → <code>iread_dskbal</code> → <code>iread_jsolver</code> → <code>itaylor</code>。前一个非零值会直接屏蔽后面的入口而不报冲突。因此一个 case 只能有一个平衡入口；仿星器使用 <code>itaylor=40/41</code> 时，三个托卡马克平衡读取参数必须全部为 0。</div>
+<div class="callout"><strong>唯一平衡入口：</strong>初始化分支的优先级为 <code>iread_eqdsk</code> → <code>iread_dskbal</code> → <code>iread_jsolver</code> → <code>itaylor</code>。排序靠前的非零参数会使后续入口失效，且程序不报告参数冲突。因此，一个 case 只能配置一个平衡入口；仿星器使用 <code>itaylor=40/41</code> 时，三个托卡马克平衡读取参数必须全部为 0。</div>
 
 <section class="device-band tokamak-band">
 <div class="device-heading"><span>托卡马克</span><h4>先决定直接投影 gfile，还是重新求解 Grad-Shafranov 方程</h4></div>
@@ -2158,10 +2158,10 @@ def simplified_html_supplement(group: str) -> str:
 <section class="device-band stellarator-band">
 <div class="device-heading"><span>仿星器</span><h4>固定边界读取 VMEC 结果；外场路径读取三维磁场数据</h4></div>
 <ol class="case-steps">
-<li><strong>先清空托卡马克平衡入口。</strong><code>iread_eqdsk=iread_dskbal=iread_jsolver=0</code>，否则源码会先进入轴对称分支，<code>itaylor=40/41</code> 不会执行。</li>
+<li><strong>首先关闭托卡马克平衡入口。</strong><code>iread_eqdsk=iread_dskbal=iread_jsolver=0</code>；任一参数非零时，程序优先进入轴对称分支，不执行 <code>itaylor=40/41</code>。</li>
 <li><strong>选择固定边界 VMEC 或外场/自由边界路径。</strong><code>itaylor=40</code> 直接读取 wout 的既有平衡结果，M3D-C1 不在此路径求解 VMEC 平衡；<code>itaylor=41</code> 使用外部/总磁场文件初始化三维场，相关文件与类型参数位于 Equilibrium 组。</li>
 <li><strong>先完成逻辑 mesh 与物理几何映射。</strong>通常用 <code>igeometry=1, iread_vmec=1</code>。固定边界关闭 bloat；外场路径可按计算域需要外扩。Input 参数不负责识别 LCFS、壁或真空 zone。</li>
-<li><strong>再选择该路径真正支持的剖面。</strong>固定 VMEC 使用 21 模式覆盖 p/ne/Te；外场路径不读取 21 模式，可用密度 22/23 在初始场完成后重写密度。旋转、F 和普通 GS 剖面均不进入这些仿星器分支。</li>
+<li><strong>随后选择该路径支持的剖面。</strong>固定 VMEC 使用 21 模式覆盖 p/ne/Te；外场路径不读取 21 模式，可用密度 22/23 在初始场完成后重写密度。旋转、F 和普通 GS 剖面均不进入这些仿星器分支。</li>
 <li><strong>最后配置源项。</strong>热源和粒子源文件的横坐标解释为逻辑 \\(s=x_l^2+z_l^2\\)，不是物理 R、Z 距离；因此源剖面与 VMEC/逻辑 mesh 的径向定义必须一致。</li>
 </ol>
 
@@ -2179,9 +2179,9 @@ def simplified_html_supplement(group: str) -> str:
 <table class="guide-table">
 <thead><tr><th>Input 参数</th><th>固定边界 VMEC</th><th>外场/自由边界</th><th>使用注意</th></tr></thead>
 <tbody>
-<tr><td><code>iread_eqdsk</code>, <code>iread_dskbal</code>, <code>iread_jsolver</code></td><td colspan="2">必须为 0。</td><td>任一非零都会抢占 <code>itaylor=40/41</code>。</td></tr>
+<tr><td><code>iread_eqdsk</code>, <code>iread_dskbal</code>, <code>iread_jsolver</code></td><td colspan="2">必须为 0。</td><td>任一非零值均优先于 <code>itaylor=40/41</code>。</td></tr>
 <tr><td><code>iread_p</code></td><td><code>21</code> 读取 <code>p_profile(s,p)</code>，替换 wout <code>presf</code>。</td><td>不读取。</td><td>只改压力场，不重新计算 VMEC 几何或磁场。</td></tr>
-<tr><td><code>iread_ne</code></td><td><code>21</code> 读取 <code>n_profile(s,ne)</code>。</td><td><code>22</code> 读 <code>n_profile(s)</code>；<code>23</code> 读 <code>n_profile_vs_p</code>。</td><td>22/23 在平衡与 NEO 应用之后重写密度；<code>den_edge&gt;0</code> 与非零模式冲突。</td></tr>
+<tr><td><code>iread_ne</code></td><td><code>21</code> 读取 <code>n_profile(s,ne)</code>。</td><td><code>22</code> 读 <code>n_profile(s)</code>；<code>23</code> 读 <code>n_profile_vs_p</code>。</td><td>22/23 在平衡与 NEO 应用之后重写密度；不得同时设置 <code>den_edge&gt;0</code>。</td></tr>
 <tr><td><code>iread_te</code></td><td><code>21</code> 读取 <code>te_profile(s,Te)</code>。</td><td>不读取。</td><td><code>tedge&gt;0</code> 与非零模式冲突。</td></tr>
 <tr><td><code>iread_f</code>, <code>iread_j</code></td><td colspan="2">不读取。</td><td>磁场分别来自 wout 或外场数据；<code>iread_j</code> 只属于特殊圆柱测试。</td></tr>
 <tr><td><code>iread_omega</code>, <code>iread_omega_e</code>, <code>iread_omega_ExB</code></td><td colspan="2">不读取。</td><td>这些实现位于托卡马克 GS 剖面路径。</td></tr>
@@ -2192,7 +2192,7 @@ def simplified_html_supplement(group: str) -> str:
 </table>
 </div>
 
-<div class="callout"><strong>源码行为提示：</strong>仿星器/圆柱的 Te-only 单压力分支当前实际按 \\(n=T_e/p\\) 计算密度；固定 VMEC 同时设置 <code>iread_ne=21</code> 与 <code>iread_te=21</code> 时，温度输出变量存在未赋值路径。这两种组合应避免，除非先核对并修正所用源码版本。</div>
+<div class="callout"><strong>适用限制：</strong>仿星器或圆柱的 Te-only 单压力分支按 \\(n=T_e/p\\) 计算密度。固定边界 VMEC 不应同时设置 <code>iread_ne=21</code> 与 <code>iread_te=21</code>，因为该组合存在温度输出变量未赋值的执行路径。</div>
 </section>
 
 <div class="callout"><strong>共同的文件覆盖原则：</strong>平衡入口决定初始几何和主场；剖面读取只在所属初始化分支中生效；NEO 与 22/23 密度属于平衡后的重写；热源和粒子源属于时间推进中的附加项。参数非零并不保证文件一定会被读到，必须同时满足装置路径和方程开关。</div>
@@ -2286,7 +2286,7 @@ def simplified_html_supplement(group: str) -> str:
 </div>
 <div class="guide-table-wrap">
 <table class="guide-table">
-<thead><tr><th>参数</th><th>源码行为</th><th>用户需要把握的覆盖关系</th></tr></thead>
+<thead><tr><th>参数</th><th>程序行为</th><th>生效与覆盖关系</th></tr></thead>
 <tbody>
 <tr><td><code>ibootstrap=0/1/2/3</code></td><td>0 关闭；1 用 \(\psi\) 作系数坐标；2 用 \(T_e\)；3 用 \(1-T_e/T_{e,max}\)，并从专用文件读取/计算更多几何系数。</td><td>不会覆盖初始 J；它选择演化阶段 bootstrap 系数的坐标和计算路径。</td></tr>
 <tr><td><code>ibootstrap_model</code></td><td>1/3 为 Sauter-Angioni，2/4 为 Redl，3/4 是简化方程实现，5 为 constant-Lambda 分支。</td><td>必须与 <code>ibootstrap</code> 及系数文件配套；<code>ibootstrap=3</code> 的模型 1/3 当前会停止运行。</td></tr>
@@ -2311,10 +2311,10 @@ def simplified_html_supplement(group: str) -> str:
 <section class="device-band stellarator-band">
 <div class="device-heading"><span>仿星器</span><h4>区分固定边界 VMEC 投影与三维 total/external-field 初始化</h4></div>
 <ol class="case-steps">
-<li><strong>先由 Input 排除托卡马克入口。</strong><code>iread_eqdsk=iread_dskbal=iread_jsolver=0</code>，否则初始化会在到达 <code>itaylor=40/41</code> 之前被抢占。</li>
+<li><strong>首先由 Input 关闭托卡马克入口。</strong><code>iread_eqdsk=iread_dskbal=iread_jsolver=0</code>；否则程序会优先执行轴对称初始化，不进入 <code>itaylor=40/41</code>。</li>
 <li><strong>由 Mesh 建立逻辑域并映射。</strong>通常 <code>igeometry=1,iread_vmec=1</code>；逻辑 \\((\\rho,\\theta,\\phi)\\) mesh 先映射到物理 R-Z-phi，zone 与 boundary 标签随映射带入，但不会由 wout 或场文件自动重分类。</li>
-<li><strong>选择固定边界。</strong><code>itaylor=40</code> 读取 wout 的几何、磁场和压力并投影；M3D-C1 不求解 VMEC。源码要求 <code>bloat_factor=0</code>，物理上还应保持 <code>bloat_distance=0</code>，使外边界对应 VMEC 最外磁面。</li>
-<li><strong>或选择三维外场/所谓自由边界入口。</strong><code>itaylor=41</code> 要求 <code>iread_ext_field!=0</code>，从 total field 或 total/external 组合建立磁场。该路径没有求解 VMEC 自由边界方程，也不会根据第一壁位置重新求 LCFS。</li>
+<li><strong>选择固定边界。</strong><code>itaylor=40</code> 读取 wout 的几何、磁场和压力并进行投影；M3D-C1 不求解 VMEC。此模式要求 <code>bloat_factor=0</code>，同时应设置 <code>bloat_distance=0</code>，使外边界对应 VMEC 最外磁面。</li>
+<li><strong>或选择三维外场初始化。</strong><code>itaylor=41</code> 要求 <code>iread_ext_field!=0</code>，从 total field 或 total/external 组合建立磁场。该路径不求解 VMEC 自由边界方程，也不根据第一壁位置重新求解 LCFS。</li>
 <li><strong>检查计算域物理意义。</strong>bloat 只扩展几何映射；扩展区是 plasma、vacuum 还是 conductor 仍完全由 <code>zone_type</code> 决定。程序允许但不会识别“导体 zone 实际落在 wout plasma 内”等物理冲突。</li>
 <li><strong>再进入演化模型。</strong>RMP/外场分解、bootstrap、transport 和壁电阻依次作用；这些模型不会回头改变 VMEC 映射或重求平衡边界。</li>
 </ol>
@@ -2333,15 +2333,15 @@ def simplified_html_supplement(group: str) -> str:
 <div class="guide-grid compact">
 <div class="guide-block">
 <h4>plasma 与外部区</h4>
-<p><code>itaylor=40</code> 的 wout 平衡定义到最外磁面。若通过 bloat 或更复杂逻辑 mesh 建立外区，源码不会从 wout 判断该区是真空、壁还是等离子体；必须在 Mesh 阶段设计 zone，并在 Transport/Boundary 模块赋材料参数。</p>
+<p><code>itaylor=40</code> 的 wout 平衡定义到最外磁面。若通过 bloat 或多区域逻辑 mesh 建立外区，程序不会依据 wout 判断该区属于真空、导体壁或等离子体；必须在 Mesh 阶段定义 zone，并在 Transport/Boundary 模块设置材料参数。</p>
 </div>
 <div class="guide-block">
-<h4>所谓 free-boundary 的准确含义</h4>
-<p>源码把 <code>itaylor=41</code> 注释为 free-boundary stellarator，但实现是读取三维 total/external field 并初始化 MHD 场。它允许 LCFS 在后续 MHD 演化中变化，却不执行 VMEC 那种在 mgrid 背景场中求 LCFS 的平衡迭代。</p>
+<h4><code>itaylor=41</code> 的自由边界含义</h4>
+<p><code>itaylor=41</code> 读取三维 total/external field 并初始化 MHD 场。该模式允许 LCFS 在后续 MHD 演化中变化，但不执行基于 mgrid 背景场求解 LCFS 的 VMEC 自由边界平衡迭代。</p>
 </div>
 </div>
 
-<div class="callout"><strong>固定 VMEC 的源码边界检查：</strong>初始化只显式检查 <code>bloat_factor==0</code>。<code>bloat_distance</code> 可在 VMEC 几何读取时把前者重置为 0，因此数值上可能通过检查；但这已不再是“mesh 外边界等于 wout 最外磁面”的严格固定边界几何，用户应主动设为 0。</div>
+<div class="callout"><strong>固定边界 VMEC 的几何约束：</strong>初始化显式检查 <code>bloat_factor==0</code>。为保证 mesh 外边界与 wout 最外磁面严格对应，还应显式设置 <code>bloat_distance=0</code>。</div>
 </section>
 
 <h4>共同的后处理顺序：后面的步骤可以改符号或叠加场，但不回写平衡来源</h4>
@@ -2362,7 +2362,7 @@ def simplified_html_supplement(group: str) -> str:
 </table>
 </div>
 
-<div class="callout"><strong>最终一致性由用户负责：</strong>源码会检查部分缺失文件和开关组合，但不会验证 mesh zone、gfile/VMEC LCFS、第一壁、线圈域和外场数据范围是否物理吻合。一个输入组合可以通过语法和分支检查，仍可能代表错误的物理区域。</div>
+<div class="callout"><strong>几何与物理一致性：</strong>程序会检查部分文件和开关组合，但不会验证 mesh zone、gfile/VMEC LCFS、第一壁、线圈域和外场数据范围之间的物理一致性。通过语法和分支检查的输入组合仍可能不符合预定的物理区域划分。</div>
 </div>
 """
     if group == "Grad-Shafranov Solver":
@@ -2381,7 +2381,7 @@ def simplified_html_supplement(group: str) -> str:
 <div><strong>GS 完成之后</strong><span>得到磁轴、LCFS/X 点与自洽 psi<br>投影 p、F=RBphi、n、omega、Te/Ti 到有限元场<br>再进入扰动、RMP、Model、Transport 和时间推进</span></div>
 </div>
 
-<div class="callout"><strong>仿星器不经过本模块：</strong><code>itaylor=40</code> 直接读取固定边界 VMEC 平衡，<code>itaylor=41</code> 读取三维 total/external field；两者都不求解轴对称 GS。因而本组参数不用于决定仿星器的 LCFS、自由边界、壁或线圈响应。源码误归在本组的 <code>adapt_qs/adapt_zlow/adapt_zup</code> 实际属于 Mesh Adaptation。</div>
+<div class="callout"><strong>仿星器不使用本模块：</strong><code>itaylor=40</code> 直接读取固定边界 VMEC 平衡，<code>itaylor=41</code> 读取三维 total/external field；两者均不求解轴对称 GS。本组参数不用于确定仿星器的 LCFS、自由边界、壁或线圈响应。<code>adapt_qs/adapt_zlow/adapt_zup</code> 用于 Mesh Adaptation。</div>
 
 <div class="flow" aria-label="托卡马克 Grad-Shafranov 求解链条">
 <span>选择 psi 初值</span><b>→</b><span>建立 p 与 F 剖面</span><b>→</b><span>形成全域 GS 矩阵</span><b>→</b><span>Picard 求解 psi</span><b>→</b><span>搜索磁轴/LCFS</span><b>→</b><span>更新源项与约束</span><b>→</b><span>线圈反馈</span><b>→</b><span>投影平衡场</span>
@@ -2395,14 +2395,14 @@ def simplified_html_supplement(group: str) -> str:
 <tbody>
 <tr><td><code>iread_eqdsk=1, igs=0</code></td><td>直接投影 gfile <code>psirz</code></td><td>直接投影 gfile</td><td>不进入 GS；本组大多数参数不生效。</td></tr>
 <tr><td><code>iread_eqdsk=1, igs&gt;0</code></td><td>gfile <code>psirz</code></td><td>gfile p/F，可被 <code>iread_p/f</code> 替换</td><td>第一轮保留文件 psi，只更新 LCFS 与源；第二轮起才解线性 GS。</td></tr>
-<tr><td><code>iread_eqdsk=2, igs&gt;0</code></td><td>先投影 gfile，但立即从第一轮重解</td><td>丢弃 gfile p/F，改用内置解析剖面，再允许文件覆盖</td><td>用 gfile 几何/磁轴/电流信息重新构造自洽平衡。</td></tr>
+<tr><td><code>iread_eqdsk=2, igs&gt;0</code></td><td>先投影 gfile，并从第一轮开始重新求解</td><td>不采用 gfile p/F，改用内置解析剖面，并允许外部文件覆盖</td><td>使用 gfile 几何、磁轴和电流信息重新构造自洽平衡。</td></tr>
 <tr><td><code>iread_eqdsk=3, igs&gt;0</code></td><td>不使用 <code>psirz</code>；在文件磁轴处放置电流丝或高斯电流</td><td>gfile p/F/q 仍可用于约束，随后允许文件覆盖</td><td>从构造的电流初猜求解。</td></tr>
 <tr><td>无平衡文件，<code>itaylor=1, igs&gt;0</code></td><td>由 <code>tcuro,xmag,zmag,sigma0</code> 建立电流初猜</td><td><code>inumgs=0</code> 用解析剖面，1 读固定剖面文件</td><td>从第一轮解 GS。</td></tr>
 </tbody>
 </table>
 </div>
 
-<div class="callout"><strong><code>igs</code> 的当前有效范围：</strong>活动循环按 <code>1...igs</code> 执行。生产 case 应使用 <code>igs&gt;0</code>；<code>igs=0</code> 表示跳过，负值不会按旁边旧注释所暗示的 <code>abs(igs)</code> 次数运行。</div>
+<div class="callout"><strong><code>igs</code> 的有效范围：</strong>迭代循环按 <code>1...igs</code> 执行。需要求解 GS 时应使用 <code>igs&gt;0</code>；<code>igs=0</code> 表示跳过，负值不执行迭代。</div>
 
 <h4>第二步：明确固定的是计算域外边界，不一定是 LCFS</h4>
 <div class="guide-table-wrap">
@@ -2418,7 +2418,7 @@ def simplified_html_supplement(group: str) -> str:
 <div class="guide-grid compact">
 <div class="guide-block">
 <h4>PF 场来源</h4>
-<p><code>idevice=-1</code> 读取 <code>coil.dat/current.dat</code>；<code>idevice=0</code> 使用 generic dipole 近似，并用 <code>libetap</code> 估计竖直场。当前源码对其它 <code>idevice</code> 值不建立 PF 线圈。</p>
+<p><code>idevice=-1</code> 读取 <code>coil.dat/current.dat</code>；<code>idevice=0</code> 使用 generic dipole 近似，并用 <code>libetap</code> 估计竖直场。其它 <code>idevice</code> 值不建立 PF 线圈。</p>
 </div>
 <div class="guide-block">
 <h4>线圈场是否分离</h4>
@@ -2426,8 +2426,8 @@ def simplified_html_supplement(group: str) -> str:
 </div>
 </div>
 
-<h4>第三步：建立真正进入 GS 方程的剖面</h4>
-<p>源码求解的数学作用可写为</p>
+<h4>第三步：建立进入 GS 方程的剖面</h4>
+<p>求解方程可写为</p>
 <div class="formula">\[\Delta^{*}\psi + R^{2}\frac{dp}{d\psi} + F\frac{dF}{d\psi}=0,\qquad F(\psi)=R B_{\phi}.\]</div>
 <p>剖面查询坐标不是 mesh 的径向坐标，而是每轮由磁轴与 LCFS 更新的磁通坐标：</p>
 <div class="formula">\[s_{\psi}=\frac{\psi-\psi_{\mathrm{axis}}}{\psi_{\mathrm{LCFS}}-\psi_{\mathrm{axis}}}\,\mathtt{psifrac}.\]</div>
@@ -2446,7 +2446,7 @@ def simplified_html_supplement(group: str) -> str:
 <tr><td><code>iread_p=1</code></td><td><code>profile_p(psi_N,p)</code>，并数值求 p'。</td><td>替换前面建立的完整压力剖面；随后仍受 p 缩放、edge 与延伸处理。</td></tr>
 <tr><td><code>iread_f=1</code></td><td><code>profile_f(psi_N,F)</code>，并数值求 FF'。</td><td>替换 F，同时按文件外点重设 <code>bzero</code>；随后仍受磁场缩放。</td></tr>
 <tr><td><code>igs_pp_ffp_rescale=1</code></td><td>让文件 p'、FF' 的积分与 p、F 端点差匹配。</td><td>只在 gfile <code>create_profile</code> 路径执行，不修复普通 <code>profile_p/f</code>。</td></tr>
-<tr><td><code>pedge/tedge/tiedge</code></td><td>平移剖面末端值；<code>tiedge</code> 会重算并覆盖 <code>pedge</code>。</td><td>在常数/径向缩放之后执行。<code>tedge</code> 的一条压力修正路径存在源码问题，应谨慎使用。</td></tr>
+<tr><td><code>pedge/tedge/tiedge</code></td><td>平移剖面末端值；<code>tiedge</code> 会重算并覆盖 <code>pedge</code>。</td><td>在常数或径向缩放之后执行。<code>tedge</code> 的一条压力修正路径使用样条点数而非边缘密度，因此不建议采用该参数组合。</td></tr>
 </tbody>
 </table>
 </div>
@@ -2515,27 +2515,6 @@ def simplified_html_supplement(group: str) -> str:
 </div>
 </div>
 
-<h4>官方文档与当前源码差异</h4>
-<div class="guide-table-wrap">
-<table class="guide-table">
-<thead><tr><th>参数</th><th>官方文档表述</th><th>当前源码行为</th></tr></thead>
-<tbody>
-<tr><td><code>inumgs</code></td><td>读取 <code>profile-p/profile-g</code></td><td>实际固定读取复数文件名 <code>profiles-p/profiles-g</code>，且使用固定宽度格式。</td></tr>
-<tr><td><code>igs</code></td><td>最大 Picard 迭代次数</td><td>活动循环只对正值执行；旁边关于负值或 <code>abs(igs)</code> 的注释已与实现脱节。</td></tr>
-<tr><td><code>igs_feedfac</code></td><td>外场反馈比例系数</td><td>只检查是否恰好等于 1，实际是开关；增益由固定公式给出。</td></tr>
-<tr><td><code>igs_forcefree_lcfs</code></td><td>主要列出 1 为 LCFS force-free</td><td>还实现 0、2 和输入默认 -1 的自动选择；1 与 2 对 LCFS 外转动的处理不同。</td></tr>
-<tr><td><code>psiscale</code></td><td>声明注释暗示可丢弃边缘剖面点</td><td>当前只把大于 1 的值重置为 1，之后没有活动使用；剖面磁通缩放实际由 <code>psifrac</code> 完成。</td></tr>
-<tr><td><code>p1/p2</code></td><td>轴上 p' 与 p''</td><td>解析式用归一化磁通，实际为 <code>p'(0)=p0*p1</code>、<code>p''(0)=2*p0*p2</code>。</td></tr>
-<tr><td><code>xnull2</code></td><td>inactive X point</td><td>与 X 点 #1 同样搜索并参与 LCFS 比较，可能成为真正活动的分离面 X 点。</td></tr>
-<tr><td><code>idenfunc</code></td><td>统一列出 0 至 3 的密度公式</td><td>0/4 保留已建密度，1/2 在后处理重写，3 主要在场评价时重写；另实现 20 和专用 21。</td></tr>
-<tr><td><code>tedge</code></td><td>按边缘密度/压力关系设置真空电子温度</td><td>一条压力修正使用样条点数 <code>n0_spline%n</code> 而非边缘密度，和文档公式不一致。</td></tr>
-<tr><td><code>rzero</code></td><td>默认 1</td><td>读入默认 -1；校验时环形几何取 <code>xzero</code>，gfile 路径又用 <code>rmaxis</code> 覆盖。</td></tr>
-<tr><td><code>igs_extend_diagmag</code></td><td>官方表使用该拼写</td><td>源码参数名是 <code>igs_extend_diamag</code>。</td></tr>
-<tr><td><code>adapt_qs/zlow/zup</code></td><td>列在 GS 小节</td><td>唯一活动用途在 Mesh Adaptation；不参与 GS 矩阵、源项或 LCFS。</td></tr>
-</tbody>
-</table>
-</div>
-
 <h4>设置 case 时的最小检查顺序</h4>
 <ol class="case-steps">
 <li>确认三个平衡读取入口只有一个非零，并确认是否真的需要 <code>igs&gt;0</code>。</li>
@@ -2546,7 +2525,7 @@ def simplified_html_supplement(group: str) -> str:
 <li>给足 <code>igs</code>，并检查收敛误差、磁轴、LCFS 限制类型及最终 <code>current.dat.out</code>，再进入 MHD 演化。</li>
 </ol>
 
-<div class="callout"><strong>源码使用注意：</strong><code>psiscale</code> 当前没有实际缩放作用；<code>igs_feedfac</code> 是开关而非连续系数；<code>xnull2</code> 可成为活动 LCFS X 点；<code>tedge</code> 的压力修正存在可疑索引；<code>adapt_qs/adapt_zlow/adapt_zup</code> 实际属于网格自适应。设置生产 case 时应以本页源码行为列为准。</div>
+<div class="callout"><strong>使用注意：</strong><code>psiscale</code> 不执行剖面缩放；<code>igs_feedfac</code> 是开关而非连续系数；<code>xnull2</code> 可成为活动 LCFS X 点；<code>tedge</code> 的压力修正路径使用样条点数而非边缘密度；<code>adapt_qs/adapt_zlow/adapt_zup</code> 属于网格自适应参数。</div>
 </section>
 </div>
 """
@@ -2589,7 +2568,7 @@ def simplified_html_supplement(group: str) -> str:
 <div class="guide-grid compact">
 <div class="guide-block">
 <h4>区域标签不会改变坐标映射</h4>
-<p>zone 是对既有单元的物理分类，不会把某块逻辑网格自动移动到等离子体、真空或导体壁的位置。即使输入在语法上合法，错误的 zone 与平衡对应关系仍会产生物理上不合理的算例。</p>
+<p>zone 是对既有单元的物理分类，不会将逻辑网格自动移动到等离子体、真空或导体壁位置。即使输入满足语法要求，不一致的 zone 与平衡对应关系仍会产生不符合预定物理模型的算例。</p>
 </div>
 <div class="guide-block">
 <h4>环向三维结构</h4>
@@ -2612,13 +2591,13 @@ def simplified_html_supplement(group: str) -> str:
 <div class="flow" aria-label="Input 数据调用顺序">
 <span>预读 NEO 文件</span><b>→</b><span>选择唯一平衡入口</span><b>→</b><span>GS/VMEC 读取剖面</span><b>→</b><span>应用 NEO 速度</span><b>→</b><span>密度后处理</span><b>→</b><span>演化中叠加源项</span>
 </div>
-<div class="callout"><strong>平衡入口优先级：</strong><code>iread_eqdsk</code> → <code>iread_dskbal</code> → <code>iread_jsolver</code> → <code>itaylor</code>。程序使用 <code>if / else if</code> 选择，前一个非零参数会静默屏蔽后面的入口。因此这些参数不能彼此组合，也不能与 <code>itaylor=40/41</code> 的仿星器初始化混用。</div>
+<div class="callout"><strong>平衡入口优先级：</strong><code>iread_eqdsk</code> → <code>iread_dskbal</code> → <code>iread_jsolver</code> → <code>itaylor</code>。程序按此顺序选择首个非零入口，后续入口不再执行。因此这些参数不能彼此组合，也不能与 <code>itaylor=40/41</code> 的仿星器初始化混用。</div>
 
 <div class="guide-grid">
 <div class="guide-block">
 <h4>托卡马克</h4>
 <p><code>geqdsk</code>、<code>dskbal</code> 和 Jsolver <code>fixed</code> 都是轴对称平衡入口。平衡数据按现有物理 <code>(R,Z)</code> 网格插值或用于重新求解 GS，不会改变 mesh 几何。</p>
-<p>普通 <code>iread_p/f/ne/te/omega</code> 剖面只有在 GS 路径真正调用 <code>define_profiles</code> 时才读取。直接导入 <code>iread_eqdsk=1/2, igs=0</code> 或 <code>iread_jsolver&gt;0, igs=0</code> 时，这些标准剖面文件不会覆盖已投影的平衡。</p>
+<p>普通 <code>iread_p/f/ne/te/omega</code> 剖面仅在 GS 路径调用 <code>define_profiles</code> 时读取。直接导入 <code>iread_eqdsk=1/2, igs=0</code> 或 <code>iread_jsolver&gt;0, igs=0</code> 时，这些标准剖面文件不会覆盖已投影的平衡。</p>
 </div>
 <div class="guide-block">
 <h4>仿星器</h4>
@@ -2642,7 +2621,7 @@ def simplified_html_supplement(group: str) -> str:
 
 <div class="guide-grid compact">
 <div class="guide-block">
-<h4><code>geqdsk</code> 真正使用的字段</h4>
+<h4><code>geqdsk</code> 读取并使用的字段</h4>
 <p>使用 R-Z 数据框和分辨率、<code>rmaxis/zmaxis</code>、<code>simag/sibry</code>、<code>current</code>、<code>fpol</code>、<code>press</code>、<code>ffprim</code>、<code>pprime</code>、<code>psirz</code> 和 <code>qpsi</code>。<code>bzero</code> 由最外点 <code>fpol/rmaxis</code> 设置，不采用文件中的 <code>bcentr</code>。</p>
 </div>
 <div class="guide-block">
@@ -2677,12 +2656,12 @@ def simplified_html_supplement(group: str) -> str:
 <tr><td><code>iread_particlesource=1</code><br><code>profile_particlesource</code></td><td>归一化 psi</td><td>逻辑 <code>s=xl²+zl²</code></td><td>第二列乘 C1input 的 <code>pellet_rate</code>，与 pellet、束源、电离和汇项相加；要求 <code>idens=1, linear=0</code>。</td></tr>
 <tr><td><code>iread_heatsource=1</code><br><code>profile_heatsource</code></td><td>归一化 psi</td><td>逻辑 <code>s=xl²+zl²</code></td><td>第二列乘 <code>ghs_rate</code>，与束流、高斯热源和热沉相加；要求非线性且存在压力/温度方程。</td></tr>
 <tr><td><code>iread_neo=1</code></td><td colspan="2"><code>out.neo.grid</code>、<code>out.neo.expnorm</code>、<code>out.neo.vel_fourier</code> 和 GYRO <code>input.profiles</code></td><td>只使用第一个物种；环向速度加到已有 <code>vz</code>，极向速度重写 <code>u/chi</code>，非 plasma 磁区置零。该坐标处理面向托卡马克。</td></tr>
-<tr><td><code>ineo_subtract_diamag=1</code></td><td colspan="2">使用 NEO 应用时刻已有的 p、pe、ne 和 psi</td><td>仅在 <code>iread_neo=1</code> 且 <code>db!=0</code> 时扣除离子抗磁速度；之后的 22/23 密度模式不会回头重算该修正。</td></tr>
+<tr><td><code>ineo_subtract_diamag=1</code></td><td colspan="2">使用 NEO 应用时刻已有的 p、pe、ne 和 psi</td><td>仅在 <code>iread_neo=1</code> 且 <code>db!=0</code> 时扣除离子抗磁速度；后续 22/23 密度模式不会重新计算该修正。</td></tr>
 </tbody>
 </table>
 </div>
 
-<div class="callout"><strong>程序可接受但不建议的组合：</strong><code>den_edge&gt;0</code> 与非零 <code>iread_ne</code> 冲突，<code>tedge&gt;0</code> 与非零 <code>iread_te</code> 冲突。VMEC 或圆柱路径只给 Te、不直接给 ne 时，当前程序实际按 <code>n=Te/p</code> 计算；VMEC 同时设置 <code>iread_ne=21</code> 和 <code>iread_te=21</code> 时温度输出未被赋值。托卡马克源项中的 private-flux 修正值也会被下一行覆盖，实际仍按原始归一化 psi 取样。</div>
+<div class="callout"><strong>不建议的参数组合：</strong><code>den_edge&gt;0</code> 不应与非零 <code>iread_ne</code> 同时设置，<code>tedge&gt;0</code> 不应与非零 <code>iread_te</code> 同时设置。VMEC 或圆柱路径仅给定 Te 而未直接给定 ne 时，程序按 <code>n=Te/p</code> 计算密度；固定边界 VMEC 不应同时设置 <code>iread_ne=21</code> 和 <code>iread_te=21</code>。托卡马克源项中的 private-flux 修正值会被后续赋值覆盖，取样仍采用原始归一化 psi。</div>
 </div>
 """
     if group == "Mesh Adaptation":
@@ -2721,7 +2700,7 @@ def simplified_html_supplement(group: str) -> str:
 </div>
 <div class="guide-grid compact">
 <div class="guide-block">
-<h4><code>iadapt</code> 的源码分派</h4>
+<h4><code>iadapt</code> 的模式选择</h4>
 <dl class="mode-list">
 <div><dt><code>0</code></dt><dd>关闭适配</dd></div>
 <div><dt><code>1</code></dt><dd>初始化时按磁通适配</dd></div>
@@ -2746,7 +2725,7 @@ def simplified_html_supplement(group: str) -> str:
 <p>SCOREC/PUMI 使用 M3D-C1 的高阶场转移把需要保留的解投影到新网格，随后更新节点所有权、单元几何和求解矩阵。初始磁通适配的非重启算例还会重新调用初始条件，把平衡再次投影到新网格。</p>
 </div>
 </div>
-<div class="callout"><strong>使用限制：</strong>按磁通适配还需要工作目录中的 <code>sizefieldParam</code>（13或14个数）。当前实现依赖 <code>USESCOREC</code>；<code>adapt_factor</code> 和 <code>adapt_smooth</code> 虽可读入但没有活动使用点。普通 error-estimator 的多平面尺寸场分支在当前源码中看起来尚未完成，真正具有明确多平面处理流程的是 SPR 路径。</div>
+<div class="callout"><strong>使用限制：</strong>按磁通适配还需要工作目录中的 <code>sizefieldParam</code>（13 或 14 个数），并依赖 <code>USESCOREC</code> 编译选项。<code>adapt_factor</code> 和 <code>adapt_smooth</code> 虽可读入，但不参与活动计算。普通 error-estimator 尚未提供完整的多平面尺寸场处理；多平面计算应使用 SPR 路径。</div>
 </div>
 """
     return ""
@@ -2840,7 +2819,7 @@ mjx-container[jax="CHTML"][display="false"] { display:inline-block; margin:0 0.0
         "<head>",
         '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
-        "<title>M3D-C1 C1input 参数简表</title>",
+        "<title>M3D-C1 C1input 参数使用手册</title>",
         f"<style>{css}</style>",
         "<script>",
         "window.MathJax = {",
@@ -2853,8 +2832,8 @@ mjx-container[jax="CHTML"][display="false"] { display:inline-block; margin:0 0.0
         "<body>",
         '<div class="layout">',
         '<aside class="sidebar">',
-        "<h1>M3D-C1 C1input 参数简表</h1>",
-        '<div class="small">只显示参数名、类型、默认值和含义。</div>',
+        "<h1>M3D-C1 C1input 参数使用手册</h1>",
+        '<div class="small">参数名、数据类型、默认值与使用含义。</div>',
         '<input id="search" class="search" type="search" placeholder="搜索参数名、默认值或含义...">',
         '<div class="small" id="result-count"></div>',
         '<nav class="nav">',
@@ -2867,9 +2846,9 @@ mjx-container[jax="CHTML"][display="false"] { display:inline-block; margin:0 0.0
         "</aside>",
         '<main class="content">',
         '<section class="hero">',
-        "<h2>M3D-C1 主程序输入参数简表</h2>",
-        f"<p>共 {len(params)} 个 `C1input` 参数。所有条目属于 `<code>&amp;inputnl</code>`；逻辑分组仅用于阅读。默认值以当前程序注册值为准。</p>",
-        "<p>本版刻意去掉开发者核查信息，只保留用户写输入文件时最需要看的四项。</p>",
+        "<h2>M3D-C1 主程序输入参数使用手册</h2>",
+        f"<p>本文是独立发布的 M3D-C1 <code>C1input</code> 参数使用手册，共包含 {len(params)} 个参数。所有条目属于 <code>&amp;inputnl</code>；逻辑分组按照算例配置流程组织。参数未显式给定时采用表中默认值。</p>",
+        "<p>各模块说明给出参数之间的生效条件、覆盖顺序、装置差异及相关模型方程。</p>",
         "</section>",
     ])
 
@@ -3310,12 +3289,12 @@ def main() -> None:
     params_json.write_text(json.dumps([asdict(p) for p in sorted_params(params)], ensure_ascii=False, indent=2), encoding="utf-8")
     write_csv(params, OUTDIR / "m3dc1_c1input_parameters.csv")
     write_usage_files(params, USAGE_MD, USAGE_CSV)
-    write_markdown(params, OUTDIR / "M3DC1_C1input_parameters.md")
     write_doc_audit(params, DOC_AUDIT_MD, DOC_AUDIT_CSV)
-    write_html_guide(params, HTML_GUIDE)
     write_simplified_markdown(params, SIMPLIFIED_MD)
     write_simplified_csv(params, SIMPLIFIED_CSV)
     write_simplified_html(params, SIMPLIFIED_HTML)
+    shutil.copyfile(SIMPLIFIED_MD, OUTDIR / "M3DC1_C1input_parameters.md")
+    shutil.copyfile(SIMPLIFIED_HTML, HTML_GUIDE)
     shutil.copyfile(SIMPLIFIED_HTML, PUBLISHED_HTML)
     write_template(params, OUTDIR / "C1input_all_parameters_template")
     print(f"params={len(params)}")

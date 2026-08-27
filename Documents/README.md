@@ -1,8 +1,8 @@
 # M3DC1-docs
 
-M3D-C1 `C1input` 参数用户指南与源码快照。
+M3D-C1 `C1input` 参数使用手册与源码快照。
 
-本仓库面向运行 M3D-C1 case 的用户，参数说明以仓库内保存的 M3D-C1 源码实际读取和使用行为为准，并将托卡马克与仿星器的设置路径分别说明。该整理文档不是 Princeton University 或 PPPL 的官方文档。
+本仓库面向 M3D-C1 算例配置用户。网页使用手册作为独立发布版本，系统说明参数的数据类型、默认值、物理或数值作用、生效条件与覆盖顺序，并分别列出托卡马克和仿星器的配置路径。
 
 ## 在线阅读
 
@@ -22,8 +22,10 @@ open Documents/index.html
 ## 目录
 
 - `../M3DC1/`：未经修改的上游 M3D-C1 源码快照，不包含上游 `.git` 历史。
-- `index.html`：参数指南网页与 GitHub Pages 发布内容。
-- `docs-data/`：完整参数表、简化表、源码使用统计、官方文档差异清单和输入模板。
+- `index.html`：独立的参数使用手册与 GitHub Pages 发布内容。
+- `docs-data/M3DC1_C1input_parameters.md`：与网页采用相同独立表述的 Markdown 参数手册。
+- `docs-data/M3DC1_official_doc_vs_source_audit.md`：官方文档与程序实现的对比清单；对比内容不进入使用手册网页。
+- `docs-data/`：参数表、源码使用统计、对比审计数据和输入模板。
 - `tools/extract_m3dc1_params.py`：从相邻 `M3DC1/` 源码快照重新生成参数资料的脚本。
 - `SOURCE_VERSION.md`：上游来源、提交版本和同步说明。
 
