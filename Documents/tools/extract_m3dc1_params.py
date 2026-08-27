@@ -12,12 +12,13 @@ from pathlib import Path
 from typing import Iterable
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+DOCUMENTS_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = DOCUMENTS_ROOT.parent
 ROOT = REPO_ROOT / "M3DC1"
 INPUT_F90 = ROOT / "unstructured/input.f90"
 DOC_INPUTS = ROOT / "doc/inputs.tex"
-OLD_DOC = REPO_ROOT / "tools/reference_old_doc.txt"
-OUTDIR = REPO_ROOT / "docs-data"
+OLD_DOC = DOCUMENTS_ROOT / "tools/reference_old_doc.txt"
+OUTDIR = DOCUMENTS_ROOT / "docs-data"
 DOC_AUDIT_MD = OUTDIR / "M3DC1_official_doc_vs_source_audit.md"
 DOC_AUDIT_CSV = OUTDIR / "m3dc1_official_doc_vs_source_audit.csv"
 USAGE_MD = OUTDIR / "M3DC1_parameter_source_usage.md"
@@ -26,7 +27,7 @@ HTML_GUIDE = OUTDIR / "M3DC1_C1input_reader_guide.html"
 SIMPLIFIED_MD = OUTDIR / "M3DC1_C1input_parameters_simplified.md"
 SIMPLIFIED_CSV = OUTDIR / "m3dc1_c1input_parameters_simplified.csv"
 SIMPLIFIED_HTML = OUTDIR / "M3DC1_C1input_simplified_guide.html"
-PUBLISHED_HTML = REPO_ROOT / "index.html"
+PUBLISHED_HTML = DOCUMENTS_ROOT / "index.html"
 
 
 CONSTANTS = {
