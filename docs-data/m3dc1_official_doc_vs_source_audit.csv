@@ -1,0 +1,169 @@
+﻿category,doc_name,source_name,source_default,doc_default,note
+doc_name_not_registered,delta_wall,,,,官方 doc/inputs.tex 提到，但源码 set_defaults 未注册；C1input 中使用会触发未识别变量警告。
+doc_name_not_registered,ihypamu,,,,官方 doc/inputs.tex 提到，但源码 set_defaults 未注册；C1input 中使用会触发未识别变量警告。
+doc_old_or_misspelled_name,bound_type,boundary_type,0,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,ikprad_z,kprad_z,1,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,iread_partilesource,iread_particlesource,0,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,iwall_break,iwall_breaks,0,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,iwrite_transport_coefs,iwrite_transport_coeffs,1,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,pellet_R,pellet_r,0.,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,temin_q0,temin_qd,0.,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+doc_old_or_misspelled_name,igs_extend_diagmag,igs_extend_diamag,1,,官方文档中的旧名/错拼名；实际 C1input 应使用 source_name。
+default_mismatch,idens,idens,0,1,源码默认 0；官方文档旧表写 1。
+default_mismatch,bootstrap_alpha,bootstrap_alpha,0.,1,源码默认 0；官方文档旧表写 1。
+default_mismatch,eta_fac,eta_fac,1.,0,源码默认 1；官方文档输运表写 0。
+default_mismatch,ikappar_ni,ikappar_ni,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,ihypdx,ihypdx,0,2,源码默认 0；官方文档表写 2。
+default_mismatch,nonrect,nonrect,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,inoslip_pol,inoslip_pol,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,iconst_bz,iconst_bz,0,1,源码默认 0；官方文档表写 1。
+default_mismatch,iconst_n,iconst_n,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,iconst_t,iconst_t,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,imp_mod,imp_mod,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,pskip,pskip,0,1,源码默认 0；官方文档表写 1。
+default_mismatch,max_repeat,max_repeat,1,3,源码默认 1；官方文档表写 3。
+default_mismatch,ksp_min,ksp_min,500,1200,源码默认 500；官方文档表写 1200。
+default_mismatch,ksp_warn,ksp_warn,1000,1600,源码默认 1000；官方文档表写 1600。
+default_mismatch,jadv,jadv,1,0,源码默认 1；官方文档表写 0。
+default_mismatch,ntimepr,ntimepr,1,5,源码默认 1；官方文档表写 5。
+default_mismatch,ifull_torus,ifull_torus,1,0,源码默认 1；官方文档 mesh/stellarator 小节写 0。
+default_mismatch,rzero,rzero,-1.,1,源码读入默认 -1，`validate_input` 中若为 -1 则 toroidal 几何取 `xzero`，否则取 1；官方文档直接写 1。
+default_mismatch,db,db,-1.,0,源码默认 -1，表示按物理归一化自动计算 ion skin depth 后乘 `db_fac`；官方文档写 0。
+default_mismatch,ghs_var,ghs_var,1.,0,源码默认 1；官方文档 Gaussian heat source 表写 0。
+default_mismatch,eta_wallRZ,eta_wallRZ,-1.,.001,源码读入默认 -1，`validate_input` 中若 <0 则取 `eta_wall`；官方文档直接写 .001。
+default_mismatch,wall_region_etaRZ,wall_region_etaRZ,-1.,1.e-3,源码读入默认 -1，`validate_input` 中若 <0 则逐区取 `wall_region_eta(i)`；官方文档直接写 1.e-3。
+usage_or_value_range_mismatch,idevice,idevice,0,,官方文档列出 1=CDX-U、2=NSTX、3=ITER、4=DIII-D；当前 `gradshafranov.f90` 的活动 `select case` 只实现 -1（读 `coil.dat/current.dat`）和 0（generic dipole），其它值进入无 PF 线圈的默认分支。
+usage_or_value_range_mismatch,irmp,irmp,0,,官方文档写 1 只在 plasma、2 只在 boundary 施加；当前 `rmp.f90` 对所有计算单元评价并投影该场，且 2 仅允许 `itor=0`，不是环形托卡马克的边界条件。
+usage_or_value_range_mismatch,icsym,icsym,0,,"官方文档只列 0-2；当前源码还实现 3，使用确定性的 (1,1) 型初始扰动而不是随机噪声。"
+usage_or_value_range_mismatch,iflip_z,iflip_z,0,,官方文档称其翻转整个平衡；当前活动使用点只在 gfile 初始化中反号 `zmaxis`，没有同时镜像 `psirz`、mesh 节点或其它平衡场。
+usage_or_value_range_mismatch,iread_ext_field,iread_ext_field,0,,官方文档只说明 1=读取外场；tokamak 源码把它作为数据组数量，1 读 `error_field`，大于 1 读 `error_fieldNN`。stellarator 读取器则只装载数组索引 `iread_ext_field`，常规可靠用法是 1。
+usage_or_value_range_mismatch,ibasicj_solvep,ibasicj_solvep,0,,官方文档把 0 概括为 uniform p；源码中 `itaylor=29` 的解析压力确为常数，但 `itaylor=31` 使用随半径衰减的解析压力，因此 0 的准确含义是使用所选 basicJ 解析压力并求 F。
+usage_or_value_range_mismatch,ibootstrap_model,ibootstrap_model,0,,官方文档列出 1-4；源码 `bootstrap.f90` 还显式实现 `ibootstrap_model=5` 的 constant-Lambda 分支。源码 `input.f90` 内联说明仍是旧的一行模型说明，使用时以 `bootstrap.f90` 为准。
+usage_or_value_range_mismatch,iread_te,iread_te,0,,官方文档主要写 `1: profile_te`；源码 GS 路径还支持 2(eV vs Psi)、4(keV vs rho)、10(Corsica)、20(iterdb)，VMEC 路径支持 21(`te_profile`)。
+usage_or_value_range_mismatch,iread_ne,iread_ne,0,,官方文档主要写 `1: profile_ne`；源码 GS 路径还支持 2、4、10、20，VMEC/ST 相关路径支持 21、22、23 等专用剖面读入方式。
+usage_or_value_range_mismatch,iread_omega,iread_omega,0,,官方文档主要写 `1: profile_omega`；源码还支持 2(`dtrot.xy`)、3(`profile_vphi`)、4(`profile_omega_rho_0`)、5(J. Menard profile_omega 格式)、20(iterdb)。
+usage_or_value_range_mismatch,iread_p,iread_p,0,,官方文档写 `1: profile_p`；源码 VMEC 路径还测试 `iread_p=21` 并读 `p_profile`。
+usage_or_value_range_mismatch,ikprad,ikprad,0,,官方文档只说明 `ikprad=1` 的 KPRAD 模型；源码还允许 `ikprad=-1`，在 `USEADAS` 编译时走 ADAS ADF11 数据路径，否则校验报错。
+usage_or_value_range_mismatch,type_ext_field,type_ext_field,-1,,官方文档列出 tokamak/stellarator 主要取值；源码 `rmp.f90` 中 `type_ext_field<=0` 走 RMP/error-field 分支，`=1/2` 走 stellarator/free-boundary 分支，另有 `=3` 从电流计算外场的分支。
+usage_or_value_range_mismatch,ipellet,ipellet,0,,官方文档列到 15；源码 `pellet.f90` 还支持 `abs(ipellet)=16`，即 toroidal von-Mises 分布并带 1/R 权重。双位数取值在归一化时还会除以 `Lor_vol`。
+usage_or_value_range_mismatch,pellet_var_tor,pellet_var_tor,0.,,官方文档写 0 时取 `pellet_var`；源码中若 `ipellet=15` 且 `pellet_var_tor<=0`，实际设为 `pellet_var/pellet_r`，其它 pellet 分支才取 `pellet_var`。
+usage_or_value_range_mismatch,ipellet_abl,ipellet_abl,0,,官方文档列出 1、2、3；源码另有 `ipellet_abl=43` 的 Sergeev06 carbon ablation 分支，并且 `ipellet_z=0` 时会按 ablation 模型推断默认 Z。
+usage_or_value_range_mismatch,itaylor,itaylor,0,,官方文档列出常用初始条件；源码 `init_conds.f90` 还包含 -1、24、25、26、28、30、31、32、33、34 等分支，实际可用性取决于编译宏和对应初始化例程。
+usage_or_value_range_mismatch,inumgs,inumgs,0,,官方文档写读取 `profile-p` 与 `profile-g`；当前源码固定打开的文件名实际是复数 `profiles-p` 与 `profiles-g`，并按固定宽度格式读取 p/p' 和 g/FF'。
+usage_or_value_range_mismatch,igs,igs,80,,"官方文档只称其为最大 Picard 迭代次数；当前活动循环是 `do itnum=1,igs`。源码旁仍保留关于 `abs(igs)`/负值继续运行的旧注释，但负 `igs` 在当前实现中不会执行 GS 迭代。"
+usage_or_value_range_mismatch,igs_feedfac,igs_feedfac,1,,官方文档称其为 external-field feedback 的 proportionality factor；当前源码只检查 `igs_feedfac.eq.1`，实际是 0/1 型开关，反馈幅值由固定公式计算。
+usage_or_value_range_mismatch,igs_forcefree_lcfs,igs_forcefree_lcfs,-1,,官方文档主要说明取 1 时使 LCFS force-free；当前源码还区分 0、1、2，并把读入默认 -1 自动改为 0 或 2。1 令 LCFS 外转动为 0，2 则保持 LCFS 转动值。
+usage_or_value_range_mismatch,psiscale,psiscale,1.,,源码声明注释称小于 1 可丢弃边缘剖面点，但当前活动代码只把大于 1 的值重置为 1，之后没有任何计算读取 `psiscale`；实际剖面磁通范围缩放使用的是 `psifrac`。
+usage_or_value_range_mismatch,p1,p1,0.,,官方文档把它写成轴上 p'(Psi)；内置解析式使用归一化磁通，实际轴上导数系数为 `p0*p1`，不是参数值本身。
+usage_or_value_range_mismatch,p2,p2,0.,,官方文档把它写成轴上 p''(Psi)；内置解析式的实际轴上二阶导数系数为 `2*p0*p2`，且自变量是归一化磁通。
+usage_or_value_range_mismatch,xnull2,xnull2,0.,,官方文档称第二 X 点为 inactive；当前 `lcfs` 对两个 X 点使用同样的搜索和 LCFS 候选比较，第二点若更靠近磁轴磁通会成为活动 LCFS 限制点。
+usage_or_value_range_mismatch,idenfunc,idenfunc,0,,官方文档把 0-3 都列为平衡密度函数；当前初始化流程中 0/4 直接保留 GS/profile 密度，1/2 在 `den_eq` 中重写，3 主要在场评价算子中按磁通梯度重写，源码还实现文档未列出的 20 与专用 21。
+usage_or_value_range_mismatch,tedge,tedge,0.,,官方文档把它概括为真空区电子温度并给出边界关系；当前 GS 源码先平移 Te 样条，随后在 `pedge<=0` 时用 `n0_spline%n`（样条点数）而非边缘密度修正压力，行为与文档公式不一致，使用该组合前应验证或修正源码。
+usage_or_value_range_mismatch,adapt_qs,adapt_qs,0.,,官方输入表把它放在 GS 小节，且源码也误用 `gs_grp` 注册；实际唯一活动使用位于 `adapt.f90`，用于按 q 面打包自适应网格，不参与 GS 求解。
+usage_or_value_range_mismatch,adapt_zlow,adapt_zlow,0.,,官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。
+usage_or_value_range_mismatch,adapt_zup,adapt_zup,0.,,官方输入表和源码注册把它归入 GS；实际只在 `adapt.f90` 中控制 SOL 粗化区域，不参与 GS 方程。
+runtime_default_or_validation_behavior,ifout,ifout,-1,,`ifout=-1` 在 `validate_input` 中改为 `i3d`：3D 默认输出 f 场，2D 默认不输出。
+runtime_default_or_validation_behavior,ntimers,ntimers,0,,`ntimers<=0` 时源码把它设为 `ntimepr`。
+runtime_default_or_validation_behavior,rzero,rzero,-1.,,`rzero=-1` 时，toroidal 几何取 `xzero`，其它几何取 1；若最终 `rzero<=0` 只给 warning。
+runtime_default_or_validation_behavior,ifbound,ifbound,-1,,`ifbound=-1` 时，complex 版本默认 2，real 版本默认 1。
+runtime_default_or_validation_behavior,eta_wallRZ,eta_wallRZ,-1.,,`eta_wallRZ<0` 时改为 `eta_wall`。
+runtime_default_or_validation_behavior,wall_region_etaRZ,wall_region_etaRZ,-1.,,每个 `wall_region_etaRZ(i)<0` 时改为对应 `wall_region_eta(i)`。
+runtime_default_or_validation_behavior,eta_max,eta_max,0.,,`eta_max<=0` 时改为 `eta_vac`。
+runtime_default_or_validation_behavior,eta_min,eta_min,0.,,`eta_min<=0` 时改为 0。
+runtime_default_or_validation_behavior,kappa_max,kappa_max,0.,,`kappa_max<=0` 时改为 `kappar`。
+runtime_default_or_validation_behavior,kappar_max,kappar_max,0.,,`kappar_max<=0` 时改为 `kappar`。
+runtime_default_or_validation_behavior,kappar_min,kappar_min,0.,,`kappar_min<=0` 时改为 `kappar`。
+runtime_default_or_validation_behavior,db,db,-1.,,`db<0` 时源码按 `b0_norm/n0_norm/l0_norm/ion_mass` 计算物理 ion skin depth，再乘 `db_fac`；显式给非负 `db` 会覆盖该自动计算。
+runtime_default_or_validation_behavior,particle_linear,particle_linear,-1,,`particle_linear=-1` 时改为当前 `linear`。
+runtime_default_or_validation_behavior,imp_mod,imp_mod,1,,`isplitstep=0` 时校验阶段强制 `imp_mod=0`。
+runtime_default_or_validation_behavior,iread_omega,iread_omega,0,,`iread_omega_e` 或 `iread_omega_ExB` 非零时会写入同一个内部 `iread_omega`，且与已有 `iread_omega` 互斥。
+source_registered_not_found_in_official_doc,,model_info,dummyInfo,,源码注册在 Mesh；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,is1_agg_blks,1,,源码注册在 Mesh；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,is1_agg_scp,0,,源码注册在 Mesh；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,psifrac,1.,,源码注册在 Grad-Shafranov Solver；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,psiscale,1.,,源码注册在 Grad-Shafranov Solver；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ra_cyc,1,,源码注册在 Model Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,radiff,0.,,源码注册在 Model Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,rjra,1.,,源码注册在 Model Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ra_characteristics,0,,源码注册在 Model Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,bzsign,0.,,源码注册在 Model Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,amu_wall,0.,,源码注册在 Transport Coefficients；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,amu_wall_off,0.,,源码注册在 Transport Coefficients；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,amu_wall_delt,0.1,,源码注册在 Transport Coefficients；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kappar_max,0.,,源码注册在 Transport Coefficients；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kappar_min,0.,,源码注册在 Transport Coefficients；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,sigma_rekc,0.,,源码注册在 Resistive Wall；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,caramana_fac,1.,,源码注册在 Time Step；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,isolve_with_guess,0,,源码注册在 Solver；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ispradapt,0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,isprntime,10,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,isprweight,0.1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,isprmaxsize,0.05,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,isprrefinelevel,1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,isprcoarsenlevel,-1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_writevtk,0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_writesmb,1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_useH1,0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_removeEquiv,0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_target_error,0.0001,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_ke,0.0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_ntime,0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_max_node,10000,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_control,1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_order_p,3.0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadaptFaceNumber,-1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_snap,1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_factor,1.,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_hmin,0.001,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_hmax,0.1,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_hmin_rel,0.5,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_hmax_rel,2.0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_smooth,2./3. (约 0.6667),,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_psin_vacuum,-1.,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_psin_wall,-1.,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iadapt_pack_rationals,0,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_pack_factor,0.02,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_coil_delta,0.,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_pellet_length,0.,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adapt_pellet_delta,0.,,源码注册在 Mesh Adaptation；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,vloopRZ,0.,,源码注册在 Sources/Sinks；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,vloop_freq,0.,,源码注册在 Sources/Sinks；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ipellet_fixed_dep,0,,源码注册在 Sources/Sinks；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,n_target,1.,,源码注册在 Sources/Sinks；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kprad_n0_denm_fac,1.,,源码注册在 KPRAD Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,adas_adf11,"""""",,源码注册在 KPRAD Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kinetic_fast_ion,1,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kinetic_thermal_ion,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,igyroaverage,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,particle_linear,-1,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,particle_substeps,40,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,particle_subcycles,1,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,particle_couple,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,particle_nodelete,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iconst_f0,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ifullf,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,fast_ion_mass,0.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,fast_ion_z,0.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,fast_ion_dist,1,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,fast_ion_max_energy,1000.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,num_par_max,4000000,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,num_par_scale,1.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kinetic_nrmfac_scale,1.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ikinetic_vpar,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,kinetic_rhomax,1.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,vpar_reduce,0.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,idiamagnetic_advection,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,imode_filter,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,mode_filter_ntor,0,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,smooth_par,1.e-8,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,smooth_dens_parallel,0.,,源码注册在 Particle Simulation Options；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,ntimers,0,,源码注册在 Output；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iwrite_adjacency,1,,源码注册在 Output；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iwrite_quad_points,0,,源码注册在 Output；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iwrite_restart,0,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,zeff,0.,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iwrite_adios,0,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iglobalout,0,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iglobalin,0,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iread_adios,0,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。
+source_registered_not_found_in_official_doc,,iread_hdf5,1,,源码注册在 Deprecated；未在 doc/*.tex 中直接提到。

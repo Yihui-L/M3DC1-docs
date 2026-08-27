@@ -1,0 +1,1491 @@
+基于 <input.f90> 整理C1input parameters
+> 参数说明整合：源码相关注释+文档
+> 标红为缺少说明信息
+
+【Model Options】 model_grp
+numvar = 3 | int
+MHD model. # of velocity variables.
+1: 2-field; 2: 4-Field; 3: 6-Field.
+linear = 0 | int
+1: Use linearized equations (perturbation terms only, no matrix recalculation)
+eqsubtract = 0 | int
+1: Subtract equilibrium fields (remove equilibrium terms from equations)
+extsubtract = 0 | int 
+1: Subtract fields from non-axisymmetric coils
+icsubtract = 0 | int
+1: Subtract fields from poloidal field coils
+  set to 1 if PF coils are in the domain.
+These are defined in the files “coils.dat” and “current.dat”
+idens = 0 | int
+1: Include density equation
+ipres = 0 | int
+1: Include total pressure equation (and electron pressure equation)
+ipressplit = 0 | int
+1: seperate pressure solve from the magnetic field solves when isplitstep=1.
+(ipressplit must be 0 for isplitstep=0)
+itemp = 0 | int
+1: Advance temperatures rather than pressures (for ipressplit=1 only)
+  if itemp=1 and ipres=1, advance both i and e temperatures.
+iadiabat = 1 | int
+1: Corrects several problems with itemp=1 option
+(Correct itemp=1 for time-varying density)
+gyro = 0 | int
+1: include Braginskii gyroviscous term. (note: needs db to be nonzero also)
+igauge = 0 | int
+0: loop voltage applied to boundary psi only
+inertia = 1 | int
+1: Include u · ∇u terms
+itwofluid = 1 | int
+1: Include J×B and ∇pe terms in Ohm’s law (electron form).
+2: ion form (not recommended)
+3: parallel pressure gradient in Ohm’s law only (not recommended)
+ibootstrap = 0 | int
+1: include bootstrap current
+ibootstrap_model = 0 | int
+1: J_BS = alpha F <p,psi> B
+bootstrap_alpha = 0. | double
+alpha parameter in bootstrap current model
+irunaway = 0 | int
+1: include runaway electron model
+cre = 0 | int
+runaway speed
+ra_cyc = 1 | int
+""
+radiff = 0. | double
+""
+rjra = 0. | double
+""
+imp_bf = 0 | int
+1: include implicit equation for f (recommended for 3D and 2D complex)
+imp_temp = 0 | int
+0: compute temperatures for isplitstep=0, itemp=0
+1: Include implicit equation for temperature
+nosig = 0 | int
+1: drop sigma terms from momentum equation
+itor = 0 | int
+1: Use toroidal geometry
+(0: cartesian; 1: cylindrical)
+iohmic_heating = 1 | int
+1: Include Ohmic heating term in heating
+irad_heating = 1 | int
+1: Include radiation heat sink/source
+gravr = 0. | double
+gravitational acceleration in R-direction
+gravz = 0. | double
+gravitational acceleration in Z-direction
+istatic = 0 | int
+1: Do not advance velocity fields
+3: zero out “chi” velocity field only
+iestatic = 0 | int
+1: Do not advance magnetic fields
+chiiner = 1. | double
+factor to multiply the chi equation inertial terms
+ieq_bdotgradt = 1 | int
+1: include equilibrium parallel T gradient
+iwall_is_limiter = 1 | int
+1 = Wall acts as limiter
+no_vdg_T = 0 | int
+1: do not include V dot grad T in Temp equation (debug)
+kinetic = 0 | int
+1: Use kinetic PIC for hot pressure
+2: Incompressible CGL
+3: Full CGL
+
+【Equilibrium】 eq_grp
+itaylor = 0 | int
+Pre-defined initial conditions.
+for itor=1 (toroidal geometry)
+0: Tilting cylinder
+  1: Calls Grad-Shafranov solver
+  2: magneto-rotational equilibrium
+  3: rotational instability
+  40: Fixed boundary stellarator
+  41: Free boundary stellarator
+for itor=0 (slab geometry)
+  0: Tilting cylinder
+  1: Taylor Reconnection
+  2: Force-Free equilibrium (Taylor state)
+  3: GEM Reconnection
+  4: Wave Propagation
+  5: Gravitational Instability
+  6: Strauss equilibrium 
+7: circular_field_init
+  8,9: biharmonic
+  10,11,12,13: analytic RWM test
+  14: 3D wave test
+  15: 3D diffusion test
+  16: FRS cylindrical equilibrium
+  17: ftz_init
+  18: eigen_init
+  19: ASDEX profiles similar to Yu’s
+  20: kstar profiles with multiple q=1 surfaces
+  21,22: fixed q(r) and p(r) profiles
+  23: Startsev equilibrium with J = (1/R0q0)(1 − r2)
+  27: cylindrical test problem
+  29: basicJ profiles
+iupstream = 0 | int
+1: adds diffusion term to convection-like upstream differencing
+magus = 5.e-2 | double
+magnitude of the upstream diffusion term
+iflip = 0 | int
+1: Flip coordinate system handedness
+iflip_b = 0 | int
+1: Flip sign of toroidal field
+iflip_j = 0 | int
+1: Flip sign of toroidal current
+iflip_v = 0 | int
+1: Flip sign of toroidal velocity
+iflip_z = 0 | int
+1: Flip equilibrium across z=0 plane
+bzero = 1. | double
+Bφ at R=rzero, vacuum toroidal field is bzero at R=rzero
+bx0 = 0. | double
+Initial field in x-direction for some test problems
+vzero = 0. | double
+Initial toroidal velocity for some test problems
+phizero = 0. | double
+Initial velocity stream function for some test problems
+verzero = 0. | double 
+magnitude of initial vertical velocity
+v0_cyl = 0. | double
+Central toroidal velocity for cylindrical test problem
+v1_cyl = 0. | double
+VZ=v0_cyl + v1_cyl*psi**beta
+0 < psi < 1 for cyl. test problem
+idevice = 0 | int
+define coils for a particular device
+-1: reads coil.dat file
+ 0: generic dipole configuration
+ 1: CDX-U
+ 2: NSTX
+ 3: ITER
+4: DIII-D
+iwave = 0 | int
+defines what wave to initialize in wave propagation test
+icsym = 0 | int
+Symmetry of initial random perturbations
+0: No symmetry
+1: Odd up-down symmetry (in U)
+2: Even up-down symmetry (in U)
+For icsym=3, maxn=1: 
+eps = 0.01 | double
+Magnitude of initial random perturbations
+maxn = 200 | int
+Maximum wavenumber of initial random noise
+tf_tilt = 0. | double
+Angle of TF from vertical in degrees
+tf_tilt_angle = 0. | double
+Axis of rotation for TF tilt in degrees
+tf_shift = 0. | double
+Horizontal shift of TF coil
+tf_shift_angle = 0. | double
+Direction of TF shift in degrees
+pf_tilt = 0. (maxcoils) | double array
+Angle of PF from vertical in degrees
+pf_tilt_angle = 0. (maxcoils) | double array
+Axis of rotation for PF tilt in degrees
+pf_shift = 0. (maxcoils) | double array
+Horizontal shift of PF coil
+pf_shift_angle = 0. (maxcoils) | double array
+Direction of PF shift in degrees
+irmp = 0 | int
+1: Apply nonaxisym. fields throughout plasma
+  reads rmp_coil.dat for (R,Z) of windowpane coils.
+  reads rmp current.dat for (+-) currents in kA and phases in degrees.
+toroidal mode number of current specified by ntor.
+requires type_ext_field = 0
+2: Apply mpol/ntor vacuum fields (itor=0 only)
+  (apply nonaxisymmetric fields only at boundaries.)
+rmp_atten = 0. | double
+Additional exponential decay of RMP field from r=1 for irmp=2
+type_ext_field = -1 | int
+External field type
+0: RMP or error field for tokamak geometry.
+1: For free boundary stellarator only: FIELDLINES or MGRID.
+iread_ext_field = 0 | int
+1: Read external field
+isample_ext_field = 1 | int
+Factor to down-sample external field data toroidally
+isample_ext_field_pol = 1 | int
+Factor to down-sample external field data poloidally
+scale_ext_field = 1. | double
+Factor to scale external field
+shift_ext_field = 0. (8) | double array
+Toroidal shift (in deg) of external fields
+file_ext_field = ‘’ (256) | string
+error_field
+file_total_field = ‘’ (256) | string
+total_field, name of total field file for ST
+beta = 0. | double
+parameter used in some model equilibrium initializations
+ln = 0. | double
+length scale parameter used in some model equilibrium
+elongation = 1. | double
+elongation used in Solovev equilibrium
+basicj_nu = 1. | double
+Exponent in basicj equilibrium
+basicj_j0 = 1. | double
+On-axis current density in basicj equilibrium
+basicj_q0 = 0. | double
+On-axis safety factor in basicj equilibrium (supersedes basicj_j0)
+basicj_qa = 0. | double
+Edge safety factor in basicj equilibrium (supersedes basicj_nu)
+basicj_voff = 1. | double
+Radial extent of flat toroidal rotation in basicj equilibrium
+basicj_vdelt = 1. | double
+Width of velocity drop-off, as fraction of ln, in basicj equilibrium
+basicj_dexp = 1. | double
+parameter for basicj equilibrium
+basicj_dvac = 1. | double
+parameter for basicj equilibrium
+ibasicj_solvep = 0 | int
+0: Uniform pressure, solve for F.
+1: Uniform F, solve for pressure
+
+【Transport Coefficients】 transp_grp
+ivisfunc = 0 | int
+select viscosity function
+
+
+amuoff = 0. | double
+
+amuoff2 = 0. | double
+
+amudelt = 0. | double
+
+amudelt2 = 0. | double
+
+amu = 0. | double
+Isotropic viscosity, core viscosity for ivisfunc =0,..,3
+amu_edge = 0. | double
+edge viscosity for ivisfunc = 1,..,3
+amuc = 0. | double
+Compressional viscosity coefficient
+amue = 0. | double
+bootstrap viscosity coefficient
+amupar = 0. | double
+Parallel viscosity coefficient
+amu_wall = 0. | double
+‘’
+amu_wall_off = 0. | double
+‘’
+amu_wall_delt = 0.1 | double
+‘’
+iresfunc = 0 | int
+select resistivity function
+
+etaoff = 0. | double
+‘’
+etadelt = 0. | double
+‘’
+etar = 0. | double
+Isotropic resistivity
+eta0 = 0. | double
+‘’
+eta_fac = 1. | double
+for iresfunc=4, resistivity multiplied by eta_fac
+eta_mod = 0 | int
+if 1: remove d/dphi terms in resistivity
+eta_te_offset = 0. | double
+Offset in Te when calculating eta，
+ikprad_te_offset = 0 | int
+If 1, eta_te_offset also used in kprad (and ablation?)
+eta_max = 0. | double
+Maximum value of resistivity in the plasma region
+defaults to etavac
+eta_min = 0. | double
+Minimum value of resistivity in the plasma region
+ikappafunc = 0 | int
+select thermal conductivity function
+
+kappa_max = 0. | double
+Maximum value of kappa in the plasma region
+if .NE. 0, max κ for ikappafunc=5
+kappai_fac = 1. | double
+Factor to multiply kappa when evaluating ion perp. thermal diffusivity
+ion thermal conduction is kappai_fac* kappa
+ikapscale = 0 | int
+if 1: kappar gets scaled by kappa
+kappaoff = 0. | double
+
+kappadelt = 0. | double
+
+kappat = 0. | double
+Isotropic thermal conductivity
+kappa0 = 0. | double
+‘’
+kappax = 0. | double
+
+kappah = 0. | double
+
+kappag = 0. | double
+Thermal diffusion proportional to pressure gradient
+kappaf = 1. | double
+
+gradp_crit = 0. | double
+Critical pressure gradient in kappag/kappaf models
+
+ikapparfunc = 0 | int
+select parallel thermal conductivity (PTC) function
+
+ikappar_ni = 1 | int
+1: include 1/n terms in parallel heat flux
+kappar = 0. | double
+Parallel thermal conductivity
+kappari_fac = 1. | double
+Ion parallel thermal conductivity factor
+(Ion parallel thermal conductivity is kappari_fac x electron value)
+tcrit = 0. | double
+
+(Te for ikapparfunc = 1 ?)
+k_fac = 1. | double
+multiplies toroidal field in denominator of PTC
+Factor by which TF is multiplied in denominator of kappa_par
+kappar_max = 0. | double
+Maximum value of kappa in the plasma region
+kappar_min = 0. | double
+Maximum value of kappa in the plasma region
+temin_qd = 0. | double
+Min. Temp. used in Equipartition term for ipres=1
+idenmfunc = 0 | int
+selects from of particle diffusion (PD)
+0: PD = denm
+1: PD = denm + denmt/Te
+10: read from file profile denm in m2/sec
+11: read from file profile denm in normalized units
+denm = 0. | double
+Density diffusion coefficient
+denmt = 0. | double
+Temperature dependent density diffusion coefficient
+multiplier of 1/Te for idenmfunc=1
+denmmin = 0. | double
+Minimum density diffusion coefficient (minimum value of denm)
+denmmax = 1.e6 | double
+Maximum density diffusion coefficient (maximum value of denm)
+
+【Boundary Conditions】 bc_grp
+isurface = 1 | int
+include surface terms in Galerkin method
+icurv = 2 | int
+if > 0, include curvature from mesh
+nonrect = 0 | int
+1: non-rectangular boundary
+ifixedb = 0 | int
+1: Set ψ=0 on boundary
+com_bc = 0 | int
+on boundary
+vor_bc = 0 | int
+on boundary
+iconst_p = 1 | int
+1: Hold pressure constant on boundary
+iconst_n = 1 | int
+1: Hold density constant on boundary
+iconst_t = 1 | int
+1: Hold temperature constant on boundary
+iconst_bn = 1 | int
+1: Hold normal field constant on boundary
+iconst_bz = 0 | int
+1: Hold toroidal field constant on boundary
+  Linear runs should normally have iconst_bz=0
+Nonlinear runs normally have iconst_bz=1
+inograd_p = 0 | int
+1: No normal pressure gradient on bounday
+inograd_t = 0 | int
+1: No normal temperature gradient on bounday
+inograd_n = 0 | int
+1: No normal density gradient on bounday
+inonormalflow = 1 | int
+1: No-normal-flow boundary condition
+inoslip_pol = 1 | int
+1: No-slip boundary condition for poloidal velocity
+2: No-slip only on the sum of the two poloidal velocity componnets
+inoslip_tor = 1 | int
+1: No-slip boundary condition for toroidal velocity
+inostress_tor = 0 | int
+1: No-normal-stress boundary for toroidal velocity
+(no stress (toroidal flow) on boundary)
+inocurrent_pol = 0 | int
+1: no poloidal current on boundary
+inocurrent_tor = 0 | int
+1: no toroidal current on boundary
+inocurrent_norm = 0 | int
+1: no normal current on boundary
+ifbound = -1 | int
+Boundary condition on 'f'(f’ ?) field.
+1 = Dirichlet
+2 = Neumann
+iconstflux = 0 | int
+1: conserves toroidal flux in nonlinear calculation
+iper = 0 | int
+1: Periodic boundary condition in R direction
+(Left/right boundaries periodic)
+jper = 0 | int
+1(2 ?): Preiodic boundary condition in Z direction
+(Top/bottom boundaries periodic)
+tebound = -1. | double
+boundary condition for electron temperature
+tibound = -1. | double
+boundary condition for ion temperature
+
+【Normalizations】 norm_grp
+b0_norm = 1.e4 | double
+Normalization of magnetic field in cgs (G)
+n0_norm = 1.e14 | double
+Normalization of density in cgs (e-/cm3)
+l0_norm = 100. | double
+Normalization of length in cgs (cm)
+
+【Grad-Shafranov Solver】 gs_grp
+inumgs = 0 | int
+1: Use numerical def. of p and g from profile-p and profile-g files
+igs = 80 | int
+Max number of Picard/Grad-Shafranov iterations
+igs_pp_ffp_rescale = 0 | int
+1: rescale p’ and FF’ to match p and F
+igs_extend_p = 0 | int
+Extend p past Psi=1 using ne and Te profiles
+1: extend p past pls=1 using ne and Te profiles
+igs_extend_diamag = 1 | int
+Extend diamagnetic rotation Psi=1
+1=extend diamagnetic rotation past psi=1
+igs_start_xpoint_search = 0 | int
+Number of GS its. before searching for xpoint
+number of GS iterations before searching for x-point
+igs_forcefree_lcfs = -1 | int
+Ensure that GS solution is force-free at LCFS
+1: ensure that GS solution is force free at LCFS
+nv1equ = 0 | int
+1:use numvar =1 equilibrium for numvar .GT. 1
+igs_feedfac = 1 | int
+proportionality factor for external field feedback
+eta_gs = 1e3 | double
+Factor for smoothing nonaxisymmetries in psi in (3D) GS solve
+tcuro = 1. | double
+Total current in initial current filament
+(scaled) plasma current in GS equilibrium
+scaled initial plasma toroidal current 
+xmag = 1. | double
+coordinate of initial current filament
+R-coordinate of initial current centroid 
+R-coordinate of magnetic axis
+zmag = 0. | double
+coordinate of initial current filament
+Z-coordinate of initial current centroid
+Z-coordinate of magnetic axis
+xmag0 = 0. | double
+if nonzero, target magnetic axis R for feedback
+zmag0 = 0. | double
+if nonzero, target magnetic axis Z for feecback
+xlim = 0. | double
+R-coordinate of limiter #1
+zlim = 0. | double
+Z-coordinate of limiter #1
+xlim2 = 0. | double
+R-coordinate of limiter #2
+zlim2 = 0. | double
+Z-coordinate of limiter #2
+rzero = -1. | double
+nominal major radius of device for itor=1
+
+libetap = 1.2 | double
+approximate initial value of  for free-boundary equ
+p0 = 0.01 | double
+Pressure at magnetic axis
+initial central pressure (if reading p from file, still used in density def)
+pi0 = 0.005 | double
+Ion pressure at magnetic axis
+initial central ion pressure.
+electron pressure is pe = p0 – pi0
+p1 = 0. | double
+ at magnetic axis
+analytic pressure function parameter 
+p2 = 0. | double
+ at magnetic axis
+analytic pressure function parameter 
+pedge = 0. | double
+Pressure outside separatrix (ignore if <= 0) 
+Also, BC on pressure
+Pressure in vacuum region
+tedge = 0. | double
+Electron temperature outside separatrix (ignore if <= 0)
+temperature in vacuum region (if .GT. 0).
+Only used in GS solve.
+Boundary value of electron temp is twall = pedge × pefac/den_edge
+tiedge = 0. | double
+Outermost ion temperature (ignore if <= 0)
+ion temperature in vacuum region
+expn = 0. | double
+Fraction of pressure gradient due to density gradient:n =
+Density profile = p^expn
+
+q0 = 1. | double
+central safety factor for analytic function 
+Safety factor at magnetic axis
+sigma0 = 0. | double
+width of Gaussian for initial current distribution for GS iteration
+djdpsi = 0. | double
+parameter in analytic equilibrium function 
+
+th_gs = 0.8 | double
+Implicitness of GS Picard iterations
+tol_gs = 1.e-8 | double
+convergence criteria for GS iteration
+psiscale = 1. | double
+depricated
+pscale = 1. | double
+Factor multiplying pressure profile
+bscale = 1. | double
+Factor multiplying toroidal field profile
+batemanscale = 1. | double
+Bateman scaling factor for TF (keeping current density fixed)
+Bateman scale the TF, keeping current profile fixed
+bpscale = 1. | double
+Factor multiplying F' (keeping F0 constant)
+iread_bscale = 0 | int
+1: read profile_bscale for factor to scale F
+iread_pscale = 0 | int
+1: read profile_pscale for factor to scale p and p'
+vscale = 1. | double
+Factor multiplying toroidal rotation profile
+gs_vertical_feedback = 0. | double array(maxcoils)
+Proportional feedback of each coil to vertical displacements
+proportional feedback of each coil to (zmag-zmag0) (array)
+proportional FB of each coil to (zmag-zmag0) (array)
+gs_radial_feedback = 0. | double array(maxcoils)
+Proportional feedback of each coil to radial displacements
+proportional feedback of each coil to (xmag-xmag0) (array)
+proportional FB of each coil to (xmag-xmag0) (array)
+gs_vertical_feedback_i = 0. | double array(maxcoils)
+Integral feedback of each coil to vertical displacements
+integral feedback of each coil to (zmag-zmag0) (array)
+integral FB of each coil to (zmag-zmag0) (array)
+gs_radial_feedback_i = 0. | double array(maxcoils)
+Integral feedback of each coil to radial displacements
+integral feedback of each coil to (xmag-xmag0) (array)
+integral FB of each coil to (xmag-xmag0) (array)
+gs_vertical_feedback_x = 0. | double array(maxcoils)
+Proportional feedback of each coil to vertical displacements
+proportional feedback of each coil to (znull-znull0) (array)
+proportional FB of each coil to (znull-znull0) (array)
+gs_radial_feedback_x = 0. | double array(maxcoils)
+Proportional feedback of each coil to radial displacements
+proportional feedback of each coil to (xnull-xnull0) (array)
+proportional FB of each coil to (xnull-xnull0) (array)
+gs_vertical_feedback_x_i = 0. | double array(maxcoils)
+Integral feedback of each coil to vertical displacements
+integral feedback of each coil to (znull-znull0) (array)
+integral FB of each coil to (znull-znull0) (array
+gs_radial_feedback_x_i = 0. | double array(maxcoils)
+Integral feedback of each coil to radial displacements
+integral feedback of each coil to (xnull-xnull0) (array)
+integral FB of each coil to (xnull-xnull0) (array
+irot = 0 | int
+Include toroidal rotation
+1: include toroidal rotation in equilibrium calculation (see Section 12)
+iscale_rot_by_p = 1 | int
+see below and Section 12
+    0: omega^2 = 2.*p0*(alphai * Psi^i)/n0|&
+    &1: omega^2 = 2.*(alphai * Psi^i)/n0,&
+    &2: omega^2 = 2.*(alphai * Psi^i), alphai = a0 + a1*exp(-((psii-a2)/a3)**2)
+alpha0 = 0. | double
+Constant term in analytic rotation profile
+
+alpha1 = 0. | double
+Linear term in analytic rotation profile
+
+alpha2 = 0. | double
+Quadratic term in analytic rotation profile
+
+alpha3 = 0. | double
+Cubic term in analytic rotation profile
+
+
+idenfunc = 0 | int
+
+
+
+den_edge = 0. | double
+edge density. If zero, set to den0*(pedge/p0)**expn
+den0 = 1. | double
+central density
+(scaled) central density
+dendelt = 0.1 | double
+width of transition region for idenfunc=1,2
+
+denoff = 1. | double
+offset for idenfunc= 1,2,3
+
+divertors = 0 | int
+number of divertors (for use in equilibrium field calculation)
+Number of divertors (0–2)
+xdiv = 0. | double
+R position of divertor coils
+r-coordinate of divertor current(s)
+zdiv = 0. | double
+Z position of divertor coil
+z-coordinate of divertor current.
+If divertors = 2, the second divertor has z = −zdiv.
+divcur = 0.1 | double
+normalized current in divertor coil
+Divertor current(s), as fraction of tcuro
+xnull = 0. | double
+Guess for R-coordinate of active x-point	
+Guess for r-coordinate of x-point
+znull = 0. | double
+Guess for Z-coordinate of axtive x-point
+Guess for z-coordinate of x-point
+mod_null_rs = 0 | int
+if 1, you can modify xnull,znull at restart
+if 1, you can reset xnull and znull from C1input at restart
+if 1: you can reset xnull and znull from C1input
+xnull2 = 0. | double
+Guess for R-coordinate of inactive x-point
+znull2 = 0. | double
+Guess for Z-coordinate of inaxtive x-point
+mod_null_rs2 = 0 | int
+if 1, you can modify xnull2,znul2l at restart
+if 1, you can reset xnull2 and znull2 from C1input at restart
+if1: you can reset xnull2 and znull2 from C1input
+gs_pf_psi_width = 0. | double
+Width of psi smoothing into private flux region
+xnull0 = 0. | double
+Target R-coordinate of x-point for feedback
+znull0 = 0. | double
+Target Z-coordinate of x-point for feedback
+adapt_qs = 0. | double array(maxqs)
+Safety factor values to pack around (array)
+adapt_zlow = 0. | double
+Z-coordinate below which SOL adaptation is coarse
+adapt_zup = 0. | double
+Z-coordinate above which SOL adaptation is coarse
+! iadapt_by_eta | int | 0 | In wall region, adapt by wall resistivities
+
+【Numerical Options】 num_grp
+jadv = 1 | int
+1: Use toroidal current density equation instead of poloidal flux equation.
+(Use Del*(psi) eqn. instead of psi eqn.)
+int_pts_main = 25 | int
+Sampling points for integrations in main time step matrices
+must be consistent with MAX_PTS at compile time
+int_pts_aux = 25 | int
+Sampling points for integrations in calculations of auxiliary variables
+MAX_PTS must be GE int_pts_tor*int_pts_nnn for 3D
+int_pts_diag = 25 | int
+Sampling points for integrations in diagnostic calculations
+int_pts_tor = 5 | int
+Max number of toroidal integration points
+max_ke = 1. | double
+Value of ke at which linear sims are rescaled (ignore if 0) (0 = don’t rescale)
+Max. value of kinetic energy before solution is rescaled in linear simulations (?)
+equilibrate = 0 | int
+1: scale trial function so L2 norm = 1
+regular = 0. | double
+regularization constant in chi equation
+iset_pe_floor = 0 | int
+1: Do not let pe drop below pe_floor
+pe_floor = 0. | double
+Minimum allowed value for pe when iset_pe_floor=1
+iset_pi_floor = 0 | int
+1: Do not let pi drop below pi_floor
+pi_floor = 0. | double
+Minimum allowed value for pi when iset_pi_floor=1
+iset_te_floor = 0 | int
+1: Do not let Te drop below te_floor
+te_floor = 0. | double
+Minimum allowed value for Te when iset_te_floor=1
+iset_ti_floor = 0 | int
+1: Do not let Ti drop below ti_floor
+ti_floor = 0. | double
+Minimum allowed value for Ti when iset_ti_floor=1
+iprecompute_metric = 0 | int
+1: precompute (full) metric tensor
+
+【Hyper Diffusivity】 hyper_grp
+deex = 1. | double
+scale length used in hyper
+hyper = 0. | double
+hyper coefficient for ψ equation
+hyperc = 0. | double
+hyper coefficient for poloidal velocity
+hyperi = 0. | double
+hyper coefficient for toroidal field
+hyperp = 0. | double
+hyper coefficient for pressure
+hyperv = 0. | double
+hyper coefficient for toroidal flow
+ihypdx = 0 | int
+hyper terms multiplied by deex**ihypdx
+ihypeta = 1 | int
+swithc for multipliers of hyper terms
+1: magnetic field hyper multiplied by eta
+2: magnetic field hyper multiplied by p
+ihypkappa = 1 | int
+1: pressure hyper coefficient multiplied by kappa
+imp_hyper = 0 | int
+switch for evaluating hyper resistivity
+
+ihypamu 1 1: velocity hyper coefficient multiplied by amu （源码没有）
+
+【Time Step】 time_grp
+ntimemax = 20 | int
+Total number of time steps
+integrator = 0 | int
+0: Crank-Nicholson (CN)
+1: BDF2
+isplitstep = 1 | int
+0: Unsplit time step (Fully implicit time step)
+1: Split time step
+imp_mod = 1 | int
+Type of split step
+0: Standard (θ-implicit)
+1: Caramana (Implicit leapfrof (isplitstep = 1 only))
+For nonlinear runs, normally set imp_mod=0 (more stable)
+For linear runs with isplitstep=1 set imp_mod=1 (more accurate)
+iteratephi = 0 | int
+1: Calculate transport coefficients after field advance, 
+then recalculate field advance.
+idiff = 0 | int
+0: only solve for difference in B,p
+1: solve for difference between n and n+1 in B,p
+idifv = 0 | int
+0: only solve for difference in v
+1: solve for difference between n and n+1 for V
+For idiff=idifv=1, should increase ksp_rtol from 10-9 to 10-8
+irecalc_eta = 0 | int
+1: recalculate transport coefficients after density solve
+iconst_eta = 0 | int
+1: don’t evolve resistivity
+itime_independent = 0 | int
+1: exclude d/dt terms
+thimp = 0.5 | double
+Implicitness of timestep (.5<thimp<1)
+thimpsm = 1.0 | double
+implicitness parameter for smoothers (smoother functions)
+harned_mikic = 0.0 | double
+coefficient of Harned-Mikic 2F stabilization term
+isources = 0 | int
+1: include “source” terms in velocity advance
+nskip = 1 | int
+number of times steps per matrix recalculation
+pskip = 1 | int
+number of times the preconditioner is reused
+iskippc = 1 | int
+number of times preconditioner is reused
+dt = 0.1 | double
+initial size of time step. Can only change on restart if dtkecrit=0
+ddt = 0.0 | double
+change in timestep per timestep
+frequency = 0.0 | double
+Frequency in time-independent calculations
+dtmin = 4.0 | double
+minimum timestep for variable timestep calculation
+dtmax = 40.0 | double
+maximum timestep for variable timestep calculation
+dtkecrit = 0.0 | double
+ekin limit on timestep
+lower timestep if ekin is above this (0.01 typical)
+dtfrac = 0.1 | double
+max fractional change of timestep in 1 cycle
+max_repeat = 3 | int
+maximum number of times a time step can be attempted
+max # time step is repeated for ksp_max iterations exceeded
+ksp_max = 10000 | int
+maximum number of ksp iterations before repeating time step
+ksp_min = 500 | int
+time step is increased if max ksp iterations is less than this
+(increase dt if ksp < ksp_min)
+ksp_warn = 1000 | int
+time step is reduced if max ksp iterations exceeds this
+(decrease dt if ksp > ksp_warn)
+! variable_timestep parameters: Timestep is constant unless dtkecrit.ne.0
+
+【Mesh】 mesh_grp
+nplanes = 1 | int
+Number of toroidal planes for 3D nonlinear
+nperiods = 1 | int
+Number of field periods
+model 1/nperiods of a torus when ifull torus=0
+ifull_torus = 0 | int
+0 = one field period
+1 = full torus
+iread_vmec = 0 | int
+1: read geometry from VMEC file
+vmec_filename = "geometry.nc" | string(256)
+name of vmec data file
+igeometry = 0 | int
+0: default, identity
+xcenter = 0. | double
+center of logical mesh (x)
+zcenter = 0. | double
+center of logical mesh (z)
+bloat_factor = 0. | double
+factor to expand VMEC domain
+bloat_distance = 0. | double
+factor to expand VMEC domain
+nzer_factor = -1 | int
+scale factor for order of VMEC interpolation
+nzer_manual = -1 | int
+order of VMEC interpolation
+iread_planes = 0 | int
+Read positions of toroidal planes from plane_positions
+xzero = 0. | double
+R-coordinate of lower left corner for rectangular mesh
+zzero = 0. | double
+Z-coordinate of lower left corner for rectangular mesh
+tiltangled = 0. | double
+angle a rectangular mesh is tilted
+mesh_filename = "struct-dmg.sms" | string(256)
+mesh name of .smb files (without number)
+mesh_model = "struct.dmg" | string(256)
+model file name from which the mesh is generated
+ipartitioned = 0 | int
+1 = the input mesh is partitioned
+imatassemble = 0 | int
+0: use scorec matrix parallel assembly
+1: use petsc matrix parallel assembly instead of scorec
+is1_agg_blk_cnt = 1 | int
+number of blocks to divide each node of dofs into for matrix s1
+is1_agg_scp = 0 | int
+0: per-rank aggregation
+1: per-plane aggregation
+2: global aggregation
+imulti_region = 0 | int
+1: Mesh has multiple regions that includes resistive wall and vacuum.
+Wall resistivity is “eta_wall”
+poloidal resistivity is “eta_wallRZ”
+Vacuum resistivity is “eta_vac”
+toroidal_pack_factor = 1. | double
+ratio of longest to shortest toroidal element
+toroidal_pack_angle = 0. | double
+toroidal angle of maximum mesh packing
+boundary_type = BOUND_UNKNOWN | int array(max_bounds)
+Type of each mesh boundary.
+Boundary conditions to apply on mesh loop
+i. 0 = None, 1 = First wall, 2 = Domain boundary
+zone_type = ZONE_UNKNOWN | int array(max_zones)
+Type of each mesh boundary.
+Physics model of mesh zone
+i. 1 = plasma, 2 = conductor, 3 = vacuum.
+
+【Solver】 solver_grp
+solver_tol = 1.e-9 | double
+solver tolerance
+solver_type = 0 | int
+for PETSc only
+0: direct solve
+1: iterative solver
+for Trilinios, iterative solver is used
+num_iter = 100 | int
+Maximum number of iterations
+isolve_with_guess = 0 | int
+newsolve with nonzero initial guess
+
+【Mesh Adaptation】 adapt_grp
+iadapt = 0 | int
+0: no adaptation
+1: adapt mesh from the magnetic flux field in the equilibrium (A)
+2: adapt mesh from the estimated error in the solution field (B)
+3: run both (A) and (B)
+ispradapt = 0 | int
+""
+isprntime = 10 | int
+""
+isprweight = 0.1 | double
+""
+isprmaxsize = 0.05 | int
+""
+isprrefinelevel = 1 | int
+""
+isprcoarsenlevel = -1 | int
+""
+iadapt_writevtk = 0 | int
+if 1, write the initial and adapted mesh in vtk format
+The initial mesh before adaptation is written in folder “ts0-initial”
+The adapted mesh is written in folder “tsN -adapted”, N=time step
+(turned back on iadapt_writesmb to pass the regression tests with old libraries. 
+once libraries are updated in all machines,
+this will be turned off -- seols 11/2021)
+iadapt_writesmb = 1 | int
+if 1, write the adapted mesh in “tsN-adapted.smb”, N=time step
+iadapt_useH1 = 0 | int
+""
+iadapt_removeEquiv = 0 | int
+""
+adapt_target_error = 0.0001 | double
+""
+adapt_ke = 0.0 | double
+""
+iadapt_ntime = 0 | int
+""
+iadapt_max_node = 10000 | int
+""
+adapt_control = 1 | int
+""
+iadapt_order_p = 3.0 | double
+convergence rate in H2 space
+iadaptFaceNumber = -1 | int
+(prereq: iadapt = 1)
+adapt elements classified on model face
+iadapt_snap = 1 | int
+support snapping
+adapt_factor = 1. | double
+""
+adapt_hmin = 0.001 | double
+""
+adapt_hmax = 0.1 | double
+""
+adapt_hmin_rel = 0.5 | double
+""
+adapt_hmax_rel = 2.0 | double
+""
+adapt_smooth = 2./3. | double
+""
+adapt_psin_vacuum = -1. | double
+treat the entire vacuum region as having that value of psin
+adapt_psin_wall = -1. | double
+treat the entire wall as having that value of psin
+iadapt_pack_rationals = 0 | int
+Number of mode-rational surfaces to pack mesh around
+adapt_pack_factor = 0.02 | double
+Width of Lorentzian (in psi_N) for rational mesh packing
+adapt_coil_delta = 0. | double
+Parameter for packing mesh around coil locations
+Width parameter for packing mesh around coil locations
+must include files adapt_coil.dat and adapt_current.dat
+adapt_pellet_length = 0. | double
+Length of pellet path to pack mesh along
+adapt_pellet_delta = 0. | double
+Width parameter for packing mesh along pellet path
+(文档有源码无) adapt_qs(array) 0 Safety vactor values (up to 32) about which to adapt. Literally, the normalized flux used for adaptation gets hacked so that it’s close to unity near the specified safety factors
+
+【Input】 input_grp
+iread_eqdsk = 0 | int
+1: Read EFIT g-file ‘geqdsk’
+2: Read psi from geqdsk, but use analytic profiles for p and F
+3: read profiles from geqdsk, but not the eqdsk psi
+iread_dskbal = 0 | int
+1: Read BAL file ‘dskbal’ (dskbal equilibrium)
+iread_jsolver = 0 | int
+1: 1: read equilibrium file “fixed” from jsolver
+iread_omega = 0 | int
+nonzero: reads in rotation profile
+iread_omega_e = 0 | int
+Read electron rotation (same options as iread_omega)
+iread_omega_ExB = 0 | int
+Read ExB rotation (same options as iread_omega)
+iread_ne = 0 | int
+nonzero: read in electron density profile
+iread_te = 0 | int
+nonzero: read in temperature profile
+iread_p = 0 | int
+1: read pressure profile from profile_p
+iread_f = 0 | int
+Read profile_f file containing F=R*B_phi vs Psi_N for GS solve
+(1: read R x BT from file)
+iread_j = 0 | int
+Read profile_j file containing toroidal J_phi(r) (basicj equilibrium only)
+(1: read current density from a file)
+iread_heatsource = 0 | int
+1: read heat source profile (psi normalized) scaled by ghs_rate
+iread_particlesource = 0 | int
+1: read particle source profile (psi normalized) scaled with pellet_rate
+iread_neo = 0 | int
+Read velocity data (profiles) from NEO output
+ineo_subtract_diamag = 0 | int
+1: subtract diamagnetic term from input vel when reading neo velocity
+
+【Output】 output_grp
+iprint = 0 | int
+1,2: additional debug output
+1: Print detailed info to stdout
+ntimepr = 1 | int
+Number of time steps per field output
+ntimers = 0 | int
+Number of time steps per restart output (defaults to ntimepr)
+ifout = -1 | int
+1: output f field
+icalc_scalars = 1 | int
+1: Calculate scalar diagnostics
+ike_only = 0 | int
+1: Only calculate ke scalar diagnostic
+ike_harmonics = 0 | int
+Number of (toroidal) Fourier harmonics of ke to be calculated and output
+(for diagnostics)
+ibh_harmonics = 0 | int
+Number of (toroidal) Fourier harmonics of magnetic perturbation energy
+(to be calculated and output for diagnostic)
+irestart = 0 | int
+0: start from time step 0
+1: normal restart (can restart 3D from 2D)
+3: start a 2D complex run from a 2D real restart
+itimer = 0 | int
+1: Output internal timer data
+iwrite_transport_coeffs = 1 | int
+1: Output transport coefficient fields
+iwrite_aux_vars = 1 | int
+1: Output auxiliary variable fields
+itemp_plot = 0 | int
+1: Output additional temperature plots
+(output vdotgradt, deldotq_perp, deldotq_par, eta_jsq)
+ibdgp = 0 | int
+ne.0: bdgp plot contains only partial results
+option for plotting partial terms for bdgp plot
+
+idouble_out = 0 | int
+1: Use double-precision floating points in output hdf5 files
+irestart_slice = -1 | int
+(Field output slice from which to restart)
+(if set to an integer, restart from that time slice)
+If set to a value (n), and iread_hdf5=1,
+will restart from a time-step other than the last one
+iveldif = 0 | int
+ne.0: veldif plot contains only partial results
+option for plotting partial terms for veldif plot
+
+文档有源码无 iglobalout 0 | 1: write global restart files
+文档有源码无 iglobalin 0 | 1: read global restart files
+文档有源码无 iwrite_adios 0 | 1: write adios restart files (no longer supported)
+文档有源码无 iread_adios 0 | 1: restart using adios (no longer supported)
+文档有源码无 irestart_factor 1 | if >1, multiply the number of planes in 3D run
+文档有源码无 iread_hdf5 1 | restart runs from hdf5 file (now default) Also, best to have idouble_out=1
+
+【Diagnostics】 diagnostic_grp
+xray_detector_enabled = 0 | int
+1: enable xray detector
+xray_r0 = 0. | double
+R coordinate of xray detector
+xray_phi0 = 0. | double
+Phi coordinate of xray detector
+xray_z0 = 0. | double
+Z coordinate of xray detector
+xray_theta = 0. | double
+Angle of xray detector chord (degrees)
+xray_sigma = 1. | double
+Spread of xray detector chord (degrees)
+imag_probes = 0 | int
+Number of magnetic probes
+mag_probe_x = 0. | double array(imag_probes_max)
+X-coordinate of magnetic probes
+mag_probe_phi = 0. | double array(imag_probes_max)
+Phi-coordinate of magnetic probes
+mag_probe_z = 0. | double array(imag_probes_max)
+Z-coordinate of magnetic probes
+mag_probe_nx = 0. | double array(imag_probes_max)
+X-component of normal vector of magnetic probe
+mag_probe_nphi = 0. | double array(imag_probes_max)
+Phi-component of normal vector of magnetic probe
+mag_probe_nz = 0. | double array(imag_probes_max)
+Z-component of normal vector of magnetic probe
+iflux_loops = 0 | int
+Number of flux loops
+flux_loop_x = 0. | double array(iflux_loops_max)
+X-coordinate of flux loop
+flux_loop_z = 0. | double array(iflux_loops_max)
+Z-coordinate of flux loop
+ifixed_temax = 0 | int
+if nonzero, evaluate temax at xmag0,zmag0
+
+【Sources/Sinks】 source_grp
+(loop voltage)
+vloop = 0. | double
+initial loop voltage
+NOTE: to change vloop at restart time, must have control_type = -1
+vloopRZ = 0. | double
+‘’
+tcur = 0. | double
+target (scaled) plasma current for current control: 
+vloop_freq = 0. | double
+Loop voltage frequency
+tcuri = 0. | double
+if tcuri .ne. tcurf, the target current is a function of time
+tcurf = 0. | double
+tcur = tcuri + (tcurf-tcuri) x .5 x (1. + tanh((t-tcur_t0)/tcur_tw))
+tcur_t0 = 0. | double
+see tcurf
+tcur_tw = 0. | double
+see tcurf
+control_type = -1 | int
+-1: no current control. Constant vloop applied
+0: old current control algorithm (not recommended)
+1: standard PID control with the following control parameters
+control_p = 0. | double
+proportional control coefficient
+control_i = 0. | double
+integral control coefficient
+control_d = 0. | double
+derivative control coefficient
+(density source)
+ipellet = 0 | int
+0: density source if non-zero (3D part equals 1 for 2D runs).
+Doubledigit values have volume integrals normalized to 1.
+Make netative for initial perturbation only
+
+
+
+
+
+irestart_pellet = 0 | int
+1 = read some pellet restart parameters from C1input
+pellet_rate, pellet_rate_D2, pellet_var_tor, pellet_var,
+cloud_pel, pellet_mix, cauchy_fraction
+(the rest from *.h5)
+ipellet_z = 0 | int
+Atomic number of pellet (0 = main ion species)
+iread_pellet = 0 | int
+0: Single pellet defined by scalar parameters below
+1: read pellet info from pellet.dat, with one row per pellet.
+The 13 space-delimited columns are:
+pellet r, pellet phi, pellet z, pellet rate,
+   pellet var, pellet var tor, pellet velr,
+   pellet vel phi, pellet vel z, r p, cloud pel,
+   pellet mix, cauchy fraction
+pellet_r_scl = 0. | double
+Initial radial position of the pellet
+coordinate of injection profile)
+
+pellet_phi_scl = 0. | double
+Initial toroidal position of the pellet
+
+pellet_z_scl = 0. | double
+Initial vertical position of the pellet
+coordinate of injection profile)
+
+pellet_rate_scl = 0. | double
+Particle number injection rate.
+Density source is pellet_rate × 𝑆S as defined by ipellet;
+If ipellet_abl .ne. 0, ablation routines define pellet_rate
+pellet_var_scl = 1. | double
+Variance of injection profile
+
+pellet_var_tor_scl = 0. | double
+toroidal spatial dispersion of pellet source (Vt).
+If zero, pellet_var_tor = pellet_var.
+
+pellet_velr_scl = 0. | double
+initial radial velocity of the pellet
+pellet_velphi_scl = 0. | double
+Initial toroidal velocity of the pellet
+pellet_velz_scl = 0. | double
+Initial vertical velocity of the pellet
+ipellet_abl = 0 | int
+Turn on pellet ablation.
+(Recommend double-digit ipellet for particle conservation)
+1: Include ablation model [Parks NF94] calibrated on DIII-D (Li)
+2: Include new ablation model [Parks, 2015] for small pellets (Li)
+3: Parks model developed 6/20/2017 (for Neon)
+ipellet_fixed_dep = 0 | int
+1 = use fixed input pellet_var when ipellet_abl=1
+r_p_scl 1.e-3 | double
+initial pellet radius
+cloud_pel_scl = 1. | double
+Parameter used to change the width of the density source if ablating.
+In this case, pellet_var = cloud_pel * r_p
+pellet_mix_scl = 0. | double
+Molar fraction of deuterium in pellet
+Molar fraction of diatomic main ion molecures in pellet (e.g., D2 )
+temin_abl = 0. | double
+Minimum temperature at which ablation turns on
+cauchy_fraction_scl = 0. | double
+For ipellet=14,
+fraction of distribution that is Cauchy, vs von Mises
+abl_fac = 1. | double
+factor to multiply ablation rate from predefined formula
+
+pallet_rate, pallet_var, pallet_var_tor pellet_R pallet_z pellet_phi
+pallet_velr pellet_velphi pellet_velz r_p cloud_pel pellet_mix
+(beam source)
+ibeam = 0 | int
+neutral beam source
+GE 1: Include neutral beam source
+
+
+beam_x = 0. | double
+R coordinate of beam center (in m)
+beam_z = 0. | double
+Z coordinate of beam center (in m)
+beam_v = 1.e4 | double
+beam voltage (in volts)
+beam_rate = 0. | double
+Ions/second deposited by beam
+beam_dr = 0.1 | double
+dispersion of beam deposition
+beam_dv = 100. | double
+dispersion of beam voltage (in volts)
+beam_fracpar = 1.0 | double
+cosine of beam angle relative to parallel (for momentum source)
+
+(current drive source)
+icd_source = 0 | int
+
+1: Include current drive source
+j_0cd = 0. | double
+
+amplitude of current drive
+r_0cd = 0. | double
+
+R-coordinate of cd maximum
+z_0cd = 0. | double
+
+Z-coordinate of cd maximum
+w_cd = 0. | double
+
+width of cd gaussian
+delta_cd = 0. | double
+
+shift of cd gaussian\
+
+J_0cd R_0cd Z_0cd W_0cd ???
+(poloidal momentum source)
+ipforce = 0 | int
+1: Include Poloidal momentum source
+
+
+2: Include Luca Guzzatto form of momentum source
+
+dforce = 0. | double
+
+half-width of poloidal momentum source
+xforce = 0. | double
+(?)
+location [0,1] of poloidal momentum source
+nforce = 0 | int
+N
+exponent of (1-x) multiplying poloidal mom. source
+aforce = 0. | double
+
+magnitude of poloidal momentum source
+(gaussian heat source)
+igaussian_heat_source = 0 | int
+1: Include gaussian heat source
+ghs_x = 0. | double
+R coordinate of gaussian heat source
+ghs_z = 0. | double
+Z coordinate of gaussian heat source
+ghs_phi = 0. | double
+Phi coordinate of gaussian heat source
+ghs_rate = 0. | double
+Amplitude of gaussian heat source
+ghs_var = 1. | double
+Variance of gaussian heat source
+ghs_var_tor = 0. | double
+Toroidal variance of gaussian heat source
+iheat_sink = 0 | int
+1: special heat sink for itaylor=27
+coolrate = 0. | double
+S = coolrate*(pedge-p) for iheat_sink = 1
+(ionization)
+ionization = 0 | int
+1: include neutral ionization source
+ionization_rate = 0. | double
+Ionization rate coefficient
+ionization_temp = 0.01 | double
+Ionization energy
+ionization_depth = 0.01 | double
+Temperature scale-length of neutral burn-out
+(sink)
+isink = 0 | int
+number of density sinks: 0,1,or 2
+sink1_x = 0. | double
+R coordinate of first density sink
+sink1_z = 0. | double
+Z coordinate of first density sink
+sink1_rate = 0. | double
+rate of first density sink
+sink1_var = 1. | double
+variance of first density sink
+sink2_x = 0. | double
+R coordinate of second density sink
+sink2_z = 0. | double
+Z coordinate of second density sink
+sink2_rate = 0. | double
+rate of second density sink
+sink2_var = 1. | double
+variance of second density sink
+(others)
+iarc_source = 0 | int
+1: density source due to halo current
+arc_source_alpha = 0. | double
+parameter for arc_source
+arc_source_eta = 0.01 | double
+parameter for arc_source
+idenfloor = 0 | int
+1: density in vacuum pegged to den_edge
+alphadenfloor = 0. | double
+multiplier of (den_edge - den). Must be .lt. 1/DT
+(density)
+n_target = 1. | double
+target density
+n_control_type = -1 | int
+-1: no density control
+0: old density control algorithm (not recommended)
+1: Standard PID control with the following parameters:
+n_control_p = 0. | double
+proportional feedback constant
+n_control_i = 0. | double
+integral feedback constant
+n_control_d = 0. | double
+derivative feedback constant
+
+【Resistive Wall】 rw_grp
+eta_wall = 1e-3 | double
+Resistivity of conducting wall region
+eta_wallRZ = -1. | double
+poloidal resistivity of wall region (if different from eta wall)
+eta_vac = 1. | double
+Resistivity of vacuum region
+iwall_breaks = 0 | int
+Number of wall break regions
+eta_break = 1. | double array(imax_wall_breaks)
+Resistivity of wall break
+wall_break_xmin = 0. | double array(imax_wall_breaks)
+Minimum x coordinate for wall break
+wall_break_xmax = 0. | double array(imax_wall_breaks)
+Maximum x coordinate for wall break
+wall_break_zmin = 0. | double array(imax_wall_breaks)
+Minimum z coordinate for wall break
+wall_break_zmax = 0. | double array(imax_wall_breaks)
+Maximum z coordinate for wall break
+wall_break_phimin = 0. | double array(imax_wall_breaks)
+Minimum phi coordinate for wall break
+wall_break_phimax = 0. | double array(imax_wall_breaks)
+Maximum phi coordinate for wall break
+iwall_regions = 0 | int
+Number of resistive wall regions
+wall_region_eta = 1e-3 | double array(imax_wall_regions)
+Resistivity of each wall region
+wall_region_etaRZ = -1. | double array(imax_wall_regions)
+Poloidal Resistivity of each wall region
+(if different from wall region eta)
+wall_region_filename = “” | string array(imax_wall_regions, 256)
+file name with wall contour points
+eta_zone = 0. | double array(max_zones)
+Resistivity of mesh region
+Only applies if zone type(i) = 2 (conductor).
+etaRZ_zone = 0. | double array(max_zones)
+Poloidal resistivity of mesh region
+i. Only applies if zone type(i) = 2 (conductor).
+eta_rekc = 0. | double
+Resistivity of runaway-electron killer coil (REKC)
+ntor_rekc = 0 | int
+Toroidal mode number of REKC
+mpol_rekc = 0 | int
+Poloidal mode number of REKC
+isym_rekc = 0 | int
+if nonzero, a double helix
+if non-zero, coil is double helix with (+,-) mpol_rekc
+phi_rekc = 0. | double
+Toroidal angle of fixed point of REKC
+theta_rekc = 0. | double
+Poloidal angle of fixed point of REKC
+sigma_rekc = 0. | double
+Angular half-width of REKC
+rzero_rekc = 0. | double
+R0 for computing theta of REKC
+zzero_rekc = 0. | double
+Z0 for computing theta of REKC
+
+【Miscellaneous】 misc_grp
+gam = 5./3. | double
+Ratio of specific heats
+db = -1. | double
+Collisionless ion skin depth (overrides db_fac)
+db_fac = 0. | double
+Factor multiplying physical value of ion skin depth
+mass_ratio = 0. | double
+ratio of ion to electron mass
+lambdae = 0. | double
+lambdae
+z_ion = 1. | double
+Z-effective
+ion_mass = 1. | double
+Ion mass (in units of m_p)
+lambda_coulomb = 17. | double
+Coulomb logarithm
+thermal_force_coeff = 0. | double
+Coefficient of thermal force
+ntor = 0 | int
+toroidal mode number for 3D linear (complex)
+mpol = 0 | int
+poloidal mode number for certain test problem initializations
+
+【Deprecated】 deprec_grp
+
+【Trilinos Options】 trilions_grp
+krylov_solver = "gmres" | string(50)
+Krylov solver
+preconditioner = "dom_decomp" | string(50)
+Preconditioner
+sub_dom_solver = "ilu" | string(50)
+Subdomain solver in preconditioner
+subdomain_overlap = 1 | int
+subdomain overlap
+graph_fill = 0 | int
+graph fill level
+ilu_drop_tol = 0.0 | double
+ILU drop tolerance
+文档名字 drop_tolerance?
+ilu_fill = 1.0 | double
+ILU fill level
+文档名字ilu_fill_level?
+ilu_omega = 1.0 | double
+Relaxation parameter for rILU
+poly_ord = 1 | int
+Polynomial order for certain preconditioners
+
+【PRAD Options】 prad_grp
+iprad = 0 | int
+1: Teng's PRad module with one impurity species
+
+prad_z = 1 | int
+Z of impurity species in PRad module
+Z=6(C), 18(Argon), 26(Fe) are available
+prad_fz = 1. | double
+Density of impurity species in PRad module, as fraction of ne
+
+iread_prad = 0 | int
+1: Read impurity density from profile_nz in units of 10^20 / m^3
+
+【KPRAD Options】 kprad_grp
+ikprad = 0 | int
+1: KPRad module with one impurity species
+kprad_z = 1 | int
+Z of impurity species in KPRad module
+Presently available: 2(He), 4(Be), 6 (C),10(Ne), 18 (Ar)
+文档名字 ikprad_z?
+kprad_fz = 0. | double
+Density of neutral impurity species in KPRad module, as fraction of ne
+kprad_nz = 0. | double
+Density of neutral impurity species in KPRAD module
+iread_lp_source = 0 | int
+Read impurity source from Lagrangian Particle code
+cloud.txt (UNDER DEVELOPMENT)
+ikprad_min_option = 1 | int
+Control behavior for KPRAD minimum density & temperature
+Determine how KPRAD behaves below minimum density/temperature
+(kprad nemin, kprad temin)
+1: No radiation/ionization/recombination (based on ne/te before subcycling)
+2: RECOMMENDED Recombination but no radiation/ionization
+(based on ne/Te during subcycling)
+3: No radiation/ionization/recombination
+(based on ne/Te during subcycling).
+NOTE: 1 and 3 behave the same if ikprad evolve internal = 0)
+kprad_nemin = 1e-12 | double
+Minimum normalized electron density for KPRAD evolution
+kprad_temin = 2e-7 | double
+Minimum normalized electron temperature for KPRAD evolution
+ikprad_max_dt = 0 | int
+Set max time step for KPRAD ionization
+Use maximum value of dt for KPRAD ionization
+
+kprad_max_dt = -1. | double
+Specify maximum value of dt for KPRAD ionization
+ikprad_evolve_internal = 0 | int
+nternally evolve ne and Te within KPRAD ionization
+Update local temperature during KPRAD subcycling:
+
+ikprad_evolve_neutrals = 0 | int
+Model for advection/diffusion of neutrals
+Determines how KPRAD neutrals evolve spatially:
+
+kprad_n0_denm_fac = 1. | double
+Scaling factor for neutral impurity diffusion
