@@ -1,6 +1,6 @@
-# M3D-C1 `C1input` 参数简表
+# M3D-C1 `C1input` 参数使用手册
 
-本简表面向写算例输入文件的用户，只保留用户需要提供/理解的四项：参数名、数据类型、默认值和含义。所有条目均为主程序 `C1input` 可读参数，属于 `&inputnl`；分组仅用于阅读。
+本文是面向 M3D-C1 算例配置的独立发布版本，逐项给出参数名、数据类型、默认值和含义。所有条目均为主程序 `C1input` 可读参数，属于 `&inputnl`；逻辑分组用于组织阅读顺序。
 
 参数总数：611。默认值以当前程序注册值为准。
 
@@ -55,7 +55,7 @@
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `iread_eqdsk` | integer | `0` | 托卡马克：轴对称 g-file 平衡入口。1 直接投影 `geqdsk`；2 读入 gfile 后在 GS 中改用默认压力/F；3 不使用 `psirz`，只取磁轴、电流和剖面重新求解 GS。仿星器：必须为 0，否则会在 `itaylor=40/41` 之前抢占初始化入口 |
+| `iread_eqdsk` | integer | `0` | 托卡马克：轴对称 g-file 平衡入口。1 直接投影 `geqdsk`；2 读入 gfile 后在 GS 中改用默认压力/F；3 不使用 `psirz`，只取磁轴、电流和剖面重新求解 GS。仿星器：必须为 0；非零值的执行优先级高于 `itaylor=40/41` |
 | `iread_dskbal` | integer | `0` | 托卡马克：旧 BAL 平衡入口。1 使用文件 psi、F、FF′、ne 并由 ne(Te+Ti) 计算压力；2 压力/F 改用默认剖面；两者都调用 GS。仿星器：必须为 0，否则屏蔽 VMEC/外场初始化 |
 | `iread_jsolver` | integer | `0` | 托卡马克：旧 Jsolver 平衡入口，读取 `fixed`；`igs>0` 时 1 使用文件 p/F、2 改用默认 p/F，`igs=0` 时直接投影。仿星器：必须为 0，否则屏蔽 VMEC/外场初始化 |
 | `iread_omega` | integer | `0` | 托卡马克：仅 GS 且 `irot!=0` 时读取，模式 1/2/3/4/5/20 分别对应 `profile_omega`、`dtrot.xy`、`profile_vphi`、rho 文件、带表头文件和 `iterdb`，之后乘 `vscale`。仿星器：VMEC 与 `itaylor=41` 路径均不读取；`iread_omega_e` 与 `iread_omega_ExB` 会在校验阶段映射到同一个内部选择量；`irot=0` 时不会读取文件；`iread_omega_e` 或 `iread_omega_ExB` 非零时会写入同一个内部 `iread_omega`，且与已有 `iread_omega` 互斥 |
@@ -139,7 +139,7 @@
 | `igs_pp_ffp_rescale` | integer | `0` | Rescale p' and FF' to match p and F；托卡马克：1 仅在由 gfile 的 p、p'、F、FF' 建立约束剖面时，把 p' 与 FF' 的积分分别重标度到给定 p 与 F；同时改变 `batemanscale` 的应用顺序。0 保留文件导数。仿星器：不使用 |
 | `igs_extend_p` | integer | `0` | Extend p past Psi=1 using ne and Te profiles；托卡马克：非零时，若 ne 或 Te 剖面延伸到压力剖面末端之外，就用电子压力加保持末端 Ti 不变的离子压力延伸总压力，并重新计算 p'。0 不延伸。仿星器：不使用 |
 | `igs_extend_diamag` | integer | `1` | Extend diamagnetic rotation Psi=1；托卡马克：读取电子或 E×B 转动并换算离子转动时，0 在归一化磁通大于等于 1 处停止加入抗磁修正；非零则继续到转动样条末端。仿星器：不使用 |
-| `igs_start_xpoint_search` | integer | `0` | Number of GS its. before searching for xpoint；托卡马克：前 N 次 GS 迭代只在给定 `xnull/znull` 位置评价磁通，从第 N 次起才在其附近搜索真正鞍点；0 表示初始化 LCFS 时即搜索。仿星器：不使用 |
+| `igs_start_xpoint_search` | integer | `0` | Number of GS its. before searching for xpoint；托卡马克：前 N 次 GS 迭代只在给定 `xnull/znull` 位置评价磁通，从第 N 次起在其附近搜索鞍点；0 表示初始化 LCFS 时即搜索。仿星器：不使用 |
 | `igs_forcefree_lcfs` | integer | `-1` | Ensure that GS solution is force-free at LCFS；托卡马克：控制 LCFS 外剖面处理。0 允许剖面按样条继续；1 在非 plasma magnetic region 令 p'、FF'、转动均为 0；2 令 p'、FF' 为 0，并把外侧转动保持为 LCFS 值。-1 会在校验时自动选 0 或 2。仿星器：不使用 |
 | `nv1equ` | integer | `0` | 托卡马克：1 使非约束解析 GS 路径把 `gamma2/gamma3/gamma4` 全部置 0，跳过 q0、dJ/dpsi 和总电流约束；0 正常计算这些约束。名称中的 numvar 说明已不能完整代表当前行为。仿星器：不使用 |
 | `igs_feedfac` | integer | `1` | 托卡马克：只按是否等于 1 作为 generic `idevice=0` 双 limiter 外场反馈开关；1 在第二轮以后根据两 limiter 的磁通差修正外边界场，其他值关闭。它不是连续比例系数。仿星器：不使用 |
@@ -424,7 +424,7 @@
 | `harned_mikic` | real | `0.` | 二场模型的 Harned-Mikic 数值稳定项系数；0 关闭，非零时抑制特定高速/高频耦合 |
 | `isources` | integer | `0` | 1 时把粒子注入等源项导致的动量修正放入速度推进；要求计算标量诊断以取得所需全局量 |
 | `nskip` | integer | `1` | 有限元系统矩阵重建的时间步间隔；1 每步重建，较大值在系数变化慢时复用矩阵 |
-| `pskip` | integer | `0` | 当前默认 0；控制预条件器重算/复用相关周期 |
+| `pskip` | integer | `0` | 控制预条件器重算与复用周期；默认值为 0 |
 | `iskippc` | integer | `1` | 后端线性求解中预条件器可复用的调用次数/周期控制；与分裂步层面的 `pskip` 分开 |
 | `dt` | real | `0.1` | Size of time step |
 | `ddt` | real | `0.` | 时间推进参数，用于设置时间步长及其允许变化范围 |
@@ -447,7 +447,7 @@
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `jadv` | integer | `1` | Use Del*(psi) eqn. instead of psi eqn.；1 使用环向电流密度方程代替极向磁通方程 |
+| `jadv` | integer | `1` | Use Del*(psi) eqn. instead of psi eqn.；1 使用环向电流密度方程代替极向磁通方程；默认值为 1 |
 | `int_pts_main` | integer | `25` | 主演化弱式在每个二维三角形上的 Gaussian 积分点数；必须是程序已实现的 Dunavant 阶数 |
 | `int_pts_aux` | integer | `25` | 辅助场投影/构造所用的二维积分点数；提高它增加后处理与系数构造成本 |
 | `int_pts_diag` | integer | `25` | 标量和诊断积分使用的二维积分点数 |
