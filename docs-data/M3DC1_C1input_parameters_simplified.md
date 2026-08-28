@@ -219,20 +219,20 @@
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `numvar` | integer | `3` | 1: 2-Field; 2: 4-Field; 3: 6-Field；1: 2-field；2: 4-field/reduced MHD；3: 6-field/compressible MHD |
+| `numvar` | integer | `3` | 1: 2-Field; 2: 4-Field; 3: 6-Field；选择基本场变量集合。1 为 \(U,\psi\) 二场；2 为 \(U,\psi,V,F\) 四场约化 MHD；3 再加入压缩速度势 \(\chi\) 和热力学槽，形成六场可压缩 MHD。密度和第二个热力学未知量分别由 `idens`、`ipres` 另外加入 |
 | `linear` | integer | `0` | 1: Use linearized equations；0 非线性；1 线性化方程。2D 非线性通常需 RL=1；线性/complex 需 COM=1 且 `nplanes=1` |
 | `eqsubtract` | integer | `0` | 1: Subtract equilibrium fields；托卡马克与仿星器：在时间演化方程中扣除已初始化的平衡场，使 0 层作为参考基态；线性模拟会在校验阶段强制为 1。它不改变平衡读取和投影结果 |
 | `extsubtract` | integer | `0` | 1: Subtract fields from non-axisymmetric coils；托卡马克：1 把 RMP/error field 保存为独立外场，而不是直接写入扰动场。仿星器：`itaylor=41,type_ext_field=2` 必须为 1，程序先读 total field，再读 external field，并把 total-external 作为动态场 |
 | `icsubtract` | integer | `0` | 1: Subtract fields from poloidal field coils；托卡马克：1 把 PF 线圈磁通与等离子体磁通分开保存；求总磁场/磁区时仍会重新相加。0 直接把线圈磁通加入 `psi_field(0)`。仿星器：没有对应的 VMEC 线圈分解路径，通常保持 0 |
-| `idens` | integer | `0` | 1: Include density equation |
-| `ipres` | integer | `0` | 1: Include total pressure equation |
-| `ipressplit` | integer | `0` | 1: Separate pressure solves from field solves；仅 `isplitstep=1` 且 `numvar=3` 时允许；把压力/温度求解从场求解分离 |
-| `itemp` | integer | `0` | 1: Advance Temperatures rather than Pressures；1 时推进温度而不是压力；要求 `ipressplit=1`，且 `z_ion` 必须为 1 |
-| `iadiabat` | integer | `1` | 1: Correct itemp=1 for time-varying density |
+| `idens` | integer | `0` | 1: Include density equation；1 时在 plasma zone 独立推进主离子数密度连续性方程，并据准中性条件得到电子密度；0 时不建立独立密度推进方程，计算使用初始化或平衡建立的密度场。托卡马克与仿星器的方程相同，区别仅在平衡和几何映射 |
+| `ipres` | integer | `0` | 1: Include total pressure equation；控制热力学未知量的数量。0 只推进一个总压强或总温度未知量；1 同时推进电子与离子热力学自由度：`itemp=0` 时使用总压强 \(p\) 与电子压强 \(p_e\)，`itemp=1` 时使用电子温度 \(T_e\) 与离子温度 \(T_i\)。双热力学模型通常配合 `numvar=3,ipressplit=1` |
+| `ipressplit` | integer | `0` | 1: Separate pressure solves from field solves；数值分块开关，不改变物理闭合。1 时把压力/温度方程从电磁场方程中分离求解，仅允许 `isplitstep=1,numvar=3`；0 时热力学变量留在整体或场方程块中 |
+| `itemp` | integer | `0` | 1: Advance Temperatures rather than Pressures；选择热力学变量。0 直接推进压力；1 推进温度，并通过 \(p_s=n_sT_s\) 与密度闭合。`itemp=1` 要求 `ipressplit=1,z_ion=1`；密度随时间变化时应保留 `iadiabat=1` |
+| `iadiabat` | integer | `1` | 1: Correct itemp=1 for time-varying density；仅温度推进使用。1 时在温度时间项和压缩功中采用随时间变化的密度，使温度方程与连续性方程及压力/内能方程一致；0 省略该修正，主要用于受控模型试验 |
 | `gyro` | integer | `0` | 1: Include Braginskii gyroviscosity |
 | `igauge` | integer | `0` | 选择矢势规范相关的数值处理。当前活动方程只在非零时加入规范约束/稳定项；常规算例保持 0。托卡马克与仿星器使用同一场表示 |
 | `inertia` | integer | `1` | 1: Include V.Grad(V) terms |
-| `itwofluid` | integer | `1` | 1: -electron 2F, 2: ion 2F |
+| `itwofluid` | integer | `1` | 1: -electron 2F, 2: ion 2F；选择广义 Ohm 定律和热方程中的 two-fluid 修正。1 使用电子流体形式，2 使用离子形式，3 仅保留平行电子压强项；实际强度还由归一化离子皮肤深度 `db` 或 `db_fac` 决定 |
 | `ibootstrap` | integer | `0` | 托卡马克：0 关闭；1 按 psi 读取 bootstrap 系数，2 按 Te，3 按 `1-Te/Temax` 并使用扩展系数文件。它在平衡完成后的磁通/环向场演化方程中加入 bootstrap 项，不覆盖初始电流。仿星器：没有专用 VMEC/ST bootstrap 初始化，除非已验证模型与系数，否则保持 0 |
 | `irunaway` | integer | `0` | 非零时增加 runaway-electron 密度场及其电流耦合；需要同时设置 `cre/radiff/rjra` 等参数。两种装置使用同一演化方程，但初始场和磁场几何来自各自平衡 |
 | `cre` | integer | `0` | runaway-electron 沿磁场特征线的传播速度输入，读入后按速度归一化换算；仅 `irunaway!=0` 使用 |
@@ -245,8 +245,8 @@
 | `imp_temp` | integer | `0` | 1: Include implicit equation for temperature |
 | `nosig` | integer | `0` | 非零时抑制密度源 `sigma` 对部分动量/温度方程的伴随项；用于源项模型诊断，不会关闭密度方程中的粒子源本身 |
 | `itor` | integer | `0` | 1: Use toroidal geometry |
-| `iohmic_heating` | integer | `1` | 1: Include Ohmic heating |
-| `irad_heating` | integer | `1` | 1: Include radiation heat source |
+| `iohmic_heating` | integer | `1` | 1: Include Ohmic heating；1 时把 \(\eta\mathbf J\cdot(\mathbf J-\mathbf J_x)\) 形式的 Ohmic 功率写入总热方程或电子热方程；0 时电阻仍可进入 Ohm 定律，但其耗散能不回填热方程 |
+| `irad_heating` | integer | `1` | 1: Include radiation heat source；1 时把已启用辐射/电离模块给出的热源或能量损失写入热方程；0 时不耦合该热源。此参数本身不创建辐射模型 |
 | `gravr` | real | `0.` | R 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力。托卡马克和映射后的仿星器均使用物理柱坐标 R |
 | `gravz` | real | `0.` | Z 方向的恒定体加速度，作为密度乘以加速度的动量源；0 表示无该外力 |
 | `istatic` | integer | `0` | 1: Do not advance velocity fields |
@@ -745,7 +745,7 @@ HDF5/标量/辅助变量输出、重启读写、调试打印和 Slurm 超时写�
 
 | 参数名 | 数据类型 | 默认值 | 含义 |
 |---|---|---:|---|
-| `gam` | real | `5./3. (约 1.6667)` | Ratio of specific heats |
+| `gam` | real | `5./3. (约 1.6667)` | Ratio of specific heats；比热比 \(\Gamma\)，用于压缩功和内能关系 \(e_{int}=p/(\Gamma-1)\)；默认 \(5/3\) 对应单原子理想气体。托卡马克与仿星器使用同一闭合 |
 | `db` | real | `-1.` | Collisionless ion skin depth (overrides db_fac)；默认 -1，表示按物理归一化自动计算 ion skin depth 并乘以 `db_fac`；若显式给非负值则覆盖；`db<0` 时程序按 `b0_norm/n0_norm/l0_norm/ion_mass` 计算物理 ion skin depth，再乘 `db_fac`；显式给非负 `db` 会覆盖该自动计算 |
 | `db_fac` | real | `0.` | Factor multiplying physical value of ion skin depth；`db<0` 时乘在物理 ion skin depth 上；默认 0 等价于关闭 two-fluid skin-depth 贡献 |
 | `mass_ratio` | real | `0.` | 已注册但当前活动计算未读取的兼容参数；电子/离子质量比由内部常数和 `ion_mass` 形成，用户不应依赖此值 |

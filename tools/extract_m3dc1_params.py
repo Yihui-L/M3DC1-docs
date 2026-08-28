@@ -139,11 +139,18 @@ MANUAL_USAGE = {
     "iread_particlesource": "托卡马克：1 读取 `profile_particlesource(psi_N)`。仿星器：1 读取同名文件，但横坐标解释为逻辑 `s=xl^2+zl^2`。两者均把第二列乘输入参数 `pellet_rate` 并与其他密度源相加，且要求 `idens=1,linear=0`。",
     "iread_neo": "托卡马克：1 读取三类 NEO 输出和 GYRO `input.profiles`；环向速度叠加到已有 `vz`，极向速度重写 `u/chi`，非 plasma 磁区置零。仿星器：没有与 VMEC 逻辑坐标配套的专用实现，建议保持 0。",
     "ineo_subtract_diamag": "托卡马克：仅 `iread_neo=1,db!=0` 时从 NEO 环向速度扣除离子抗磁贡献。仿星器：随 `iread_neo` 保持 0。",
-    "numvar": "1: 2-field；2: 4-field/reduced MHD；3: 6-field/compressible MHD。",
+    "numvar": "选择基本场变量集合。1 为 \(U,\\psi\) 二场；2 为 \(U,\\psi,V,F\) 四场约化 MHD；3 再加入压缩速度势 \(\\chi\) 和热力学槽，形成六场可压缩 MHD。密度和第二个热力学未知量分别由 `idens`、`ipres` 另外加入。",
+    "idens": "1 时在 plasma zone 独立推进主离子数密度连续性方程，并据准中性条件得到电子密度；0 时不建立独立密度推进方程，计算使用初始化或平衡建立的密度场。托卡马克与仿星器的方程相同，区别仅在平衡和几何映射。",
+    "ipres": "控制热力学未知量的数量。0 只推进一个总压强或总温度未知量；1 同时推进电子与离子热力学自由度：`itemp=0` 时使用总压强 \(p\) 与电子压强 \(p_e\)，`itemp=1` 时使用电子温度 \(T_e\) 与离子温度 \(T_i\)。双热力学模型通常配合 `numvar=3,ipressplit=1`。",
     "linear": "0 非线性；1 线性化方程。2D 非线性通常需 RL=1；线性/complex 需 COM=1 且 `nplanes=1`。",
     "eqsubtract": "线性模拟会在校验阶段强制置 1；非线性时设 1 表示从方程中扣除平衡场。",
-    "ipressplit": "仅 `isplitstep=1` 且 `numvar=3` 时允许；把压力/温度求解从场求解分离。",
-    "itemp": "1 时推进温度而不是压力；要求 `ipressplit=1`，且 `z_ion` 必须为 1。",
+    "ipressplit": "数值分块开关，不改变物理闭合。1 时把压力/温度方程从电磁场方程中分离求解，仅允许 `isplitstep=1,numvar=3`；0 时热力学变量留在整体或场方程块中。",
+    "itemp": "选择热力学变量。0 直接推进压力；1 推进温度，并通过 \(p_s=n_sT_s\) 与密度闭合。`itemp=1` 要求 `ipressplit=1,z_ion=1`；密度随时间变化时应保留 `iadiabat=1`。",
+    "iadiabat": "仅温度推进使用。1 时在温度时间项和压缩功中采用随时间变化的密度，使温度方程与连续性方程及压力/内能方程一致；0 省略该修正，主要用于受控模型试验。",
+    "gam": "比热比 \(\\Gamma\)，用于压缩功和内能关系 \(e_{int}=p/(\\Gamma-1)\)；默认 \(5/3\) 对应单原子理想气体。托卡马克与仿星器使用同一闭合。",
+    "iohmic_heating": "1 时把 \(\\eta\\mathbf J\\cdot(\\mathbf J-\\mathbf J_x)\) 形式的 Ohmic 功率写入总热方程或电子热方程；0 时电阻仍可进入 Ohm 定律，但其耗散能不回填热方程。",
+    "irad_heating": "1 时把已启用辐射/电离模块给出的热源或能量损失写入热方程；0 时不耦合该热源。此参数本身不创建辐射模型。",
+    "itwofluid": "选择广义 Ohm 定律和热方程中的 two-fluid 修正。1 使用电子流体形式，2 使用离子形式，3 仅保留平行电子压强项；实际强度还由归一化离子皮肤深度 `db` 或 `db_fac` 决定。",
     "kinetic": "1: kinetic PIC hot ion pressure；2: incompressible CGL；3: full CGL。2/3 要求 linear=1,isplitstep=0,ipres=1,itemp=0,ipressplit=0。",
     "irestart": "0 从头启动；1 从 HDF5 restart；2 用 restart 初始化 GS；3 用 2D real restart 初始化 2D complex。",
     "irestart_slice": "-1 使用最后一个 time slice；否则从指定 `time_nnn.h5` restart。",
@@ -1720,20 +1727,118 @@ def remaining_module_supplement(group: str) -> str:
     if group == "Model Options":
         return r"""
 <div class="guide" data-guide>
-<div class="guide-title"><div><h3>Model Options：决定实际求解哪一组 extended-MHD 方程</h3><p>本组承接 Mesh/Input/Equilibrium 的初始场。先选未知量数和线性化方式，再打开密度、压力/温度、two-fluid、bootstrap、runaway 或 kinetic 闭合；未被选择的场即使在平衡文件中存在，也不会成为独立演化未知量。</p></div><span class="guide-kicker">CASE 物理核心</span></div>
-<div class="formula">\[\frac{\partial n_i}{\partial t}+\nabla\!\cdot(n_i\mathbf v)=\nabla\!\cdot(D\nabla n_i)+\sigma_i\]</div>
-<div class="formula">\[\rho\left(\frac{\partial\mathbf v}{\partial t}+\mathbf v\!\cdot\nabla\mathbf v\right)=\mathbf J\!\times\mathbf B-\nabla p-\nabla\!\cdot\Pi-\varpi\mathbf v\]</div>
-<div class="formula">\[\frac{\partial\mathbf B}{\partial t}=-\nabla\times\mathbf E,\qquad \mathbf E=-\mathbf v\times\mathbf B+\eta(\mathbf J-\mathbf J_x)+\frac{d_i}{n_e}(\mathbf J\times\mathbf B-\nabla p_e).\]</div>
+<div class="guide-title"><div><h3>Model Options：从守恒定律到实际推进变量</h3><p>本组承接 Mesh、Input 与 Equilibrium 已建立的几何、区域和初始场，决定时间推进所包含的流体、电磁和热力学自由度。M3D-C1 不把总能量密度作为单独有限元未知量；程序通过总压强、电子压强或电子/离子温度方程推进内能，并与动量方程、Faraday 定律及广义 Ohm 定律共同保持所选模型的能量收支。</p></div><span class="guide-kicker">CASE 物理核心</span></div>
+<div class="callout"><strong>能量方程的位置：</strong>压力方程和温度方程就是程序的内能方程。因而，参数表中未出现名为“total energy”的演化变量，并不表示能量演化被省略。</div>
+<p>本节公式采用便于识别物理量的有量纲 SI 形式；进入程序后，各项按 Normalizations 中定义的 \(B_0,n_0,L_0\) 转为无量纲形式。</p>
+
+<h4>理想 MHD 的三条守恒律</h4>
+<p>忽略扩散、粘性、电阻率、外源和 two-fluid 修正时，M3D-C1 所用模型以理想可压缩 MHD 为骨架。采用总能量密度</p>
+<div class="formula">\[\mathcal E=\frac{1}{2}\rho v^2+\frac{p}{\Gamma-1}+\frac{B^2}{2\mu_0},\]</div>
+<p>质量、动量和总能量的守恒形式可写为</p>
+<div class="formula">\[\frac{\partial\rho}{\partial t}+\nabla\!\cdot(\rho\mathbf v)=0,\]</div>
+<div class="formula">\[\begin{aligned}
+\frac{\partial(\rho\mathbf v)}{\partial t}+\nabla\!\cdot(\rho\mathbf v\mathbf v+p\mathbf I)
+&\\
++\nabla\!\cdot\!\left(\frac{B^2}{2\mu_0}\mathbf I-\frac{\mathbf B\mathbf B}{\mu_0}\right)&=0,
+\end{aligned}\]</div>
+<div class="formula">\[\begin{aligned}
+\frac{\partial\mathcal E}{\partial t}+\nabla\!\cdot\mathbf F_{\mathcal E}&=0,\\
+\mathbf F_{\mathcal E}&=\left(\mathcal E+p+\frac{B^2}{2\mu_0}\right)\mathbf v-\frac{(\mathbf v\!\cdot\mathbf B)\mathbf B}{\mu_0}.
+\end{aligned}\]</div>
+<p>以上总能量式用于说明守恒结构。实际 extended-MHD 推进将其拆为动能、磁能与内能收支，并显式加入粒子扩散和源项、粘性应力、热流、电阻耗散、辐射及外部驱动。</p>
+
+<h4>M3D-C1 实际使用的流体方程</h4>
+<div class="formula">\[\frac{\partial n_i}{\partial t}+\nabla\!\cdot(n_i\mathbf v)=\nabla\!\cdot(D\nabla n_i)+\sigma_i,\]</div>
+<div class="formula">\[\begin{aligned}
+D_t&\equiv\frac{\partial}{\partial t}+\mathbf v\!\cdot\nabla,\\
+\rho D_t\mathbf v&=\mathbf J\!\times\mathbf B-\nabla p-\nabla\!\cdot\boldsymbol\Pi-\varpi\mathbf v.
+\end{aligned}\]</div>
+<p>单主离子模型中，\(n_e=Z_i n_i\)、\(\rho=m_i n_i\)、\(\varpi=m_i\sigma_i\)。杂质模型启用后，准中性关系、质量密度和粒子源按所有电荷态求和。</p>
+
+<h4>内能、压力与温度方程</h4>
+<p>最完整的双温度表示分别推进电子温度和离子温度。温度以能量单位表示，\(p_e=n_eT_e\)、\(p_i=n_iT_i\)、\(p=p_e+p_i\)：</p>
+<div class="formula">\[\begin{aligned}
+n_e\!\left[D_tT_e+(\Gamma-1)T_e\nabla\!\cdot\mathbf v\right]+\sigma_eT_e
+&=(\Gamma-1)\!\left[\eta\mathbf J\!\cdot(\mathbf J-\mathbf J_x)-\nabla\!\cdot\mathbf q_e\right.\\
+&\hspace{4.2em}\left.+Q_e-\boldsymbol\Pi_e\!:\nabla\mathbf v\right].
+\end{aligned}\]</div>
+<div class="formula">\[\begin{aligned}
+n_i\!\left[D_tT_i+(\Gamma-1)T_i\nabla\!\cdot\mathbf v\right]+\sigma_iT_i
+&=(\Gamma-1)\!\left[-\nabla\!\cdot\mathbf q_i+Q_i\right.\\
+&\hspace{4.2em}\left.-\boldsymbol\Pi_i\!:\nabla\mathbf v+\frac{1}{2}\varpi v^2\right].
+\end{aligned}\]</div>
+<p>压力表示由连续性方程和 \(p_s=n_sT_s\) 得到；无源、无耗散时退化为 \(D_t p+\Gamma p\nabla\!\cdot\mathbf v=0\)。启用 two-fluid 后，电子热方程还包含由电子相对离子漂移产生的电子压强平流及相应功项。</p>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th><code>ipres</code></th><th><code>itemp</code></th><th>热力学未知量</th><th>物理含义</th></tr></thead><tbody>
+<tr><td>0</td><td>0</td><td>总压强 \(p\)</td><td>单一内能方程，电子与离子压强比例固定。</td></tr>
+<tr><td>0</td><td>1</td><td>总温度 \(T\)</td><td>单一温度方程，电子与离子温度比例固定。</td></tr>
+<tr><td>1</td><td>0</td><td>总压强 \(p\) 与电子压强 \(p_e\)</td><td>由 \(p_i=p-p_e\) 得到离子压强，电子和离子内能可分别收支。</td></tr>
+<tr><td>1</td><td>1</td><td>电子温度 \(T_e\) 与离子温度 \(T_i\)</td><td>双温度模型，可包含 Ohmic 加热、电子-离子能量交换和分别的热输运。</td></tr>
+</tbody></table></div>
+
+<h4>从内能守恒推导压力/温度方程</h4>
+<p>对任一流体组分 \(s\)，以内能密度 \(\varepsilon_s=p_s/(\Gamma-1)\) 写第一定律：</p>
+<div class="formula">\[\frac{\partial\varepsilon_s}{\partial t}+\nabla\!\cdot(\varepsilon_s\mathbf v)=-p_s\nabla\!\cdot\mathbf v-\nabla\!\cdot\mathbf q_s+H_s.\]</div>
+<p>将 \(p_s=n_sT_s\) 和连续性方程代入，可得到温度形式</p>
+<div class="formula">\[n_s\left[D_tT_s+(\Gamma-1)T_s\nabla\!\cdot\mathbf v\right]=(\Gamma-1)\left(-\nabla\!\cdot\mathbf q_s+H_s\right),\]</div>
+<p>或等价的压力形式</p>
+<div class="formula">\[D_tp_s+\Gamma p_s\nabla\!\cdot\mathbf v=(\Gamma-1)\left(-\nabla\!\cdot\mathbf q_s+H_s\right).\]</div>
+<p>粒子源、粒子扩散和 two-fluid 漂移存在时，连续性方程会在这两种变量变换中产生相应附加项；这正是 <code>iadiabat</code>、电子压强平流和源项修正的来源。</p>
+<p>总能量守恒可由三类方程直接相加验证。动量方程点乘 \(\mathbf v\) 给出动能收支，Faraday 与 Ampère 定律给出 Poynting 定理</p>
+<div class="formula">\[\frac{\partial}{\partial t}\left(\frac{B^2}{2\mu_0}\right)+\nabla\!\cdot\left(\frac{\mathbf E\times\mathbf B}{\mu_0}\right)=-\mathbf J\!\cdot\mathbf E.\]</div>
+<p>理想项 \(\mathbf E=-\mathbf v\times\mathbf B\) 使磁能中的 \(-\mathbf J\!\cdot\mathbf E\) 与动能中的 \(\mathbf v\!\cdot(\mathbf J\times\mathbf B)\) 抵消；压强功在动能和内能之间抵消。当 \(\mathbf J_x=0\) 时，电阻项从磁能移除 \(\eta J^2\)，并在 <code>iohmic_heating=1</code> 时作为电子或总热方程中的正加热项返回；非零 \(\mathbf J_x\) 表示与外部电流驱动的能量交换。因此无需直接推进 \(\mathcal E\) 也能形成完整能量账目。</p>
+
+<h4>约化麦克斯韦方程组与广义 Ohm 定律</h4>
+<div class="formula">\[\begin{aligned}
+\frac{\partial\mathbf B}{\partial t}&=-\nabla\times\mathbf E, & \mu_0\mathbf J&=\nabla\times\mathbf B,\\
+\nabla\!\cdot\mathbf B&=0.&&
+\end{aligned}\]</div>
+<div class="formula">\[\begin{aligned}
+\mathbf E={}&-\mathbf v\times\mathbf B+\eta(\mathbf J-\mathbf J_x)\\
+&+\frac{1}{n_e e}\left(\mathbf J\times\mathbf B-\nabla p_e\right).
+\end{aligned}\]</div>
+<p>这是低频 MHD 近似：不推进电磁波，不保留位移电流；电荷分离由准中性条件消去，电子动量方程化为广义 Ohm 定律。归一化方程使用 <code>db</code>/<code>db_fac</code> 给定 Hall 与电子压强项的离子皮肤深度系数。</p>
+<p>该 Ohm 定律来自忽略电子惯性后的电子动量平衡：</p>
+<div class="formula">\[0=-n_e e\left(\mathbf E+\mathbf v_e\times\mathbf B\right)-\nabla p_e-\nabla\!\cdot\boldsymbol\Pi_e+\mathbf R_e+\mathbf F_e.\]</div>
+<p>利用 \(\mathbf J=n_e e(\mathbf v-\mathbf v_e)\) 消去电子速度，碰撞摩擦 \(\mathbf R_e\) 形成电阻项，便得到 \(\mathbf J\times\mathbf B/(n_e e)\) 的 Hall 项和 \(-\nabla p_e/(n_e e)\) 的电子压强项。粘性、热力和外力模型启用时，相应项继续保留在广义 Ohm 定律中。</p>
+<p>程序不直接以三个笛卡尔分量存储 \(\mathbf B\) 和 \(\mathbf v\)，而在环向坐标 \(\varphi\) 中使用势函数表示：</p>
+<div class="formula">\[\begin{aligned}
+\mathbf A&=R^2\nabla\varphi\times\nabla f+\psi\nabla\varphi,\\
+\mathbf B&=\nabla\times\mathbf A=\nabla\psi\times\nabla\varphi+F\nabla\varphi-\nabla_p f',\\
+\mathbf v&=R^2\nabla U\times\nabla\varphi+R^2\omega\nabla\varphi+R^{-2}\nabla_p\chi.
+\end{aligned}\]</div>
+<p>其中 \(\nabla_p=\nabla-\nabla\varphi\,\partial_\varphi\)、\(f'=\partial_\varphi f\)、\(F=R^2\nabla_p^2f\)。因此 \(\nabla\!\cdot\mathbf B=0\) 由磁场表示满足，而不是作为额外标量演化方程求解；<code>numvar</code> 选择上述势函数中参与时间推进的子集。</p>
+
+<h4>从矢量 MHD 方程到约化标量方程</h4>
+<p>速度表示把流动分成极向旋转、环向流动和可压缩三部分。对动量残差 \(\mathbf M=0\) 分别施加下列投影算子，得到三个标量方程：</p>
+<div class="formula">\[\begin{aligned}
+\mathcal P_U(\mathbf M)&=-\nabla\varphi\!\cdot\nabla\times(R^2\mathbf M),\\
+\mathcal P_V(\mathbf M)&=R^2\nabla\varphi\!\cdot\mathbf M,\\
+\mathcal P_\chi(\mathbf M)&=\nabla_p\!\cdot(R^{-2}\mathbf M).
+\end{aligned}\]</div>
+<p>三者依次是极向涡量方程、环向动量方程和压缩方程，对应 \(U\)、环向速度变量 \(V/\omega\) 与 \(\chi\)。电磁部分采用相同思路：<code>jadv=0</code> 时取矢势感应方程的环向分量得到 \(\psi\) 方程；<code>jadv=1</code> 时对 Faraday 定律取旋度并作环向投影，改为推进环向电流；Faraday 定律的环向磁场分量给出 \(F\) 方程。</p>
+<div class="guide-table-wrap"><table class="guide-table"><thead><tr><th><code>numvar</code></th><th>保留的基本标量场</th><th>约化含义</th></tr></thead><tbody>
+<tr><td>1</td><td>\(U,\psi\)</td><td>二场模型，仅保留极向涡量与极向磁通的核心耦合。</td></tr>
+<tr><td>2</td><td>\(U,\psi,V,F\)</td><td>四场约化 MHD，增加环向动量和环向磁场响应。</td></tr>
+<tr><td>3</td><td>\(U,\psi,V,F,\chi\) 与热力学槽</td><td>六场可压缩 MHD，恢复压缩流动和动态内能；<code>idens</code>、<code>ipres</code> 可再增加独立密度和第二热力学未知量。</td></tr>
+</tbody></table></div>
+<p>有限元离散再以测试函数 \(\mu\) 对每个标量残差 \(\mathcal R_k\) 建立 Galerkin 弱式 \(\int_\Omega\mu\mathcal R_k\,dV=0\)，并通过分部积分降低场变量所需导数阶数。由此，程序中看到的是 \(U,\psi,V,F,\chi,p_e,n,p\) 等弱式矩阵项，而不是直接逐分量离散原始矢量守恒方程。</p>
+
+<h4>闭合条件</h4>
+<div class="formula">\[p_s=n_sT_s,\qquad p=p_e+p_i,\qquad e_{\mathrm{int}}=\frac{p}{\Gamma-1},\qquad \Gamma=\texttt{gam},\]</div>
+<div class="formula">\[\mathbf q_s=-\kappa_s\nabla T_s-\kappa_{\parallel s}\frac{\mathbf B\mathbf B}{B^2}\!\cdot\nabla T_s.\]</div>
+<p>方程组还需要电阻率 \(\eta\)、粘性/gyroviscous 应力 \(\boldsymbol\Pi\)、垂直与平行热导率、粒子扩散率，以及辐射、加热、粒子和动量源等模型。Transport、Hyper Diffusivity、Sources/Sinks、PRAD/KPRAD 与 Particle Simulation 模块分别提供这些闭合；Model Options 只决定相应项是否进入已选方程。</p>
+
 <div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>设置层</th><th>主要参数</th><th>实际作用</th></tr></thead><tbody>
 <tr><td>场数</td><td><code>numvar</code>, <code>idens</code>, <code>ipres</code></td><td>1 为 \(U,\psi\) 二场；2 再加环向速度和环向磁场；3 再加压缩势与压力槽。密度和附加热力学场由独立开关加入。</td></tr>
-<tr><td>热力学</td><td><code>ipressplit</code>, <code>itemp</code>, <code>iadiabat</code>, <code>imp_temp</code></td><td>选择总压/电子压或电子/离子温度表示及分裂求解。<code>itemp=1</code> 要求 <code>numvar=3,ipressplit=1,z_ion=1</code>。</td></tr>
+<tr><td>热力学</td><td><code>gam</code>, <code>ipressplit</code>, <code>itemp</code>, <code>iadiabat</code>, <code>imp_temp</code></td><td>选择总压强、总温度、双压强或双温度表示以及数值分块。<code>itemp=1</code> 要求 <code>numvar=3,ipressplit=1,z_ion=1</code>。</td></tr>
 <tr><td>线性化</td><td><code>linear</code>, <code>eqsubtract</code>, <code>extsubtract</code>, <code>icsubtract</code></td><td>线性模式强制减去轴对称平衡；外场和 PF 场是否从演化量中扣除由另外两个开关决定。</td></tr>
 <tr><td>非理想闭合</td><td><code>itwofluid</code>, <code>gyro</code>, <code>inertia</code>, <code>iohmic_heating</code>, <code>irad_heating</code></td><td>控制 Hall/电子压强、gyroviscosity、非线性惯性和热方程源项。two-fluid 的实际幅值还取决于 <code>db</code>。</td></tr>
 <tr><td>专用模型</td><td><code>ibootstrap*</code>, <code>irunaway*</code>, <code>kinetic</code></td><td>在基本 MHD 上加入 bootstrap 电流闭合、runaway 密度/电流或 PIC/CGL 模型；这些开关不重做初始平衡。</td></tr>
 <tr><td>冻结/调试</td><td><code>istatic</code>, <code>iestatic</code>, <code>no_vdg_T</code>, <code>nosig</code></td><td>冻结速度或磁场，或移除特定热力学项；主要用于响应、验证和模型拆分。</td></tr>
 </tbody></table></div>
-<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>可从轴对称平衡进入 2D、单 n complex 或真实 3D 演化</h4></div><p><code>ntor</code> 定义 complex 线性模；真实三维使用 <code>nplanes&gt;1</code>。bootstrap、runaway 和若干径向闭合使用磁通面/轴对称几何量，托卡马克是其主要使用路径。</p></section>
-<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>映射完成后求解同一套三维弱式</h4></div><p>没有另一套“stellarator MHD 方程”；差别来自三维几何和平衡场。完整 3D 模型可用，但依赖轴对称 \(\psi,q,R_0\) 的 bootstrap/runaway/剖面闭合不能因语法可读就视为已对仿星器验证。</p></section>
+<section class="device-band tokamak-band"><div class="device-heading"><span>托卡马克</span><h4>在物理 R-φ-Z 域上选择约化或可压缩模型</h4></div><p>轴对称平衡投影或 GS 求解先建立 \(\psi,F,p,n\) 等初始场，随后本组决定这些量中哪些成为演化未知量。可使用 2D、单一环向模 complex 线性计算或 <code>nplanes&gt;1</code> 的真实三维演化；能量闭合均由上述压力/温度方程提供。bootstrap、runaway 及依赖轴对称磁通面的闭合主要用于这一装置路径。</p></section>
+<section class="device-band stellarator-band"><div class="device-heading"><span>仿星器</span><h4>在 VMEC/外场映射后的三维几何上求解同一方程组</h4></div><p>几何映射改变有限元度量和初始三维场，不改变质量、动量、热力学、Faraday 与 Ohm 方程的物理含义。仿星器没有另一条能量方程；同样通过单压强、双压强或温度模型闭合。依赖轴对称 \(\psi,q,R_0\) 的专用闭合应只在其适用条件得到确认后使用。</p></section>
+<div class="callout"><strong>区域作用：</strong>密度、压力和温度的动态方程作用于 plasma zone。vacuum 与 conductor zone 主要承担电磁场和电阻壁响应，不因 mesh 中存在相应节点就自动成为具有等离子体内能的区域。</div>
 <div class="callout"><strong>合法组合：</strong><code>linear=1</code> 禁止 <code>iteratephi=1</code>；<code>kinetic=2/3</code> 要求 <code>linear=1,isplitstep=0,ipres=1,itemp=0,ipressplit=0</code>；<code>kinetic=1</code> 还要求 USEPARTICLES 编译。</div>
 </div>"""
 
@@ -2782,6 +2887,7 @@ code { background:#f0f2f1; border-radius:4px; padding:0.08rem 0.28rem; overflow-
 .guide-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; margin:16px 0; }
 .guide-grid.compact { margin-top:18px; }
 .guide-block { min-width:0; border-left:3px solid #9dbdc6; padding-left:12px; }
+.formula { width:100%; max-width:100%; overflow-x:auto; overflow-y:hidden; }
 .guide-table-wrap { overflow-x:auto; width:100%; max-width:100%; margin:16px 0; }
 .guide-table { width:100%; border-collapse:collapse; min-width:700px; background:#fff; font-size:0.9rem; }
 .guide-table th,.guide-table td { padding:9px 10px; border:1px solid var(--line); text-align:left; vertical-align:top; }
@@ -2809,7 +2915,20 @@ mjx-container { max-width:100%; overflow-x:auto; overflow-y:hidden; }
 mjx-container[jax="CHTML"][display="false"] { display:inline-block; margin:0 0.08em; overflow:visible; vertical-align:-0.08em; }
 .hidden { display:none !important; }
 .empty { padding:18px; color:var(--muted); border:1px dashed var(--line); border-radius:8px; background:#fff; }
-@media (max-width:900px) { .layout { grid-template-columns:minmax(0,1fr); } .sidebar { position:static; height:auto; min-width:0; border-right:0; border-bottom:1px solid var(--line); } .content { padding:22px 16px 42px; } .guide-grid,.sequence-pair { grid-template-columns:minmax(0,1fr); gap:14px; } .guide-title { gap:10px; } .device-heading { align-items:flex-start; } .meaning-part { grid-template-columns:1fr; gap:2px; } }
+@media (max-width:900px) {
+  .layout { grid-template-columns:minmax(0,1fr); }
+  .sidebar { position:static; height:auto; min-width:0; padding:16px; border-right:0; border-bottom:1px solid var(--line); }
+  .sidebar h1 { margin-bottom:6px; }
+  .sidebar .small { margin:5px 0 9px; }
+  .nav { display:flex; gap:7px; overflow-x:auto; margin-top:10px; padding:1px 0 8px; scrollbar-width:thin; }
+  .nav a { flex:0 0 auto; gap:10px; white-space:nowrap; border:1px solid var(--line); background:#fff; }
+  .content { padding:22px 16px 42px; }
+  .guide-grid,.sequence-pair { grid-template-columns:minmax(0,1fr); gap:14px; }
+  .guide-title { gap:10px; }
+  .formula { font-size:0.9rem; }
+  .device-heading { align-items:flex-start; }
+  .meaning-part { grid-template-columns:1fr; gap:2px; }
+}
 """
 
     lines = [
